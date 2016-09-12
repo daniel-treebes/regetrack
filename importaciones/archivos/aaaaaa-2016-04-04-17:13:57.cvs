@@ -1,0 +1,7 @@
+id,nombre,Marca,celdas,factor_k,placas,volts,ah,vida_util,regeneracion_preventiva,regeneracion_correctiva
+1,Bateria tipo A,Marca A,18,125,13,36,750,608,350,550
+2,Bateria tipo B,Marca B,19,126,14,37,751,609,351,551
+3,Bateria tipo C,Marca A,20,127,15,38,752,610,352,552
+4,Bateria tipo D,Marca B,21,128,16,39,753,611,353,553
+5,Bateria tipo E,Marca A,22,129,17,40,754,612,354,554
+6,Bateria tipo F,Marca B,23,130,18,41,755,613,355,555

@@ -1,0 +1,4 @@
+id,nombre,modelo,tipo,ciclos_totales,ciclos_iniciales
+1,MC1,1,1,500,120
+2,MC2,1,1,500,200
+3,MC3,1,1,500,200

@@ -1,0 +1,2 @@
+id,nombre,celdas,factor_k,placas,volts,ah,vida_util,regeneracion_preventiva,regeneracion_correctiva
+1,"Baterua tipo A",18,125,13,36,750,5,2.5,4.5

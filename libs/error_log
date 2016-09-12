@@ -1,0 +1,16 @@
+[15-Jul-2016 12:09:38 America/New_York] PHP Fatal error:  require_once(): Failed opening required 'models/config.php' (include_path='.:/usr/lib/php:/usr/local/lib/php') in /home/regetrac/public_html/libs/imprimeQR.php on line 3
+[15-Jul-2016 12:09:55 America/New_York] PHP Fatal error:  require_once(): Failed opening required 'models/config.php' (include_path='.:/usr/lib/php:/usr/local/lib/php') in /home/regetrac/public_html/libs/imprimeQR.php on line 3
+[15-Jul-2016 12:10:06 America/New_York] PHP Fatal error:  require_once(): Failed opening required '/models/config.php' (include_path='.:/usr/lib/php:/usr/local/lib/php') in /home/regetrac/public_html/libs/imprimeQR.php on line 3
+[15-Jul-2016 12:10:35 America/New_York] PHP Fatal error:  require_once(): Failed opening required 'models/config.php' (include_path='.:/usr/lib/php:/usr/local/lib/php') in /home/regetrac/public_html/libs/imprimeQR.php on line 4
+[15-Jul-2016 12:52:22 America/New_York] PHP Parse error:  syntax error, unexpected '" src='https://chart.googleapi' (T_CONSTANT_ENCAPSED_STRING), expecting ',' or ';' in /home/regetrac/public_html/libs/imprimeQR.php on line 37
+[15-Jul-2016 12:53:15 America/New_York] PHP Parse error:  syntax error, unexpected '" src='https://chart.googleapi' (T_CONSTANT_ENCAPSED_STRING), expecting ',' or ';' in /home/regetrac/public_html/libs/imprimeQR.php on line 37
+[15-Jul-2016 12:53:31 America/New_York] PHP Parse error:  syntax error, unexpected '" src='https://chart.googleapi' (T_CONSTANT_ENCAPSED_STRING), expecting ',' or ';' in /home/regetrac/public_html/libs/imprimeQR.php on line 35
+[15-Jul-2016 12:54:08 America/New_York] PHP Warning:  session_start(): Cannot send session cache limiter - headers already sent (output started at /home/regetrac/public_html/libs/imprimeQR.php:4) in /home/regetrac/public_html/models/config.php on line 52
+[15-Jul-2016 12:54:08 America/New_York] PHP Notice:  Undefined variable: datos in /home/regetrac/public_html/libs/imprimeQR.php on line 29
+[15-Jul-2016 12:54:08 America/New_York] PHP Notice:  Undefined variable: datos in /home/regetrac/public_html/libs/imprimeQR.php on line 30
+[15-Jul-2016 12:54:08 America/New_York] PHP Notice:  Undefined variable: datos in /home/regetrac/public_html/libs/imprimeQR.php on line 31
+[15-Jul-2016 12:54:31 America/New_York] PHP Warning:  session_start(): Cannot send session cache limiter - headers already sent (output started at /home/regetrac/public_html/libs/imprimeQR.php:4) in /home/regetrac/public_html/models/config.php on line 52
+[15-Jul-2016 12:54:31 America/New_York] PHP Notice:  Undefined variable: datos in /home/regetrac/public_html/libs/imprimeQR.php on line 29
+[15-Jul-2016 12:54:31 America/New_York] PHP Notice:  Undefined variable: datos in /home/regetrac/public_html/libs/imprimeQR.php on line 30
+[15-Jul-2016 12:54:31 America/New_York] PHP Notice:  Undefined variable: datos in /home/regetrac/public_html/libs/imprimeQR.php on line 31
+[15-Jul-2016 13:21:47 America/New_York] PHP Fatal error:  Call to a member function fetch_array() on a non-object in /home/regetrac/public_html/libs/imprimeQR.php on line 47
