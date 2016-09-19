@@ -3,11 +3,20 @@
 UserCake Version: 2.0.2
 http://usercake.com
 */
+
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 require_once("db-settings.php"); //Require DB connection
+/*
+ * PROPEL
+ */
+require_once 'vendor/propel/propel1/runtime/lib/Propel.php';
+Propel::init("build/conf/regetrack-conf.php");
+require_once 'vendor/autoload.php';
+set_include_path('build/classes' . PATH_SEPARATOR . get_include_path());
+
 
 //Retrieve settings
 $stmt = $mysqli->prepare("SELECT id, name, value
