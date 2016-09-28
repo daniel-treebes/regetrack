@@ -108,6 +108,12 @@ abstract class BaseMontacargas extends BaseObject implements Persistent
     protected $montacargas_numserie;
 
     /**
+     * The value for the montacargas_comprador field.
+     * @var        string
+     */
+    protected $montacargas_comprador;
+
+    /**
      * @var        Sucursal
      */
     protected $aSucursal;
@@ -297,6 +303,17 @@ abstract class BaseMontacargas extends BaseObject implements Persistent
     {
 
         return $this->montacargas_numserie;
+    }
+
+    /**
+     * Get the [montacargas_comprador] column value.
+     *
+     * @return string
+     */
+    public function getMontacargasComprador()
+    {
+
+        return $this->montacargas_comprador;
     }
 
     /**
@@ -577,6 +594,27 @@ abstract class BaseMontacargas extends BaseObject implements Persistent
     } // setMontacargasNumserie()
 
     /**
+     * Set the value of [montacargas_comprador] column.
+     *
+     * @param  string $v new value
+     * @return Montacargas The current object (for fluent API support)
+     */
+    public function setMontacargasComprador($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->montacargas_comprador !== $v) {
+            $this->montacargas_comprador = $v;
+            $this->modifiedColumns[] = MontacargasPeer::MONTACARGAS_COMPRADOR;
+        }
+
+
+        return $this;
+    } // setMontacargasComprador()
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -621,6 +659,7 @@ abstract class BaseMontacargas extends BaseObject implements Persistent
             $this->montacargas_amperaje = ($row[$startcol + 10] !== null) ? (int) $row[$startcol + 10] : null;
             $this->montacargas_nombre = ($row[$startcol + 11] !== null) ? (string) $row[$startcol + 11] : null;
             $this->montacargas_numserie = ($row[$startcol + 12] !== null) ? (string) $row[$startcol + 12] : null;
+            $this->montacargas_comprador = ($row[$startcol + 13] !== null) ? (string) $row[$startcol + 13] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -630,7 +669,7 @@ abstract class BaseMontacargas extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 13; // 13 = MontacargasPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 14; // 14 = MontacargasPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Montacargas object", $e);
@@ -935,6 +974,9 @@ abstract class BaseMontacargas extends BaseObject implements Persistent
         if ($this->isColumnModified(MontacargasPeer::MONTACARGAS_NUMSERIE)) {
             $modifiedColumns[':p' . $index++]  = '`montacargas_numserie`';
         }
+        if ($this->isColumnModified(MontacargasPeer::MONTACARGAS_COMPRADOR)) {
+            $modifiedColumns[':p' . $index++]  = '`montacargas_comprador`';
+        }
 
         $sql = sprintf(
             'INSERT INTO `montacargas` (%s) VALUES (%s)',
@@ -984,6 +1026,9 @@ abstract class BaseMontacargas extends BaseObject implements Persistent
                         break;
                     case '`montacargas_numserie`':
                         $stmt->bindValue($identifier, $this->montacargas_numserie, PDO::PARAM_STR);
+                        break;
+                    case '`montacargas_comprador`':
+                        $stmt->bindValue($identifier, $this->montacargas_comprador, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -1186,6 +1231,9 @@ abstract class BaseMontacargas extends BaseObject implements Persistent
             case 12:
                 return $this->getMontacargasNumserie();
                 break;
+            case 13:
+                return $this->getMontacargasComprador();
+                break;
             default:
                 return null;
                 break;
@@ -1228,6 +1276,7 @@ abstract class BaseMontacargas extends BaseObject implements Persistent
             $keys[10] => $this->getMontacargasAmperaje(),
             $keys[11] => $this->getMontacargasNombre(),
             $keys[12] => $this->getMontacargasNumserie(),
+            $keys[13] => $this->getMontacargasComprador(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1317,6 +1366,9 @@ abstract class BaseMontacargas extends BaseObject implements Persistent
             case 12:
                 $this->setMontacargasNumserie($value);
                 break;
+            case 13:
+                $this->setMontacargasComprador($value);
+                break;
         } // switch()
     }
 
@@ -1354,6 +1406,7 @@ abstract class BaseMontacargas extends BaseObject implements Persistent
         if (array_key_exists($keys[10], $arr)) $this->setMontacargasAmperaje($arr[$keys[10]]);
         if (array_key_exists($keys[11], $arr)) $this->setMontacargasNombre($arr[$keys[11]]);
         if (array_key_exists($keys[12], $arr)) $this->setMontacargasNumserie($arr[$keys[12]]);
+        if (array_key_exists($keys[13], $arr)) $this->setMontacargasComprador($arr[$keys[13]]);
     }
 
     /**
@@ -1378,6 +1431,7 @@ abstract class BaseMontacargas extends BaseObject implements Persistent
         if ($this->isColumnModified(MontacargasPeer::MONTACARGAS_AMPERAJE)) $criteria->add(MontacargasPeer::MONTACARGAS_AMPERAJE, $this->montacargas_amperaje);
         if ($this->isColumnModified(MontacargasPeer::MONTACARGAS_NOMBRE)) $criteria->add(MontacargasPeer::MONTACARGAS_NOMBRE, $this->montacargas_nombre);
         if ($this->isColumnModified(MontacargasPeer::MONTACARGAS_NUMSERIE)) $criteria->add(MontacargasPeer::MONTACARGAS_NUMSERIE, $this->montacargas_numserie);
+        if ($this->isColumnModified(MontacargasPeer::MONTACARGAS_COMPRADOR)) $criteria->add(MontacargasPeer::MONTACARGAS_COMPRADOR, $this->montacargas_comprador);
 
         return $criteria;
     }
@@ -1453,6 +1507,7 @@ abstract class BaseMontacargas extends BaseObject implements Persistent
         $copyObj->setMontacargasAmperaje($this->getMontacargasAmperaje());
         $copyObj->setMontacargasNombre($this->getMontacargasNombre());
         $copyObj->setMontacargasNumserie($this->getMontacargasNumserie());
+        $copyObj->setMontacargasComprador($this->getMontacargasComprador());
 
         if ($deepCopy && !$this->startCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -2187,6 +2242,7 @@ abstract class BaseMontacargas extends BaseObject implements Persistent
         $this->montacargas_amperaje = null;
         $this->montacargas_nombre = null;
         $this->montacargas_numserie = null;
+        $this->montacargas_comprador = null;
         $this->alreadyInSave = false;
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;

@@ -109,7 +109,7 @@ function read(a)
   var data=htmlEntities(a);
   
  
-  var stingurl="https://regetrack.com/sistema.php?ruta=edita/";
+  var stingurl="https://v2.regetrack.com/sistema.php?ruta=edita/";
   
   var res = data.substring(0, stingurl.length);
  // alert(data);

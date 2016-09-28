@@ -8,7 +8,7 @@ echo '<link href="../models/site-templates/default.css" rel="stylesheet" type="t
 echo '<br>';
 
 if($tipo=="montacargas"){
-    $stingurl=urlencode("https://regetrack.com/sistema.php?ruta=edita/montacargas&id=".$id);
+    $stingurl=urlencode("https://v2.regetrack.com/sistema.php?ruta=edita/montacargas&id=".$id);
     $query="
         SELECT
             m.nombre,
@@ -29,7 +29,7 @@ if($tipo=="montacargas"){
 }
 
 if($tipo=="baterias"){
-    $stingurl=urlencode("https://regetrack.com/sistema.php?ruta=edita/baterias&id=".$id);
+    $stingurl=urlencode("https://v2.regetrack.com/sistema.php?ruta=edita/baterias&id=".$id);
     $query="
         SELECT
             m.num_serie as nombre,
@@ -50,7 +50,7 @@ if($tipo=="baterias"){
 }
 
 if($tipo=="cargadores"){
-    $stingurl=urlencode("https://regetrack.com/sistema.php?ruta=edita/cargadores&id=".$id);
+    $stingurl=urlencode("https://v2.regetrack.com/sistema.php?ruta=edita/cargadores&id=".$id);
     $query="
         SELECT
             m.nombre,

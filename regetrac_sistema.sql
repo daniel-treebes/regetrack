@@ -214,7 +214,7 @@ CREATE TABLE IF NOT EXISTS `uc_configuration` (
 
 INSERT INTO `uc_configuration` (`id`, `name`, `value`) VALUES
 (1, 'website_name', 'Regetrack'),
-(2, 'website_url', 'http://regetrack.com'),
+(2, 'website_url', 'http://v2.regetrack.com'),
 (3, 'email', 'soporte@treebes.com'),
 (4, 'activation', 'false'),
 (5, 'resend_activation_threshold', '0'),

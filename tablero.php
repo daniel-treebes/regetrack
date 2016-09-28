@@ -16,47 +16,41 @@ $inputFileName = 'bat monta carga de pisa repartido.xlsx';
 $inputFileType = PHPExcel_IOFactory::identify($inputFileName);
 $objReader = PHPExcel_IOFactory::createReader($inputFileType);
 $objPHPExcel = $objReader->load($inputFileName);
-$sheet = $objPHPExcel->getSheet(3); 
+$sheet = $objPHPExcel->getSheet(4); 
 $highestRow = $sheet->getHighestRow(); 
 $highestColumn = $sheet->getHighestColumn();
 for ($row = 3; $row <= $highestRow; $row++){ 
     
     //Read a row of data into an array
-    $rowData = $sheet->rangeToArray('A' . $row . ':' . 'L'     . $row,NULL,TRUE,FALSE);
-    $cargador = new Cargadores();
-    $cargador->setCargadoresModelo($rowData[0][1])
-             ->setCargadoresMarca($rowData[0][2])
-             ->setCargadoresComprador($rowData[0][6])
-             ->setCargadoresE($rowData[0][11])
+    $rowData = $sheet->rangeToArray('A' . $row . ':' . 'M'     . $row,NULL,TRUE,FALSE);
+    $cargador = new Montacargas();
+    $cargador->setMontacargasModelo($rowData[0][1])
+             ->setMontacargasMarca($rowData[0][2])
+             ->setMontacargasComprador($rowData[0][5])
+             ->setMontacargasT($rowData[0][11])
+             ->setMontacargasE($rowData[0][12])   
              ->setIdsucursal(1);
     
     if($rowData[0][3] != 'N/A'){
-        $cargador->setCargadoresVolts($rowData[0][3]);
+        $cargador->setMontacargasVolts($rowData[0][3]);
     }
     if($rowData[0][4] != 'N/A'){
-        $cargador->setCargadoresAmperaje($rowData[0][4]);
+        $cargador->setMontacargasAmperaje($rowData[0][4]);
+    }
+    if($rowData[0][8] != 'N/A'){
+        $cargador->setMontacargasC($rowData[0][9]);
     }
     if($rowData[0][9] != 'N/A'){
-        $cargador->setCargadoresAmperaje($rowData[0][9]);
+        $cargador->setMontacargasK($rowData[0][9]);
     }
     if($rowData[0][10] != 'N/A'){
-        $cargador->setCargadoresAmperaje($rowData[0][10]);
+        $cargador->setMontacargasP($rowData[0][10]);
     }
      
     $cargador->save();
     
-    $cargador->setCargadoresNombre('C'.$cargador->getIdcargadores())->save();
-    
-    //LOS ESPACIOS
-    $abc = array("A","B","C");
-    $num_espacios = $rowData[0][5];
-    for($i=0;$i<$num_espacios;$i++){
-       $bodega = new Bodegas();
-       $bodega->setCg($cargador->getIdcargadores())
-              ->setNombre($abc[$i])
-              ->save();
-    }
-   
+    $cargador->setMontacargasNombre('M'.$cargador->getIdmontacargas())->save();
+       
 
     
 }

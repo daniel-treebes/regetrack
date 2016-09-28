@@ -176,6 +176,7 @@
     <column name="montacargas_amperaje" phpName="MontacargasAmperaje" type="INTEGER" required="false"/>
     <column name="montacargas_nombre" phpName="MontacargasNombre" type="VARCHAR" size="255" required="false"/>
     <column name="montacargas_numserie" phpName="MontacargasNumserie" type="VARCHAR" size="255" required="false"/>
+    <column name="montacargas_comprador" phpName="MontacargasComprador" type="VARCHAR" size="45" required="false"/>
     <foreign-key foreignTable="sucursal" name="montacargas_idsucursal" onDelete="CASCADE" onUpdate="CASCADE">
       <reference local="idsucursal" foreign="idsucursal"/>
     </foreign-key>
@@ -210,6 +211,7 @@
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
+
   <table name="uc_permission_page_matches" phpName="UcPermissionPageMatches" idMethod="native">
     <column name="id" phpName="Id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="permission_id" phpName="PermissionId" type="INTEGER" required="true"/>

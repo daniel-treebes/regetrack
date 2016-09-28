@@ -19,6 +19,7 @@
  * @method MontacargasQuery orderByMontacargasAmperaje($order = Criteria::ASC) Order by the montacargas_amperaje column
  * @method MontacargasQuery orderByMontacargasNombre($order = Criteria::ASC) Order by the montacargas_nombre column
  * @method MontacargasQuery orderByMontacargasNumserie($order = Criteria::ASC) Order by the montacargas_numserie column
+ * @method MontacargasQuery orderByMontacargasComprador($order = Criteria::ASC) Order by the montacargas_comprador column
  *
  * @method MontacargasQuery groupByIdmontacargas() Group by the idmontacargas column
  * @method MontacargasQuery groupByIdsucursal() Group by the idsucursal column
@@ -33,6 +34,7 @@
  * @method MontacargasQuery groupByMontacargasAmperaje() Group by the montacargas_amperaje column
  * @method MontacargasQuery groupByMontacargasNombre() Group by the montacargas_nombre column
  * @method MontacargasQuery groupByMontacargasNumserie() Group by the montacargas_numserie column
+ * @method MontacargasQuery groupByMontacargasComprador() Group by the montacargas_comprador column
  *
  * @method MontacargasQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method MontacargasQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -65,6 +67,7 @@
  * @method Montacargas findOneByMontacargasAmperaje(int $montacargas_amperaje) Return the first Montacargas filtered by the montacargas_amperaje column
  * @method Montacargas findOneByMontacargasNombre(string $montacargas_nombre) Return the first Montacargas filtered by the montacargas_nombre column
  * @method Montacargas findOneByMontacargasNumserie(string $montacargas_numserie) Return the first Montacargas filtered by the montacargas_numserie column
+ * @method Montacargas findOneByMontacargasComprador(string $montacargas_comprador) Return the first Montacargas filtered by the montacargas_comprador column
  *
  * @method array findByIdmontacargas(int $idmontacargas) Return Montacargas objects filtered by the idmontacargas column
  * @method array findByIdsucursal(int $idsucursal) Return Montacargas objects filtered by the idsucursal column
@@ -79,6 +82,7 @@
  * @method array findByMontacargasAmperaje(int $montacargas_amperaje) Return Montacargas objects filtered by the montacargas_amperaje column
  * @method array findByMontacargasNombre(string $montacargas_nombre) Return Montacargas objects filtered by the montacargas_nombre column
  * @method array findByMontacargasNumserie(string $montacargas_numserie) Return Montacargas objects filtered by the montacargas_numserie column
+ * @method array findByMontacargasComprador(string $montacargas_comprador) Return Montacargas objects filtered by the montacargas_comprador column
  *
  * @package    propel.generator.regetrack.om
  */
@@ -186,7 +190,7 @@ abstract class BaseMontacargasQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `idmontacargas`, `idsucursal`, `montacargas_modelo`, `montacargas_marca`, `montacargas_c`, `montacargas_k`, `montacargas_p`, `montacargas_t`, `montacargas_e`, `montacargas_volts`, `montacargas_amperaje`, `montacargas_nombre`, `montacargas_numserie` FROM `montacargas` WHERE `idmontacargas` = :p0';
+        $sql = 'SELECT `idmontacargas`, `idsucursal`, `montacargas_modelo`, `montacargas_marca`, `montacargas_c`, `montacargas_k`, `montacargas_p`, `montacargas_t`, `montacargas_e`, `montacargas_volts`, `montacargas_amperaje`, `montacargas_nombre`, `montacargas_numserie`, `montacargas_comprador` FROM `montacargas` WHERE `idmontacargas` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -704,6 +708,35 @@ abstract class BaseMontacargasQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(MontacargasPeer::MONTACARGAS_NUMSERIE, $montacargasNumserie, $comparison);
+    }
+
+    /**
+     * Filter the query on the montacargas_comprador column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByMontacargasComprador('fooValue');   // WHERE montacargas_comprador = 'fooValue'
+     * $query->filterByMontacargasComprador('%fooValue%'); // WHERE montacargas_comprador LIKE '%fooValue%'
+     * </code>
+     *
+     * @param     string $montacargasComprador The value to use as filter.
+     *              Accepts wildcards (* and % trigger a LIKE)
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return MontacargasQuery The current query, for fluid interface
+     */
+    public function filterByMontacargasComprador($montacargasComprador = null, $comparison = null)
+    {
+        if (null === $comparison) {
+            if (is_array($montacargasComprador)) {
+                $comparison = Criteria::IN;
+            } elseif (preg_match('/[\%\*]/', $montacargasComprador)) {
+                $montacargasComprador = str_replace('*', '%', $montacargasComprador);
+                $comparison = Criteria::LIKE;
+            }
+        }
+
+        return $this->addUsingAlias(MontacargasPeer::MONTACARGAS_COMPRADOR, $montacargasComprador, $comparison);
     }
 
     /**

@@ -229,6 +229,7 @@ CREATE TABLE `montacargas`
     `montacargas_amperaje` INTEGER,
     `montacargas_nombre` VARCHAR(255),
     `montacargas_numserie` VARCHAR(255),
+    `montacargas_comprador` VARCHAR(45),
     PRIMARY KEY (`idmontacargas`),
     INDEX `idsucursal` (`idsucursal`),
     CONSTRAINT `montacargas_idsucursal`

@@ -122,7 +122,7 @@ function ponBateriaEnCarga(){
    })
    .done(function( data, textStatus, jqXHR) {
 //      alert( "Bateria en carga");
-      window.location.replace("https://regetrack.com/sistema.php?ruta=edita/baterias&id="+data);
+      window.location.replace("https://v2.regetrack.com/sistema.php?ruta=edita/baterias&id="+data);
    })
    .fail(function( jqXHR, textStatus, errorThrown ) {
       alert( "El registro a fallado: " +  textStatus + " Inicie nuevamente. ");
@@ -159,7 +159,7 @@ function ponBateriaEnInventario(){
          vaciado=data.substr(0,posl);
          alert( "El módulo(s) "+vaciado+" tenía(n) todos sus espacios con batería(s) por lo que ha(n) sido LIBERADO(S) TOTALMENTE. Favor de ubicar las baterías removidas.");
       }
-      window.location.replace("https://regetrack.com/sistema.php?ruta=edita/baterias&id="+id);
+      window.location.replace("https://v2.regetrack.com/sistema.php?ruta=edita/baterias&id="+id);
    })
    .fail(function( jqXHR, textStatus, errorThrown ) {
       alert( "El registro de inventario a fallado: " +  jqXHR.responseText + ". Inicie nuevamente");
@@ -168,7 +168,7 @@ function ponBateriaEnInventario(){
 }
 
 function imprimeQr(tipo,id) {
-   var stingurl="https://regetrack.com/libs/imprimeQR.php?tipo="+tipo+"&id="+id;
+   var stingurl="https://v2.regetrack.com/libs/imprimeQR.php?tipo="+tipo+"&id="+id;
    //url="<img src='https://chart.googleapis.com/chart?chs=250x250&cht=qr&chl="+encodeURIComponent(data)+"'/>";
    window.open(stingurl,'_self');
 }
