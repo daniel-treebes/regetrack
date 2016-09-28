@@ -25,6 +25,8 @@ CREATE TABLE `baterias`
     `baterias_comprador` VARCHAR(255),
     `baterias_nombre` VARCHAR(255),
     `baterias_numserie` VARCHAR(255),
+    `baterias_ciclosmant` INTEGER,
+    `baterias_ciclosiniciales` INTEGER,
     PRIMARY KEY (`idbaterias`),
     INDEX `idsucursal` (`idsucursal`),
     CONSTRAINT `baterias_idsucursal`
@@ -230,6 +232,8 @@ CREATE TABLE `montacargas`
     `montacargas_nombre` VARCHAR(255),
     `montacargas_numserie` VARCHAR(255),
     `montacargas_comprador` VARCHAR(45),
+    `montacargas_ciclosmant` INTEGER,
+    `montacargas_ciclosiniciales` INTEGER,
     PRIMARY KEY (`idmontacargas`),
     INDEX `idsucursal` (`idsucursal`),
     CONSTRAINT `montacargas_idsucursal`

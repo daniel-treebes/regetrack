@@ -22,14 +22,13 @@ if($loggedInUser->checkPermission(array(2))){
 
 $query="
     SELECT
-        m.idmontacargas as Id,
-        m.montacargas_nombre as Nombre,
-        m.montacargas_modelo as Modelo,
-         m.montacargas_modelo as Modelo,
-        CONCAT(m.montacargas_c,'-',m.montacargas_k,'-',m.montacargas_p,'-',m.montacargas_t,'-',m.montacargas_e,' (',m.montacargas_volts,'V - ',m.montacargas_amperaje,'Ah)') as Tipo
+        m.id as Id,
+        m.nombre as Nombre,
+        m.modelo as Modelo,
+        CONCAT(t.volts,'V - ',t.ah,'Ah') as Tipo
     FROM
-        montacargas as m
-        WHERE m.idsucursal = ".$loggedInUser->sucursal_activa."
+        bateriastipos as btt,zzmontacargas as m, bateriastipos as t
+    WHERE m.tipo = t.id AND m.tipo = btt.id AND btt.idsucursal = ".$loggedInUser->sucursal_activa."
 	ORDER BY Nombre
 ";
 

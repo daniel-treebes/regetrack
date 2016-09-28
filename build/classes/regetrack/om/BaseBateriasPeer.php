@@ -24,13 +24,13 @@ abstract class BaseBateriasPeer
     const TM_CLASS = 'BateriasTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 14;
+    const NUM_COLUMNS = 16;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 14;
+    const NUM_HYDRATE_COLUMNS = 16;
 
     /** the column name for the idbaterias field */
     const IDBATERIAS = 'baterias.idbaterias';
@@ -74,6 +74,12 @@ abstract class BaseBateriasPeer
     /** the column name for the baterias_numserie field */
     const BATERIAS_NUMSERIE = 'baterias.baterias_numserie';
 
+    /** the column name for the baterias_ciclosmant field */
+    const BATERIAS_CICLOSMANT = 'baterias.baterias_ciclosmant';
+
+    /** the column name for the baterias_ciclosiniciales field */
+    const BATERIAS_CICLOSINICIALES = 'baterias.baterias_ciclosiniciales';
+
     /** The default string format for model objects of the related table **/
     const DEFAULT_STRING_FORMAT = 'YAML';
 
@@ -93,12 +99,12 @@ abstract class BaseBateriasPeer
      * e.g. BateriasPeer::$fieldNames[BateriasPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Idbaterias', 'Idsucursal', 'BateriasModelo', 'BateriasMarca', 'BateriasC', 'BateriasK', 'BateriasP', 'BateriasT', 'BateriasE', 'BateriasVolts', 'BateriasAmperaje', 'BateriasComprador', 'BateriasNombre', 'BateriasNumserie', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idbaterias', 'idsucursal', 'bateriasModelo', 'bateriasMarca', 'bateriasC', 'bateriasK', 'bateriasP', 'bateriasT', 'bateriasE', 'bateriasVolts', 'bateriasAmperaje', 'bateriasComprador', 'bateriasNombre', 'bateriasNumserie', ),
-        BasePeer::TYPE_COLNAME => array (BateriasPeer::IDBATERIAS, BateriasPeer::IDSUCURSAL, BateriasPeer::BATERIAS_MODELO, BateriasPeer::BATERIAS_MARCA, BateriasPeer::BATERIAS_C, BateriasPeer::BATERIAS_K, BateriasPeer::BATERIAS_P, BateriasPeer::BATERIAS_T, BateriasPeer::BATERIAS_E, BateriasPeer::BATERIAS_VOLTS, BateriasPeer::BATERIAS_AMPERAJE, BateriasPeer::BATERIAS_COMPRADOR, BateriasPeer::BATERIAS_NOMBRE, BateriasPeer::BATERIAS_NUMSERIE, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDBATERIAS', 'IDSUCURSAL', 'BATERIAS_MODELO', 'BATERIAS_MARCA', 'BATERIAS_C', 'BATERIAS_K', 'BATERIAS_P', 'BATERIAS_T', 'BATERIAS_E', 'BATERIAS_VOLTS', 'BATERIAS_AMPERAJE', 'BATERIAS_COMPRADOR', 'BATERIAS_NOMBRE', 'BATERIAS_NUMSERIE', ),
-        BasePeer::TYPE_FIELDNAME => array ('idbaterias', 'idsucursal', 'baterias_modelo', 'baterias_marca', 'baterias_c', 'baterias_k', 'baterias_p', 'baterias_t', 'baterias_e', 'baterias_volts', 'baterias_amperaje', 'baterias_comprador', 'baterias_nombre', 'baterias_numserie', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, )
+        BasePeer::TYPE_PHPNAME => array ('Idbaterias', 'Idsucursal', 'BateriasModelo', 'BateriasMarca', 'BateriasC', 'BateriasK', 'BateriasP', 'BateriasT', 'BateriasE', 'BateriasVolts', 'BateriasAmperaje', 'BateriasComprador', 'BateriasNombre', 'BateriasNumserie', 'BateriasCiclosmant', 'BateriasCiclosiniciales', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idbaterias', 'idsucursal', 'bateriasModelo', 'bateriasMarca', 'bateriasC', 'bateriasK', 'bateriasP', 'bateriasT', 'bateriasE', 'bateriasVolts', 'bateriasAmperaje', 'bateriasComprador', 'bateriasNombre', 'bateriasNumserie', 'bateriasCiclosmant', 'bateriasCiclosiniciales', ),
+        BasePeer::TYPE_COLNAME => array (BateriasPeer::IDBATERIAS, BateriasPeer::IDSUCURSAL, BateriasPeer::BATERIAS_MODELO, BateriasPeer::BATERIAS_MARCA, BateriasPeer::BATERIAS_C, BateriasPeer::BATERIAS_K, BateriasPeer::BATERIAS_P, BateriasPeer::BATERIAS_T, BateriasPeer::BATERIAS_E, BateriasPeer::BATERIAS_VOLTS, BateriasPeer::BATERIAS_AMPERAJE, BateriasPeer::BATERIAS_COMPRADOR, BateriasPeer::BATERIAS_NOMBRE, BateriasPeer::BATERIAS_NUMSERIE, BateriasPeer::BATERIAS_CICLOSMANT, BateriasPeer::BATERIAS_CICLOSINICIALES, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDBATERIAS', 'IDSUCURSAL', 'BATERIAS_MODELO', 'BATERIAS_MARCA', 'BATERIAS_C', 'BATERIAS_K', 'BATERIAS_P', 'BATERIAS_T', 'BATERIAS_E', 'BATERIAS_VOLTS', 'BATERIAS_AMPERAJE', 'BATERIAS_COMPRADOR', 'BATERIAS_NOMBRE', 'BATERIAS_NUMSERIE', 'BATERIAS_CICLOSMANT', 'BATERIAS_CICLOSINICIALES', ),
+        BasePeer::TYPE_FIELDNAME => array ('idbaterias', 'idsucursal', 'baterias_modelo', 'baterias_marca', 'baterias_c', 'baterias_k', 'baterias_p', 'baterias_t', 'baterias_e', 'baterias_volts', 'baterias_amperaje', 'baterias_comprador', 'baterias_nombre', 'baterias_numserie', 'baterias_ciclosmant', 'baterias_ciclosiniciales', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, )
     );
 
     /**
@@ -108,12 +114,12 @@ abstract class BaseBateriasPeer
      * e.g. BateriasPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Idbaterias' => 0, 'Idsucursal' => 1, 'BateriasModelo' => 2, 'BateriasMarca' => 3, 'BateriasC' => 4, 'BateriasK' => 5, 'BateriasP' => 6, 'BateriasT' => 7, 'BateriasE' => 8, 'BateriasVolts' => 9, 'BateriasAmperaje' => 10, 'BateriasComprador' => 11, 'BateriasNombre' => 12, 'BateriasNumserie' => 13, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idbaterias' => 0, 'idsucursal' => 1, 'bateriasModelo' => 2, 'bateriasMarca' => 3, 'bateriasC' => 4, 'bateriasK' => 5, 'bateriasP' => 6, 'bateriasT' => 7, 'bateriasE' => 8, 'bateriasVolts' => 9, 'bateriasAmperaje' => 10, 'bateriasComprador' => 11, 'bateriasNombre' => 12, 'bateriasNumserie' => 13, ),
-        BasePeer::TYPE_COLNAME => array (BateriasPeer::IDBATERIAS => 0, BateriasPeer::IDSUCURSAL => 1, BateriasPeer::BATERIAS_MODELO => 2, BateriasPeer::BATERIAS_MARCA => 3, BateriasPeer::BATERIAS_C => 4, BateriasPeer::BATERIAS_K => 5, BateriasPeer::BATERIAS_P => 6, BateriasPeer::BATERIAS_T => 7, BateriasPeer::BATERIAS_E => 8, BateriasPeer::BATERIAS_VOLTS => 9, BateriasPeer::BATERIAS_AMPERAJE => 10, BateriasPeer::BATERIAS_COMPRADOR => 11, BateriasPeer::BATERIAS_NOMBRE => 12, BateriasPeer::BATERIAS_NUMSERIE => 13, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDBATERIAS' => 0, 'IDSUCURSAL' => 1, 'BATERIAS_MODELO' => 2, 'BATERIAS_MARCA' => 3, 'BATERIAS_C' => 4, 'BATERIAS_K' => 5, 'BATERIAS_P' => 6, 'BATERIAS_T' => 7, 'BATERIAS_E' => 8, 'BATERIAS_VOLTS' => 9, 'BATERIAS_AMPERAJE' => 10, 'BATERIAS_COMPRADOR' => 11, 'BATERIAS_NOMBRE' => 12, 'BATERIAS_NUMSERIE' => 13, ),
-        BasePeer::TYPE_FIELDNAME => array ('idbaterias' => 0, 'idsucursal' => 1, 'baterias_modelo' => 2, 'baterias_marca' => 3, 'baterias_c' => 4, 'baterias_k' => 5, 'baterias_p' => 6, 'baterias_t' => 7, 'baterias_e' => 8, 'baterias_volts' => 9, 'baterias_amperaje' => 10, 'baterias_comprador' => 11, 'baterias_nombre' => 12, 'baterias_numserie' => 13, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, )
+        BasePeer::TYPE_PHPNAME => array ('Idbaterias' => 0, 'Idsucursal' => 1, 'BateriasModelo' => 2, 'BateriasMarca' => 3, 'BateriasC' => 4, 'BateriasK' => 5, 'BateriasP' => 6, 'BateriasT' => 7, 'BateriasE' => 8, 'BateriasVolts' => 9, 'BateriasAmperaje' => 10, 'BateriasComprador' => 11, 'BateriasNombre' => 12, 'BateriasNumserie' => 13, 'BateriasCiclosmant' => 14, 'BateriasCiclosiniciales' => 15, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idbaterias' => 0, 'idsucursal' => 1, 'bateriasModelo' => 2, 'bateriasMarca' => 3, 'bateriasC' => 4, 'bateriasK' => 5, 'bateriasP' => 6, 'bateriasT' => 7, 'bateriasE' => 8, 'bateriasVolts' => 9, 'bateriasAmperaje' => 10, 'bateriasComprador' => 11, 'bateriasNombre' => 12, 'bateriasNumserie' => 13, 'bateriasCiclosmant' => 14, 'bateriasCiclosiniciales' => 15, ),
+        BasePeer::TYPE_COLNAME => array (BateriasPeer::IDBATERIAS => 0, BateriasPeer::IDSUCURSAL => 1, BateriasPeer::BATERIAS_MODELO => 2, BateriasPeer::BATERIAS_MARCA => 3, BateriasPeer::BATERIAS_C => 4, BateriasPeer::BATERIAS_K => 5, BateriasPeer::BATERIAS_P => 6, BateriasPeer::BATERIAS_T => 7, BateriasPeer::BATERIAS_E => 8, BateriasPeer::BATERIAS_VOLTS => 9, BateriasPeer::BATERIAS_AMPERAJE => 10, BateriasPeer::BATERIAS_COMPRADOR => 11, BateriasPeer::BATERIAS_NOMBRE => 12, BateriasPeer::BATERIAS_NUMSERIE => 13, BateriasPeer::BATERIAS_CICLOSMANT => 14, BateriasPeer::BATERIAS_CICLOSINICIALES => 15, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDBATERIAS' => 0, 'IDSUCURSAL' => 1, 'BATERIAS_MODELO' => 2, 'BATERIAS_MARCA' => 3, 'BATERIAS_C' => 4, 'BATERIAS_K' => 5, 'BATERIAS_P' => 6, 'BATERIAS_T' => 7, 'BATERIAS_E' => 8, 'BATERIAS_VOLTS' => 9, 'BATERIAS_AMPERAJE' => 10, 'BATERIAS_COMPRADOR' => 11, 'BATERIAS_NOMBRE' => 12, 'BATERIAS_NUMSERIE' => 13, 'BATERIAS_CICLOSMANT' => 14, 'BATERIAS_CICLOSINICIALES' => 15, ),
+        BasePeer::TYPE_FIELDNAME => array ('idbaterias' => 0, 'idsucursal' => 1, 'baterias_modelo' => 2, 'baterias_marca' => 3, 'baterias_c' => 4, 'baterias_k' => 5, 'baterias_p' => 6, 'baterias_t' => 7, 'baterias_e' => 8, 'baterias_volts' => 9, 'baterias_amperaje' => 10, 'baterias_comprador' => 11, 'baterias_nombre' => 12, 'baterias_numserie' => 13, 'baterias_ciclosmant' => 14, 'baterias_ciclosiniciales' => 15, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, )
     );
 
     /**
@@ -201,6 +207,8 @@ abstract class BaseBateriasPeer
             $criteria->addSelectColumn(BateriasPeer::BATERIAS_COMPRADOR);
             $criteria->addSelectColumn(BateriasPeer::BATERIAS_NOMBRE);
             $criteria->addSelectColumn(BateriasPeer::BATERIAS_NUMSERIE);
+            $criteria->addSelectColumn(BateriasPeer::BATERIAS_CICLOSMANT);
+            $criteria->addSelectColumn(BateriasPeer::BATERIAS_CICLOSINICIALES);
         } else {
             $criteria->addSelectColumn($alias . '.idbaterias');
             $criteria->addSelectColumn($alias . '.idsucursal');
@@ -216,6 +224,8 @@ abstract class BaseBateriasPeer
             $criteria->addSelectColumn($alias . '.baterias_comprador');
             $criteria->addSelectColumn($alias . '.baterias_nombre');
             $criteria->addSelectColumn($alias . '.baterias_numserie');
+            $criteria->addSelectColumn($alias . '.baterias_ciclosmant');
+            $criteria->addSelectColumn($alias . '.baterias_ciclosiniciales');
         }
     }
 

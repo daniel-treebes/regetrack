@@ -173,8 +173,9 @@ require_once("libs/libreriasJquery.php");
                                  * 
                                  */
                                 
-				$cgInactivos= DeshabilitacgQuery::create()->filterByFechaSalida(NULL)->useCargadoresQuery()->filterByIdsucursal($loggedInUser->sucursal_activa)->count();
-				/*
+				$cgInactivos= DeshabilitacgQuery::create()->filterByFechaSalida(NULL)->useCargadoresQuery()->filterByIdsucursal($loggedInUser->sucursal_activa)->endUse()->count();
+                               
+                                /*
                                 if ($fila=$resInactivos->fetch_array())$cgInactivos=$fila['inactivos'];
 
                                 $queryIbt="SELECT COUNT(deshabilitabt.id) as inactivos 
@@ -272,11 +273,19 @@ require_once("libs/libreriasJquery.php");
                     <div class="col-lg-1 col-md-4 col-sm-4 col-xs-4">
                         <i class="my_icons fa icon-cargador"></i>
                     </div>
-					<?php
-						if($cgInactivos>0) $clasegci="inactivos";
-						else $clasecgi="activos";
-					?>
+                    
                     <div class="col-lg-2 col-md-8 col-sm-8 col-xs-8">
+                        <?php
+                     
+                            
+                            $clasecgi = "";
+                            if($cgInactivos>0){
+                                $clasecgi = 'inactivos';
+                            }else{
+                                $clasecgi = 'activos';
+                            }
+                        ?>
+                          
                         <center>
                             Deshabilitados<?php echo '<span class="'.$clasecgi.'">'.$cgInactivos.'/'.$resultadoTC.'</span>';?>
                         </center>

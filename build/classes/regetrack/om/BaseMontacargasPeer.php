@@ -24,13 +24,13 @@ abstract class BaseMontacargasPeer
     const TM_CLASS = 'MontacargasTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 14;
+    const NUM_COLUMNS = 16;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 14;
+    const NUM_HYDRATE_COLUMNS = 16;
 
     /** the column name for the idmontacargas field */
     const IDMONTACARGAS = 'montacargas.idmontacargas';
@@ -74,6 +74,12 @@ abstract class BaseMontacargasPeer
     /** the column name for the montacargas_comprador field */
     const MONTACARGAS_COMPRADOR = 'montacargas.montacargas_comprador';
 
+    /** the column name for the montacargas_ciclosmant field */
+    const MONTACARGAS_CICLOSMANT = 'montacargas.montacargas_ciclosmant';
+
+    /** the column name for the montacargas_ciclosiniciales field */
+    const MONTACARGAS_CICLOSINICIALES = 'montacargas.montacargas_ciclosiniciales';
+
     /** The default string format for model objects of the related table **/
     const DEFAULT_STRING_FORMAT = 'YAML';
 
@@ -93,12 +99,12 @@ abstract class BaseMontacargasPeer
      * e.g. MontacargasPeer::$fieldNames[MontacargasPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Idmontacargas', 'Idsucursal', 'MontacargasModelo', 'MontacargasMarca', 'MontacargasC', 'MontacargasK', 'MontacargasP', 'MontacargasT', 'MontacargasE', 'MontacargasVolts', 'MontacargasAmperaje', 'MontacargasNombre', 'MontacargasNumserie', 'MontacargasComprador', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idmontacargas', 'idsucursal', 'montacargasModelo', 'montacargasMarca', 'montacargasC', 'montacargasK', 'montacargasP', 'montacargasT', 'montacargasE', 'montacargasVolts', 'montacargasAmperaje', 'montacargasNombre', 'montacargasNumserie', 'montacargasComprador', ),
-        BasePeer::TYPE_COLNAME => array (MontacargasPeer::IDMONTACARGAS, MontacargasPeer::IDSUCURSAL, MontacargasPeer::MONTACARGAS_MODELO, MontacargasPeer::MONTACARGAS_MARCA, MontacargasPeer::MONTACARGAS_C, MontacargasPeer::MONTACARGAS_K, MontacargasPeer::MONTACARGAS_P, MontacargasPeer::MONTACARGAS_T, MontacargasPeer::MONTACARGAS_E, MontacargasPeer::MONTACARGAS_VOLTS, MontacargasPeer::MONTACARGAS_AMPERAJE, MontacargasPeer::MONTACARGAS_NOMBRE, MontacargasPeer::MONTACARGAS_NUMSERIE, MontacargasPeer::MONTACARGAS_COMPRADOR, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDMONTACARGAS', 'IDSUCURSAL', 'MONTACARGAS_MODELO', 'MONTACARGAS_MARCA', 'MONTACARGAS_C', 'MONTACARGAS_K', 'MONTACARGAS_P', 'MONTACARGAS_T', 'MONTACARGAS_E', 'MONTACARGAS_VOLTS', 'MONTACARGAS_AMPERAJE', 'MONTACARGAS_NOMBRE', 'MONTACARGAS_NUMSERIE', 'MONTACARGAS_COMPRADOR', ),
-        BasePeer::TYPE_FIELDNAME => array ('idmontacargas', 'idsucursal', 'montacargas_modelo', 'montacargas_marca', 'montacargas_c', 'montacargas_k', 'montacargas_p', 'montacargas_t', 'montacargas_e', 'montacargas_volts', 'montacargas_amperaje', 'montacargas_nombre', 'montacargas_numserie', 'montacargas_comprador', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, )
+        BasePeer::TYPE_PHPNAME => array ('Idmontacargas', 'Idsucursal', 'MontacargasModelo', 'MontacargasMarca', 'MontacargasC', 'MontacargasK', 'MontacargasP', 'MontacargasT', 'MontacargasE', 'MontacargasVolts', 'MontacargasAmperaje', 'MontacargasNombre', 'MontacargasNumserie', 'MontacargasComprador', 'MontacargasCiclosmant', 'MontacargasCiclosiniciales', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idmontacargas', 'idsucursal', 'montacargasModelo', 'montacargasMarca', 'montacargasC', 'montacargasK', 'montacargasP', 'montacargasT', 'montacargasE', 'montacargasVolts', 'montacargasAmperaje', 'montacargasNombre', 'montacargasNumserie', 'montacargasComprador', 'montacargasCiclosmant', 'montacargasCiclosiniciales', ),
+        BasePeer::TYPE_COLNAME => array (MontacargasPeer::IDMONTACARGAS, MontacargasPeer::IDSUCURSAL, MontacargasPeer::MONTACARGAS_MODELO, MontacargasPeer::MONTACARGAS_MARCA, MontacargasPeer::MONTACARGAS_C, MontacargasPeer::MONTACARGAS_K, MontacargasPeer::MONTACARGAS_P, MontacargasPeer::MONTACARGAS_T, MontacargasPeer::MONTACARGAS_E, MontacargasPeer::MONTACARGAS_VOLTS, MontacargasPeer::MONTACARGAS_AMPERAJE, MontacargasPeer::MONTACARGAS_NOMBRE, MontacargasPeer::MONTACARGAS_NUMSERIE, MontacargasPeer::MONTACARGAS_COMPRADOR, MontacargasPeer::MONTACARGAS_CICLOSMANT, MontacargasPeer::MONTACARGAS_CICLOSINICIALES, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDMONTACARGAS', 'IDSUCURSAL', 'MONTACARGAS_MODELO', 'MONTACARGAS_MARCA', 'MONTACARGAS_C', 'MONTACARGAS_K', 'MONTACARGAS_P', 'MONTACARGAS_T', 'MONTACARGAS_E', 'MONTACARGAS_VOLTS', 'MONTACARGAS_AMPERAJE', 'MONTACARGAS_NOMBRE', 'MONTACARGAS_NUMSERIE', 'MONTACARGAS_COMPRADOR', 'MONTACARGAS_CICLOSMANT', 'MONTACARGAS_CICLOSINICIALES', ),
+        BasePeer::TYPE_FIELDNAME => array ('idmontacargas', 'idsucursal', 'montacargas_modelo', 'montacargas_marca', 'montacargas_c', 'montacargas_k', 'montacargas_p', 'montacargas_t', 'montacargas_e', 'montacargas_volts', 'montacargas_amperaje', 'montacargas_nombre', 'montacargas_numserie', 'montacargas_comprador', 'montacargas_ciclosmant', 'montacargas_ciclosiniciales', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, )
     );
 
     /**
@@ -108,12 +114,12 @@ abstract class BaseMontacargasPeer
      * e.g. MontacargasPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Idmontacargas' => 0, 'Idsucursal' => 1, 'MontacargasModelo' => 2, 'MontacargasMarca' => 3, 'MontacargasC' => 4, 'MontacargasK' => 5, 'MontacargasP' => 6, 'MontacargasT' => 7, 'MontacargasE' => 8, 'MontacargasVolts' => 9, 'MontacargasAmperaje' => 10, 'MontacargasNombre' => 11, 'MontacargasNumserie' => 12, 'MontacargasComprador' => 13, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idmontacargas' => 0, 'idsucursal' => 1, 'montacargasModelo' => 2, 'montacargasMarca' => 3, 'montacargasC' => 4, 'montacargasK' => 5, 'montacargasP' => 6, 'montacargasT' => 7, 'montacargasE' => 8, 'montacargasVolts' => 9, 'montacargasAmperaje' => 10, 'montacargasNombre' => 11, 'montacargasNumserie' => 12, 'montacargasComprador' => 13, ),
-        BasePeer::TYPE_COLNAME => array (MontacargasPeer::IDMONTACARGAS => 0, MontacargasPeer::IDSUCURSAL => 1, MontacargasPeer::MONTACARGAS_MODELO => 2, MontacargasPeer::MONTACARGAS_MARCA => 3, MontacargasPeer::MONTACARGAS_C => 4, MontacargasPeer::MONTACARGAS_K => 5, MontacargasPeer::MONTACARGAS_P => 6, MontacargasPeer::MONTACARGAS_T => 7, MontacargasPeer::MONTACARGAS_E => 8, MontacargasPeer::MONTACARGAS_VOLTS => 9, MontacargasPeer::MONTACARGAS_AMPERAJE => 10, MontacargasPeer::MONTACARGAS_NOMBRE => 11, MontacargasPeer::MONTACARGAS_NUMSERIE => 12, MontacargasPeer::MONTACARGAS_COMPRADOR => 13, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDMONTACARGAS' => 0, 'IDSUCURSAL' => 1, 'MONTACARGAS_MODELO' => 2, 'MONTACARGAS_MARCA' => 3, 'MONTACARGAS_C' => 4, 'MONTACARGAS_K' => 5, 'MONTACARGAS_P' => 6, 'MONTACARGAS_T' => 7, 'MONTACARGAS_E' => 8, 'MONTACARGAS_VOLTS' => 9, 'MONTACARGAS_AMPERAJE' => 10, 'MONTACARGAS_NOMBRE' => 11, 'MONTACARGAS_NUMSERIE' => 12, 'MONTACARGAS_COMPRADOR' => 13, ),
-        BasePeer::TYPE_FIELDNAME => array ('idmontacargas' => 0, 'idsucursal' => 1, 'montacargas_modelo' => 2, 'montacargas_marca' => 3, 'montacargas_c' => 4, 'montacargas_k' => 5, 'montacargas_p' => 6, 'montacargas_t' => 7, 'montacargas_e' => 8, 'montacargas_volts' => 9, 'montacargas_amperaje' => 10, 'montacargas_nombre' => 11, 'montacargas_numserie' => 12, 'montacargas_comprador' => 13, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, )
+        BasePeer::TYPE_PHPNAME => array ('Idmontacargas' => 0, 'Idsucursal' => 1, 'MontacargasModelo' => 2, 'MontacargasMarca' => 3, 'MontacargasC' => 4, 'MontacargasK' => 5, 'MontacargasP' => 6, 'MontacargasT' => 7, 'MontacargasE' => 8, 'MontacargasVolts' => 9, 'MontacargasAmperaje' => 10, 'MontacargasNombre' => 11, 'MontacargasNumserie' => 12, 'MontacargasComprador' => 13, 'MontacargasCiclosmant' => 14, 'MontacargasCiclosiniciales' => 15, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idmontacargas' => 0, 'idsucursal' => 1, 'montacargasModelo' => 2, 'montacargasMarca' => 3, 'montacargasC' => 4, 'montacargasK' => 5, 'montacargasP' => 6, 'montacargasT' => 7, 'montacargasE' => 8, 'montacargasVolts' => 9, 'montacargasAmperaje' => 10, 'montacargasNombre' => 11, 'montacargasNumserie' => 12, 'montacargasComprador' => 13, 'montacargasCiclosmant' => 14, 'montacargasCiclosiniciales' => 15, ),
+        BasePeer::TYPE_COLNAME => array (MontacargasPeer::IDMONTACARGAS => 0, MontacargasPeer::IDSUCURSAL => 1, MontacargasPeer::MONTACARGAS_MODELO => 2, MontacargasPeer::MONTACARGAS_MARCA => 3, MontacargasPeer::MONTACARGAS_C => 4, MontacargasPeer::MONTACARGAS_K => 5, MontacargasPeer::MONTACARGAS_P => 6, MontacargasPeer::MONTACARGAS_T => 7, MontacargasPeer::MONTACARGAS_E => 8, MontacargasPeer::MONTACARGAS_VOLTS => 9, MontacargasPeer::MONTACARGAS_AMPERAJE => 10, MontacargasPeer::MONTACARGAS_NOMBRE => 11, MontacargasPeer::MONTACARGAS_NUMSERIE => 12, MontacargasPeer::MONTACARGAS_COMPRADOR => 13, MontacargasPeer::MONTACARGAS_CICLOSMANT => 14, MontacargasPeer::MONTACARGAS_CICLOSINICIALES => 15, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDMONTACARGAS' => 0, 'IDSUCURSAL' => 1, 'MONTACARGAS_MODELO' => 2, 'MONTACARGAS_MARCA' => 3, 'MONTACARGAS_C' => 4, 'MONTACARGAS_K' => 5, 'MONTACARGAS_P' => 6, 'MONTACARGAS_T' => 7, 'MONTACARGAS_E' => 8, 'MONTACARGAS_VOLTS' => 9, 'MONTACARGAS_AMPERAJE' => 10, 'MONTACARGAS_NOMBRE' => 11, 'MONTACARGAS_NUMSERIE' => 12, 'MONTACARGAS_COMPRADOR' => 13, 'MONTACARGAS_CICLOSMANT' => 14, 'MONTACARGAS_CICLOSINICIALES' => 15, ),
+        BasePeer::TYPE_FIELDNAME => array ('idmontacargas' => 0, 'idsucursal' => 1, 'montacargas_modelo' => 2, 'montacargas_marca' => 3, 'montacargas_c' => 4, 'montacargas_k' => 5, 'montacargas_p' => 6, 'montacargas_t' => 7, 'montacargas_e' => 8, 'montacargas_volts' => 9, 'montacargas_amperaje' => 10, 'montacargas_nombre' => 11, 'montacargas_numserie' => 12, 'montacargas_comprador' => 13, 'montacargas_ciclosmant' => 14, 'montacargas_ciclosiniciales' => 15, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, )
     );
 
     /**
@@ -201,6 +207,8 @@ abstract class BaseMontacargasPeer
             $criteria->addSelectColumn(MontacargasPeer::MONTACARGAS_NOMBRE);
             $criteria->addSelectColumn(MontacargasPeer::MONTACARGAS_NUMSERIE);
             $criteria->addSelectColumn(MontacargasPeer::MONTACARGAS_COMPRADOR);
+            $criteria->addSelectColumn(MontacargasPeer::MONTACARGAS_CICLOSMANT);
+            $criteria->addSelectColumn(MontacargasPeer::MONTACARGAS_CICLOSINICIALES);
         } else {
             $criteria->addSelectColumn($alias . '.idmontacargas');
             $criteria->addSelectColumn($alias . '.idsucursal');
@@ -216,6 +224,8 @@ abstract class BaseMontacargasPeer
             $criteria->addSelectColumn($alias . '.montacargas_nombre');
             $criteria->addSelectColumn($alias . '.montacargas_numserie');
             $criteria->addSelectColumn($alias . '.montacargas_comprador');
+            $criteria->addSelectColumn($alias . '.montacargas_ciclosmant');
+            $criteria->addSelectColumn($alias . '.montacargas_ciclosiniciales');
         }
     }
 

@@ -20,6 +20,8 @@
  * @method MontacargasQuery orderByMontacargasNombre($order = Criteria::ASC) Order by the montacargas_nombre column
  * @method MontacargasQuery orderByMontacargasNumserie($order = Criteria::ASC) Order by the montacargas_numserie column
  * @method MontacargasQuery orderByMontacargasComprador($order = Criteria::ASC) Order by the montacargas_comprador column
+ * @method MontacargasQuery orderByMontacargasCiclosmant($order = Criteria::ASC) Order by the montacargas_ciclosmant column
+ * @method MontacargasQuery orderByMontacargasCiclosiniciales($order = Criteria::ASC) Order by the montacargas_ciclosiniciales column
  *
  * @method MontacargasQuery groupByIdmontacargas() Group by the idmontacargas column
  * @method MontacargasQuery groupByIdsucursal() Group by the idsucursal column
@@ -35,6 +37,8 @@
  * @method MontacargasQuery groupByMontacargasNombre() Group by the montacargas_nombre column
  * @method MontacargasQuery groupByMontacargasNumserie() Group by the montacargas_numserie column
  * @method MontacargasQuery groupByMontacargasComprador() Group by the montacargas_comprador column
+ * @method MontacargasQuery groupByMontacargasCiclosmant() Group by the montacargas_ciclosmant column
+ * @method MontacargasQuery groupByMontacargasCiclosiniciales() Group by the montacargas_ciclosiniciales column
  *
  * @method MontacargasQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method MontacargasQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -68,6 +72,8 @@
  * @method Montacargas findOneByMontacargasNombre(string $montacargas_nombre) Return the first Montacargas filtered by the montacargas_nombre column
  * @method Montacargas findOneByMontacargasNumserie(string $montacargas_numserie) Return the first Montacargas filtered by the montacargas_numserie column
  * @method Montacargas findOneByMontacargasComprador(string $montacargas_comprador) Return the first Montacargas filtered by the montacargas_comprador column
+ * @method Montacargas findOneByMontacargasCiclosmant(int $montacargas_ciclosmant) Return the first Montacargas filtered by the montacargas_ciclosmant column
+ * @method Montacargas findOneByMontacargasCiclosiniciales(int $montacargas_ciclosiniciales) Return the first Montacargas filtered by the montacargas_ciclosiniciales column
  *
  * @method array findByIdmontacargas(int $idmontacargas) Return Montacargas objects filtered by the idmontacargas column
  * @method array findByIdsucursal(int $idsucursal) Return Montacargas objects filtered by the idsucursal column
@@ -83,6 +89,8 @@
  * @method array findByMontacargasNombre(string $montacargas_nombre) Return Montacargas objects filtered by the montacargas_nombre column
  * @method array findByMontacargasNumserie(string $montacargas_numserie) Return Montacargas objects filtered by the montacargas_numserie column
  * @method array findByMontacargasComprador(string $montacargas_comprador) Return Montacargas objects filtered by the montacargas_comprador column
+ * @method array findByMontacargasCiclosmant(int $montacargas_ciclosmant) Return Montacargas objects filtered by the montacargas_ciclosmant column
+ * @method array findByMontacargasCiclosiniciales(int $montacargas_ciclosiniciales) Return Montacargas objects filtered by the montacargas_ciclosiniciales column
  *
  * @package    propel.generator.regetrack.om
  */
@@ -190,7 +198,7 @@ abstract class BaseMontacargasQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `idmontacargas`, `idsucursal`, `montacargas_modelo`, `montacargas_marca`, `montacargas_c`, `montacargas_k`, `montacargas_p`, `montacargas_t`, `montacargas_e`, `montacargas_volts`, `montacargas_amperaje`, `montacargas_nombre`, `montacargas_numserie`, `montacargas_comprador` FROM `montacargas` WHERE `idmontacargas` = :p0';
+        $sql = 'SELECT `idmontacargas`, `idsucursal`, `montacargas_modelo`, `montacargas_marca`, `montacargas_c`, `montacargas_k`, `montacargas_p`, `montacargas_t`, `montacargas_e`, `montacargas_volts`, `montacargas_amperaje`, `montacargas_nombre`, `montacargas_numserie`, `montacargas_comprador`, `montacargas_ciclosmant`, `montacargas_ciclosiniciales` FROM `montacargas` WHERE `idmontacargas` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -737,6 +745,90 @@ abstract class BaseMontacargasQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(MontacargasPeer::MONTACARGAS_COMPRADOR, $montacargasComprador, $comparison);
+    }
+
+    /**
+     * Filter the query on the montacargas_ciclosmant column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByMontacargasCiclosmant(1234); // WHERE montacargas_ciclosmant = 1234
+     * $query->filterByMontacargasCiclosmant(array(12, 34)); // WHERE montacargas_ciclosmant IN (12, 34)
+     * $query->filterByMontacargasCiclosmant(array('min' => 12)); // WHERE montacargas_ciclosmant >= 12
+     * $query->filterByMontacargasCiclosmant(array('max' => 12)); // WHERE montacargas_ciclosmant <= 12
+     * </code>
+     *
+     * @param     mixed $montacargasCiclosmant The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return MontacargasQuery The current query, for fluid interface
+     */
+    public function filterByMontacargasCiclosmant($montacargasCiclosmant = null, $comparison = null)
+    {
+        if (is_array($montacargasCiclosmant)) {
+            $useMinMax = false;
+            if (isset($montacargasCiclosmant['min'])) {
+                $this->addUsingAlias(MontacargasPeer::MONTACARGAS_CICLOSMANT, $montacargasCiclosmant['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($montacargasCiclosmant['max'])) {
+                $this->addUsingAlias(MontacargasPeer::MONTACARGAS_CICLOSMANT, $montacargasCiclosmant['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(MontacargasPeer::MONTACARGAS_CICLOSMANT, $montacargasCiclosmant, $comparison);
+    }
+
+    /**
+     * Filter the query on the montacargas_ciclosiniciales column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByMontacargasCiclosiniciales(1234); // WHERE montacargas_ciclosiniciales = 1234
+     * $query->filterByMontacargasCiclosiniciales(array(12, 34)); // WHERE montacargas_ciclosiniciales IN (12, 34)
+     * $query->filterByMontacargasCiclosiniciales(array('min' => 12)); // WHERE montacargas_ciclosiniciales >= 12
+     * $query->filterByMontacargasCiclosiniciales(array('max' => 12)); // WHERE montacargas_ciclosiniciales <= 12
+     * </code>
+     *
+     * @param     mixed $montacargasCiclosiniciales The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return MontacargasQuery The current query, for fluid interface
+     */
+    public function filterByMontacargasCiclosiniciales($montacargasCiclosiniciales = null, $comparison = null)
+    {
+        if (is_array($montacargasCiclosiniciales)) {
+            $useMinMax = false;
+            if (isset($montacargasCiclosiniciales['min'])) {
+                $this->addUsingAlias(MontacargasPeer::MONTACARGAS_CICLOSINICIALES, $montacargasCiclosiniciales['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($montacargasCiclosiniciales['max'])) {
+                $this->addUsingAlias(MontacargasPeer::MONTACARGAS_CICLOSINICIALES, $montacargasCiclosiniciales['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(MontacargasPeer::MONTACARGAS_CICLOSINICIALES, $montacargasCiclosiniciales, $comparison);
     }
 
     /**
