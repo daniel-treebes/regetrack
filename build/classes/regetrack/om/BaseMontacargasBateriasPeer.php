@@ -32,8 +32,8 @@ abstract class BaseMontacargasBateriasPeer
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
     const NUM_HYDRATE_COLUMNS = 3;
 
-    /** the column name for the idcargadores_baterias field */
-    const IDCARGADORES_BATERIAS = 'montacargas_baterias.idcargadores_baterias';
+    /** the column name for the idmontacargas_baterias field */
+    const IDMONTACARGAS_BATERIAS = 'montacargas_baterias.idmontacargas_baterias';
 
     /** the column name for the idmontacargas field */
     const IDMONTACARGAS = 'montacargas_baterias.idmontacargas';
@@ -60,11 +60,11 @@ abstract class BaseMontacargasBateriasPeer
      * e.g. MontacargasBateriasPeer::$fieldNames[MontacargasBateriasPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('IdcargadoresBaterias', 'Idmontacargas', 'Idbaterias', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idcargadoresBaterias', 'idmontacargas', 'idbaterias', ),
-        BasePeer::TYPE_COLNAME => array (MontacargasBateriasPeer::IDCARGADORES_BATERIAS, MontacargasBateriasPeer::IDMONTACARGAS, MontacargasBateriasPeer::IDBATERIAS, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDCARGADORES_BATERIAS', 'IDMONTACARGAS', 'IDBATERIAS', ),
-        BasePeer::TYPE_FIELDNAME => array ('idcargadores_baterias', 'idmontacargas', 'idbaterias', ),
+        BasePeer::TYPE_PHPNAME => array ('IdmontacargasBaterias', 'Idmontacargas', 'Idbaterias', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idmontacargasBaterias', 'idmontacargas', 'idbaterias', ),
+        BasePeer::TYPE_COLNAME => array (MontacargasBateriasPeer::IDMONTACARGAS_BATERIAS, MontacargasBateriasPeer::IDMONTACARGAS, MontacargasBateriasPeer::IDBATERIAS, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDMONTACARGAS_BATERIAS', 'IDMONTACARGAS', 'IDBATERIAS', ),
+        BasePeer::TYPE_FIELDNAME => array ('idmontacargas_baterias', 'idmontacargas', 'idbaterias', ),
         BasePeer::TYPE_NUM => array (0, 1, 2, )
     );
 
@@ -75,11 +75,11 @@ abstract class BaseMontacargasBateriasPeer
      * e.g. MontacargasBateriasPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('IdcargadoresBaterias' => 0, 'Idmontacargas' => 1, 'Idbaterias' => 2, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idcargadoresBaterias' => 0, 'idmontacargas' => 1, 'idbaterias' => 2, ),
-        BasePeer::TYPE_COLNAME => array (MontacargasBateriasPeer::IDCARGADORES_BATERIAS => 0, MontacargasBateriasPeer::IDMONTACARGAS => 1, MontacargasBateriasPeer::IDBATERIAS => 2, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDCARGADORES_BATERIAS' => 0, 'IDMONTACARGAS' => 1, 'IDBATERIAS' => 2, ),
-        BasePeer::TYPE_FIELDNAME => array ('idcargadores_baterias' => 0, 'idmontacargas' => 1, 'idbaterias' => 2, ),
+        BasePeer::TYPE_PHPNAME => array ('IdmontacargasBaterias' => 0, 'Idmontacargas' => 1, 'Idbaterias' => 2, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idmontacargasBaterias' => 0, 'idmontacargas' => 1, 'idbaterias' => 2, ),
+        BasePeer::TYPE_COLNAME => array (MontacargasBateriasPeer::IDMONTACARGAS_BATERIAS => 0, MontacargasBateriasPeer::IDMONTACARGAS => 1, MontacargasBateriasPeer::IDBATERIAS => 2, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDMONTACARGAS_BATERIAS' => 0, 'IDMONTACARGAS' => 1, 'IDBATERIAS' => 2, ),
+        BasePeer::TYPE_FIELDNAME => array ('idmontacargas_baterias' => 0, 'idmontacargas' => 1, 'idbaterias' => 2, ),
         BasePeer::TYPE_NUM => array (0, 1, 2, )
     );
 
@@ -154,11 +154,11 @@ abstract class BaseMontacargasBateriasPeer
     public static function addSelectColumns(Criteria $criteria, $alias = null)
     {
         if (null === $alias) {
-            $criteria->addSelectColumn(MontacargasBateriasPeer::IDCARGADORES_BATERIAS);
+            $criteria->addSelectColumn(MontacargasBateriasPeer::IDMONTACARGAS_BATERIAS);
             $criteria->addSelectColumn(MontacargasBateriasPeer::IDMONTACARGAS);
             $criteria->addSelectColumn(MontacargasBateriasPeer::IDBATERIAS);
         } else {
-            $criteria->addSelectColumn($alias . '.idcargadores_baterias');
+            $criteria->addSelectColumn($alias . '.idmontacargas_baterias');
             $criteria->addSelectColumn($alias . '.idmontacargas');
             $criteria->addSelectColumn($alias . '.idbaterias');
         }
@@ -287,7 +287,7 @@ abstract class BaseMontacargasBateriasPeer
     {
         if (Propel::isInstancePoolingEnabled()) {
             if ($key === null) {
-                $key = (string) $obj->getIdcargadoresBaterias();
+                $key = (string) $obj->getIdmontacargasBaterias();
             } // if key === null
             MontacargasBateriasPeer::$instances[$key] = $obj;
         }
@@ -310,7 +310,7 @@ abstract class BaseMontacargasBateriasPeer
     {
         if (Propel::isInstancePoolingEnabled() && $value !== null) {
             if (is_object($value) && $value instanceof MontacargasBaterias) {
-                $key = (string) $value->getIdcargadoresBaterias();
+                $key = (string) $value->getIdmontacargasBaterias();
             } elseif (is_scalar($value)) {
                 // assume we've been passed a primary key
                 $key = (string) $value;
@@ -1147,8 +1147,8 @@ abstract class BaseMontacargasBateriasPeer
             $criteria = $values->buildCriteria(); // build Criteria from MontacargasBaterias object
         }
 
-        if ($criteria->containsKey(MontacargasBateriasPeer::IDCARGADORES_BATERIAS) && $criteria->keyContainsValue(MontacargasBateriasPeer::IDCARGADORES_BATERIAS) ) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key ('.MontacargasBateriasPeer::IDCARGADORES_BATERIAS.')');
+        if ($criteria->containsKey(MontacargasBateriasPeer::IDMONTACARGAS_BATERIAS) && $criteria->keyContainsValue(MontacargasBateriasPeer::IDMONTACARGAS_BATERIAS) ) {
+            throw new PropelException('Cannot insert a value for auto-increment primary key ('.MontacargasBateriasPeer::IDMONTACARGAS_BATERIAS.')');
         }
 
 
@@ -1189,10 +1189,10 @@ abstract class BaseMontacargasBateriasPeer
         if ($values instanceof Criteria) {
             $criteria = clone $values; // rename for clarity
 
-            $comparison = $criteria->getComparison(MontacargasBateriasPeer::IDCARGADORES_BATERIAS);
-            $value = $criteria->remove(MontacargasBateriasPeer::IDCARGADORES_BATERIAS);
+            $comparison = $criteria->getComparison(MontacargasBateriasPeer::IDMONTACARGAS_BATERIAS);
+            $value = $criteria->remove(MontacargasBateriasPeer::IDMONTACARGAS_BATERIAS);
             if ($value) {
-                $selectCriteria->add(MontacargasBateriasPeer::IDCARGADORES_BATERIAS, $value, $comparison);
+                $selectCriteria->add(MontacargasBateriasPeer::IDMONTACARGAS_BATERIAS, $value, $comparison);
             } else {
                 $selectCriteria->setPrimaryTableName(MontacargasBateriasPeer::TABLE_NAME);
             }
@@ -1271,7 +1271,7 @@ abstract class BaseMontacargasBateriasPeer
             $criteria = $values->buildPkeyCriteria();
         } else { // it's a primary key, or an array of pks
             $criteria = new Criteria(MontacargasBateriasPeer::DATABASE_NAME);
-            $criteria->add(MontacargasBateriasPeer::IDCARGADORES_BATERIAS, (array) $values, Criteria::IN);
+            $criteria->add(MontacargasBateriasPeer::IDMONTACARGAS_BATERIAS, (array) $values, Criteria::IN);
             // invalidate the cache for this object(s)
             foreach ((array) $values as $singleval) {
                 MontacargasBateriasPeer::removeInstanceFromPool($singleval);
@@ -1355,7 +1355,7 @@ abstract class BaseMontacargasBateriasPeer
         }
 
         $criteria = new Criteria(MontacargasBateriasPeer::DATABASE_NAME);
-        $criteria->add(MontacargasBateriasPeer::IDCARGADORES_BATERIAS, $pk);
+        $criteria->add(MontacargasBateriasPeer::IDMONTACARGAS_BATERIAS, $pk);
 
         $v = MontacargasBateriasPeer::doSelect($criteria, $con);
 
@@ -1382,7 +1382,7 @@ abstract class BaseMontacargasBateriasPeer
             $objs = array();
         } else {
             $criteria = new Criteria(MontacargasBateriasPeer::DATABASE_NAME);
-            $criteria->add(MontacargasBateriasPeer::IDCARGADORES_BATERIAS, $pks, Criteria::IN);
+            $criteria->add(MontacargasBateriasPeer::IDMONTACARGAS_BATERIAS, $pks, Criteria::IN);
             $objs = MontacargasBateriasPeer::doSelect($criteria, $con);
         }
 

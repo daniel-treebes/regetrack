@@ -30,10 +30,10 @@ abstract class BaseMontacargasBaterias extends BaseObject implements Persistent
     protected $startCopy = false;
 
     /**
-     * The value for the idcargadores_baterias field.
+     * The value for the idmontacargas_baterias field.
      * @var        int
      */
-    protected $idcargadores_baterias;
+    protected $idmontacargas_baterias;
 
     /**
      * The value for the idmontacargas field.
@@ -78,14 +78,14 @@ abstract class BaseMontacargasBaterias extends BaseObject implements Persistent
     protected $alreadyInClearAllReferencesDeep = false;
 
     /**
-     * Get the [idcargadores_baterias] column value.
+     * Get the [idmontacargas_baterias] column value.
      *
      * @return int
      */
-    public function getIdcargadoresBaterias()
+    public function getIdmontacargasBaterias()
     {
 
-        return $this->idcargadores_baterias;
+        return $this->idmontacargas_baterias;
     }
 
     /**
@@ -111,25 +111,25 @@ abstract class BaseMontacargasBaterias extends BaseObject implements Persistent
     }
 
     /**
-     * Set the value of [idcargadores_baterias] column.
+     * Set the value of [idmontacargas_baterias] column.
      *
      * @param  int $v new value
      * @return MontacargasBaterias The current object (for fluent API support)
      */
-    public function setIdcargadoresBaterias($v)
+    public function setIdmontacargasBaterias($v)
     {
         if ($v !== null && is_numeric($v)) {
             $v = (int) $v;
         }
 
-        if ($this->idcargadores_baterias !== $v) {
-            $this->idcargadores_baterias = $v;
-            $this->modifiedColumns[] = MontacargasBateriasPeer::IDCARGADORES_BATERIAS;
+        if ($this->idmontacargas_baterias !== $v) {
+            $this->idmontacargas_baterias = $v;
+            $this->modifiedColumns[] = MontacargasBateriasPeer::IDMONTACARGAS_BATERIAS;
         }
 
 
         return $this;
-    } // setIdcargadoresBaterias()
+    } // setIdmontacargasBaterias()
 
     /**
      * Set the value of [idmontacargas] column.
@@ -213,7 +213,7 @@ abstract class BaseMontacargasBaterias extends BaseObject implements Persistent
     {
         try {
 
-            $this->idcargadores_baterias = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
+            $this->idmontacargas_baterias = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
             $this->idmontacargas = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
             $this->idbaterias = ($row[$startcol + 2] !== null) ? (int) $row[$startcol + 2] : null;
             $this->resetModified();
@@ -458,14 +458,14 @@ abstract class BaseMontacargasBaterias extends BaseObject implements Persistent
         $modifiedColumns = array();
         $index = 0;
 
-        $this->modifiedColumns[] = MontacargasBateriasPeer::IDCARGADORES_BATERIAS;
-        if (null !== $this->idcargadores_baterias) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key (' . MontacargasBateriasPeer::IDCARGADORES_BATERIAS . ')');
+        $this->modifiedColumns[] = MontacargasBateriasPeer::IDMONTACARGAS_BATERIAS;
+        if (null !== $this->idmontacargas_baterias) {
+            throw new PropelException('Cannot insert a value for auto-increment primary key (' . MontacargasBateriasPeer::IDMONTACARGAS_BATERIAS . ')');
         }
 
          // check the columns in natural order for more readable SQL queries
-        if ($this->isColumnModified(MontacargasBateriasPeer::IDCARGADORES_BATERIAS)) {
-            $modifiedColumns[':p' . $index++]  = '`idcargadores_baterias`';
+        if ($this->isColumnModified(MontacargasBateriasPeer::IDMONTACARGAS_BATERIAS)) {
+            $modifiedColumns[':p' . $index++]  = '`idmontacargas_baterias`';
         }
         if ($this->isColumnModified(MontacargasBateriasPeer::IDMONTACARGAS)) {
             $modifiedColumns[':p' . $index++]  = '`idmontacargas`';
@@ -484,8 +484,8 @@ abstract class BaseMontacargasBaterias extends BaseObject implements Persistent
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case '`idcargadores_baterias`':
-                        $stmt->bindValue($identifier, $this->idcargadores_baterias, PDO::PARAM_INT);
+                    case '`idmontacargas_baterias`':
+                        $stmt->bindValue($identifier, $this->idmontacargas_baterias, PDO::PARAM_INT);
                         break;
                     case '`idmontacargas`':
                         $stmt->bindValue($identifier, $this->idmontacargas, PDO::PARAM_INT);
@@ -506,7 +506,7 @@ abstract class BaseMontacargasBaterias extends BaseObject implements Persistent
         } catch (Exception $e) {
             throw new PropelException('Unable to get autoincrement id.', $e);
         }
-        $this->setIdcargadoresBaterias($pk);
+        $this->setIdmontacargasBaterias($pk);
 
         $this->setNew(false);
     }
@@ -646,7 +646,7 @@ abstract class BaseMontacargasBaterias extends BaseObject implements Persistent
     {
         switch ($pos) {
             case 0:
-                return $this->getIdcargadoresBaterias();
+                return $this->getIdmontacargasBaterias();
                 break;
             case 1:
                 return $this->getIdmontacargas();
@@ -683,7 +683,7 @@ abstract class BaseMontacargasBaterias extends BaseObject implements Persistent
         $alreadyDumpedObjects['MontacargasBaterias'][$this->getPrimaryKey()] = true;
         $keys = MontacargasBateriasPeer::getFieldNames($keyType);
         $result = array(
-            $keys[0] => $this->getIdcargadoresBaterias(),
+            $keys[0] => $this->getIdmontacargasBaterias(),
             $keys[1] => $this->getIdmontacargas(),
             $keys[2] => $this->getIdbaterias(),
         );
@@ -734,7 +734,7 @@ abstract class BaseMontacargasBaterias extends BaseObject implements Persistent
     {
         switch ($pos) {
             case 0:
-                $this->setIdcargadoresBaterias($value);
+                $this->setIdmontacargasBaterias($value);
                 break;
             case 1:
                 $this->setIdmontacargas($value);
@@ -766,7 +766,7 @@ abstract class BaseMontacargasBaterias extends BaseObject implements Persistent
     {
         $keys = MontacargasBateriasPeer::getFieldNames($keyType);
 
-        if (array_key_exists($keys[0], $arr)) $this->setIdcargadoresBaterias($arr[$keys[0]]);
+        if (array_key_exists($keys[0], $arr)) $this->setIdmontacargasBaterias($arr[$keys[0]]);
         if (array_key_exists($keys[1], $arr)) $this->setIdmontacargas($arr[$keys[1]]);
         if (array_key_exists($keys[2], $arr)) $this->setIdbaterias($arr[$keys[2]]);
     }
@@ -780,7 +780,7 @@ abstract class BaseMontacargasBaterias extends BaseObject implements Persistent
     {
         $criteria = new Criteria(MontacargasBateriasPeer::DATABASE_NAME);
 
-        if ($this->isColumnModified(MontacargasBateriasPeer::IDCARGADORES_BATERIAS)) $criteria->add(MontacargasBateriasPeer::IDCARGADORES_BATERIAS, $this->idcargadores_baterias);
+        if ($this->isColumnModified(MontacargasBateriasPeer::IDMONTACARGAS_BATERIAS)) $criteria->add(MontacargasBateriasPeer::IDMONTACARGAS_BATERIAS, $this->idmontacargas_baterias);
         if ($this->isColumnModified(MontacargasBateriasPeer::IDMONTACARGAS)) $criteria->add(MontacargasBateriasPeer::IDMONTACARGAS, $this->idmontacargas);
         if ($this->isColumnModified(MontacargasBateriasPeer::IDBATERIAS)) $criteria->add(MontacargasBateriasPeer::IDBATERIAS, $this->idbaterias);
 
@@ -798,7 +798,7 @@ abstract class BaseMontacargasBaterias extends BaseObject implements Persistent
     public function buildPkeyCriteria()
     {
         $criteria = new Criteria(MontacargasBateriasPeer::DATABASE_NAME);
-        $criteria->add(MontacargasBateriasPeer::IDCARGADORES_BATERIAS, $this->idcargadores_baterias);
+        $criteria->add(MontacargasBateriasPeer::IDMONTACARGAS_BATERIAS, $this->idmontacargas_baterias);
 
         return $criteria;
     }
@@ -809,18 +809,18 @@ abstract class BaseMontacargasBaterias extends BaseObject implements Persistent
      */
     public function getPrimaryKey()
     {
-        return $this->getIdcargadoresBaterias();
+        return $this->getIdmontacargasBaterias();
     }
 
     /**
-     * Generic method to set the primary key (idcargadores_baterias column).
+     * Generic method to set the primary key (idmontacargas_baterias column).
      *
      * @param  int $key Primary key.
      * @return void
      */
     public function setPrimaryKey($key)
     {
-        $this->setIdcargadoresBaterias($key);
+        $this->setIdmontacargasBaterias($key);
     }
 
     /**
@@ -830,7 +830,7 @@ abstract class BaseMontacargasBaterias extends BaseObject implements Persistent
     public function isPrimaryKeyNull()
     {
 
-        return null === $this->getIdcargadoresBaterias();
+        return null === $this->getIdmontacargasBaterias();
     }
 
     /**
@@ -862,7 +862,7 @@ abstract class BaseMontacargasBaterias extends BaseObject implements Persistent
 
         if ($makeNew) {
             $copyObj->setNew(true);
-            $copyObj->setIdcargadoresBaterias(NULL); // this is a auto-increment column, so set to default value
+            $copyObj->setIdmontacargasBaterias(NULL); // this is a auto-increment column, so set to default value
         }
     }
 
@@ -1015,7 +1015,7 @@ abstract class BaseMontacargasBaterias extends BaseObject implements Persistent
      */
     public function clear()
     {
-        $this->idcargadores_baterias = null;
+        $this->idmontacargas_baterias = null;
         $this->idmontacargas = null;
         $this->idbaterias = null;
         $this->alreadyInSave = false;

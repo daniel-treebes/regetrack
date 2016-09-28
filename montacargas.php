@@ -177,7 +177,7 @@ function deshabilita(cual) {
 				$saludBateriaActualValor = mt_rand(1, 100);
 				
 				$querybateria="
-				  SELECT b.baterias_numserie as 'bateria', CONCAT(TIMESTAMPDIFF(day, fecha_entrada, now()),'D ',    
+				  SELECT b.baterias_nombre as 'bateria', CONCAT(TIMESTAMPDIFF(day, fecha_entrada, now()),'D ',    
 					 TIMESTAMPDIFF(hour, fecha_entrada, now())-TIMESTAMPDIFF(day, fecha_entrada, now())*24,'H  ',
 					 TIMESTAMPDIFF(minute, fecha_entrada, now())-(TIMESTAMPDIFF(hour, fecha_entrada, now()))*60,'M')
 					 as 'tiempo'
@@ -186,7 +186,8 @@ function deshabilita(cual) {
 					 AND u.bt = b.idbaterias
                                          AND b.idsucursal = ".$loggedInUser->sucursal_activa."
 					 AND u.mc =".$fila['Id'];
-  
+ 
+                            
 			   $resultadobateria=$mysqli->query($querybateria);
 			   $filabateria = $resultadobateria->fetch_array();
 			   if (!isset($filabateria['bateria'])) {

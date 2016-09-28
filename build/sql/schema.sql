@@ -273,10 +273,10 @@ DROP TABLE IF EXISTS `montacargas_baterias`;
 
 CREATE TABLE `montacargas_baterias`
 (
-    `idcargadores_baterias` INTEGER NOT NULL AUTO_INCREMENT,
+    `idmontacargas_baterias` INTEGER NOT NULL AUTO_INCREMENT,
     `idmontacargas` INTEGER NOT NULL,
     `idbaterias` INTEGER NOT NULL,
-    PRIMARY KEY (`idcargadores_baterias`),
+    PRIMARY KEY (`idmontacargas_baterias`),
     INDEX `idmontacargas` (`idmontacargas`),
     INDEX `idbaterias` (`idbaterias`),
     CONSTRAINT `cargadores_baterias_idcargadores0`

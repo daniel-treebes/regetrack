@@ -6,11 +6,11 @@
  *
  *
  *
- * @method MontacargasBateriasQuery orderByIdcargadoresBaterias($order = Criteria::ASC) Order by the idcargadores_baterias column
+ * @method MontacargasBateriasQuery orderByIdmontacargasBaterias($order = Criteria::ASC) Order by the idmontacargas_baterias column
  * @method MontacargasBateriasQuery orderByIdmontacargas($order = Criteria::ASC) Order by the idmontacargas column
  * @method MontacargasBateriasQuery orderByIdbaterias($order = Criteria::ASC) Order by the idbaterias column
  *
- * @method MontacargasBateriasQuery groupByIdcargadoresBaterias() Group by the idcargadores_baterias column
+ * @method MontacargasBateriasQuery groupByIdmontacargasBaterias() Group by the idmontacargas_baterias column
  * @method MontacargasBateriasQuery groupByIdmontacargas() Group by the idmontacargas column
  * @method MontacargasBateriasQuery groupByIdbaterias() Group by the idbaterias column
  *
@@ -32,7 +32,7 @@
  * @method MontacargasBaterias findOneByIdmontacargas(int $idmontacargas) Return the first MontacargasBaterias filtered by the idmontacargas column
  * @method MontacargasBaterias findOneByIdbaterias(int $idbaterias) Return the first MontacargasBaterias filtered by the idbaterias column
  *
- * @method array findByIdcargadoresBaterias(int $idcargadores_baterias) Return MontacargasBaterias objects filtered by the idcargadores_baterias column
+ * @method array findByIdmontacargasBaterias(int $idmontacargas_baterias) Return MontacargasBaterias objects filtered by the idmontacargas_baterias column
  * @method array findByIdmontacargas(int $idmontacargas) Return MontacargasBaterias objects filtered by the idmontacargas column
  * @method array findByIdbaterias(int $idbaterias) Return MontacargasBaterias objects filtered by the idbaterias column
  *
@@ -125,7 +125,7 @@ abstract class BaseMontacargasBateriasQuery extends ModelCriteria
      * @return                 MontacargasBaterias A model object, or null if the key is not found
      * @throws PropelException
      */
-     public function findOneByIdcargadoresBaterias($key, $con = null)
+     public function findOneByIdmontacargasBaterias($key, $con = null)
      {
         return $this->findPk($key, $con);
      }
@@ -142,7 +142,7 @@ abstract class BaseMontacargasBateriasQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `idcargadores_baterias`, `idmontacargas`, `idbaterias` FROM `montacargas_baterias` WHERE `idcargadores_baterias` = :p0';
+        $sql = 'SELECT `idmontacargas_baterias`, `idmontacargas`, `idbaterias` FROM `montacargas_baterias` WHERE `idmontacargas_baterias` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -215,7 +215,7 @@ abstract class BaseMontacargasBateriasQuery extends ModelCriteria
     public function filterByPrimaryKey($key)
     {
 
-        return $this->addUsingAlias(MontacargasBateriasPeer::IDCARGADORES_BATERIAS, $key, Criteria::EQUAL);
+        return $this->addUsingAlias(MontacargasBateriasPeer::IDMONTACARGAS_BATERIAS, $key, Criteria::EQUAL);
     }
 
     /**
@@ -228,21 +228,21 @@ abstract class BaseMontacargasBateriasQuery extends ModelCriteria
     public function filterByPrimaryKeys($keys)
     {
 
-        return $this->addUsingAlias(MontacargasBateriasPeer::IDCARGADORES_BATERIAS, $keys, Criteria::IN);
+        return $this->addUsingAlias(MontacargasBateriasPeer::IDMONTACARGAS_BATERIAS, $keys, Criteria::IN);
     }
 
     /**
-     * Filter the query on the idcargadores_baterias column
+     * Filter the query on the idmontacargas_baterias column
      *
      * Example usage:
      * <code>
-     * $query->filterByIdcargadoresBaterias(1234); // WHERE idcargadores_baterias = 1234
-     * $query->filterByIdcargadoresBaterias(array(12, 34)); // WHERE idcargadores_baterias IN (12, 34)
-     * $query->filterByIdcargadoresBaterias(array('min' => 12)); // WHERE idcargadores_baterias >= 12
-     * $query->filterByIdcargadoresBaterias(array('max' => 12)); // WHERE idcargadores_baterias <= 12
+     * $query->filterByIdmontacargasBaterias(1234); // WHERE idmontacargas_baterias = 1234
+     * $query->filterByIdmontacargasBaterias(array(12, 34)); // WHERE idmontacargas_baterias IN (12, 34)
+     * $query->filterByIdmontacargasBaterias(array('min' => 12)); // WHERE idmontacargas_baterias >= 12
+     * $query->filterByIdmontacargasBaterias(array('max' => 12)); // WHERE idmontacargas_baterias <= 12
      * </code>
      *
-     * @param     mixed $idcargadoresBaterias The value to use as filter.
+     * @param     mixed $idmontacargasBaterias The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
@@ -250,16 +250,16 @@ abstract class BaseMontacargasBateriasQuery extends ModelCriteria
      *
      * @return MontacargasBateriasQuery The current query, for fluid interface
      */
-    public function filterByIdcargadoresBaterias($idcargadoresBaterias = null, $comparison = null)
+    public function filterByIdmontacargasBaterias($idmontacargasBaterias = null, $comparison = null)
     {
-        if (is_array($idcargadoresBaterias)) {
+        if (is_array($idmontacargasBaterias)) {
             $useMinMax = false;
-            if (isset($idcargadoresBaterias['min'])) {
-                $this->addUsingAlias(MontacargasBateriasPeer::IDCARGADORES_BATERIAS, $idcargadoresBaterias['min'], Criteria::GREATER_EQUAL);
+            if (isset($idmontacargasBaterias['min'])) {
+                $this->addUsingAlias(MontacargasBateriasPeer::IDMONTACARGAS_BATERIAS, $idmontacargasBaterias['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
-            if (isset($idcargadoresBaterias['max'])) {
-                $this->addUsingAlias(MontacargasBateriasPeer::IDCARGADORES_BATERIAS, $idcargadoresBaterias['max'], Criteria::LESS_EQUAL);
+            if (isset($idmontacargasBaterias['max'])) {
+                $this->addUsingAlias(MontacargasBateriasPeer::IDMONTACARGAS_BATERIAS, $idmontacargasBaterias['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -270,7 +270,7 @@ abstract class BaseMontacargasBateriasQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(MontacargasBateriasPeer::IDCARGADORES_BATERIAS, $idcargadoresBaterias, $comparison);
+        return $this->addUsingAlias(MontacargasBateriasPeer::IDMONTACARGAS_BATERIAS, $idmontacargasBaterias, $comparison);
     }
 
     /**
@@ -523,7 +523,7 @@ abstract class BaseMontacargasBateriasQuery extends ModelCriteria
     public function prune($montacargasBaterias = null)
     {
         if ($montacargasBaterias) {
-            $this->addUsingAlias(MontacargasBateriasPeer::IDCARGADORES_BATERIAS, $montacargasBaterias->getIdcargadoresBaterias(), Criteria::NOT_EQUAL);
+            $this->addUsingAlias(MontacargasBateriasPeer::IDMONTACARGAS_BATERIAS, $montacargasBaterias->getIdmontacargasBaterias(), Criteria::NOT_EQUAL);
         }
 
         return $this;

@@ -38,7 +38,7 @@ class MontacargasBateriasTableMap extends TableMap
         $this->setPackage('regetrack');
         $this->setUseIdGenerator(true);
         // columns
-        $this->addPrimaryKey('idcargadores_baterias', 'IdcargadoresBaterias', 'INTEGER', true, null, null);
+        $this->addPrimaryKey('idmontacargas_baterias', 'IdmontacargasBaterias', 'INTEGER', true, null, null);
         $this->addForeignKey('idmontacargas', 'Idmontacargas', 'INTEGER', 'montacargas', 'idmontacargas', true, null, null);
         $this->addForeignKey('idbaterias', 'Idbaterias', 'INTEGER', 'baterias', 'idbaterias', true, null, null);
         // validators
