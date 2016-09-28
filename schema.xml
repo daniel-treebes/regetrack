@@ -63,6 +63,26 @@
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
+  <table name="cargadores_baterias" phpName="CargadoresBaterias" idMethod="native">
+    <column name="idcargadores_baterias" phpName="IdcargadoresBaterias" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="idcargadores" phpName="Idcargadores" type="INTEGER" required="true"/>
+    <column name="idbaterias" phpName="Idbaterias" type="INTEGER" required="true"/>
+    <foreign-key foreignTable="cargadores" name="cargadores_baterias_idcargadores" onDelete="RESTRICT" onUpdate="RESTRICT">
+      <reference local="idcargadores" foreign="idcargadores"/>
+    </foreign-key>
+    <foreign-key foreignTable="baterias" name="cargadores_baterias_idbaterias" onDelete="RESTRICT" onUpdate="RESTRICT">
+      <reference local="idbaterias" foreign="idbaterias"/>
+    </foreign-key>
+    <index name="idcargadores">
+      <index-column name="idcargadores"/>
+    </index>
+    <index name="idbaterias">
+      <index-column name="idbaterias"/>
+    </index>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
   <table name="deshabilitabt" phpName="Deshabilitabt" idMethod="native">
     <column name="id" phpName="Id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="bt" phpName="Bt" type="INTEGER" required="true"/>
@@ -186,6 +206,26 @@
     </foreign-key>
     <index name="idsucursal">
       <index-column name="idsucursal"/>
+    </index>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="montacargas_baterias" phpName="MontacargasBaterias" idMethod="native">
+    <column name="idcargadores_baterias" phpName="IdcargadoresBaterias" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="idmontacargas" phpName="Idmontacargas" type="INTEGER" required="true"/>
+    <column name="idbaterias" phpName="Idbaterias" type="INTEGER" required="true"/>
+    <foreign-key foreignTable="montacargas" name="cargadores_baterias_idcargadores0" onDelete="RESTRICT" onUpdate="RESTRICT">
+      <reference local="idmontacargas" foreign="idmontacargas"/>
+    </foreign-key>
+    <foreign-key foreignTable="baterias" name="cargadores_baterias_idbaterias0" onDelete="RESTRICT" onUpdate="RESTRICT">
+      <reference local="idbaterias" foreign="idbaterias"/>
+    </foreign-key>
+    <index name="idmontacargas">
+      <index-column name="idmontacargas"/>
+    </index>
+    <index name="idbaterias">
+      <index-column name="idbaterias"/>
     </index>
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>

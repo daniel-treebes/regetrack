@@ -52,6 +52,10 @@
  * @method MontacargasQuery rightJoinDeshabilitamc($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Deshabilitamc relation
  * @method MontacargasQuery innerJoinDeshabilitamc($relationAlias = null) Adds a INNER JOIN clause to the query using the Deshabilitamc relation
  *
+ * @method MontacargasQuery leftJoinMontacargasBaterias($relationAlias = null) Adds a LEFT JOIN clause to the query using the MontacargasBaterias relation
+ * @method MontacargasQuery rightJoinMontacargasBaterias($relationAlias = null) Adds a RIGHT JOIN clause to the query using the MontacargasBaterias relation
+ * @method MontacargasQuery innerJoinMontacargasBaterias($relationAlias = null) Adds a INNER JOIN clause to the query using the MontacargasBaterias relation
+ *
  * @method MontacargasQuery leftJoinUsoBateriasMontacargas($relationAlias = null) Adds a LEFT JOIN clause to the query using the UsoBateriasMontacargas relation
  * @method MontacargasQuery rightJoinUsoBateriasMontacargas($relationAlias = null) Adds a RIGHT JOIN clause to the query using the UsoBateriasMontacargas relation
  * @method MontacargasQuery innerJoinUsoBateriasMontacargas($relationAlias = null) Adds a INNER JOIN clause to the query using the UsoBateriasMontacargas relation
@@ -979,6 +983,80 @@ abstract class BaseMontacargasQuery extends ModelCriteria
         return $this
             ->joinDeshabilitamc($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'Deshabilitamc', 'DeshabilitamcQuery');
+    }
+
+    /**
+     * Filter the query by a related MontacargasBaterias object
+     *
+     * @param   MontacargasBaterias|PropelObjectCollection $montacargasBaterias  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 MontacargasQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByMontacargasBaterias($montacargasBaterias, $comparison = null)
+    {
+        if ($montacargasBaterias instanceof MontacargasBaterias) {
+            return $this
+                ->addUsingAlias(MontacargasPeer::IDMONTACARGAS, $montacargasBaterias->getIdmontacargas(), $comparison);
+        } elseif ($montacargasBaterias instanceof PropelObjectCollection) {
+            return $this
+                ->useMontacargasBateriasQuery()
+                ->filterByPrimaryKeys($montacargasBaterias->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByMontacargasBaterias() only accepts arguments of type MontacargasBaterias or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the MontacargasBaterias relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return MontacargasQuery The current query, for fluid interface
+     */
+    public function joinMontacargasBaterias($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('MontacargasBaterias');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'MontacargasBaterias');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the MontacargasBaterias relation MontacargasBaterias object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   MontacargasBateriasQuery A secondary query class using the current class as primary query
+     */
+    public function useMontacargasBateriasQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinMontacargasBaterias($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'MontacargasBaterias', 'MontacargasBateriasQuery');
     }
 
     /**

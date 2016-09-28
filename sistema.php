@@ -11,7 +11,7 @@ if (!securePage($_SERVER['PHP_SELF']))
 
 $module = explode('edita/', $_GET['ruta'])[1];
 if($module == 'montacargas'){
-  $exist = MontacargasQuery::create()->filterById($_GET['id'])->useBateriastiposQuery()->filterByIdsucursal($loggedInUser->sucursal_activa)->endUse()->exists();
+  $exist = MontacargasQuery::create()->filterByIdmontacargas($_GET['id'])->filterByIdsucursal($loggedInUser->sucursal_activa)->exists();
     if(!$exist){
         header("Location: /montacargas.php");
         die();

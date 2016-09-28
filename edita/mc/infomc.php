@@ -1,18 +1,15 @@
 <?php
 
-
-
 $query="
     SELECT
-        m.id as Id,
-        m.nombre as Nombre,
-        m.modelo as Modelo,
-        CONCAT(t.volts,'V - ',t.ah,'Ah') as Tipo
+        m.idmontacargas as Id,
+        m.montacargas_nombre as Nombre,
+        m.montacargas_modelo as Modelo,
+        CONCAT(m.montacargas_c,'-',m.montacargas_k,'-',m.montacargas_p,'-',m.montacargas_t,'-',m.montacargas_e,' (',m.montacargas_volts,'V - ',m.montacargas_amperaje,'Ah)') as Tipo
     FROM
-        montacargas as m, bateriastipos as t
+        montacargas as m
     WHERE
-        m.id= ".$_GET['id']."
-        AND m.tipo = t.id
+        m.idmontacargas= ".$_GET['id']."
     limit 1
 ";
 
@@ -27,7 +24,7 @@ while($fila = $resultado->fetch_array()) {
 $querydeshabilitado="
     SELECT *
     FROM deshabilitamc
-    WHERE mc= ".$_GET['id']." and fecha_salida='0000-00-00 00:00:00'
+    WHERE idmontacargas= ".$_GET['id']." and fecha_salida='0000-00-00 00:00:00'
 ";
 $resultado = $mysqli->query($querydeshabilitado);
 $habilitaid=0;

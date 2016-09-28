@@ -7,10 +7,10 @@ $queryBateriaSiguiente="
 			IF (tubb.fecha_descanso<>'0000-00-00 00:00:00','2 descanso','3 carga')
 		) as estado,
 		tubb.id as movimientoid,
-		tcg.id as cg_id,
-		tcg.nombre as cg_nombre,
-		tbt.id as bt_id,
-		tbt.num_serie as bt_nombre,
+		tcg.idcargadores as cg_id,
+		tcg.cargadores_nombre as cg_nombre,
+		tbt.idbaterias as bt_id,
+		tbt.baterias_numserie as bt_nombre,
 		tubb.bg as bg_id,
 		CONCAT(TIMESTAMPDIFF(hour, tubb.fecha_descanso, now()),'H ',
 			(TIMESTAMPDIFF(minute, tubb.fecha_descanso, now())-TIMESTAMPDIFF(hour, tubb.fecha_descanso, now())*60),'M')
@@ -31,12 +31,12 @@ $queryBateriaSiguiente="
 			&& tubb.fecha_carga<>'0000-00-00 00:00:00')
 		)
 		AND tbg.id=tubb.bg
-		AND tbg.cg=tcg.id
-		AND tbt.id=tubb.bt
+		AND tbg.cg=tcg.idcargadores
+		AND tbt.idbaterias=tubb.bt
 		AND tbt.tipo=tmc.tipo
 		AND tcg.tipo=tmc.tipo
-		AND tmc.id=".$_GET['id']."
-		AND tbt.id NOT IN (
+		AND tmc.idmontacargas=".$_GET['id']."
+		AND tbt.idbaterias NOT IN (
 			SELECT bt
 			FROM deshabilitabt
 			WHERE fecha_salida ='0000-00-00 00:00:00'
@@ -45,7 +45,7 @@ $queryBateriaSiguiente="
 	ORDER BY estado, t_descanso DESC, t_carga DESC
 	LIMIT 1
 ";
-
+echo '<pre>';var_dump($queryBateriaSiguiente);echo  '</pre>';exit();
 $res = $mysqli->query($queryBateriaSiguiente);
 $bateriaSiguiente=array();
 while($fila = $res->fetch_array()) {
@@ -231,7 +231,7 @@ foreach ($espaciosDisponibles as $cg_id => $datos){
 		 uso_baterias_montacargas as u, baterias as b
 	  WHERE b.id=u.bt AND
 		 u.mc= ".$_GET['id']."
-	  ORDER BY fecha_salida DESC
+	  ORDER BY fecha_salidaid DESC
 	  limit 1
    ";
    

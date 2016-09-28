@@ -58,6 +58,7 @@ class CargadoresTableMap extends TableMap
     {
         $this->addRelation('Sucursal', 'Sucursal', RelationMap::MANY_TO_ONE, array('idsucursal' => 'idsucursal', ), 'CASCADE', 'CASCADE');
         $this->addRelation('Bodegas', 'Bodegas', RelationMap::ONE_TO_MANY, array('idcargadores' => 'cg', ), 'CASCADE', 'CASCADE', 'Bodegass');
+        $this->addRelation('CargadoresBaterias', 'CargadoresBaterias', RelationMap::ONE_TO_MANY, array('idcargadores' => 'idcargadores', ), null, null, 'CargadoresBateriass');
         $this->addRelation('Deshabilitacg', 'Deshabilitacg', RelationMap::ONE_TO_MANY, array('idcargadores' => 'cg', ), 'CASCADE', 'CASCADE', 'Deshabilitacgs');
     } // buildRelations()
 

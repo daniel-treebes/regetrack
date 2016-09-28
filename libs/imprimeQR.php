@@ -11,14 +11,15 @@ if($tipo=="montacargas"){
     $stingurl=urlencode("https://v2.regetrack.com/sistema.php?ruta=edita/montacargas&id=".$id);
     $query="
         SELECT
-            m.nombre,
-            CONCAT(t.volts,'V ',t.ah,'Ah') as tipo
-        FROM montacargas as m,
-            bateriastipos as t
-        WHERE t.id=m.tipo
-            AND m.id=".$id;
+            m.montacargas_nombre as nombre,
+            CONCAT(m.montacargas_c,'-',m.montacargas_k,'-',m.montacargas_p,'-',m.montacargas_t,'-',m.montacargas_e,' (',m.montacargas_volts,'V - ',m.montacargas_amperaje,'Ah)') as tipo
+        FROM montacargas as m
+        WHERE
+            m.idmontacargas=".$id;
+   
     $res = $mysqli->query($query);
     $datos = $res->fetch_array();
+     
     ?>
     <center>
     <h1 style="font-size:2em;">MONTAGARGAS</h1><br><h1 style="font-size:2em;"><?php echo $datos['nombre'] ?></h1>

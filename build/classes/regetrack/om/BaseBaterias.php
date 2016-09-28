@@ -131,6 +131,12 @@ abstract class BaseBaterias extends BaseObject implements Persistent
     protected $aSucursal;
 
     /**
+     * @var        PropelObjectCollection|CargadoresBaterias[] Collection to store aggregation of CargadoresBaterias objects.
+     */
+    protected $collCargadoresBateriass;
+    protected $collCargadoresBateriassPartial;
+
+    /**
      * @var        PropelObjectCollection|Deshabilitabt[] Collection to store aggregation of Deshabilitabt objects.
      */
     protected $collDeshabilitabts;
@@ -141,6 +147,12 @@ abstract class BaseBaterias extends BaseObject implements Persistent
      */
     protected $collLimbos;
     protected $collLimbosPartial;
+
+    /**
+     * @var        PropelObjectCollection|MontacargasBaterias[] Collection to store aggregation of MontacargasBaterias objects.
+     */
+    protected $collMontacargasBateriass;
+    protected $collMontacargasBateriassPartial;
 
     /**
      * @var        PropelObjectCollection|UsoBateriasBodega[] Collection to store aggregation of UsoBateriasBodega objects.
@@ -178,6 +190,12 @@ abstract class BaseBaterias extends BaseObject implements Persistent
      * An array of objects scheduled for deletion.
      * @var		PropelObjectCollection
      */
+    protected $cargadoresBateriassScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
     protected $deshabilitabtsScheduledForDeletion = null;
 
     /**
@@ -185,6 +203,12 @@ abstract class BaseBaterias extends BaseObject implements Persistent
      * @var		PropelObjectCollection
      */
     protected $limbosScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $montacargasBateriassScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -837,9 +861,13 @@ abstract class BaseBaterias extends BaseObject implements Persistent
         if ($deep) {  // also de-associate any related objects?
 
             $this->aSucursal = null;
+            $this->collCargadoresBateriass = null;
+
             $this->collDeshabilitabts = null;
 
             $this->collLimbos = null;
+
+            $this->collMontacargasBateriass = null;
 
             $this->collUsoBateriasBodegas = null;
 
@@ -981,6 +1009,23 @@ abstract class BaseBaterias extends BaseObject implements Persistent
                 $this->resetModified();
             }
 
+            if ($this->cargadoresBateriassScheduledForDeletion !== null) {
+                if (!$this->cargadoresBateriassScheduledForDeletion->isEmpty()) {
+                    CargadoresBateriasQuery::create()
+                        ->filterByPrimaryKeys($this->cargadoresBateriassScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->cargadoresBateriassScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collCargadoresBateriass !== null) {
+                foreach ($this->collCargadoresBateriass as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
             if ($this->deshabilitabtsScheduledForDeletion !== null) {
                 if (!$this->deshabilitabtsScheduledForDeletion->isEmpty()) {
                     DeshabilitabtQuery::create()
@@ -1009,6 +1054,23 @@ abstract class BaseBaterias extends BaseObject implements Persistent
 
             if ($this->collLimbos !== null) {
                 foreach ($this->collLimbos as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->montacargasBateriassScheduledForDeletion !== null) {
+                if (!$this->montacargasBateriassScheduledForDeletion->isEmpty()) {
+                    MontacargasBateriasQuery::create()
+                        ->filterByPrimaryKeys($this->montacargasBateriassScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->montacargasBateriassScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collMontacargasBateriass !== null) {
+                foreach ($this->collMontacargasBateriass as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -1293,6 +1355,14 @@ abstract class BaseBaterias extends BaseObject implements Persistent
             }
 
 
+                if ($this->collCargadoresBateriass !== null) {
+                    foreach ($this->collCargadoresBateriass as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
                 if ($this->collDeshabilitabts !== null) {
                     foreach ($this->collDeshabilitabts as $referrerFK) {
                         if (!$referrerFK->validate($columns)) {
@@ -1303,6 +1373,14 @@ abstract class BaseBaterias extends BaseObject implements Persistent
 
                 if ($this->collLimbos !== null) {
                     foreach ($this->collLimbos as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
+                if ($this->collMontacargasBateriass !== null) {
+                    foreach ($this->collMontacargasBateriass as $referrerFK) {
                         if (!$referrerFK->validate($columns)) {
                             $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
                         }
@@ -1463,11 +1541,17 @@ abstract class BaseBaterias extends BaseObject implements Persistent
             if (null !== $this->aSucursal) {
                 $result['Sucursal'] = $this->aSucursal->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
+            if (null !== $this->collCargadoresBateriass) {
+                $result['CargadoresBateriass'] = $this->collCargadoresBateriass->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
             if (null !== $this->collDeshabilitabts) {
                 $result['Deshabilitabts'] = $this->collDeshabilitabts->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collLimbos) {
                 $result['Limbos'] = $this->collLimbos->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collMontacargasBateriass) {
+                $result['MontacargasBateriass'] = $this->collMontacargasBateriass->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collUsoBateriasBodegas) {
                 $result['UsoBateriasBodegas'] = $this->collUsoBateriasBodegas->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
@@ -1710,6 +1794,12 @@ abstract class BaseBaterias extends BaseObject implements Persistent
             // store object hash to prevent cycle
             $this->startCopy = true;
 
+            foreach ($this->getCargadoresBateriass() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addCargadoresBaterias($relObj->copy($deepCopy));
+                }
+            }
+
             foreach ($this->getDeshabilitabts() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addDeshabilitabt($relObj->copy($deepCopy));
@@ -1719,6 +1809,12 @@ abstract class BaseBaterias extends BaseObject implements Persistent
             foreach ($this->getLimbos() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addLimbo($relObj->copy($deepCopy));
+                }
+            }
+
+            foreach ($this->getMontacargasBateriass() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addMontacargasBaterias($relObj->copy($deepCopy));
                 }
             }
 
@@ -1847,11 +1943,17 @@ abstract class BaseBaterias extends BaseObject implements Persistent
      */
     public function initRelation($relationName)
     {
+        if ('CargadoresBaterias' == $relationName) {
+            $this->initCargadoresBateriass();
+        }
         if ('Deshabilitabt' == $relationName) {
             $this->initDeshabilitabts();
         }
         if ('Limbo' == $relationName) {
             $this->initLimbos();
+        }
+        if ('MontacargasBaterias' == $relationName) {
+            $this->initMontacargasBateriass();
         }
         if ('UsoBateriasBodega' == $relationName) {
             $this->initUsoBateriasBodegas();
@@ -1859,6 +1961,256 @@ abstract class BaseBaterias extends BaseObject implements Persistent
         if ('UsoBateriasMontacargas' == $relationName) {
             $this->initUsoBateriasMontacargass();
         }
+    }
+
+    /**
+     * Clears out the collCargadoresBateriass collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Baterias The current object (for fluent API support)
+     * @see        addCargadoresBateriass()
+     */
+    public function clearCargadoresBateriass()
+    {
+        $this->collCargadoresBateriass = null; // important to set this to null since that means it is uninitialized
+        $this->collCargadoresBateriassPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collCargadoresBateriass collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialCargadoresBateriass($v = true)
+    {
+        $this->collCargadoresBateriassPartial = $v;
+    }
+
+    /**
+     * Initializes the collCargadoresBateriass collection.
+     *
+     * By default this just sets the collCargadoresBateriass collection to an empty array (like clearcollCargadoresBateriass());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initCargadoresBateriass($overrideExisting = true)
+    {
+        if (null !== $this->collCargadoresBateriass && !$overrideExisting) {
+            return;
+        }
+        $this->collCargadoresBateriass = new PropelObjectCollection();
+        $this->collCargadoresBateriass->setModel('CargadoresBaterias');
+    }
+
+    /**
+     * Gets an array of CargadoresBaterias objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Baterias is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|CargadoresBaterias[] List of CargadoresBaterias objects
+     * @throws PropelException
+     */
+    public function getCargadoresBateriass($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collCargadoresBateriassPartial && !$this->isNew();
+        if (null === $this->collCargadoresBateriass || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collCargadoresBateriass) {
+                // return empty collection
+                $this->initCargadoresBateriass();
+            } else {
+                $collCargadoresBateriass = CargadoresBateriasQuery::create(null, $criteria)
+                    ->filterByBaterias($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collCargadoresBateriassPartial && count($collCargadoresBateriass)) {
+                      $this->initCargadoresBateriass(false);
+
+                      foreach ($collCargadoresBateriass as $obj) {
+                        if (false == $this->collCargadoresBateriass->contains($obj)) {
+                          $this->collCargadoresBateriass->append($obj);
+                        }
+                      }
+
+                      $this->collCargadoresBateriassPartial = true;
+                    }
+
+                    $collCargadoresBateriass->getInternalIterator()->rewind();
+
+                    return $collCargadoresBateriass;
+                }
+
+                if ($partial && $this->collCargadoresBateriass) {
+                    foreach ($this->collCargadoresBateriass as $obj) {
+                        if ($obj->isNew()) {
+                            $collCargadoresBateriass[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collCargadoresBateriass = $collCargadoresBateriass;
+                $this->collCargadoresBateriassPartial = false;
+            }
+        }
+
+        return $this->collCargadoresBateriass;
+    }
+
+    /**
+     * Sets a collection of CargadoresBaterias objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $cargadoresBateriass A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Baterias The current object (for fluent API support)
+     */
+    public function setCargadoresBateriass(PropelCollection $cargadoresBateriass, PropelPDO $con = null)
+    {
+        $cargadoresBateriassToDelete = $this->getCargadoresBateriass(new Criteria(), $con)->diff($cargadoresBateriass);
+
+
+        $this->cargadoresBateriassScheduledForDeletion = $cargadoresBateriassToDelete;
+
+        foreach ($cargadoresBateriassToDelete as $cargadoresBateriasRemoved) {
+            $cargadoresBateriasRemoved->setBaterias(null);
+        }
+
+        $this->collCargadoresBateriass = null;
+        foreach ($cargadoresBateriass as $cargadoresBaterias) {
+            $this->addCargadoresBaterias($cargadoresBaterias);
+        }
+
+        $this->collCargadoresBateriass = $cargadoresBateriass;
+        $this->collCargadoresBateriassPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related CargadoresBaterias objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related CargadoresBaterias objects.
+     * @throws PropelException
+     */
+    public function countCargadoresBateriass(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collCargadoresBateriassPartial && !$this->isNew();
+        if (null === $this->collCargadoresBateriass || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collCargadoresBateriass) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getCargadoresBateriass());
+            }
+            $query = CargadoresBateriasQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByBaterias($this)
+                ->count($con);
+        }
+
+        return count($this->collCargadoresBateriass);
+    }
+
+    /**
+     * Method called to associate a CargadoresBaterias object to this object
+     * through the CargadoresBaterias foreign key attribute.
+     *
+     * @param    CargadoresBaterias $l CargadoresBaterias
+     * @return Baterias The current object (for fluent API support)
+     */
+    public function addCargadoresBaterias(CargadoresBaterias $l)
+    {
+        if ($this->collCargadoresBateriass === null) {
+            $this->initCargadoresBateriass();
+            $this->collCargadoresBateriassPartial = true;
+        }
+
+        if (!in_array($l, $this->collCargadoresBateriass->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddCargadoresBaterias($l);
+
+            if ($this->cargadoresBateriassScheduledForDeletion and $this->cargadoresBateriassScheduledForDeletion->contains($l)) {
+                $this->cargadoresBateriassScheduledForDeletion->remove($this->cargadoresBateriassScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	CargadoresBaterias $cargadoresBaterias The cargadoresBaterias object to add.
+     */
+    protected function doAddCargadoresBaterias($cargadoresBaterias)
+    {
+        $this->collCargadoresBateriass[]= $cargadoresBaterias;
+        $cargadoresBaterias->setBaterias($this);
+    }
+
+    /**
+     * @param	CargadoresBaterias $cargadoresBaterias The cargadoresBaterias object to remove.
+     * @return Baterias The current object (for fluent API support)
+     */
+    public function removeCargadoresBaterias($cargadoresBaterias)
+    {
+        if ($this->getCargadoresBateriass()->contains($cargadoresBaterias)) {
+            $this->collCargadoresBateriass->remove($this->collCargadoresBateriass->search($cargadoresBaterias));
+            if (null === $this->cargadoresBateriassScheduledForDeletion) {
+                $this->cargadoresBateriassScheduledForDeletion = clone $this->collCargadoresBateriass;
+                $this->cargadoresBateriassScheduledForDeletion->clear();
+            }
+            $this->cargadoresBateriassScheduledForDeletion[]= clone $cargadoresBaterias;
+            $cargadoresBaterias->setBaterias(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Baterias is new, it will return
+     * an empty collection; or if this Baterias has previously
+     * been saved, it will retrieve related CargadoresBateriass from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Baterias.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|CargadoresBaterias[] List of CargadoresBaterias objects
+     */
+    public function getCargadoresBateriassJoinCargadores($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = CargadoresBateriasQuery::create(null, $criteria);
+        $query->joinWith('Cargadores', $join_behavior);
+
+        return $this->getCargadoresBateriass($query, $con);
     }
 
     /**
@@ -2309,6 +2661,256 @@ abstract class BaseBaterias extends BaseObject implements Persistent
         }
 
         return $this;
+    }
+
+    /**
+     * Clears out the collMontacargasBateriass collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Baterias The current object (for fluent API support)
+     * @see        addMontacargasBateriass()
+     */
+    public function clearMontacargasBateriass()
+    {
+        $this->collMontacargasBateriass = null; // important to set this to null since that means it is uninitialized
+        $this->collMontacargasBateriassPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collMontacargasBateriass collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialMontacargasBateriass($v = true)
+    {
+        $this->collMontacargasBateriassPartial = $v;
+    }
+
+    /**
+     * Initializes the collMontacargasBateriass collection.
+     *
+     * By default this just sets the collMontacargasBateriass collection to an empty array (like clearcollMontacargasBateriass());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initMontacargasBateriass($overrideExisting = true)
+    {
+        if (null !== $this->collMontacargasBateriass && !$overrideExisting) {
+            return;
+        }
+        $this->collMontacargasBateriass = new PropelObjectCollection();
+        $this->collMontacargasBateriass->setModel('MontacargasBaterias');
+    }
+
+    /**
+     * Gets an array of MontacargasBaterias objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Baterias is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|MontacargasBaterias[] List of MontacargasBaterias objects
+     * @throws PropelException
+     */
+    public function getMontacargasBateriass($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collMontacargasBateriassPartial && !$this->isNew();
+        if (null === $this->collMontacargasBateriass || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collMontacargasBateriass) {
+                // return empty collection
+                $this->initMontacargasBateriass();
+            } else {
+                $collMontacargasBateriass = MontacargasBateriasQuery::create(null, $criteria)
+                    ->filterByBaterias($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collMontacargasBateriassPartial && count($collMontacargasBateriass)) {
+                      $this->initMontacargasBateriass(false);
+
+                      foreach ($collMontacargasBateriass as $obj) {
+                        if (false == $this->collMontacargasBateriass->contains($obj)) {
+                          $this->collMontacargasBateriass->append($obj);
+                        }
+                      }
+
+                      $this->collMontacargasBateriassPartial = true;
+                    }
+
+                    $collMontacargasBateriass->getInternalIterator()->rewind();
+
+                    return $collMontacargasBateriass;
+                }
+
+                if ($partial && $this->collMontacargasBateriass) {
+                    foreach ($this->collMontacargasBateriass as $obj) {
+                        if ($obj->isNew()) {
+                            $collMontacargasBateriass[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collMontacargasBateriass = $collMontacargasBateriass;
+                $this->collMontacargasBateriassPartial = false;
+            }
+        }
+
+        return $this->collMontacargasBateriass;
+    }
+
+    /**
+     * Sets a collection of MontacargasBaterias objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $montacargasBateriass A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Baterias The current object (for fluent API support)
+     */
+    public function setMontacargasBateriass(PropelCollection $montacargasBateriass, PropelPDO $con = null)
+    {
+        $montacargasBateriassToDelete = $this->getMontacargasBateriass(new Criteria(), $con)->diff($montacargasBateriass);
+
+
+        $this->montacargasBateriassScheduledForDeletion = $montacargasBateriassToDelete;
+
+        foreach ($montacargasBateriassToDelete as $montacargasBateriasRemoved) {
+            $montacargasBateriasRemoved->setBaterias(null);
+        }
+
+        $this->collMontacargasBateriass = null;
+        foreach ($montacargasBateriass as $montacargasBaterias) {
+            $this->addMontacargasBaterias($montacargasBaterias);
+        }
+
+        $this->collMontacargasBateriass = $montacargasBateriass;
+        $this->collMontacargasBateriassPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related MontacargasBaterias objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related MontacargasBaterias objects.
+     * @throws PropelException
+     */
+    public function countMontacargasBateriass(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collMontacargasBateriassPartial && !$this->isNew();
+        if (null === $this->collMontacargasBateriass || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collMontacargasBateriass) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getMontacargasBateriass());
+            }
+            $query = MontacargasBateriasQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByBaterias($this)
+                ->count($con);
+        }
+
+        return count($this->collMontacargasBateriass);
+    }
+
+    /**
+     * Method called to associate a MontacargasBaterias object to this object
+     * through the MontacargasBaterias foreign key attribute.
+     *
+     * @param    MontacargasBaterias $l MontacargasBaterias
+     * @return Baterias The current object (for fluent API support)
+     */
+    public function addMontacargasBaterias(MontacargasBaterias $l)
+    {
+        if ($this->collMontacargasBateriass === null) {
+            $this->initMontacargasBateriass();
+            $this->collMontacargasBateriassPartial = true;
+        }
+
+        if (!in_array($l, $this->collMontacargasBateriass->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddMontacargasBaterias($l);
+
+            if ($this->montacargasBateriassScheduledForDeletion and $this->montacargasBateriassScheduledForDeletion->contains($l)) {
+                $this->montacargasBateriassScheduledForDeletion->remove($this->montacargasBateriassScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	MontacargasBaterias $montacargasBaterias The montacargasBaterias object to add.
+     */
+    protected function doAddMontacargasBaterias($montacargasBaterias)
+    {
+        $this->collMontacargasBateriass[]= $montacargasBaterias;
+        $montacargasBaterias->setBaterias($this);
+    }
+
+    /**
+     * @param	MontacargasBaterias $montacargasBaterias The montacargasBaterias object to remove.
+     * @return Baterias The current object (for fluent API support)
+     */
+    public function removeMontacargasBaterias($montacargasBaterias)
+    {
+        if ($this->getMontacargasBateriass()->contains($montacargasBaterias)) {
+            $this->collMontacargasBateriass->remove($this->collMontacargasBateriass->search($montacargasBaterias));
+            if (null === $this->montacargasBateriassScheduledForDeletion) {
+                $this->montacargasBateriassScheduledForDeletion = clone $this->collMontacargasBateriass;
+                $this->montacargasBateriassScheduledForDeletion->clear();
+            }
+            $this->montacargasBateriassScheduledForDeletion[]= clone $montacargasBaterias;
+            $montacargasBaterias->setBaterias(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Baterias is new, it will return
+     * an empty collection; or if this Baterias has previously
+     * been saved, it will retrieve related MontacargasBateriass from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Baterias.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|MontacargasBaterias[] List of MontacargasBaterias objects
+     */
+    public function getMontacargasBateriassJoinMontacargas($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = MontacargasBateriasQuery::create(null, $criteria);
+        $query->joinWith('Montacargas', $join_behavior);
+
+        return $this->getMontacargasBateriass($query, $con);
     }
 
     /**
@@ -2904,6 +3506,11 @@ abstract class BaseBaterias extends BaseObject implements Persistent
     {
         if ($deep && !$this->alreadyInClearAllReferencesDeep) {
             $this->alreadyInClearAllReferencesDeep = true;
+            if ($this->collCargadoresBateriass) {
+                foreach ($this->collCargadoresBateriass as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->collDeshabilitabts) {
                 foreach ($this->collDeshabilitabts as $o) {
                     $o->clearAllReferences($deep);
@@ -2911,6 +3518,11 @@ abstract class BaseBaterias extends BaseObject implements Persistent
             }
             if ($this->collLimbos) {
                 foreach ($this->collLimbos as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
+            if ($this->collMontacargasBateriass) {
+                foreach ($this->collMontacargasBateriass as $o) {
                     $o->clearAllReferences($deep);
                 }
             }
@@ -2931,6 +3543,10 @@ abstract class BaseBaterias extends BaseObject implements Persistent
             $this->alreadyInClearAllReferencesDeep = false;
         } // if ($deep)
 
+        if ($this->collCargadoresBateriass instanceof PropelCollection) {
+            $this->collCargadoresBateriass->clearIterator();
+        }
+        $this->collCargadoresBateriass = null;
         if ($this->collDeshabilitabts instanceof PropelCollection) {
             $this->collDeshabilitabts->clearIterator();
         }
@@ -2939,6 +3555,10 @@ abstract class BaseBaterias extends BaseObject implements Persistent
             $this->collLimbos->clearIterator();
         }
         $this->collLimbos = null;
+        if ($this->collMontacargasBateriass instanceof PropelCollection) {
+            $this->collMontacargasBateriass->clearIterator();
+        }
+        $this->collMontacargasBateriass = null;
         if ($this->collUsoBateriasBodegas instanceof PropelCollection) {
             $this->collUsoBateriasBodegas->clearIterator();
         }

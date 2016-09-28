@@ -1,9 +1,5 @@
 <?php
 
-
-
-
-
 require_once("models/config.php");
 if (!securePage($_SERVER['PHP_SELF'])){die();}
 
@@ -25,7 +21,7 @@ $query="
         m.idmontacargas as Id,
         m.montacargas_nombre as Nombre,
         m.montacargas_modelo as Modelo,
-         m.montacargas_modelo as Modelo,
+         m.montacargas_marca as Marca,
         CONCAT(m.montacargas_c,'-',m.montacargas_k,'-',m.montacargas_p,'-',m.montacargas_t,'-',m.montacargas_e,' (',m.montacargas_volts,'V - ',m.montacargas_amperaje,'Ah)') as Tipo
     FROM
         montacargas as m
@@ -93,6 +89,7 @@ function deshabilita(cual) {
             <tr>
                 <th>Nombre</th>
                 <th>Modelo</th>
+                <th>Marca</th>
                 <th>Tipo</th>
                 <th>Total de Ciclos</th>
                 <th>Ciclos Restantes</th>
@@ -111,17 +108,19 @@ function deshabilita(cual) {
 				echo "<tr>";
 			    echo "<th>".$fila['Nombre']."</th>";
 				echo "<th>".$fila['Modelo']."</th>";
+                                  echo "<th>".$fila['Marca']."</th>";
 				echo "<th>".$fila['Tipo']."</th>";
+                              
 
 //					 (cictot-IF(COUNT(d.id) IS NULL,0,COUNT(d.id)))/IF(m.ciclos_mant IS NULL OR m.ciclos_mant=0,1,m.ciclos_mant)) AS  'cicres'
 
 			   $qciclos="
 				  SELECT COUNT(uso_baterias_montacargas.id) as ciclos
 				  FROM uso_baterias_montacargas
-                                  JOIN montacargas ON uso_baterias_montacargas.mc = montacargas.id
-                                  JOIN bateriastipos ON montacargas.tipo = bateriastipos.id
-				  WHERE mc =".$fila['Id']."
-					 AND fecha_salida!='0000-00-00 00:00:00' AND bateriastipos.idsucursal = ".$loggedInUser->sucursal_activa."
+                                  JOIN montacargas ON uso_baterias_montacargas.mc = montacargas.idmontacargas
+				  WHERE idmontacargas =".$fila['Id']."
+					 AND fecha_salida!='0000-00-00 00:00:00'
+                                         AND idsucursal = ".$loggedInUser->sucursal_activa."
 			   ";
                            
 			   $resC1=$mysqli->query($qciclos);
@@ -131,13 +130,13 @@ function deshabilita(cual) {
 			   $qcicman="
 				  SELECT IF(MAX(fecha_entrada) IS NULL,0,MAX(fecha_entrada)) as ultman
 				  FROM deshabilitamc
-                                  JOIN montacargas ON deshabilitamc.mc = montacargas.id
-                                  JOIN bateriastipos ON montacargas.tipo = bateriastipos.id
-				  WHERE mc =".$fila['Id']."
+                                  JOIN montacargas ON deshabilitamc.idmontacargas = montacargas.idmontacargas
+				  WHERE montacargas.idmontacargas =".$fila['Id']."
 					 AND fecha_salida!='0000-00-00 00:00:00'
 					 AND motivo='Mantenimiento'
-                                         AND bateriastipos.idsucursal= ".$loggedInUser->sucursal_activa."
+                                         AND montacargas.idsucursal = ".$loggedInUser->sucursal_activa."
 			   ";
+                          
 			   $resC1=$mysqli->query($qcicman);
 			   $filaC1 = $resC1->fetch_array();
 			   $ultman = $filaC1['ultman'];
@@ -145,22 +144,21 @@ function deshabilita(cual) {
 			   $qcicact="
 				  SELECT COUNT(uso_baterias_montacargas.id) as cicact
 				  FROM uso_baterias_montacargas
-                                   JOIN montacargas ON uso_baterias_montacargas.mc = montacargas.id
-                                  JOIN bateriastipos ON montacargas.tipo = bateriastipos.id 
-				  WHERE mc =".$fila['Id']."
-					 AND fecha_salida>'".$ultman."' AND bateriastipos.idsucursal = ".$loggedInUser->sucursal_activa."
+                                   JOIN montacargas ON uso_baterias_montacargas.mc = montacargas.idmontacargas
+				  WHERE montacargas.idmontacargas =".$fila['Id']."
+					 AND fecha_salida>'".$ultman."' AND montacargas.idsucursal = ".$loggedInUser->sucursal_activa."
 			   ";
-
+                         
 			   $resC1=$mysqli->query($qcicact);
 			   $filaC1 = $resC1->fetch_array();
 			   $cicact = $filaC1['cicact'];
 			   
-			   $qcicmei="SELECT IF(ciclos_iniciales IS NULL,0,ciclos_iniciales) as cicini,
-					 IF(ciclos_mant IS NULL OR ciclos_mant=0,1,ciclos_mant) as cicman
+			   $qcicmei="SELECT IF(montacargas_ciclosiniciales IS NULL,0,montacargas_ciclosiniciales) as cicini,
+					 IF(montacargas_ciclosmant IS NULL OR montacargas_ciclosmant=0,1,montacargas_ciclosmant) as cicman
 				  FROM  montacargas
-                                  JOIN bateriastipos ON montacargas.tipo = bateriastipos.id 
-				  WHERE  montacargas.id = ".$fila['Id']." AND bateriastipos.idsucursal = ".$loggedInUser->sucursal_activa.";";
-			   
+				  WHERE  montacargas.idmontacargas = ".$fila['Id']." AND montacargas.idsucursal = ".$loggedInUser->sucursal_activa.";";
+			  
+                          
                            $resC1=$mysqli->query($qcicmei);
 			   $filaC1 = $resC1->fetch_array();
 			   $cicini = $filaC1['cicini'];
@@ -179,15 +177,14 @@ function deshabilita(cual) {
 				$saludBateriaActualValor = mt_rand(1, 100);
 				
 				$querybateria="
-				  SELECT b.num_serie as 'bateria', CONCAT(TIMESTAMPDIFF(day, fecha_entrada, now()),'D ',    
+				  SELECT b.baterias_numserie as 'bateria', CONCAT(TIMESTAMPDIFF(day, fecha_entrada, now()),'D ',    
 					 TIMESTAMPDIFF(hour, fecha_entrada, now())-TIMESTAMPDIFF(day, fecha_entrada, now())*24,'H  ',
 					 TIMESTAMPDIFF(minute, fecha_entrada, now())-(TIMESTAMPDIFF(hour, fecha_entrada, now()))*60,'M')
 					 as 'tiempo'
-				  FROM bateriastipos as btt ,uso_baterias_montacargas as u, baterias as b
+				  FROM uso_baterias_montacargas as u, baterias as b
 				  WHERE fecha_salida = '0000-00-00 00:00:00'
-					 AND u.bt = b.id
-                                         AND btt.id = b.tipo
-                                         AND btt.idsucursal = ".$loggedInUser->sucursal_activa."
+					 AND u.bt = b.idbaterias
+                                         AND b.idsucursal = ".$loggedInUser->sucursal_activa."
 					 AND u.mc =".$fila['Id'];
   
 			   $resultadobateria=$mysqli->query($querybateria);
@@ -210,10 +207,10 @@ function deshabilita(cual) {
 						   TIMESTAMPDIFF(minute, fecha_entrada, now())-(TIMESTAMPDIFF(hour, fecha_entrada, now()))*60,'M')
 						as 'tiempo'
 					 FROM deshabilitamc
-                                         JOIN montacargas ON deshabilitamc.mc = montacargas.id
-                                         JOIN bateriastipos ON bateriastipos.id = montacargas.tipo
-					 WHERE mc=".$fila['Id']."
-						AND fecha_salida='0000-00-00 00:00:00' AND bateriastipos.idsucursal=".$loggedInUser->sucursal_activa;
+                                         JOIN montacargas ON deshabilitamc.idmontacargas = montacargas.idmontacargas                
+					 WHERE montacargas.idmontacargas=".$fila['Id']."
+						AND fecha_salida='0000-00-00 00:00:00' AND montacargas.idsucursal=".$loggedInUser->sucursal_activa;
+                           
 			   if ($resultadostatus=$mysqli->query($querystatus)){
 				  $filastatus = $resultadostatus->fetch_array();
 						 

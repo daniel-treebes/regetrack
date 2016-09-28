@@ -63,8 +63,10 @@ class BateriasTableMap extends TableMap
     public function buildRelations()
     {
         $this->addRelation('Sucursal', 'Sucursal', RelationMap::MANY_TO_ONE, array('idsucursal' => 'idsucursal', ), 'CASCADE', 'CASCADE');
+        $this->addRelation('CargadoresBaterias', 'CargadoresBaterias', RelationMap::ONE_TO_MANY, array('idbaterias' => 'idbaterias', ), null, null, 'CargadoresBateriass');
         $this->addRelation('Deshabilitabt', 'Deshabilitabt', RelationMap::ONE_TO_MANY, array('idbaterias' => 'bt', ), 'CASCADE', 'CASCADE', 'Deshabilitabts');
         $this->addRelation('Limbo', 'Limbo', RelationMap::ONE_TO_MANY, array('idbaterias' => 'bt', ), 'CASCADE', 'CASCADE', 'Limbos');
+        $this->addRelation('MontacargasBaterias', 'MontacargasBaterias', RelationMap::ONE_TO_MANY, array('idbaterias' => 'idbaterias', ), null, null, 'MontacargasBateriass');
         $this->addRelation('UsoBateriasBodega', 'UsoBateriasBodega', RelationMap::ONE_TO_MANY, array('idbaterias' => 'bt', ), 'CASCADE', 'CASCADE', 'UsoBateriasBodegas');
         $this->addRelation('UsoBateriasMontacargas', 'UsoBateriasMontacargas', RelationMap::ONE_TO_MANY, array('idbaterias' => 'bt', ), 'CASCADE', 'CASCADE', 'UsoBateriasMontacargass');
     } // buildRelations()

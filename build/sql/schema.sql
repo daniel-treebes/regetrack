@@ -84,6 +84,28 @@ CREATE TABLE `cargadores`
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
+-- cargadores_baterias
+-- ---------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `cargadores_baterias`;
+
+CREATE TABLE `cargadores_baterias`
+(
+    `idcargadores_baterias` INTEGER NOT NULL AUTO_INCREMENT,
+    `idcargadores` INTEGER NOT NULL,
+    `idbaterias` INTEGER NOT NULL,
+    PRIMARY KEY (`idcargadores_baterias`),
+    INDEX `idcargadores` (`idcargadores`),
+    INDEX `idbaterias` (`idbaterias`),
+    CONSTRAINT `cargadores_baterias_idcargadores`
+        FOREIGN KEY (`idcargadores`)
+        REFERENCES `cargadores` (`idcargadores`),
+    CONSTRAINT `cargadores_baterias_idbaterias`
+        FOREIGN KEY (`idbaterias`)
+        REFERENCES `baterias` (`idbaterias`)
+) ENGINE=InnoDB;
+
+-- ---------------------------------------------------------------------
 -- deshabilitabt
 -- ---------------------------------------------------------------------
 
@@ -241,6 +263,28 @@ CREATE TABLE `montacargas`
         REFERENCES `sucursal` (`idsucursal`)
         ON UPDATE CASCADE
         ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+-- ---------------------------------------------------------------------
+-- montacargas_baterias
+-- ---------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `montacargas_baterias`;
+
+CREATE TABLE `montacargas_baterias`
+(
+    `idcargadores_baterias` INTEGER NOT NULL AUTO_INCREMENT,
+    `idmontacargas` INTEGER NOT NULL,
+    `idbaterias` INTEGER NOT NULL,
+    PRIMARY KEY (`idcargadores_baterias`),
+    INDEX `idmontacargas` (`idmontacargas`),
+    INDEX `idbaterias` (`idbaterias`),
+    CONSTRAINT `cargadores_baterias_idcargadores0`
+        FOREIGN KEY (`idmontacargas`)
+        REFERENCES `montacargas` (`idmontacargas`),
+    CONSTRAINT `cargadores_baterias_idbaterias0`
+        FOREIGN KEY (`idbaterias`)
+        REFERENCES `baterias` (`idbaterias`)
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
