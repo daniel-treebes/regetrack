@@ -36,10 +36,10 @@ abstract class BaseDeshabilitamc extends BaseObject implements Persistent
     protected $id;
 
     /**
-     * The value for the mc field.
+     * The value for the idmontacargas field.
      * @var        int
      */
-    protected $mc;
+    protected $idmontacargas;
 
     /**
      * The value for the motivo field.
@@ -70,6 +70,21 @@ abstract class BaseDeshabilitamc extends BaseObject implements Persistent
      * @var        int
      */
     protected $usuario_salida;
+
+    /**
+     * @var        Montacargas
+     */
+    protected $aMontacargas;
+
+    /**
+     * @var        UcUsers
+     */
+    protected $aUcUsersRelatedByUsuarioEntrada;
+
+    /**
+     * @var        UcUsers
+     */
+    protected $aUcUsersRelatedByUsuarioSalida;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -103,14 +118,14 @@ abstract class BaseDeshabilitamc extends BaseObject implements Persistent
     }
 
     /**
-     * Get the [mc] column value.
+     * Get the [idmontacargas] column value.
      *
      * @return int
      */
-    public function getMc()
+    public function getIdmontacargas()
     {
 
-        return $this->mc;
+        return $this->idmontacargas;
     }
 
     /**
@@ -248,25 +263,29 @@ abstract class BaseDeshabilitamc extends BaseObject implements Persistent
     } // setId()
 
     /**
-     * Set the value of [mc] column.
+     * Set the value of [idmontacargas] column.
      *
      * @param  int $v new value
      * @return Deshabilitamc The current object (for fluent API support)
      */
-    public function setMc($v)
+    public function setIdmontacargas($v)
     {
         if ($v !== null && is_numeric($v)) {
             $v = (int) $v;
         }
 
-        if ($this->mc !== $v) {
-            $this->mc = $v;
-            $this->modifiedColumns[] = DeshabilitamcPeer::MC;
+        if ($this->idmontacargas !== $v) {
+            $this->idmontacargas = $v;
+            $this->modifiedColumns[] = DeshabilitamcPeer::IDMONTACARGAS;
+        }
+
+        if ($this->aMontacargas !== null && $this->aMontacargas->getIdmontacargas() !== $v) {
+            $this->aMontacargas = null;
         }
 
 
         return $this;
-    } // setMc()
+    } // setIdmontacargas()
 
     /**
      * Set the value of [motivo] column.
@@ -352,6 +371,10 @@ abstract class BaseDeshabilitamc extends BaseObject implements Persistent
             $this->modifiedColumns[] = DeshabilitamcPeer::USUARIO_ENTRADA;
         }
 
+        if ($this->aUcUsersRelatedByUsuarioEntrada !== null && $this->aUcUsersRelatedByUsuarioEntrada->getId() !== $v) {
+            $this->aUcUsersRelatedByUsuarioEntrada = null;
+        }
+
 
         return $this;
     } // setUsuarioEntrada()
@@ -371,6 +394,10 @@ abstract class BaseDeshabilitamc extends BaseObject implements Persistent
         if ($this->usuario_salida !== $v) {
             $this->usuario_salida = $v;
             $this->modifiedColumns[] = DeshabilitamcPeer::USUARIO_SALIDA;
+        }
+
+        if ($this->aUcUsersRelatedByUsuarioSalida !== null && $this->aUcUsersRelatedByUsuarioSalida->getId() !== $v) {
+            $this->aUcUsersRelatedByUsuarioSalida = null;
         }
 
 
@@ -410,7 +437,7 @@ abstract class BaseDeshabilitamc extends BaseObject implements Persistent
         try {
 
             $this->id = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
-            $this->mc = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
+            $this->idmontacargas = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
             $this->motivo = ($row[$startcol + 2] !== null) ? (string) $row[$startcol + 2] : null;
             $this->fecha_entrada = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
             $this->fecha_salida = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
@@ -448,6 +475,15 @@ abstract class BaseDeshabilitamc extends BaseObject implements Persistent
     public function ensureConsistency()
     {
 
+        if ($this->aMontacargas !== null && $this->idmontacargas !== $this->aMontacargas->getIdmontacargas()) {
+            $this->aMontacargas = null;
+        }
+        if ($this->aUcUsersRelatedByUsuarioEntrada !== null && $this->usuario_entrada !== $this->aUcUsersRelatedByUsuarioEntrada->getId()) {
+            $this->aUcUsersRelatedByUsuarioEntrada = null;
+        }
+        if ($this->aUcUsersRelatedByUsuarioSalida !== null && $this->usuario_salida !== $this->aUcUsersRelatedByUsuarioSalida->getId()) {
+            $this->aUcUsersRelatedByUsuarioSalida = null;
+        }
     } // ensureConsistency
 
     /**
@@ -487,6 +523,9 @@ abstract class BaseDeshabilitamc extends BaseObject implements Persistent
 
         if ($deep) {  // also de-associate any related objects?
 
+            $this->aMontacargas = null;
+            $this->aUcUsersRelatedByUsuarioEntrada = null;
+            $this->aUcUsersRelatedByUsuarioSalida = null;
         } // if (deep)
     }
 
@@ -600,6 +639,32 @@ abstract class BaseDeshabilitamc extends BaseObject implements Persistent
         if (!$this->alreadyInSave) {
             $this->alreadyInSave = true;
 
+            // We call the save method on the following object(s) if they
+            // were passed to this object by their corresponding set
+            // method.  This object relates to these object(s) by a
+            // foreign key reference.
+
+            if ($this->aMontacargas !== null) {
+                if ($this->aMontacargas->isModified() || $this->aMontacargas->isNew()) {
+                    $affectedRows += $this->aMontacargas->save($con);
+                }
+                $this->setMontacargas($this->aMontacargas);
+            }
+
+            if ($this->aUcUsersRelatedByUsuarioEntrada !== null) {
+                if ($this->aUcUsersRelatedByUsuarioEntrada->isModified() || $this->aUcUsersRelatedByUsuarioEntrada->isNew()) {
+                    $affectedRows += $this->aUcUsersRelatedByUsuarioEntrada->save($con);
+                }
+                $this->setUcUsersRelatedByUsuarioEntrada($this->aUcUsersRelatedByUsuarioEntrada);
+            }
+
+            if ($this->aUcUsersRelatedByUsuarioSalida !== null) {
+                if ($this->aUcUsersRelatedByUsuarioSalida->isModified() || $this->aUcUsersRelatedByUsuarioSalida->isNew()) {
+                    $affectedRows += $this->aUcUsersRelatedByUsuarioSalida->save($con);
+                }
+                $this->setUcUsersRelatedByUsuarioSalida($this->aUcUsersRelatedByUsuarioSalida);
+            }
+
             if ($this->isNew() || $this->isModified()) {
                 // persist changes
                 if ($this->isNew()) {
@@ -640,8 +705,8 @@ abstract class BaseDeshabilitamc extends BaseObject implements Persistent
         if ($this->isColumnModified(DeshabilitamcPeer::ID)) {
             $modifiedColumns[':p' . $index++]  = '`id`';
         }
-        if ($this->isColumnModified(DeshabilitamcPeer::MC)) {
-            $modifiedColumns[':p' . $index++]  = '`mc`';
+        if ($this->isColumnModified(DeshabilitamcPeer::IDMONTACARGAS)) {
+            $modifiedColumns[':p' . $index++]  = '`idmontacargas`';
         }
         if ($this->isColumnModified(DeshabilitamcPeer::MOTIVO)) {
             $modifiedColumns[':p' . $index++]  = '`motivo`';
@@ -672,8 +737,8 @@ abstract class BaseDeshabilitamc extends BaseObject implements Persistent
                     case '`id`':
                         $stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
                         break;
-                    case '`mc`':
-                        $stmt->bindValue($identifier, $this->mc, PDO::PARAM_INT);
+                    case '`idmontacargas`':
+                        $stmt->bindValue($identifier, $this->idmontacargas, PDO::PARAM_INT);
                         break;
                     case '`motivo`':
                         $stmt->bindValue($identifier, $this->motivo, PDO::PARAM_STR);
@@ -784,6 +849,30 @@ abstract class BaseDeshabilitamc extends BaseObject implements Persistent
             $failureMap = array();
 
 
+            // We call the validate method on the following object(s) if they
+            // were passed to this object by their corresponding set
+            // method.  This object relates to these object(s) by a
+            // foreign key reference.
+
+            if ($this->aMontacargas !== null) {
+                if (!$this->aMontacargas->validate($columns)) {
+                    $failureMap = array_merge($failureMap, $this->aMontacargas->getValidationFailures());
+                }
+            }
+
+            if ($this->aUcUsersRelatedByUsuarioEntrada !== null) {
+                if (!$this->aUcUsersRelatedByUsuarioEntrada->validate($columns)) {
+                    $failureMap = array_merge($failureMap, $this->aUcUsersRelatedByUsuarioEntrada->getValidationFailures());
+                }
+            }
+
+            if ($this->aUcUsersRelatedByUsuarioSalida !== null) {
+                if (!$this->aUcUsersRelatedByUsuarioSalida->validate($columns)) {
+                    $failureMap = array_merge($failureMap, $this->aUcUsersRelatedByUsuarioSalida->getValidationFailures());
+                }
+            }
+
+
             if (($retval = DeshabilitamcPeer::doValidate($this, $columns)) !== true) {
                 $failureMap = array_merge($failureMap, $retval);
             }
@@ -828,7 +917,7 @@ abstract class BaseDeshabilitamc extends BaseObject implements Persistent
                 return $this->getId();
                 break;
             case 1:
-                return $this->getMc();
+                return $this->getIdmontacargas();
                 break;
             case 2:
                 return $this->getMotivo();
@@ -862,10 +951,11 @@ abstract class BaseDeshabilitamc extends BaseObject implements Persistent
      *                    Defaults to BasePeer::TYPE_PHPNAME.
      * @param     boolean $includeLazyLoadColumns (optional) Whether to include lazy loaded columns. Defaults to true.
      * @param     array $alreadyDumpedObjects List of objects to skip to avoid recursion
+     * @param     boolean $includeForeignObjects (optional) Whether to include hydrated related objects. Default to FALSE.
      *
      * @return array an associative array containing the field names (as keys) and field values
      */
-    public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array())
+    public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array(), $includeForeignObjects = false)
     {
         if (isset($alreadyDumpedObjects['Deshabilitamc'][$this->getPrimaryKey()])) {
             return '*RECURSION*';
@@ -874,7 +964,7 @@ abstract class BaseDeshabilitamc extends BaseObject implements Persistent
         $keys = DeshabilitamcPeer::getFieldNames($keyType);
         $result = array(
             $keys[0] => $this->getId(),
-            $keys[1] => $this->getMc(),
+            $keys[1] => $this->getIdmontacargas(),
             $keys[2] => $this->getMotivo(),
             $keys[3] => $this->getFechaEntrada(),
             $keys[4] => $this->getFechaSalida(),
@@ -886,6 +976,17 @@ abstract class BaseDeshabilitamc extends BaseObject implements Persistent
             $result[$key] = $virtualColumn;
         }
 
+        if ($includeForeignObjects) {
+            if (null !== $this->aMontacargas) {
+                $result['Montacargas'] = $this->aMontacargas->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->aUcUsersRelatedByUsuarioEntrada) {
+                $result['UcUsersRelatedByUsuarioEntrada'] = $this->aUcUsersRelatedByUsuarioEntrada->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->aUcUsersRelatedByUsuarioSalida) {
+                $result['UcUsersRelatedByUsuarioSalida'] = $this->aUcUsersRelatedByUsuarioSalida->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+        }
 
         return $result;
     }
@@ -923,7 +1024,7 @@ abstract class BaseDeshabilitamc extends BaseObject implements Persistent
                 $this->setId($value);
                 break;
             case 1:
-                $this->setMc($value);
+                $this->setIdmontacargas($value);
                 break;
             case 2:
                 $this->setMotivo($value);
@@ -965,7 +1066,7 @@ abstract class BaseDeshabilitamc extends BaseObject implements Persistent
         $keys = DeshabilitamcPeer::getFieldNames($keyType);
 
         if (array_key_exists($keys[0], $arr)) $this->setId($arr[$keys[0]]);
-        if (array_key_exists($keys[1], $arr)) $this->setMc($arr[$keys[1]]);
+        if (array_key_exists($keys[1], $arr)) $this->setIdmontacargas($arr[$keys[1]]);
         if (array_key_exists($keys[2], $arr)) $this->setMotivo($arr[$keys[2]]);
         if (array_key_exists($keys[3], $arr)) $this->setFechaEntrada($arr[$keys[3]]);
         if (array_key_exists($keys[4], $arr)) $this->setFechaSalida($arr[$keys[4]]);
@@ -983,7 +1084,7 @@ abstract class BaseDeshabilitamc extends BaseObject implements Persistent
         $criteria = new Criteria(DeshabilitamcPeer::DATABASE_NAME);
 
         if ($this->isColumnModified(DeshabilitamcPeer::ID)) $criteria->add(DeshabilitamcPeer::ID, $this->id);
-        if ($this->isColumnModified(DeshabilitamcPeer::MC)) $criteria->add(DeshabilitamcPeer::MC, $this->mc);
+        if ($this->isColumnModified(DeshabilitamcPeer::IDMONTACARGAS)) $criteria->add(DeshabilitamcPeer::IDMONTACARGAS, $this->idmontacargas);
         if ($this->isColumnModified(DeshabilitamcPeer::MOTIVO)) $criteria->add(DeshabilitamcPeer::MOTIVO, $this->motivo);
         if ($this->isColumnModified(DeshabilitamcPeer::FECHA_ENTRADA)) $criteria->add(DeshabilitamcPeer::FECHA_ENTRADA, $this->fecha_entrada);
         if ($this->isColumnModified(DeshabilitamcPeer::FECHA_SALIDA)) $criteria->add(DeshabilitamcPeer::FECHA_SALIDA, $this->fecha_salida);
@@ -1052,12 +1153,24 @@ abstract class BaseDeshabilitamc extends BaseObject implements Persistent
      */
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
-        $copyObj->setMc($this->getMc());
+        $copyObj->setIdmontacargas($this->getIdmontacargas());
         $copyObj->setMotivo($this->getMotivo());
         $copyObj->setFechaEntrada($this->getFechaEntrada());
         $copyObj->setFechaSalida($this->getFechaSalida());
         $copyObj->setUsuarioEntrada($this->getUsuarioEntrada());
         $copyObj->setUsuarioSalida($this->getUsuarioSalida());
+
+        if ($deepCopy && !$this->startCopy) {
+            // important: temporarily setNew(false) because this affects the behavior of
+            // the getter/setter methods for fkey referrer objects.
+            $copyObj->setNew(false);
+            // store object hash to prevent cycle
+            $this->startCopy = true;
+
+            //unflag object copy
+            $this->startCopy = false;
+        } // if ($deepCopy)
+
         if ($makeNew) {
             $copyObj->setNew(true);
             $copyObj->setId(NULL); // this is a auto-increment column, so set to default value
@@ -1105,12 +1218,168 @@ abstract class BaseDeshabilitamc extends BaseObject implements Persistent
     }
 
     /**
+     * Declares an association between this object and a Montacargas object.
+     *
+     * @param                  Montacargas $v
+     * @return Deshabilitamc The current object (for fluent API support)
+     * @throws PropelException
+     */
+    public function setMontacargas(Montacargas $v = null)
+    {
+        if ($v === null) {
+            $this->setIdmontacargas(NULL);
+        } else {
+            $this->setIdmontacargas($v->getIdmontacargas());
+        }
+
+        $this->aMontacargas = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the Montacargas object, it will not be re-added.
+        if ($v !== null) {
+            $v->addDeshabilitamc($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated Montacargas object
+     *
+     * @param PropelPDO $con Optional Connection object.
+     * @param $doQuery Executes a query to get the object if required
+     * @return Montacargas The associated Montacargas object.
+     * @throws PropelException
+     */
+    public function getMontacargas(PropelPDO $con = null, $doQuery = true)
+    {
+        if ($this->aMontacargas === null && ($this->idmontacargas !== null) && $doQuery) {
+            $this->aMontacargas = MontacargasQuery::create()->findPk($this->idmontacargas, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aMontacargas->addDeshabilitamcs($this);
+             */
+        }
+
+        return $this->aMontacargas;
+    }
+
+    /**
+     * Declares an association between this object and a UcUsers object.
+     *
+     * @param                  UcUsers $v
+     * @return Deshabilitamc The current object (for fluent API support)
+     * @throws PropelException
+     */
+    public function setUcUsersRelatedByUsuarioEntrada(UcUsers $v = null)
+    {
+        if ($v === null) {
+            $this->setUsuarioEntrada(NULL);
+        } else {
+            $this->setUsuarioEntrada($v->getId());
+        }
+
+        $this->aUcUsersRelatedByUsuarioEntrada = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the UcUsers object, it will not be re-added.
+        if ($v !== null) {
+            $v->addDeshabilitamcRelatedByUsuarioEntrada($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated UcUsers object
+     *
+     * @param PropelPDO $con Optional Connection object.
+     * @param $doQuery Executes a query to get the object if required
+     * @return UcUsers The associated UcUsers object.
+     * @throws PropelException
+     */
+    public function getUcUsersRelatedByUsuarioEntrada(PropelPDO $con = null, $doQuery = true)
+    {
+        if ($this->aUcUsersRelatedByUsuarioEntrada === null && ($this->usuario_entrada !== null) && $doQuery) {
+            $this->aUcUsersRelatedByUsuarioEntrada = UcUsersQuery::create()->findPk($this->usuario_entrada, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aUcUsersRelatedByUsuarioEntrada->addDeshabilitamcsRelatedByUsuarioEntrada($this);
+             */
+        }
+
+        return $this->aUcUsersRelatedByUsuarioEntrada;
+    }
+
+    /**
+     * Declares an association between this object and a UcUsers object.
+     *
+     * @param                  UcUsers $v
+     * @return Deshabilitamc The current object (for fluent API support)
+     * @throws PropelException
+     */
+    public function setUcUsersRelatedByUsuarioSalida(UcUsers $v = null)
+    {
+        if ($v === null) {
+            $this->setUsuarioSalida(NULL);
+        } else {
+            $this->setUsuarioSalida($v->getId());
+        }
+
+        $this->aUcUsersRelatedByUsuarioSalida = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the UcUsers object, it will not be re-added.
+        if ($v !== null) {
+            $v->addDeshabilitamcRelatedByUsuarioSalida($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated UcUsers object
+     *
+     * @param PropelPDO $con Optional Connection object.
+     * @param $doQuery Executes a query to get the object if required
+     * @return UcUsers The associated UcUsers object.
+     * @throws PropelException
+     */
+    public function getUcUsersRelatedByUsuarioSalida(PropelPDO $con = null, $doQuery = true)
+    {
+        if ($this->aUcUsersRelatedByUsuarioSalida === null && ($this->usuario_salida !== null) && $doQuery) {
+            $this->aUcUsersRelatedByUsuarioSalida = UcUsersQuery::create()->findPk($this->usuario_salida, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aUcUsersRelatedByUsuarioSalida->addDeshabilitamcsRelatedByUsuarioSalida($this);
+             */
+        }
+
+        return $this->aUcUsersRelatedByUsuarioSalida;
+    }
+
+    /**
      * Clears the current object and sets all attributes to their default values
      */
     public function clear()
     {
         $this->id = null;
-        $this->mc = null;
+        $this->idmontacargas = null;
         $this->motivo = null;
         $this->fecha_entrada = null;
         $this->fecha_salida = null;
@@ -1138,10 +1407,22 @@ abstract class BaseDeshabilitamc extends BaseObject implements Persistent
     {
         if ($deep && !$this->alreadyInClearAllReferencesDeep) {
             $this->alreadyInClearAllReferencesDeep = true;
+            if ($this->aMontacargas instanceof Persistent) {
+              $this->aMontacargas->clearAllReferences($deep);
+            }
+            if ($this->aUcUsersRelatedByUsuarioEntrada instanceof Persistent) {
+              $this->aUcUsersRelatedByUsuarioEntrada->clearAllReferences($deep);
+            }
+            if ($this->aUcUsersRelatedByUsuarioSalida instanceof Persistent) {
+              $this->aUcUsersRelatedByUsuarioSalida->clearAllReferences($deep);
+            }
 
             $this->alreadyInClearAllReferencesDeep = false;
         } // if ($deep)
 
+        $this->aMontacargas = null;
+        $this->aUcUsersRelatedByUsuarioEntrada = null;
+        $this->aUcUsersRelatedByUsuarioSalida = null;
     }
 
     /**

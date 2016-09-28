@@ -1,0 +1,5 @@
+id,nombre,modelo,tipo,ciclos_mant,ciclos_iniciales
+1,MC1,Audi,1,200,20
+2,MC2,Renault,1,200,10
+3,MC3,Ford,1,200,33
+4,MC11,Ford,1,200,33

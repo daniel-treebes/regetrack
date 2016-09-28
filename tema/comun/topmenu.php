@@ -3,6 +3,10 @@
 
 
 if($loggedInUser->checkPermission(array(2))){
+                
+                $sucursa_activa = SucursalQuery::create()->findPk($loggedInUser->sucursal_activa);
+                $sucursales = \SucursalQuery::create()->filterByIdempresa($loggedInUser->idempresa)->find();
+
 		?>
 		<!-- BEGIN TOP NAVIGATION MENU -->
             <ul class="nav navbar-nav pull-right" >
@@ -10,7 +14,7 @@ if($loggedInUser->checkPermission(array(2))){
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
                     <!--img alt="" class="img-circle" src="../assets/layouts/layout/img/avatar3_small.jpg"/-->
                     <span class="username" >
-                    <?php echo $loggedInUser->displayname; ?> </span>
+                    <?php echo $loggedInUser->displayname ?> (<?php echo $sucursa_activa->getSucursalNombre()?>) </span>
                     <i class="fa fa-angle-down"></i>
                     </a>
                     <ul class="dropdown-menu">
@@ -47,6 +51,18 @@ if($loggedInUser->checkPermission(array(2))){
                             <i class="fa fa-cogs"></i> Configuración
                             </a>
                         </li>
+                        <li class="divider">
+                        </li>
+                        <?php foreach ($sucursales as $sucursal) :?>
+                            <li>
+                                <a href="cambiarsucursal.php?idsucursal=<?php echo $sucursal->getIdsucursal()?>">
+                                <?php echo $sucursal->getSucursalNombre()?>
+                                <?php if($loggedInUser->sucursal_activa == $sucursal->getIdsucursal()) :?>
+                                    <i class="fa fa-check"></i>
+                                <?php endif;?>
+                                </a>
+                            </li>
+                        <?php endforeach;?>
                         <li class="divider">
                         </li>
                         <li>

@@ -72,6 +72,11 @@ abstract class BaseDeshabilitabt extends BaseObject implements Persistent
     protected $usuario_salida;
 
     /**
+     * @var        Baterias
+     */
+    protected $aBaterias;
+
+    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      * @var        boolean
@@ -264,6 +269,10 @@ abstract class BaseDeshabilitabt extends BaseObject implements Persistent
             $this->modifiedColumns[] = DeshabilitabtPeer::BT;
         }
 
+        if ($this->aBaterias !== null && $this->aBaterias->getIdbaterias() !== $v) {
+            $this->aBaterias = null;
+        }
+
 
         return $this;
     } // setBt()
@@ -448,6 +457,9 @@ abstract class BaseDeshabilitabt extends BaseObject implements Persistent
     public function ensureConsistency()
     {
 
+        if ($this->aBaterias !== null && $this->bt !== $this->aBaterias->getIdbaterias()) {
+            $this->aBaterias = null;
+        }
     } // ensureConsistency
 
     /**
@@ -487,6 +499,7 @@ abstract class BaseDeshabilitabt extends BaseObject implements Persistent
 
         if ($deep) {  // also de-associate any related objects?
 
+            $this->aBaterias = null;
         } // if (deep)
     }
 
@@ -599,6 +612,18 @@ abstract class BaseDeshabilitabt extends BaseObject implements Persistent
         $affectedRows = 0; // initialize var to track total num of affected rows
         if (!$this->alreadyInSave) {
             $this->alreadyInSave = true;
+
+            // We call the save method on the following object(s) if they
+            // were passed to this object by their corresponding set
+            // method.  This object relates to these object(s) by a
+            // foreign key reference.
+
+            if ($this->aBaterias !== null) {
+                if ($this->aBaterias->isModified() || $this->aBaterias->isNew()) {
+                    $affectedRows += $this->aBaterias->save($con);
+                }
+                $this->setBaterias($this->aBaterias);
+            }
 
             if ($this->isNew() || $this->isModified()) {
                 // persist changes
@@ -784,6 +809,18 @@ abstract class BaseDeshabilitabt extends BaseObject implements Persistent
             $failureMap = array();
 
 
+            // We call the validate method on the following object(s) if they
+            // were passed to this object by their corresponding set
+            // method.  This object relates to these object(s) by a
+            // foreign key reference.
+
+            if ($this->aBaterias !== null) {
+                if (!$this->aBaterias->validate($columns)) {
+                    $failureMap = array_merge($failureMap, $this->aBaterias->getValidationFailures());
+                }
+            }
+
+
             if (($retval = DeshabilitabtPeer::doValidate($this, $columns)) !== true) {
                 $failureMap = array_merge($failureMap, $retval);
             }
@@ -862,10 +899,11 @@ abstract class BaseDeshabilitabt extends BaseObject implements Persistent
      *                    Defaults to BasePeer::TYPE_PHPNAME.
      * @param     boolean $includeLazyLoadColumns (optional) Whether to include lazy loaded columns. Defaults to true.
      * @param     array $alreadyDumpedObjects List of objects to skip to avoid recursion
+     * @param     boolean $includeForeignObjects (optional) Whether to include hydrated related objects. Default to FALSE.
      *
      * @return array an associative array containing the field names (as keys) and field values
      */
-    public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array())
+    public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array(), $includeForeignObjects = false)
     {
         if (isset($alreadyDumpedObjects['Deshabilitabt'][$this->getPrimaryKey()])) {
             return '*RECURSION*';
@@ -886,6 +924,11 @@ abstract class BaseDeshabilitabt extends BaseObject implements Persistent
             $result[$key] = $virtualColumn;
         }
 
+        if ($includeForeignObjects) {
+            if (null !== $this->aBaterias) {
+                $result['Baterias'] = $this->aBaterias->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+        }
 
         return $result;
     }
@@ -1058,6 +1101,18 @@ abstract class BaseDeshabilitabt extends BaseObject implements Persistent
         $copyObj->setFechaSalida($this->getFechaSalida());
         $copyObj->setUsuarioEntrada($this->getUsuarioEntrada());
         $copyObj->setUsuarioSalida($this->getUsuarioSalida());
+
+        if ($deepCopy && !$this->startCopy) {
+            // important: temporarily setNew(false) because this affects the behavior of
+            // the getter/setter methods for fkey referrer objects.
+            $copyObj->setNew(false);
+            // store object hash to prevent cycle
+            $this->startCopy = true;
+
+            //unflag object copy
+            $this->startCopy = false;
+        } // if ($deepCopy)
+
         if ($makeNew) {
             $copyObj->setNew(true);
             $copyObj->setId(NULL); // this is a auto-increment column, so set to default value
@@ -1105,6 +1160,58 @@ abstract class BaseDeshabilitabt extends BaseObject implements Persistent
     }
 
     /**
+     * Declares an association between this object and a Baterias object.
+     *
+     * @param                  Baterias $v
+     * @return Deshabilitabt The current object (for fluent API support)
+     * @throws PropelException
+     */
+    public function setBaterias(Baterias $v = null)
+    {
+        if ($v === null) {
+            $this->setBt(NULL);
+        } else {
+            $this->setBt($v->getIdbaterias());
+        }
+
+        $this->aBaterias = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the Baterias object, it will not be re-added.
+        if ($v !== null) {
+            $v->addDeshabilitabt($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated Baterias object
+     *
+     * @param PropelPDO $con Optional Connection object.
+     * @param $doQuery Executes a query to get the object if required
+     * @return Baterias The associated Baterias object.
+     * @throws PropelException
+     */
+    public function getBaterias(PropelPDO $con = null, $doQuery = true)
+    {
+        if ($this->aBaterias === null && ($this->bt !== null) && $doQuery) {
+            $this->aBaterias = BateriasQuery::create()->findPk($this->bt, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aBaterias->addDeshabilitabts($this);
+             */
+        }
+
+        return $this->aBaterias;
+    }
+
+    /**
      * Clears the current object and sets all attributes to their default values
      */
     public function clear()
@@ -1138,10 +1245,14 @@ abstract class BaseDeshabilitabt extends BaseObject implements Persistent
     {
         if ($deep && !$this->alreadyInClearAllReferencesDeep) {
             $this->alreadyInClearAllReferencesDeep = true;
+            if ($this->aBaterias instanceof Persistent) {
+              $this->aBaterias->clearAllReferences($deep);
+            }
 
             $this->alreadyInClearAllReferencesDeep = false;
         } // if ($deep)
 
+        $this->aBaterias = null;
     }
 
     /**

@@ -38,11 +38,20 @@ class BateriasTableMap extends TableMap
         $this->setPackage('regetrack');
         $this->setUseIdGenerator(true);
         // columns
-        $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
-        $this->addColumn('tipo', 'Tipo', 'INTEGER', true, null, null);
-        $this->addColumn('num_serie', 'NumSerie', 'VARCHAR', true, 255, null);
-        $this->addColumn('ciclos_mant', 'CiclosMant', 'INTEGER', true, null, 120);
-        $this->addColumn('ciclos_iniciales', 'CiclosIniciales', 'INTEGER', true, 255, 0);
+        $this->addPrimaryKey('idbaterias', 'Idbaterias', 'INTEGER', true, null, null);
+        $this->addForeignKey('idsucursal', 'Idsucursal', 'INTEGER', 'sucursal', 'idsucursal', true, null, null);
+        $this->addColumn('baterias_modelo', 'BateriasModelo', 'VARCHAR', true, 255, null);
+        $this->addColumn('baterias_marca', 'BateriasMarca', 'VARCHAR', false, 45, null);
+        $this->addColumn('baterias_c', 'BateriasC', 'VARCHAR', false, 45, null);
+        $this->addColumn('baterias_k', 'BateriasK', 'VARCHAR', false, 45, null);
+        $this->addColumn('baterias_p', 'BateriasP', 'VARCHAR', false, 45, null);
+        $this->addColumn('baterias_t', 'BateriasT', 'VARCHAR', false, 45, null);
+        $this->addColumn('baterias_e', 'BateriasE', 'VARCHAR', false, 45, null);
+        $this->addColumn('baterias_volts', 'BateriasVolts', 'INTEGER', false, null, null);
+        $this->addColumn('baterias_amperaje', 'BateriasAmperaje', 'INTEGER', false, null, null);
+        $this->addColumn('baterias_comprador', 'BateriasComprador', 'VARCHAR', false, 255, null);
+        $this->addColumn('baterias_nombre', 'BateriasNombre', 'VARCHAR', false, 255, null);
+        $this->addColumn('baterias_numserie', 'BateriasNumserie', 'VARCHAR', false, 255, null);
         // validators
     } // initialize()
 
@@ -51,6 +60,11 @@ class BateriasTableMap extends TableMap
      */
     public function buildRelations()
     {
+        $this->addRelation('Sucursal', 'Sucursal', RelationMap::MANY_TO_ONE, array('idsucursal' => 'idsucursal', ), 'CASCADE', 'CASCADE');
+        $this->addRelation('Deshabilitabt', 'Deshabilitabt', RelationMap::ONE_TO_MANY, array('idbaterias' => 'bt', ), 'CASCADE', 'CASCADE', 'Deshabilitabts');
+        $this->addRelation('Limbo', 'Limbo', RelationMap::ONE_TO_MANY, array('idbaterias' => 'bt', ), 'CASCADE', 'CASCADE', 'Limbos');
+        $this->addRelation('UsoBateriasBodega', 'UsoBateriasBodega', RelationMap::ONE_TO_MANY, array('idbaterias' => 'bt', ), 'CASCADE', 'CASCADE', 'UsoBateriasBodegas');
+        $this->addRelation('UsoBateriasMontacargas', 'UsoBateriasMontacargas', RelationMap::ONE_TO_MANY, array('idbaterias' => 'bt', ), 'CASCADE', 'CASCADE', 'UsoBateriasMontacargass');
     } // buildRelations()
 
 } // BateriasTableMap

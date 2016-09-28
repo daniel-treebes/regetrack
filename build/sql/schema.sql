@@ -11,27 +11,28 @@ DROP TABLE IF EXISTS `baterias`;
 
 CREATE TABLE `baterias`
 (
-    `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `tipo` INTEGER NOT NULL,
-    `num_serie` VARCHAR(255) NOT NULL,
-    `ciclos_mant` INTEGER DEFAULT 120 NOT NULL,
-    `ciclos_iniciales` INTEGER(255) DEFAULT 0 NOT NULL,
-    PRIMARY KEY (`id`)
-) ENGINE=MyISAM;
-
--- ---------------------------------------------------------------------
--- bateriastipos
--- ---------------------------------------------------------------------
-
-DROP TABLE IF EXISTS `bateriastipos`;
-
-CREATE TABLE `bateriastipos`
-(
-    `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `volts` INTEGER NOT NULL,
-    `ah` INTEGER NOT NULL,
-    PRIMARY KEY (`id`)
-) ENGINE=MyISAM;
+    `idbaterias` INTEGER NOT NULL AUTO_INCREMENT,
+    `idsucursal` INTEGER NOT NULL,
+    `baterias_modelo` VARCHAR(255) NOT NULL,
+    `baterias_marca` VARCHAR(45),
+    `baterias_c` VARCHAR(45),
+    `baterias_k` VARCHAR(45),
+    `baterias_p` VARCHAR(45),
+    `baterias_t` VARCHAR(45),
+    `baterias_e` VARCHAR(45),
+    `baterias_volts` INTEGER,
+    `baterias_amperaje` INTEGER,
+    `baterias_comprador` VARCHAR(255),
+    `baterias_nombre` VARCHAR(255),
+    `baterias_numserie` VARCHAR(255),
+    PRIMARY KEY (`idbaterias`),
+    INDEX `idsucursal` (`idsucursal`),
+    CONSTRAINT `baterias_idsucursal`
+        FOREIGN KEY (`idsucursal`)
+        REFERENCES `sucursal` (`idsucursal`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
 -- bodegas
@@ -45,8 +46,13 @@ CREATE TABLE `bodegas`
     `nombre` VARCHAR(255) NOT NULL,
     `cg` INTEGER NOT NULL,
     PRIMARY KEY (`id`),
-    INDEX `id` (`id`)
-) ENGINE=MyISAM;
+    INDEX `id` (`cg`),
+    CONSTRAINT `bodegas_cg`
+        FOREIGN KEY (`cg`)
+        REFERENCES `cargadores` (`idcargadores`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
 -- cargadores
@@ -56,11 +62,24 @@ DROP TABLE IF EXISTS `cargadores`;
 
 CREATE TABLE `cargadores`
 (
-    `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `nombre` VARCHAR(255) NOT NULL,
-    `tipo` INTEGER NOT NULL,
-    PRIMARY KEY (`id`)
-) ENGINE=MyISAM;
+    `idcargadores` INTEGER NOT NULL AUTO_INCREMENT,
+    `idsucursal` INTEGER NOT NULL,
+    `cargadores_modelo` VARCHAR(255) NOT NULL,
+    `cargadores_marca` VARCHAR(255) NOT NULL,
+    `cargadores_e` VARCHAR(45),
+    `cargadores_volts` INTEGER,
+    `cargadores_amperaje` INTEGER,
+    `cargadores_comprador` VARCHAR(255),
+    `cargadores_nombre` VARCHAR(255),
+    `cargadores_numserie` VARCHAR(45),
+    PRIMARY KEY (`idcargadores`),
+    INDEX `idsucursal` (`idsucursal`),
+    CONSTRAINT `cargadores_idsucursal`
+        FOREIGN KEY (`idsucursal`)
+        REFERENCES `sucursal` (`idsucursal`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
 -- deshabilitabt
@@ -77,8 +96,14 @@ CREATE TABLE `deshabilitabt`
     `fecha_salida` DATETIME NOT NULL,
     `usuario_entrada` INTEGER,
     `usuario_salida` INTEGER,
-    PRIMARY KEY (`id`)
-) ENGINE=MyISAM;
+    PRIMARY KEY (`id`),
+    INDEX `index2` (`bt`),
+    CONSTRAINT `deshabilitabt_bt`
+        FOREIGN KEY (`bt`)
+        REFERENCES `baterias` (`idbaterias`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
 -- deshabilitacg
@@ -95,8 +120,14 @@ CREATE TABLE `deshabilitacg`
     `fecha_salida` DATETIME NOT NULL,
     `usuario_entrada` INTEGER,
     `usuario_salida` INTEGER,
-    PRIMARY KEY (`id`)
-) ENGINE=MyISAM;
+    PRIMARY KEY (`id`),
+    INDEX `index2` (`cg`),
+    CONSTRAINT `deshabilitacg_cg`
+        FOREIGN KEY (`cg`)
+        REFERENCES `cargadores` (`idcargadores`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
 -- deshabilitamc
@@ -107,14 +138,75 @@ DROP TABLE IF EXISTS `deshabilitamc`;
 CREATE TABLE `deshabilitamc`
 (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `mc` INTEGER NOT NULL,
+    `idmontacargas` INTEGER NOT NULL,
     `motivo` TEXT NOT NULL,
     `fecha_entrada` DATETIME NOT NULL,
     `fecha_salida` DATETIME NOT NULL,
     `usuario_entrada` INTEGER,
     `usuario_salida` INTEGER,
-    PRIMARY KEY (`id`)
-) ENGINE=MyISAM;
+    PRIMARY KEY (`id`),
+    INDEX `idmontacargas` (`idmontacargas`),
+    INDEX `usuario_entrada` (`usuario_entrada`),
+    INDEX `usuario_salida` (`usuario_salida`),
+    CONSTRAINT `deshabilitamc_idmontacargas`
+        FOREIGN KEY (`idmontacargas`)
+        REFERENCES `montacargas` (`idmontacargas`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `deshabilitamc_usuario_entrada`
+        FOREIGN KEY (`usuario_entrada`)
+        REFERENCES `uc_users` (`id`),
+    CONSTRAINT `deshabilitamc_usuario_salida`
+        FOREIGN KEY (`usuario_salida`)
+        REFERENCES `uc_users` (`id`)
+) ENGINE=InnoDB;
+
+-- ---------------------------------------------------------------------
+-- empresa
+-- ---------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `empresa`;
+
+CREATE TABLE `empresa`
+(
+    `idempresa` INTEGER NOT NULL AUTO_INCREMENT,
+    `idusuario` INTEGER NOT NULL,
+    `empresa_nombre` VARCHAR(255) NOT NULL,
+    `empresa_numsucursales` INTEGER NOT NULL,
+    `empresa_suscripcioninicio` INTEGER NOT NULL,
+    `empresa_suscripcionfin` INTEGER NOT NULL,
+    PRIMARY KEY (`idempresa`),
+    INDEX `Idusuario` (`idusuario`),
+    CONSTRAINT `empresa_idusuario`
+        FOREIGN KEY (`idusuario`)
+        REFERENCES `uc_users` (`id`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+-- ---------------------------------------------------------------------
+-- limbo
+-- ---------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `limbo`;
+
+CREATE TABLE `limbo`
+(
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `bt` INTEGER NOT NULL,
+    `motivo` TEXT NOT NULL,
+    `fecha_entrada` DATETIME NOT NULL,
+    `fecha_salida` DATETIME NOT NULL,
+    `usuario_entrada` INTEGER,
+    `usuario_salida` INTEGER,
+    PRIMARY KEY (`id`),
+    INDEX `index2` (`bt`),
+    CONSTRAINT `deshabilitabt_bt0`
+        FOREIGN KEY (`bt`)
+        REFERENCES `baterias` (`idbaterias`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
 -- montacargas
@@ -124,14 +216,49 @@ DROP TABLE IF EXISTS `montacargas`;
 
 CREATE TABLE `montacargas`
 (
-    `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `nombre` VARCHAR(45) NOT NULL,
-    `modelo` VARCHAR(45) NOT NULL,
-    `tipo` VARCHAR(45) NOT NULL,
-    `ciclos_mant` INTEGER,
-    `ciclos_iniciales` INTEGER,
-    PRIMARY KEY (`id`)
-) ENGINE=MyISAM;
+    `idmontacargas` INTEGER NOT NULL AUTO_INCREMENT,
+    `idsucursal` INTEGER NOT NULL,
+    `montacargas_modelo` VARCHAR(45) NOT NULL,
+    `montacargas_marca` VARCHAR(45) NOT NULL,
+    `montacargas_c` VARCHAR(45),
+    `montacargas_k` VARCHAR(45),
+    `montacargas_p` VARCHAR(45),
+    `montacargas_t` VARCHAR(45),
+    `montacargas_e` VARCHAR(45),
+    `montacargas_volts` INTEGER,
+    `montacargas_amperaje` INTEGER,
+    `montacargas_nombre` VARCHAR(255),
+    `montacargas_numserie` VARCHAR(255),
+    PRIMARY KEY (`idmontacargas`),
+    INDEX `idsucursal` (`idsucursal`),
+    CONSTRAINT `montacargas_idsucursal`
+        FOREIGN KEY (`idsucursal`)
+        REFERENCES `sucursal` (`idsucursal`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+-- ---------------------------------------------------------------------
+-- sucursal
+-- ---------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `sucursal`;
+
+CREATE TABLE `sucursal`
+(
+    `idsucursal` INTEGER NOT NULL AUTO_INCREMENT,
+    `idempresa` INTEGER,
+    `sucursal_nombre` VARCHAR(255) NOT NULL,
+    `sucursal_suscripcioninicio` INTEGER NOT NULL,
+    `sucursal_suscripcionfin` INTEGER NOT NULL,
+    PRIMARY KEY (`idsucursal`),
+    INDEX `idempresa` (`idempresa`),
+    CONSTRAINT `sucursal_idempresa`
+        FOREIGN KEY (`idempresa`)
+        REFERENCES `empresa` (`idempresa`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
 -- uc_configuration
@@ -144,20 +271,6 @@ CREATE TABLE `uc_configuration`
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(150) NOT NULL,
     `value` VARCHAR(150) NOT NULL,
-    PRIMARY KEY (`id`)
-) ENGINE=InnoDB;
-
--- ---------------------------------------------------------------------
--- uc_pages
--- ---------------------------------------------------------------------
-
-DROP TABLE IF EXISTS `uc_pages`;
-
-CREATE TABLE `uc_pages`
-(
-    `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `page` VARCHAR(150) NOT NULL,
-    `private` TINYINT(1) DEFAULT 0 NOT NULL,
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
@@ -211,6 +324,7 @@ DROP TABLE IF EXISTS `uc_users`;
 CREATE TABLE `uc_users`
 (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `idsucursal` INTEGER,
     `user_name` VARCHAR(50) NOT NULL,
     `display_name` VARCHAR(50) NOT NULL,
     `password` VARCHAR(225) NOT NULL,
@@ -222,7 +336,13 @@ CREATE TABLE `uc_users`
     `title` VARCHAR(150) NOT NULL,
     `sign_up_stamp` INTEGER NOT NULL,
     `last_sign_in_stamp` INTEGER NOT NULL,
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (`id`),
+    INDEX `Idsucursal` (`idsucursal`),
+    CONSTRAINT `idsucursal`
+        FOREIGN KEY (`idsucursal`)
+        REFERENCES `sucursal` (`idsucursal`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
@@ -244,8 +364,22 @@ CREATE TABLE `uso_baterias_bodega`
     `usuario_carga` INTEGER,
     `usuario_descanso` INTEGER,
     `usuario_salida` INTEGER,
-    PRIMARY KEY (`id`)
-) ENGINE=MyISAM;
+    PRIMARY KEY (`id`),
+    INDEX `bg` (`bg`),
+    INDEX `bt` (`bt`),
+    INDEX `usuario_entrada` (`usuario_entrada`),
+    INDEX `usuario_salida` (`usuario_salida`),
+    INDEX `usuario_carga` (`usuario_carga`),
+    INDEX `usuario_descanso` (`usuario_descanso`),
+    CONSTRAINT `uso_baterias_bodega_bg`
+        FOREIGN KEY (`bg`)
+        REFERENCES `bodegas` (`id`),
+    CONSTRAINT `uso_baterias_bodega_bt`
+        FOREIGN KEY (`bt`)
+        REFERENCES `baterias` (`idbaterias`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
 -- uso_baterias_montacargas
@@ -262,8 +396,26 @@ CREATE TABLE `uso_baterias_montacargas`
     `fecha_salida` DATETIME NOT NULL,
     `usuario_entrada` INTEGER,
     `usuario_salida` INTEGER,
-    PRIMARY KEY (`id`)
-) ENGINE=MyISAM;
+    PRIMARY KEY (`id`),
+    INDEX `mc` (`mc`),
+    INDEX `bt` (`bt`),
+    INDEX `usuario_entrada` (`usuario_entrada`),
+    INDEX `usuario_salida` (`usuario_salida`),
+    CONSTRAINT `uso_baterias_montacargas_bt`
+        FOREIGN KEY (`bt`)
+        REFERENCES `baterias` (`idbaterias`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `uso_baterias_montacargas_mc`
+        FOREIGN KEY (`mc`)
+        REFERENCES `montacargas` (`idmontacargas`),
+    CONSTRAINT `uso_baterias_usuario_entrada`
+        FOREIGN KEY (`usuario_entrada`)
+        REFERENCES `uc_users` (`id`),
+    CONSTRAINT `uso_baterias_usuario_salida`
+        FOREIGN KEY (`usuario_salida`)
+        REFERENCES `uc_users` (`id`)
+) ENGINE=InnoDB;
 
 # This restores the fkey checks, after having unset them earlier
 SET FOREIGN_KEY_CHECKS = 1;

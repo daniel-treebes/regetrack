@@ -9,7 +9,7 @@ $conf = array (
       'adapter' => 'mysql',
       'connection' => 
       array (
-        'dsn' => 'mysql:host=localhost;dbname=regetrac_sistema',
+        'dsn' => 'mysql:host=localhost;dbname=regetrac_sistemav2',
         'user' => 'regetrac_sistema',
         'password' => 'Hola.1234',
       ),

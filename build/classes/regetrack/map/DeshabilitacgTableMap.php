@@ -39,7 +39,7 @@ class DeshabilitacgTableMap extends TableMap
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
-        $this->addColumn('cg', 'Cg', 'INTEGER', true, null, null);
+        $this->addForeignKey('cg', 'Cg', 'INTEGER', 'cargadores', 'idcargadores', true, null, null);
         $this->addColumn('motivo', 'Motivo', 'LONGVARCHAR', true, null, null);
         $this->addColumn('fecha_entrada', 'FechaEntrada', 'TIMESTAMP', true, null, null);
         $this->addColumn('fecha_salida', 'FechaSalida', 'TIMESTAMP', true, null, null);
@@ -53,6 +53,7 @@ class DeshabilitacgTableMap extends TableMap
      */
     public function buildRelations()
     {
+        $this->addRelation('Cargadores', 'Cargadores', RelationMap::MANY_TO_ONE, array('cg' => 'idcargadores', ), 'CASCADE', 'CASCADE');
     } // buildRelations()
 
 } // DeshabilitacgTableMap

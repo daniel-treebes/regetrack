@@ -39,6 +39,7 @@ class BateriastiposTableMap extends TableMap
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
+        $this->addForeignKey('idsucursal', 'Idsucursal', 'INTEGER', 'sucursal', 'idsucursal', true, null, null);
         $this->addColumn('volts', 'Volts', 'INTEGER', true, null, null);
         $this->addColumn('ah', 'Ah', 'INTEGER', true, null, null);
         // validators
@@ -49,6 +50,10 @@ class BateriastiposTableMap extends TableMap
      */
     public function buildRelations()
     {
+        $this->addRelation('Sucursal', 'Sucursal', RelationMap::MANY_TO_ONE, array('idsucursal' => 'idsucursal', ), 'CASCADE', 'CASCADE');
+        $this->addRelation('Baterias', 'Baterias', RelationMap::ONE_TO_MANY, array('id' => 'tipo', ), 'CASCADE', 'CASCADE', 'Bateriass');
+        $this->addRelation('Cargadores', 'Cargadores', RelationMap::ONE_TO_MANY, array('id' => 'tipo', ), 'CASCADE', 'CASCADE', 'Cargadoress');
+        $this->addRelation('Montacargas', 'Montacargas', RelationMap::ONE_TO_MANY, array('id' => 'tipo', ), 'CASCADE', 'CASCADE', 'Montacargass');
     } // buildRelations()
 
 } // BateriastiposTableMap

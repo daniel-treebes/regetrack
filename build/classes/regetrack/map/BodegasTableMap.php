@@ -40,7 +40,7 @@ class BodegasTableMap extends TableMap
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
         $this->addColumn('nombre', 'Nombre', 'VARCHAR', true, 255, null);
-        $this->addColumn('cg', 'Cg', 'INTEGER', true, null, null);
+        $this->addForeignKey('cg', 'Cg', 'INTEGER', 'cargadores', 'idcargadores', true, null, null);
         // validators
     } // initialize()
 
@@ -49,6 +49,8 @@ class BodegasTableMap extends TableMap
      */
     public function buildRelations()
     {
+        $this->addRelation('Cargadores', 'Cargadores', RelationMap::MANY_TO_ONE, array('cg' => 'idcargadores', ), 'CASCADE', 'CASCADE');
+        $this->addRelation('UsoBateriasBodega', 'UsoBateriasBodega', RelationMap::ONE_TO_MANY, array('id' => 'bg', ), null, null, 'UsoBateriasBodegas');
     } // buildRelations()
 
 } // BodegasTableMap

@@ -12,10 +12,10 @@ require_once("db-settings.php"); //Require DB connection
 /*
  * PROPEL
  */
-require_once 'vendor/propel/propel1/runtime/lib/Propel.php';
-Propel::init("build/conf/regetrack-conf.php");
-require_once 'vendor/autoload.php';
-set_include_path('build/classes' . PATH_SEPARATOR . get_include_path());
+require_once $_SERVER['DOCUMENT_ROOT'].'/'.'vendor/propel/propel1/runtime/lib/Propel.php';
+Propel::init($_SERVER['DOCUMENT_ROOT'].'/'.'build/conf/regetrack-conf.php');
+require_once $_SERVER['DOCUMENT_ROOT'].'/'.'vendor/autoload.php';
+set_include_path($_SERVER['DOCUMENT_ROOT'].'/'.'build/classes' . PATH_SEPARATOR . get_include_path());
 
 
 //Retrieve settings

@@ -1,11 +1,76 @@
 <?php
+
+
+//BATERIAS
 require_once("models/config.php");
+
+require_once 'libs/PHPExcel/Classes/PHPExcel/IOFactory.php';
+
+/*
+$b= BateriasQuery::create()->findPk(58);
+$b->setBateriasVolts(NULL)->setBateriasAmperaje(NULL)->setBateriasC(NULL)->setBateriasK(NULL)->setBateriasP(NULL)->save();
+exit();
+*/
+
+$inputFileName = 'bat monta carga de pisa repartido.xlsx';
+$inputFileType = PHPExcel_IOFactory::identify($inputFileName);
+$objReader = PHPExcel_IOFactory::createReader($inputFileType);
+$objPHPExcel = $objReader->load($inputFileName);
+$sheet = $objPHPExcel->getSheet(3); 
+$highestRow = $sheet->getHighestRow(); 
+$highestColumn = $sheet->getHighestColumn();
+for ($row = 3; $row <= $highestRow; $row++){ 
+    
+    //Read a row of data into an array
+    $rowData = $sheet->rangeToArray('A' . $row . ':' . 'L'     . $row,NULL,TRUE,FALSE);
+    $cargador = new Cargadores();
+    $cargador->setCargadoresModelo($rowData[0][1])
+             ->setCargadoresMarca($rowData[0][2])
+             ->setCargadoresComprador($rowData[0][6])
+             ->setCargadoresE($rowData[0][11])
+             ->setIdsucursal(1);
+    
+    if($rowData[0][3] != 'N/A'){
+        $cargador->setCargadoresVolts($rowData[0][3]);
+    }
+    if($rowData[0][4] != 'N/A'){
+        $cargador->setCargadoresAmperaje($rowData[0][4]);
+    }
+    if($rowData[0][9] != 'N/A'){
+        $cargador->setCargadoresAmperaje($rowData[0][9]);
+    }
+    if($rowData[0][10] != 'N/A'){
+        $cargador->setCargadoresAmperaje($rowData[0][10]);
+    }
+     
+    $cargador->save();
+    
+    $cargador->setCargadoresNombre('C'.$cargador->getIdcargadores())->save();
+    
+    //LOS ESPACIOS
+    $abc = array("A","B","C");
+    $num_espacios = $rowData[0][5];
+    for($i=0;$i<$num_espacios;$i++){
+       $bodega = new Bodegas();
+       $bodega->setCg($cargador->getIdcargadores())
+              ->setNombre($abc[$i])
+              ->save();
+    }
+   
+
+    
+}
+exit();
+
+require_once("models/config.php");
+
 if (!securePage($_SERVER['PHP_SELF'])){die();}
 
 require_once("models/header.php");
 require_once("libs/libreriasJquery.php");
 
 ?>
+
 <script src="rgraph/RGraph.common.core.js" ></script>
 <script src="rgraph/RGraph.meter.js" ></script>
 <script src="https://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
@@ -62,63 +127,76 @@ require_once("libs/libreriasJquery.php");
 <script src="assets/global/scripts/datatable.js" type="text/javascript"></script>
 <script src="assets/global/plugins/datatables/datatables.min.js" type="text/javascript"></script>
 <script src="assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js" type="text/javascript"></script>
-
+        
         <div class="row">
             <div class="col-md-12">
-		<?php require_once("tema/comun/topcontenedor.php");?>
+		<?php  require_once("tema/comun/topcontenedor.php");?>
             </div>
             <div class="col-md-12 ">
 		<?php
-                $queryTM="
-                    SELECT COUNT( id )
-                    FROM `montacargas`
-                    ";
-                $resultadoTM=$mysqli->query($queryTM);
-                $filaTM=$resultadoTM->fetch_array();
-                $queryTB="
-                    SELECT COUNT( id )
-                    FROM  `baterias`
-                ";
-                $resultadoTB=$mysqli->query($queryTB);
-                $filaTB=$resultadoTB->fetch_array();
+                //$queryTM="SELECT COUNT( montacargas.idmontacargas ) FROM montacargas  WHERE montacargas.idsucursal = ".$loggedInUser->sucursal_activa;
+                //$resultadoTM=$mysqli->query($queryTM);
+                $filaTM=  MontacargasQuery::create()->filterByIdsucursal($loggedInUser->sucursal_activa)->count();
                 
-                $queryTC="
-                    SELECT COUNT( id )
-                    FROM  `cargadores`
-                ";
-                $resultadoTC=$mysqli->query($queryTC);
+                //$queryTB="SELECT COUNT( baterias.id ) FROM baterias JOIN bateriastipos ON bateriastipos.id = tipo WHERE bateriastipos.idsucursal = ".$loggedInUser->sucursal_activa;
+                //$resultadoTB=$mysqli->query($queryTB);
+                $filaTB=  BateriasQuery::create()->filterByIdsucursal($loggedInUser->sucursal_activa)->count();
+                
+              
+                //$queryTC="SELECT COUNT( cargadores.id ) FROM cargadores JOIN bateriastipos ON bateriastipos.id = tipo WHERE bateriastipos.idsucursal = ".$loggedInUser->sucursal_activa;
+                //$resultadoTC=$mysqli->query($queryTC);
+                $resultadoTC = CargadoresQuery::create()->filterByIdsucursal($loggedInUser->sucursal_activa)->count();
 				/*
                 $valor4=eficiencia("uso_baterias_bodega","bg",$mysqli,"fecha_entrada","fecha_salida");
                 $valor4=round($valor4,2);
                 */
-                $filaTC=$resultadoTC->fetch_array();
-				
-				$queryImc="
-					SELECT COUNT(id) as inactivos
-					FROM deshabilitamc
-					WHERE fecha_salida='0000-00-00 00:00:00'
-					";
-				$resInactivos=$mysqli->query($queryImc);
-				$mcInactivos=0;
-				if ($fila=$resInactivos->fetch_array()) $mcInactivos=$fila['inactivos'];
-				$queryIcg="
-					SELECT COUNT(id) as inactivos
-					FROM deshabilitacg
-					WHERE fecha_salida='0000-00-00 00:00:00'
-					";
+                //$filaTC=$resultadoTC->fetch_array();
+				/*
+				$queryImc="SELECT COUNT(deshabilitamc.id) as inactivos 
+                                            FROM deshabilitamc 
+                                            JOIN montacargas ON montacargas.id = deshabilitamc.id
+                                            JOIN bateriastipos ON montacargas.tipo = bateriastipos.id
+                                            JOIN sucursal ON bateriastipos.idsucursal = sucursal.idsucursal
+                                            WHERE fecha_salida='0000-00-00 00:00:00' AND sucursal.idsucursal = ".$loggedInUser->sucursal_activa;
+                                
+                                */
+                
+				$mcInactivos = DeshabilitamcQuery::create()->filterByFechaSalida(NULL)->useMontacargasQuery()->filterByIdsucursal($loggedInUser->sucursal_activa)->endUse()->count();	
+				//$resInactivos=$mysqli->query($queryImc);
+                               
+				//$mcInactivos=0;
+				//if ($fila=$resInactivos->fetch_array()) $mcInactivos=$fila['inactivos'];
+                                /*
+                                $queryIcg="SELECT COUNT(deshabilitacg.id) as inactivos 
+                                            FROM deshabilitacg 
+                                            JOIN montacargas ON montacargas.id = deshabilitacg.id
+                                            JOIN bateriastipos ON montacargas.tipo = bateriastipos.id
+                                            JOIN sucursal ON bateriastipos.idsucursal = sucursal.idsucursal
+                                            WHERE fecha_salida='0000-00-00 00:00:00' AND sucursal.idsucursal = ".$loggedInUser->sucursal_activa;
+                                
+
 				$resInactivos=$mysqli->query($queryIcg);
-				$cgInactivos=0;
-				if ($fila=$resInactivos->fetch_array())$cgInactivos=$fila['inactivos'];
-				$queryIbt="
-					SELECT COUNT(id) as inactivos
-					FROM deshabilitabt
-					WHERE fecha_salida='0000-00-00 00:00:00'
-					";
+                                 * 
+                                 */
+                                
+				$cgInactivos= DeshabilitacgQuery::create()->filterByFechaSalida(NULL)->useCargadoresQuery()->filterByIdsucursal($loggedInUser->sucursal_activa)->count();
+				/*
+                                if ($fila=$resInactivos->fetch_array())$cgInactivos=$fila['inactivos'];
+
+                                $queryIbt="SELECT COUNT(deshabilitabt.id) as inactivos 
+                                            FROM deshabilitabt 
+                                            JOIN montacargas ON montacargas.id = deshabilitabt.id
+                                            JOIN bateriastipos ON montacargas.tipo = bateriastipos.id
+                                            JOIN sucursal ON bateriastipos.idsucursal = sucursal.idsucursal
+                                            WHERE fecha_salida='0000-00-00 00:00:00' AND sucursal.idsucursal = ".$loggedInUser->sucursal_activa;
+                                
 				$resInactivos=$mysqli->query($queryIbt);
 				$btInactivos=0;
 				if ($fila=$resInactivos->fetch_array())$btInactivos=$fila['inactivos'];
+				*/
+                                $btInactivos = DeshabilitabtQuery::create()->filterByFechaSalida(NULL)->useBateriasQuery()->filterByIdsucursal($loggedInUser->sucursal_activa)->endUse()->count();
 				
-				?>
+                                ?>
                 <script>
                     var gaugeOptions = {
                         chart: {
@@ -176,7 +254,7 @@ require_once("libs/libreriasJquery.php");
                 <div class="row widget-row">
                     <div class="col-lg-1 col-md-4 col-sm-4 col-xs-4">
                         <center>
-                            <i class="my_icons icon-montacarga"></i>
+                            <i class="my_icons fa icon-montacarga"></i>
                         </center>
                     </div>
 					<?php
@@ -185,7 +263,7 @@ require_once("libs/libreriasJquery.php");
 					?>
                     <div class="col-lg-2 col-md-8 col-sm-8 col-xs-8">
                         <center>
-                            Deshabilitados<?php echo '<span class="'.$clasemci.'">'.$mcInactivos.'/'.$filaTM[0].'</span>';?>
+                            Deshabilitados<?php echo '<span class="'.$clasemci.'">'.$mcInactivos.'/'.$filaTM.'</span>';?>
                         </center>
                     </div>
                     <div class="col-lg-8 col-md-12 col-sm-12 col-xs-12">
@@ -198,7 +276,7 @@ require_once("libs/libreriasJquery.php");
                 <!-- CARGADORES!!! -->
                 <div class="row widget-row">
                     <div class="col-lg-1 col-md-4 col-sm-4 col-xs-4">
-                        <i class="my_icons icon-cargador"></i>
+                        <i class="my_icons fa icon-cargador"></i>
                     </div>
 					<?php
 						if($cgInactivos>0) $clasegci="inactivos";
@@ -206,7 +284,7 @@ require_once("libs/libreriasJquery.php");
 					?>
                     <div class="col-lg-2 col-md-8 col-sm-8 col-xs-8">
                         <center>
-                            Deshabilitados<?php echo '<span class="'.$clasecgi.'">'.$cgInactivos.'/'.$filaTC[0].'</span>';?>
+                            Deshabilitados<?php echo '<span class="'.$clasecgi.'">'.$cgInactivos.'/'.$resultadoTC.'</span>';?>
                         </center>
                     </div>
                     <div class="col-lg-8 col-md-12 col-sm-12 col-xs-12">
@@ -224,7 +302,7 @@ require_once("libs/libreriasJquery.php");
                 <!-- Baterias!!! -->
                 <div class="row widget-row">
                     <div class="col-md-1 col-sm-4 col-xs-4">
-                        <i class="my_icons icon-bateria"></i>
+                        <i class="my_icons fa icon-bateria"></i>
                     </div>
 					<?php
 						if($btInactivos>0) $clasebti="inactivos";
@@ -232,7 +310,7 @@ require_once("libs/libreriasJquery.php");
 					?>
                     <div class="col-lg-2 col-md-8 col-sm-8 col-xs-8">
                         <center>
-                            Deshabilitados<?php echo '<span class="'.$clasebti.'">'.$btInactivos.'/'.$filaTB[0].'</span>';?>
+                            Deshabilitados<?php echo '<span class="'.$clasebti.'">'.$btInactivos.'/'.$filaTB.'</span>';?>
                         </center>
                     </div>
                     <div class="col-md-8 col-sm-12 col-xs-12">
@@ -252,7 +330,7 @@ require_once("libs/libreriasJquery.php");
                         <div class="portlet light portlet-fit bordered">
                             <div class="portlet-title">
                                 <div class="caption">
-                                    <i class=" icon-layers font-green"></i>
+                                    <i class="fa icon-montacarga font-green"></i>
                                     <span class="caption-subject font-green bold uppercase">Desempeño de montacargas</span>
                                 </div>
                             </div>
@@ -264,7 +342,8 @@ require_once("libs/libreriasJquery.php");
                 </div>
 
 				<?php
-				$grafica=pinta_grafica('mc','reporteMC','uso','todo');
+                               
+				$grafica=pinta_grafica('mc','reporteMC','uso','todo',$loggedInUser->sucursal_activa);
 				echo $grafica;
 				?>
 
@@ -273,7 +352,7 @@ require_once("libs/libreriasJquery.php");
                             <div class="portlet light portlet-fit bordered">
                                 <div class="portlet-title">
                                     <div class="caption">
-                                        <i class=" icon-layers font-green"></i>
+                                        <i class="fa icon-bateria font-green"></i>
                                         <span class="caption-subject font-green bold uppercase">Desempeño de baterias</span>
                                     </div>
                                 </div>
@@ -294,30 +373,30 @@ require_once("libs/libreriasJquery.php");
                     </div>
 
 				<?php
+                              
+				$efidato=eficiencia('mc','uso','eficienciaMC',$loggedInUser->sucursal_activa);
+				echo $efidato['script'];
+				$efidato=eficiencia('cg','espera','eficienciaCGE',$loggedInUser->sucursal_activa);
+				echo $efidato['script'];
+				$efidato=eficiencia('cg','carga','eficienciaCGC',$loggedInUser->sucursal_activa);
+				echo $efidato['script'];
+				$efidato=eficiencia('cg','descanso','eficienciaCGD',$loggedInUser->sucursal_activa);
+				echo $efidato['script'];
+				$efidato=eficiencia('bt','uso','eficienciaBTU',$loggedInUser->sucursal_activa);
+				echo $efidato['script'];
+				$efidato=eficiencia('bt','carga','eficienciaBTC',$loggedInUser->sucursal_activa);
+				echo $efidato['script'];
+				$efidato=eficiencia('bt','descanso','eficienciaBTD',$loggedInUser->sucursal_activa);
+				echo $efidato['script'];
 
-				$efidato=eficiencia('mc','uso','eficienciaMC');
-				echo $efidato['script'];
-				$efidato=eficiencia('cg','espera','eficienciaCGE');
-				echo $efidato['script'];
-				$efidato=eficiencia('cg','carga','eficienciaCGC');
-				echo $efidato['script'];
-				$efidato=eficiencia('cg','descanso','eficienciaCGD');
-				echo $efidato['script'];
-				$efidato=eficiencia('bt','uso','eficienciaBTU');
-				echo $efidato['script'];
-				$efidato=eficiencia('bt','carga','eficienciaBTC');
-				echo $efidato['script'];
-				$efidato=eficiencia('bt','descanso','eficienciaBTD');
-				echo $efidato['script'];
 
-
-				$grafica=pinta_grafica('bt','reporteBU','uso','todo');
+				$grafica=pinta_grafica('bt','reporteBU','uso','todo',$loggedInUser->sucursal_activa);
 				echo $grafica;
-				$grafica=pinta_grafica('bt','reporteBE','espera','todo');
+				$grafica=pinta_grafica('bt','reporteBE','espera','todo',$loggedInUser->sucursal_activa);
 				echo $grafica;
-				$grafica=pinta_grafica('bt','reporteBC','carga','todo');
+				$grafica=pinta_grafica('bt','reporteBC','carga','todo',$loggedInUser->sucursal_activa);
 				echo $grafica;
-				$grafica=pinta_grafica('bt','reporteBD','descanso','todo');
+				$grafica=pinta_grafica('bt','reporteBD','descanso','todo',$loggedInUser->sucursal_activa);
 				echo $grafica;
 				?>
 
@@ -326,7 +405,7 @@ require_once("libs/libreriasJquery.php");
 						<div class="portlet light portlet-fit bordered">
 							<div class="portlet-title">
 								<div class="caption">
-									<i class=" icon-layers font-green"></i>
+									<i class="fa icon-cargador font-green"></i>
 									<span class="caption-subject font-green bold uppercase">Desempeño de Cargadores</span>
 								</div>
 							</div>
@@ -343,78 +422,14 @@ require_once("libs/libreriasJquery.php");
 					</div>
 				</div>
 				<?php
-				$grafica=pinta_grafica('cg','reporteCE','espera','todo');
+				$grafica=pinta_grafica('cg','reporteCE','espera','todo',$loggedInUser->sucursal_activa);
 				echo $grafica;
-				$grafica=pinta_grafica('cg','reporteCC','carga','todo');
+				$grafica=pinta_grafica('cg','reporteCC','carga','todo',$loggedInUser->sucursal_activa);
 				echo $grafica;
-				$grafica=pinta_grafica('cg','reporteCD','descanso','todo');
+				$grafica=pinta_grafica('cg','reporteCD','descanso','todo',$loggedInUser->sucursal_activa);
 				echo $grafica;
 
 				
-function eficienciaBORRAME($tabla,$ref,$mysqli,$fechamenor,$fechamayor,$va=0){
-			   //Aquí viene lo chingüengüenchón
-				//Esta consulta nos regresa todos los montacargas
-				$queryTODO="
-				SELECT ".$ref."
-				FROM  ".$tabla."
-				ORDER BY  ".$ref." ASC
-				";
 
-
-				$resultadoTODO = $mysqli->query($queryTODO);
-
-				//Variables que vamos a usar
-				$contador=0;//Vamos a ver cuántos montacargas iguales hay en el arreglo
-				//$actual=""; //Para saber si estamos trabajando con el mismo montacargas
-				$tiempo="";//Diferencia de salida-entrada
-				$promedio=0;//Promedio de eficiencia
-				//Recorremos los resultados
-				while($filaTODO=$resultadoTODO->fetch_array()){
-				   //Esta consulta saca las horas de diferencia para el montacargas actual del arreglo de resultados de la consulta anterior
-				   $consulta="
-				   SELECT TIMESTAMPDIFF( HOUR , ".$fechamenor.", ".$fechamayor." ) AS  'tiempo'
-				FROM  ".$tabla."
-				WHERE  ".$ref." = ".$filaTODO[0];
-
-				 if($va==1){
-					echo $consulta;
-				   }
-
-				$resultado=$mysqli->query($consulta);
-				$filaresultado=$resultado->fetch_array();
-				//Ahora calculamos resultados
-
-					  $contador++;
-
-					  if($filaresultado[0]==NULL) $filaresultado[0]=0;
-					  $tiempo=$filaresultado[0];
-					  $promedio = $promedio + $tiempo;
-
-				   /*
-				   if($actual==$filaTODO["mc"]){
-					  $promedio=$promedio/$contador;
-					  $contador=1;
-
-				   }
-				   else{
-					  $actual=$filaTODO["mc"];
-					  if($filaresultado==NULL) $filaresultado=0;
-					  $tiempo=$filaresultado;
-					  $promedio=$promedio+$tiempo;
-				   }
-
-				   */
-
-
-
-				}
-
-
-					$promedio=$promedio/$contador;
-					//El 100% es 8, hay que convertir este promedio
-					return $promedio;//$promedio = $promedio*100/8;
-					//Aquí termina lo chingüengüenchón... al menos para esta parte
-
-   }
 			 ?>
 

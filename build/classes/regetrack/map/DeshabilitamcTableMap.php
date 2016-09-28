@@ -39,12 +39,12 @@ class DeshabilitamcTableMap extends TableMap
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
-        $this->addColumn('mc', 'Mc', 'INTEGER', true, null, null);
+        $this->addForeignKey('idmontacargas', 'Idmontacargas', 'INTEGER', 'montacargas', 'idmontacargas', true, null, null);
         $this->addColumn('motivo', 'Motivo', 'LONGVARCHAR', true, null, null);
         $this->addColumn('fecha_entrada', 'FechaEntrada', 'TIMESTAMP', true, null, null);
         $this->addColumn('fecha_salida', 'FechaSalida', 'TIMESTAMP', true, null, null);
-        $this->addColumn('usuario_entrada', 'UsuarioEntrada', 'INTEGER', false, null, null);
-        $this->addColumn('usuario_salida', 'UsuarioSalida', 'INTEGER', false, null, null);
+        $this->addForeignKey('usuario_entrada', 'UsuarioEntrada', 'INTEGER', 'uc_users', 'id', false, null, null);
+        $this->addForeignKey('usuario_salida', 'UsuarioSalida', 'INTEGER', 'uc_users', 'id', false, null, null);
         // validators
     } // initialize()
 
@@ -53,6 +53,9 @@ class DeshabilitamcTableMap extends TableMap
      */
     public function buildRelations()
     {
+        $this->addRelation('Montacargas', 'Montacargas', RelationMap::MANY_TO_ONE, array('idmontacargas' => 'idmontacargas', ), 'CASCADE', 'CASCADE');
+        $this->addRelation('UcUsersRelatedByUsuarioEntrada', 'UcUsers', RelationMap::MANY_TO_ONE, array('usuario_entrada' => 'id', ), null, null);
+        $this->addRelation('UcUsersRelatedByUsuarioSalida', 'UcUsers', RelationMap::MANY_TO_ONE, array('usuario_salida' => 'id', ), null, null);
     } // buildRelations()
 
 } // DeshabilitamcTableMap

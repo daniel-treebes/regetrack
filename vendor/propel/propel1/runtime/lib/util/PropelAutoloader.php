@@ -106,8 +106,10 @@ class PropelAutoloader
      */
     public function autoload($class)
     {
+        
         if (isset($this->classes[$class])) {
-            require $this->classes[$class];
+
+            require $_SERVER['DOCUMENT_ROOT'].'/build/classes/'.$this->classes[$class];
 
             return true;
         }

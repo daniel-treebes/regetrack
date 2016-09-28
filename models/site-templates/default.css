@@ -132,12 +132,13 @@ th{
 .easy-pie-chart .number canvas{
 	left:4px!important;
 }
+/*
 .datos-cosa{
 	height: 25px!important;
     padding: 10px!important;
     pointer-events: none!important;
 }
-
+*/
 .page-header  .nav>li,.page-header  .nav>li>a {
 
     background-color: #2b3643;

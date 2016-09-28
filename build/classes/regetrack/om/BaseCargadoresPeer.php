@@ -24,22 +24,43 @@ abstract class BaseCargadoresPeer
     const TM_CLASS = 'CargadoresTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 3;
+    const NUM_COLUMNS = 10;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 3;
+    const NUM_HYDRATE_COLUMNS = 10;
 
-    /** the column name for the id field */
-    const ID = 'cargadores.id';
+    /** the column name for the idcargadores field */
+    const IDCARGADORES = 'cargadores.idcargadores';
 
-    /** the column name for the nombre field */
-    const NOMBRE = 'cargadores.nombre';
+    /** the column name for the idsucursal field */
+    const IDSUCURSAL = 'cargadores.idsucursal';
 
-    /** the column name for the tipo field */
-    const TIPO = 'cargadores.tipo';
+    /** the column name for the cargadores_modelo field */
+    const CARGADORES_MODELO = 'cargadores.cargadores_modelo';
+
+    /** the column name for the cargadores_marca field */
+    const CARGADORES_MARCA = 'cargadores.cargadores_marca';
+
+    /** the column name for the cargadores_e field */
+    const CARGADORES_E = 'cargadores.cargadores_e';
+
+    /** the column name for the cargadores_volts field */
+    const CARGADORES_VOLTS = 'cargadores.cargadores_volts';
+
+    /** the column name for the cargadores_amperaje field */
+    const CARGADORES_AMPERAJE = 'cargadores.cargadores_amperaje';
+
+    /** the column name for the cargadores_comprador field */
+    const CARGADORES_COMPRADOR = 'cargadores.cargadores_comprador';
+
+    /** the column name for the cargadores_nombre field */
+    const CARGADORES_NOMBRE = 'cargadores.cargadores_nombre';
+
+    /** the column name for the cargadores_numserie field */
+    const CARGADORES_NUMSERIE = 'cargadores.cargadores_numserie';
 
     /** The default string format for model objects of the related table **/
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -60,12 +81,12 @@ abstract class BaseCargadoresPeer
      * e.g. CargadoresPeer::$fieldNames[CargadoresPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Id', 'Nombre', 'Tipo', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'nombre', 'tipo', ),
-        BasePeer::TYPE_COLNAME => array (CargadoresPeer::ID, CargadoresPeer::NOMBRE, CargadoresPeer::TIPO, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'NOMBRE', 'TIPO', ),
-        BasePeer::TYPE_FIELDNAME => array ('id', 'nombre', 'tipo', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, )
+        BasePeer::TYPE_PHPNAME => array ('Idcargadores', 'Idsucursal', 'CargadoresModelo', 'CargadoresMarca', 'CargadoresE', 'CargadoresVolts', 'CargadoresAmperaje', 'CargadoresComprador', 'CargadoresNombre', 'CargadoresNumserie', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idcargadores', 'idsucursal', 'cargadoresModelo', 'cargadoresMarca', 'cargadoresE', 'cargadoresVolts', 'cargadoresAmperaje', 'cargadoresComprador', 'cargadoresNombre', 'cargadoresNumserie', ),
+        BasePeer::TYPE_COLNAME => array (CargadoresPeer::IDCARGADORES, CargadoresPeer::IDSUCURSAL, CargadoresPeer::CARGADORES_MODELO, CargadoresPeer::CARGADORES_MARCA, CargadoresPeer::CARGADORES_E, CargadoresPeer::CARGADORES_VOLTS, CargadoresPeer::CARGADORES_AMPERAJE, CargadoresPeer::CARGADORES_COMPRADOR, CargadoresPeer::CARGADORES_NOMBRE, CargadoresPeer::CARGADORES_NUMSERIE, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDCARGADORES', 'IDSUCURSAL', 'CARGADORES_MODELO', 'CARGADORES_MARCA', 'CARGADORES_E', 'CARGADORES_VOLTS', 'CARGADORES_AMPERAJE', 'CARGADORES_COMPRADOR', 'CARGADORES_NOMBRE', 'CARGADORES_NUMSERIE', ),
+        BasePeer::TYPE_FIELDNAME => array ('idcargadores', 'idsucursal', 'cargadores_modelo', 'cargadores_marca', 'cargadores_e', 'cargadores_volts', 'cargadores_amperaje', 'cargadores_comprador', 'cargadores_nombre', 'cargadores_numserie', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, )
     );
 
     /**
@@ -75,12 +96,12 @@ abstract class BaseCargadoresPeer
      * e.g. CargadoresPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Nombre' => 1, 'Tipo' => 2, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'nombre' => 1, 'tipo' => 2, ),
-        BasePeer::TYPE_COLNAME => array (CargadoresPeer::ID => 0, CargadoresPeer::NOMBRE => 1, CargadoresPeer::TIPO => 2, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'NOMBRE' => 1, 'TIPO' => 2, ),
-        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'nombre' => 1, 'tipo' => 2, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, )
+        BasePeer::TYPE_PHPNAME => array ('Idcargadores' => 0, 'Idsucursal' => 1, 'CargadoresModelo' => 2, 'CargadoresMarca' => 3, 'CargadoresE' => 4, 'CargadoresVolts' => 5, 'CargadoresAmperaje' => 6, 'CargadoresComprador' => 7, 'CargadoresNombre' => 8, 'CargadoresNumserie' => 9, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idcargadores' => 0, 'idsucursal' => 1, 'cargadoresModelo' => 2, 'cargadoresMarca' => 3, 'cargadoresE' => 4, 'cargadoresVolts' => 5, 'cargadoresAmperaje' => 6, 'cargadoresComprador' => 7, 'cargadoresNombre' => 8, 'cargadoresNumserie' => 9, ),
+        BasePeer::TYPE_COLNAME => array (CargadoresPeer::IDCARGADORES => 0, CargadoresPeer::IDSUCURSAL => 1, CargadoresPeer::CARGADORES_MODELO => 2, CargadoresPeer::CARGADORES_MARCA => 3, CargadoresPeer::CARGADORES_E => 4, CargadoresPeer::CARGADORES_VOLTS => 5, CargadoresPeer::CARGADORES_AMPERAJE => 6, CargadoresPeer::CARGADORES_COMPRADOR => 7, CargadoresPeer::CARGADORES_NOMBRE => 8, CargadoresPeer::CARGADORES_NUMSERIE => 9, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDCARGADORES' => 0, 'IDSUCURSAL' => 1, 'CARGADORES_MODELO' => 2, 'CARGADORES_MARCA' => 3, 'CARGADORES_E' => 4, 'CARGADORES_VOLTS' => 5, 'CARGADORES_AMPERAJE' => 6, 'CARGADORES_COMPRADOR' => 7, 'CARGADORES_NOMBRE' => 8, 'CARGADORES_NUMSERIE' => 9, ),
+        BasePeer::TYPE_FIELDNAME => array ('idcargadores' => 0, 'idsucursal' => 1, 'cargadores_modelo' => 2, 'cargadores_marca' => 3, 'cargadores_e' => 4, 'cargadores_volts' => 5, 'cargadores_amperaje' => 6, 'cargadores_comprador' => 7, 'cargadores_nombre' => 8, 'cargadores_numserie' => 9, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, )
     );
 
     /**
@@ -154,13 +175,27 @@ abstract class BaseCargadoresPeer
     public static function addSelectColumns(Criteria $criteria, $alias = null)
     {
         if (null === $alias) {
-            $criteria->addSelectColumn(CargadoresPeer::ID);
-            $criteria->addSelectColumn(CargadoresPeer::NOMBRE);
-            $criteria->addSelectColumn(CargadoresPeer::TIPO);
+            $criteria->addSelectColumn(CargadoresPeer::IDCARGADORES);
+            $criteria->addSelectColumn(CargadoresPeer::IDSUCURSAL);
+            $criteria->addSelectColumn(CargadoresPeer::CARGADORES_MODELO);
+            $criteria->addSelectColumn(CargadoresPeer::CARGADORES_MARCA);
+            $criteria->addSelectColumn(CargadoresPeer::CARGADORES_E);
+            $criteria->addSelectColumn(CargadoresPeer::CARGADORES_VOLTS);
+            $criteria->addSelectColumn(CargadoresPeer::CARGADORES_AMPERAJE);
+            $criteria->addSelectColumn(CargadoresPeer::CARGADORES_COMPRADOR);
+            $criteria->addSelectColumn(CargadoresPeer::CARGADORES_NOMBRE);
+            $criteria->addSelectColumn(CargadoresPeer::CARGADORES_NUMSERIE);
         } else {
-            $criteria->addSelectColumn($alias . '.id');
-            $criteria->addSelectColumn($alias . '.nombre');
-            $criteria->addSelectColumn($alias . '.tipo');
+            $criteria->addSelectColumn($alias . '.idcargadores');
+            $criteria->addSelectColumn($alias . '.idsucursal');
+            $criteria->addSelectColumn($alias . '.cargadores_modelo');
+            $criteria->addSelectColumn($alias . '.cargadores_marca');
+            $criteria->addSelectColumn($alias . '.cargadores_e');
+            $criteria->addSelectColumn($alias . '.cargadores_volts');
+            $criteria->addSelectColumn($alias . '.cargadores_amperaje');
+            $criteria->addSelectColumn($alias . '.cargadores_comprador');
+            $criteria->addSelectColumn($alias . '.cargadores_nombre');
+            $criteria->addSelectColumn($alias . '.cargadores_numserie');
         }
     }
 
@@ -287,7 +322,7 @@ abstract class BaseCargadoresPeer
     {
         if (Propel::isInstancePoolingEnabled()) {
             if ($key === null) {
-                $key = (string) $obj->getId();
+                $key = (string) $obj->getIdcargadores();
             } // if key === null
             CargadoresPeer::$instances[$key] = $obj;
         }
@@ -310,7 +345,7 @@ abstract class BaseCargadoresPeer
     {
         if (Propel::isInstancePoolingEnabled() && $value !== null) {
             if (is_object($value) && $value instanceof Cargadores) {
-                $key = (string) $value->getId();
+                $key = (string) $value->getIdcargadores();
             } elseif (is_scalar($value)) {
                 // assume we've been passed a primary key
                 $key = (string) $value;
@@ -365,6 +400,12 @@ abstract class BaseCargadoresPeer
      */
     public static function clearRelatedInstancePool()
     {
+        // Invalidate objects in BodegasPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        BodegasPeer::clearInstancePool();
+        // Invalidate objects in DeshabilitacgPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        DeshabilitacgPeer::clearInstancePool();
     }
 
     /**
@@ -461,6 +502,244 @@ abstract class BaseCargadoresPeer
         return array($obj, $col);
     }
 
+
+    /**
+     * Returns the number of rows matching criteria, joining the related Sucursal table
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return int Number of matching rows.
+     */
+    public static function doCountJoinSucursal(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        // we're going to modify criteria, so copy it first
+        $criteria = clone $criteria;
+
+        // We need to set the primary table name, since in the case that there are no WHERE columns
+        // it will be impossible for the BasePeer::createSelectSql() method to determine which
+        // tables go into the FROM clause.
+        $criteria->setPrimaryTableName(CargadoresPeer::TABLE_NAME);
+
+        if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
+            $criteria->setDistinct();
+        }
+
+        if (!$criteria->hasSelectClause()) {
+            CargadoresPeer::addSelectColumns($criteria);
+        }
+
+        $criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
+
+        // Set the correct dbName
+        $criteria->setDbName(CargadoresPeer::DATABASE_NAME);
+
+        if ($con === null) {
+            $con = Propel::getConnection(CargadoresPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+        }
+
+        $criteria->addJoin(CargadoresPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
+
+        $stmt = BasePeer::doCount($criteria, $con);
+
+        if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $count = (int) $row[0];
+        } else {
+            $count = 0; // no rows returned; we infer that means 0 matches.
+        }
+        $stmt->closeCursor();
+
+        return $count;
+    }
+
+
+    /**
+     * Selects a collection of Cargadores objects pre-filled with their Sucursal objects.
+     * @param      Criteria  $criteria
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return array           Array of Cargadores objects.
+     * @throws PropelException Any exceptions caught during processing will be
+     *		 rethrown wrapped into a PropelException.
+     */
+    public static function doSelectJoinSucursal(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $criteria = clone $criteria;
+
+        // Set the correct dbName if it has not been overridden
+        if ($criteria->getDbName() == Propel::getDefaultDB()) {
+            $criteria->setDbName(CargadoresPeer::DATABASE_NAME);
+        }
+
+        CargadoresPeer::addSelectColumns($criteria);
+        $startcol = CargadoresPeer::NUM_HYDRATE_COLUMNS;
+        SucursalPeer::addSelectColumns($criteria);
+
+        $criteria->addJoin(CargadoresPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
+
+        $stmt = BasePeer::doSelect($criteria, $con);
+        $results = array();
+
+        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $key1 = CargadoresPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = CargadoresPeer::getInstanceFromPool($key1))) {
+                // We no longer rehydrate the object, since this can cause data loss.
+                // See http://www.propelorm.org/ticket/509
+                // $obj1->hydrate($row, 0, true); // rehydrate
+            } else {
+
+                $cls = CargadoresPeer::getOMClass();
+
+                $obj1 = new $cls();
+                $obj1->hydrate($row);
+                CargadoresPeer::addInstanceToPool($obj1, $key1);
+            } // if $obj1 already loaded
+
+            $key2 = SucursalPeer::getPrimaryKeyHashFromRow($row, $startcol);
+            if ($key2 !== null) {
+                $obj2 = SucursalPeer::getInstanceFromPool($key2);
+                if (!$obj2) {
+
+                    $cls = SucursalPeer::getOMClass();
+
+                    $obj2 = new $cls();
+                    $obj2->hydrate($row, $startcol);
+                    SucursalPeer::addInstanceToPool($obj2, $key2);
+                } // if obj2 already loaded
+
+                // Add the $obj1 (Cargadores) to $obj2 (Sucursal)
+                $obj2->addCargadores($obj1);
+
+            } // if joined row was not null
+
+            $results[] = $obj1;
+        }
+        $stmt->closeCursor();
+
+        return $results;
+    }
+
+
+    /**
+     * Returns the number of rows matching criteria, joining all related tables
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return int Number of matching rows.
+     */
+    public static function doCountJoinAll(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        // we're going to modify criteria, so copy it first
+        $criteria = clone $criteria;
+
+        // We need to set the primary table name, since in the case that there are no WHERE columns
+        // it will be impossible for the BasePeer::createSelectSql() method to determine which
+        // tables go into the FROM clause.
+        $criteria->setPrimaryTableName(CargadoresPeer::TABLE_NAME);
+
+        if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
+            $criteria->setDistinct();
+        }
+
+        if (!$criteria->hasSelectClause()) {
+            CargadoresPeer::addSelectColumns($criteria);
+        }
+
+        $criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
+
+        // Set the correct dbName
+        $criteria->setDbName(CargadoresPeer::DATABASE_NAME);
+
+        if ($con === null) {
+            $con = Propel::getConnection(CargadoresPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+        }
+
+        $criteria->addJoin(CargadoresPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
+
+        $stmt = BasePeer::doCount($criteria, $con);
+
+        if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $count = (int) $row[0];
+        } else {
+            $count = 0; // no rows returned; we infer that means 0 matches.
+        }
+        $stmt->closeCursor();
+
+        return $count;
+    }
+
+    /**
+     * Selects a collection of Cargadores objects pre-filled with all related objects.
+     *
+     * @param      Criteria  $criteria
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return array           Array of Cargadores objects.
+     * @throws PropelException Any exceptions caught during processing will be
+     *		 rethrown wrapped into a PropelException.
+     */
+    public static function doSelectJoinAll(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $criteria = clone $criteria;
+
+        // Set the correct dbName if it has not been overridden
+        if ($criteria->getDbName() == Propel::getDefaultDB()) {
+            $criteria->setDbName(CargadoresPeer::DATABASE_NAME);
+        }
+
+        CargadoresPeer::addSelectColumns($criteria);
+        $startcol2 = CargadoresPeer::NUM_HYDRATE_COLUMNS;
+
+        SucursalPeer::addSelectColumns($criteria);
+        $startcol3 = $startcol2 + SucursalPeer::NUM_HYDRATE_COLUMNS;
+
+        $criteria->addJoin(CargadoresPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
+
+        $stmt = BasePeer::doSelect($criteria, $con);
+        $results = array();
+
+        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $key1 = CargadoresPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = CargadoresPeer::getInstanceFromPool($key1))) {
+                // We no longer rehydrate the object, since this can cause data loss.
+                // See http://www.propelorm.org/ticket/509
+                // $obj1->hydrate($row, 0, true); // rehydrate
+            } else {
+                $cls = CargadoresPeer::getOMClass();
+
+                $obj1 = new $cls();
+                $obj1->hydrate($row);
+                CargadoresPeer::addInstanceToPool($obj1, $key1);
+            } // if obj1 already loaded
+
+            // Add objects for joined Sucursal rows
+
+            $key2 = SucursalPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+            if ($key2 !== null) {
+                $obj2 = SucursalPeer::getInstanceFromPool($key2);
+                if (!$obj2) {
+
+                    $cls = SucursalPeer::getOMClass();
+
+                    $obj2 = new $cls();
+                    $obj2->hydrate($row, $startcol2);
+                    SucursalPeer::addInstanceToPool($obj2, $key2);
+                } // if obj2 loaded
+
+                // Add the $obj1 (Cargadores) to the collection in $obj2 (Sucursal)
+                $obj2->addCargadores($obj1);
+            } // if joined row not null
+
+            $results[] = $obj1;
+        }
+        $stmt->closeCursor();
+
+        return $results;
+    }
+
     /**
      * Returns the TableMap related to this peer.
      * This method is not needed for general use but a specific application could have a need.
@@ -516,8 +795,8 @@ abstract class BaseCargadoresPeer
             $criteria = $values->buildCriteria(); // build Criteria from Cargadores object
         }
 
-        if ($criteria->containsKey(CargadoresPeer::ID) && $criteria->keyContainsValue(CargadoresPeer::ID) ) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key ('.CargadoresPeer::ID.')');
+        if ($criteria->containsKey(CargadoresPeer::IDCARGADORES) && $criteria->keyContainsValue(CargadoresPeer::IDCARGADORES) ) {
+            throw new PropelException('Cannot insert a value for auto-increment primary key ('.CargadoresPeer::IDCARGADORES.')');
         }
 
 
@@ -558,10 +837,10 @@ abstract class BaseCargadoresPeer
         if ($values instanceof Criteria) {
             $criteria = clone $values; // rename for clarity
 
-            $comparison = $criteria->getComparison(CargadoresPeer::ID);
-            $value = $criteria->remove(CargadoresPeer::ID);
+            $comparison = $criteria->getComparison(CargadoresPeer::IDCARGADORES);
+            $value = $criteria->remove(CargadoresPeer::IDCARGADORES);
             if ($value) {
-                $selectCriteria->add(CargadoresPeer::ID, $value, $comparison);
+                $selectCriteria->add(CargadoresPeer::IDCARGADORES, $value, $comparison);
             } else {
                 $selectCriteria->setPrimaryTableName(CargadoresPeer::TABLE_NAME);
             }
@@ -594,6 +873,7 @@ abstract class BaseCargadoresPeer
             // use transaction because $criteria could contain info
             // for more than one table or we could emulating ON DELETE CASCADE, etc.
             $con->beginTransaction();
+            $affectedRows += CargadoresPeer::doOnDeleteCascade(new Criteria(CargadoresPeer::DATABASE_NAME), $con);
             $affectedRows += BasePeer::doDeleteAll(CargadoresPeer::TABLE_NAME, $con, CargadoresPeer::DATABASE_NAME);
             // Because this db requires some delete cascade/set null emulation, we have to
             // clear the cached instance *after* the emulation has happened (since
@@ -627,24 +907,14 @@ abstract class BaseCargadoresPeer
         }
 
         if ($values instanceof Criteria) {
-            // invalidate the cache for all objects of this type, since we have no
-            // way of knowing (without running a query) what objects should be invalidated
-            // from the cache based on this Criteria.
-            CargadoresPeer::clearInstancePool();
             // rename for clarity
             $criteria = clone $values;
         } elseif ($values instanceof Cargadores) { // it's a model object
-            // invalidate the cache for this single object
-            CargadoresPeer::removeInstanceFromPool($values);
             // create criteria based on pk values
             $criteria = $values->buildPkeyCriteria();
         } else { // it's a primary key, or an array of pks
             $criteria = new Criteria(CargadoresPeer::DATABASE_NAME);
-            $criteria->add(CargadoresPeer::ID, (array) $values, Criteria::IN);
-            // invalidate the cache for this object(s)
-            foreach ((array) $values as $singleval) {
-                CargadoresPeer::removeInstanceFromPool($singleval);
-            }
+            $criteria->add(CargadoresPeer::IDCARGADORES, (array) $values, Criteria::IN);
         }
 
         // Set the correct dbName
@@ -657,6 +927,23 @@ abstract class BaseCargadoresPeer
             // for more than one table or we could emulating ON DELETE CASCADE, etc.
             $con->beginTransaction();
 
+            // cloning the Criteria in case it's modified by doSelect() or doSelectStmt()
+            $c = clone $criteria;
+            $affectedRows += CargadoresPeer::doOnDeleteCascade($c, $con);
+
+            // Because this db requires some delete cascade/set null emulation, we have to
+            // clear the cached instance *after* the emulation has happened (since
+            // instances get re-added by the select statement contained therein).
+            if ($values instanceof Criteria) {
+                CargadoresPeer::clearInstancePool();
+            } elseif ($values instanceof Cargadores) { // it's a model object
+                CargadoresPeer::removeInstanceFromPool($values);
+            } else { // it's a primary key, or an array of pks
+                foreach ((array) $values as $singleval) {
+                    CargadoresPeer::removeInstanceFromPool($singleval);
+                }
+            }
+
             $affectedRows += BasePeer::doDelete($criteria, $con);
             CargadoresPeer::clearRelatedInstancePool();
             $con->commit();
@@ -666,6 +953,45 @@ abstract class BaseCargadoresPeer
             $con->rollBack();
             throw $e;
         }
+    }
+
+    /**
+     * This is a method for emulating ON DELETE CASCADE for DBs that don't support this
+     * feature (like MySQL or SQLite).
+     *
+     * This method is not very speedy because it must perform a query first to get
+     * the implicated records and then perform the deletes by calling those Peer classes.
+     *
+     * This method should be used within a transaction if possible.
+     *
+     * @param      Criteria $criteria
+     * @param      PropelPDO $con
+     * @return int The number of affected rows (if supported by underlying database driver).
+     */
+    protected static function doOnDeleteCascade(Criteria $criteria, PropelPDO $con)
+    {
+        // initialize var to track total num of affected rows
+        $affectedRows = 0;
+
+        // first find the objects that are implicated by the $criteria
+        $objects = CargadoresPeer::doSelect($criteria, $con);
+        foreach ($objects as $obj) {
+
+
+            // delete related Bodegas objects
+            $criteria = new Criteria(BodegasPeer::DATABASE_NAME);
+
+            $criteria->add(BodegasPeer::CG, $obj->getIdcargadores());
+            $affectedRows += BodegasPeer::doDelete($criteria, $con);
+
+            // delete related Deshabilitacg objects
+            $criteria = new Criteria(DeshabilitacgPeer::DATABASE_NAME);
+
+            $criteria->add(DeshabilitacgPeer::CG, $obj->getIdcargadores());
+            $affectedRows += DeshabilitacgPeer::doDelete($criteria, $con);
+        }
+
+        return $affectedRows;
     }
 
     /**
@@ -724,7 +1050,7 @@ abstract class BaseCargadoresPeer
         }
 
         $criteria = new Criteria(CargadoresPeer::DATABASE_NAME);
-        $criteria->add(CargadoresPeer::ID, $pk);
+        $criteria->add(CargadoresPeer::IDCARGADORES, $pk);
 
         $v = CargadoresPeer::doSelect($criteria, $con);
 
@@ -751,7 +1077,7 @@ abstract class BaseCargadoresPeer
             $objs = array();
         } else {
             $criteria = new Criteria(CargadoresPeer::DATABASE_NAME);
-            $criteria->add(CargadoresPeer::ID, $pks, Criteria::IN);
+            $criteria->add(CargadoresPeer::IDCARGADORES, $pks, Criteria::IN);
             $objs = CargadoresPeer::doSelect($criteria, $con);
         }
 

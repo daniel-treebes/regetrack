@@ -4,7 +4,7 @@
 
                     
         <h3 class="page-title">
-            Bienvenido <?php echo $loggedInUser->username; ?>
+            Bienvenido <?php echo $loggedInUser->displayname; ?>
         </h3>
         <div class="page-bar">
             <ul class="page-breadcrumb">

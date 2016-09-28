@@ -126,7 +126,7 @@ function ponBateriaEnCarga(){
    })
    .fail(function( jqXHR, textStatus, errorThrown ) {
       alert( "El registro a fallado: " +  textStatus + " Inicie nuevamente. ");
-      window.location.replace("https://regetrack.com/escanear.php");
+      window.location.replace("/escanear.php");
    });
 }
 
@@ -163,7 +163,7 @@ function ponBateriaEnInventario(){
    })
    .fail(function( jqXHR, textStatus, errorThrown ) {
       alert( "El registro de inventario a fallado: " +  jqXHR.responseText + ". Inicie nuevamente");
-      window.location.replace("https://regetrack.com/escanear.php");
+      window.location.replace("/escanear.php");
    });
 }
 

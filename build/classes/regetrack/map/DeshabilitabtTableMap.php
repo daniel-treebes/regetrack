@@ -39,7 +39,7 @@ class DeshabilitabtTableMap extends TableMap
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
-        $this->addColumn('bt', 'Bt', 'INTEGER', true, null, null);
+        $this->addForeignKey('bt', 'Bt', 'INTEGER', 'baterias', 'idbaterias', true, null, null);
         $this->addColumn('motivo', 'Motivo', 'LONGVARCHAR', true, null, null);
         $this->addColumn('fecha_entrada', 'FechaEntrada', 'TIMESTAMP', true, null, null);
         $this->addColumn('fecha_salida', 'FechaSalida', 'TIMESTAMP', true, null, null);
@@ -53,6 +53,7 @@ class DeshabilitabtTableMap extends TableMap
      */
     public function buildRelations()
     {
+        $this->addRelation('Baterias', 'Baterias', RelationMap::MANY_TO_ONE, array('bt' => 'idbaterias', ), 'CASCADE', 'CASCADE');
     } // buildRelations()
 
 } // DeshabilitabtTableMap

@@ -18,6 +18,14 @@
  * @method BodegasQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
  * @method BodegasQuery innerJoin($relation) Adds a INNER JOIN clause to the query
  *
+ * @method BodegasQuery leftJoinCargadores($relationAlias = null) Adds a LEFT JOIN clause to the query using the Cargadores relation
+ * @method BodegasQuery rightJoinCargadores($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Cargadores relation
+ * @method BodegasQuery innerJoinCargadores($relationAlias = null) Adds a INNER JOIN clause to the query using the Cargadores relation
+ *
+ * @method BodegasQuery leftJoinUsoBateriasBodega($relationAlias = null) Adds a LEFT JOIN clause to the query using the UsoBateriasBodega relation
+ * @method BodegasQuery rightJoinUsoBateriasBodega($relationAlias = null) Adds a RIGHT JOIN clause to the query using the UsoBateriasBodega relation
+ * @method BodegasQuery innerJoinUsoBateriasBodega($relationAlias = null) Adds a INNER JOIN clause to the query using the UsoBateriasBodega relation
+ *
  * @method Bodegas findOne(PropelPDO $con = null) Return the first Bodegas matching the query
  * @method Bodegas findOneOrCreate(PropelPDO $con = null) Return the first Bodegas matching the query, or a new Bodegas object populated from the query conditions when no match is found
  *
@@ -305,6 +313,8 @@ abstract class BaseBodegasQuery extends ModelCriteria
      * $query->filterByCg(array('max' => 12)); // WHERE cg <= 12
      * </code>
      *
+     * @see       filterByCargadores()
+     *
      * @param     mixed $cg The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
@@ -334,6 +344,156 @@ abstract class BaseBodegasQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(BodegasPeer::CG, $cg, $comparison);
+    }
+
+    /**
+     * Filter the query by a related Cargadores object
+     *
+     * @param   Cargadores|PropelObjectCollection $cargadores The related object(s) to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 BodegasQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByCargadores($cargadores, $comparison = null)
+    {
+        if ($cargadores instanceof Cargadores) {
+            return $this
+                ->addUsingAlias(BodegasPeer::CG, $cargadores->getIdcargadores(), $comparison);
+        } elseif ($cargadores instanceof PropelObjectCollection) {
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+
+            return $this
+                ->addUsingAlias(BodegasPeer::CG, $cargadores->toKeyValue('PrimaryKey', 'Idcargadores'), $comparison);
+        } else {
+            throw new PropelException('filterByCargadores() only accepts arguments of type Cargadores or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Cargadores relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return BodegasQuery The current query, for fluid interface
+     */
+    public function joinCargadores($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Cargadores');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Cargadores');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Cargadores relation Cargadores object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   CargadoresQuery A secondary query class using the current class as primary query
+     */
+    public function useCargadoresQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinCargadores($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Cargadores', 'CargadoresQuery');
+    }
+
+    /**
+     * Filter the query by a related UsoBateriasBodega object
+     *
+     * @param   UsoBateriasBodega|PropelObjectCollection $usoBateriasBodega  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 BodegasQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByUsoBateriasBodega($usoBateriasBodega, $comparison = null)
+    {
+        if ($usoBateriasBodega instanceof UsoBateriasBodega) {
+            return $this
+                ->addUsingAlias(BodegasPeer::ID, $usoBateriasBodega->getBg(), $comparison);
+        } elseif ($usoBateriasBodega instanceof PropelObjectCollection) {
+            return $this
+                ->useUsoBateriasBodegaQuery()
+                ->filterByPrimaryKeys($usoBateriasBodega->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByUsoBateriasBodega() only accepts arguments of type UsoBateriasBodega or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the UsoBateriasBodega relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return BodegasQuery The current query, for fluid interface
+     */
+    public function joinUsoBateriasBodega($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('UsoBateriasBodega');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'UsoBateriasBodega');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the UsoBateriasBodega relation UsoBateriasBodega object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   UsoBateriasBodegaQuery A secondary query class using the current class as primary query
+     */
+    public function useUsoBateriasBodegaQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinUsoBateriasBodega($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'UsoBateriasBodega', 'UsoBateriasBodegaQuery');
     }
 
     /**

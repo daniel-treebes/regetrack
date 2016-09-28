@@ -1,4 +1,7 @@
 <?php
+
+
+
 $query="
     SELECT
         m.id as Id,
@@ -55,19 +58,19 @@ while($fila = $resultado->fetch_array()) {
                     <div class="form-group">
                         <label class="col-md-3 control-label">Nombre</label>
                         <div class="col-md-9">
-                            <input type="text" class="form-control datos-cosa" placeholder="Default Input" value="<?php  echo $nombre ?> "> 
+                            <input readonly type="text" class="form-control datos-cosa" placeholder="Default Input" value="<?php  echo $nombre ?> "> 
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-md-3 control-label">Modelo</label>
                         <div class="col-md-9">
-                            <input type="text" class="form-control datos-cosa" placeholder="Default Input" value="<?php  echo $modelo ?> "> 
+                            <input readonly type="text" class="form-control datos-cosa" placeholder="Default Input" value="<?php  echo $modelo ?> "> 
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-md-3 control-label">Tipo</label>
                         <div class="col-md-9">
-                            <input type="text" class="form-control datos-cosa" placeholder="Default Input" value="<?php  echo $tipo ?> "> 
+                            <input readonly type="text" class="form-control datos-cosa" placeholder="Default Input" value="<?php  echo $tipo ?> "> 
                         </div>
                     </div>
                 </div>
@@ -212,7 +215,7 @@ if($loggedInUser->checkPermission(array(1,2))){
 	</div>
 
 	<?php
-	$grafica=pinta_grafica('mc','reporteMC','uso',$id);
+	$grafica=pinta_grafica('mc','reporteMC','uso',$id,$loggedInUser->sucursal_activa);
 	echo $grafica;
 
 }

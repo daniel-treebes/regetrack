@@ -9,7 +9,7 @@ $conf = array (
       'adapter' => 'mysql',
       'connection' => 
       array (
-        'dsn' => 'mysql:host=localhost;dbname=regetrac_sistema',
+        'dsn' => 'mysql:host=localhost;dbname=regetrac_sistemav2',
         'user' => 'regetrac_sistema',
         'password' => 'Hola.1234',
       ),
@@ -18,5 +18,5 @@ $conf = array (
   ),
   'generator_version' => '1.7.1',
 );
-//$conf['classmap'] = include(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'classmap-regetrack-conf.php');
+$conf['classmap'] = include(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'classmap-regetrack-conf.php');
 return $conf;

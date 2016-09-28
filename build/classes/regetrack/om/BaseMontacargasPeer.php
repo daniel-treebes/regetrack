@@ -24,31 +24,52 @@ abstract class BaseMontacargasPeer
     const TM_CLASS = 'MontacargasTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 6;
+    const NUM_COLUMNS = 13;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 6;
+    const NUM_HYDRATE_COLUMNS = 13;
 
-    /** the column name for the id field */
-    const ID = 'montacargas.id';
+    /** the column name for the idmontacargas field */
+    const IDMONTACARGAS = 'montacargas.idmontacargas';
 
-    /** the column name for the nombre field */
-    const NOMBRE = 'montacargas.nombre';
+    /** the column name for the idsucursal field */
+    const IDSUCURSAL = 'montacargas.idsucursal';
 
-    /** the column name for the modelo field */
-    const MODELO = 'montacargas.modelo';
+    /** the column name for the montacargas_modelo field */
+    const MONTACARGAS_MODELO = 'montacargas.montacargas_modelo';
 
-    /** the column name for the tipo field */
-    const TIPO = 'montacargas.tipo';
+    /** the column name for the montacargas_marca field */
+    const MONTACARGAS_MARCA = 'montacargas.montacargas_marca';
 
-    /** the column name for the ciclos_mant field */
-    const CICLOS_MANT = 'montacargas.ciclos_mant';
+    /** the column name for the montacargas_c field */
+    const MONTACARGAS_C = 'montacargas.montacargas_c';
 
-    /** the column name for the ciclos_iniciales field */
-    const CICLOS_INICIALES = 'montacargas.ciclos_iniciales';
+    /** the column name for the montacargas_k field */
+    const MONTACARGAS_K = 'montacargas.montacargas_k';
+
+    /** the column name for the montacargas_p field */
+    const MONTACARGAS_P = 'montacargas.montacargas_p';
+
+    /** the column name for the montacargas_t field */
+    const MONTACARGAS_T = 'montacargas.montacargas_t';
+
+    /** the column name for the montacargas_e field */
+    const MONTACARGAS_E = 'montacargas.montacargas_e';
+
+    /** the column name for the montacargas_volts field */
+    const MONTACARGAS_VOLTS = 'montacargas.montacargas_volts';
+
+    /** the column name for the montacargas_amperaje field */
+    const MONTACARGAS_AMPERAJE = 'montacargas.montacargas_amperaje';
+
+    /** the column name for the montacargas_nombre field */
+    const MONTACARGAS_NOMBRE = 'montacargas.montacargas_nombre';
+
+    /** the column name for the montacargas_numserie field */
+    const MONTACARGAS_NUMSERIE = 'montacargas.montacargas_numserie';
 
     /** The default string format for model objects of the related table **/
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -69,12 +90,12 @@ abstract class BaseMontacargasPeer
      * e.g. MontacargasPeer::$fieldNames[MontacargasPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Id', 'Nombre', 'Modelo', 'Tipo', 'CiclosMant', 'CiclosIniciales', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'nombre', 'modelo', 'tipo', 'ciclosMant', 'ciclosIniciales', ),
-        BasePeer::TYPE_COLNAME => array (MontacargasPeer::ID, MontacargasPeer::NOMBRE, MontacargasPeer::MODELO, MontacargasPeer::TIPO, MontacargasPeer::CICLOS_MANT, MontacargasPeer::CICLOS_INICIALES, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'NOMBRE', 'MODELO', 'TIPO', 'CICLOS_MANT', 'CICLOS_INICIALES', ),
-        BasePeer::TYPE_FIELDNAME => array ('id', 'nombre', 'modelo', 'tipo', 'ciclos_mant', 'ciclos_iniciales', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, )
+        BasePeer::TYPE_PHPNAME => array ('Idmontacargas', 'Idsucursal', 'MontacargasModelo', 'MontacargasMarca', 'MontacargasC', 'MontacargasK', 'MontacargasP', 'MontacargasT', 'MontacargasE', 'MontacargasVolts', 'MontacargasAmperaje', 'MontacargasNombre', 'MontacargasNumserie', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idmontacargas', 'idsucursal', 'montacargasModelo', 'montacargasMarca', 'montacargasC', 'montacargasK', 'montacargasP', 'montacargasT', 'montacargasE', 'montacargasVolts', 'montacargasAmperaje', 'montacargasNombre', 'montacargasNumserie', ),
+        BasePeer::TYPE_COLNAME => array (MontacargasPeer::IDMONTACARGAS, MontacargasPeer::IDSUCURSAL, MontacargasPeer::MONTACARGAS_MODELO, MontacargasPeer::MONTACARGAS_MARCA, MontacargasPeer::MONTACARGAS_C, MontacargasPeer::MONTACARGAS_K, MontacargasPeer::MONTACARGAS_P, MontacargasPeer::MONTACARGAS_T, MontacargasPeer::MONTACARGAS_E, MontacargasPeer::MONTACARGAS_VOLTS, MontacargasPeer::MONTACARGAS_AMPERAJE, MontacargasPeer::MONTACARGAS_NOMBRE, MontacargasPeer::MONTACARGAS_NUMSERIE, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDMONTACARGAS', 'IDSUCURSAL', 'MONTACARGAS_MODELO', 'MONTACARGAS_MARCA', 'MONTACARGAS_C', 'MONTACARGAS_K', 'MONTACARGAS_P', 'MONTACARGAS_T', 'MONTACARGAS_E', 'MONTACARGAS_VOLTS', 'MONTACARGAS_AMPERAJE', 'MONTACARGAS_NOMBRE', 'MONTACARGAS_NUMSERIE', ),
+        BasePeer::TYPE_FIELDNAME => array ('idmontacargas', 'idsucursal', 'montacargas_modelo', 'montacargas_marca', 'montacargas_c', 'montacargas_k', 'montacargas_p', 'montacargas_t', 'montacargas_e', 'montacargas_volts', 'montacargas_amperaje', 'montacargas_nombre', 'montacargas_numserie', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, )
     );
 
     /**
@@ -84,12 +105,12 @@ abstract class BaseMontacargasPeer
      * e.g. MontacargasPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Nombre' => 1, 'Modelo' => 2, 'Tipo' => 3, 'CiclosMant' => 4, 'CiclosIniciales' => 5, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'nombre' => 1, 'modelo' => 2, 'tipo' => 3, 'ciclosMant' => 4, 'ciclosIniciales' => 5, ),
-        BasePeer::TYPE_COLNAME => array (MontacargasPeer::ID => 0, MontacargasPeer::NOMBRE => 1, MontacargasPeer::MODELO => 2, MontacargasPeer::TIPO => 3, MontacargasPeer::CICLOS_MANT => 4, MontacargasPeer::CICLOS_INICIALES => 5, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'NOMBRE' => 1, 'MODELO' => 2, 'TIPO' => 3, 'CICLOS_MANT' => 4, 'CICLOS_INICIALES' => 5, ),
-        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'nombre' => 1, 'modelo' => 2, 'tipo' => 3, 'ciclos_mant' => 4, 'ciclos_iniciales' => 5, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, )
+        BasePeer::TYPE_PHPNAME => array ('Idmontacargas' => 0, 'Idsucursal' => 1, 'MontacargasModelo' => 2, 'MontacargasMarca' => 3, 'MontacargasC' => 4, 'MontacargasK' => 5, 'MontacargasP' => 6, 'MontacargasT' => 7, 'MontacargasE' => 8, 'MontacargasVolts' => 9, 'MontacargasAmperaje' => 10, 'MontacargasNombre' => 11, 'MontacargasNumserie' => 12, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idmontacargas' => 0, 'idsucursal' => 1, 'montacargasModelo' => 2, 'montacargasMarca' => 3, 'montacargasC' => 4, 'montacargasK' => 5, 'montacargasP' => 6, 'montacargasT' => 7, 'montacargasE' => 8, 'montacargasVolts' => 9, 'montacargasAmperaje' => 10, 'montacargasNombre' => 11, 'montacargasNumserie' => 12, ),
+        BasePeer::TYPE_COLNAME => array (MontacargasPeer::IDMONTACARGAS => 0, MontacargasPeer::IDSUCURSAL => 1, MontacargasPeer::MONTACARGAS_MODELO => 2, MontacargasPeer::MONTACARGAS_MARCA => 3, MontacargasPeer::MONTACARGAS_C => 4, MontacargasPeer::MONTACARGAS_K => 5, MontacargasPeer::MONTACARGAS_P => 6, MontacargasPeer::MONTACARGAS_T => 7, MontacargasPeer::MONTACARGAS_E => 8, MontacargasPeer::MONTACARGAS_VOLTS => 9, MontacargasPeer::MONTACARGAS_AMPERAJE => 10, MontacargasPeer::MONTACARGAS_NOMBRE => 11, MontacargasPeer::MONTACARGAS_NUMSERIE => 12, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDMONTACARGAS' => 0, 'IDSUCURSAL' => 1, 'MONTACARGAS_MODELO' => 2, 'MONTACARGAS_MARCA' => 3, 'MONTACARGAS_C' => 4, 'MONTACARGAS_K' => 5, 'MONTACARGAS_P' => 6, 'MONTACARGAS_T' => 7, 'MONTACARGAS_E' => 8, 'MONTACARGAS_VOLTS' => 9, 'MONTACARGAS_AMPERAJE' => 10, 'MONTACARGAS_NOMBRE' => 11, 'MONTACARGAS_NUMSERIE' => 12, ),
+        BasePeer::TYPE_FIELDNAME => array ('idmontacargas' => 0, 'idsucursal' => 1, 'montacargas_modelo' => 2, 'montacargas_marca' => 3, 'montacargas_c' => 4, 'montacargas_k' => 5, 'montacargas_p' => 6, 'montacargas_t' => 7, 'montacargas_e' => 8, 'montacargas_volts' => 9, 'montacargas_amperaje' => 10, 'montacargas_nombre' => 11, 'montacargas_numserie' => 12, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, )
     );
 
     /**
@@ -163,19 +184,33 @@ abstract class BaseMontacargasPeer
     public static function addSelectColumns(Criteria $criteria, $alias = null)
     {
         if (null === $alias) {
-            $criteria->addSelectColumn(MontacargasPeer::ID);
-            $criteria->addSelectColumn(MontacargasPeer::NOMBRE);
-            $criteria->addSelectColumn(MontacargasPeer::MODELO);
-            $criteria->addSelectColumn(MontacargasPeer::TIPO);
-            $criteria->addSelectColumn(MontacargasPeer::CICLOS_MANT);
-            $criteria->addSelectColumn(MontacargasPeer::CICLOS_INICIALES);
+            $criteria->addSelectColumn(MontacargasPeer::IDMONTACARGAS);
+            $criteria->addSelectColumn(MontacargasPeer::IDSUCURSAL);
+            $criteria->addSelectColumn(MontacargasPeer::MONTACARGAS_MODELO);
+            $criteria->addSelectColumn(MontacargasPeer::MONTACARGAS_MARCA);
+            $criteria->addSelectColumn(MontacargasPeer::MONTACARGAS_C);
+            $criteria->addSelectColumn(MontacargasPeer::MONTACARGAS_K);
+            $criteria->addSelectColumn(MontacargasPeer::MONTACARGAS_P);
+            $criteria->addSelectColumn(MontacargasPeer::MONTACARGAS_T);
+            $criteria->addSelectColumn(MontacargasPeer::MONTACARGAS_E);
+            $criteria->addSelectColumn(MontacargasPeer::MONTACARGAS_VOLTS);
+            $criteria->addSelectColumn(MontacargasPeer::MONTACARGAS_AMPERAJE);
+            $criteria->addSelectColumn(MontacargasPeer::MONTACARGAS_NOMBRE);
+            $criteria->addSelectColumn(MontacargasPeer::MONTACARGAS_NUMSERIE);
         } else {
-            $criteria->addSelectColumn($alias . '.id');
-            $criteria->addSelectColumn($alias . '.nombre');
-            $criteria->addSelectColumn($alias . '.modelo');
-            $criteria->addSelectColumn($alias . '.tipo');
-            $criteria->addSelectColumn($alias . '.ciclos_mant');
-            $criteria->addSelectColumn($alias . '.ciclos_iniciales');
+            $criteria->addSelectColumn($alias . '.idmontacargas');
+            $criteria->addSelectColumn($alias . '.idsucursal');
+            $criteria->addSelectColumn($alias . '.montacargas_modelo');
+            $criteria->addSelectColumn($alias . '.montacargas_marca');
+            $criteria->addSelectColumn($alias . '.montacargas_c');
+            $criteria->addSelectColumn($alias . '.montacargas_k');
+            $criteria->addSelectColumn($alias . '.montacargas_p');
+            $criteria->addSelectColumn($alias . '.montacargas_t');
+            $criteria->addSelectColumn($alias . '.montacargas_e');
+            $criteria->addSelectColumn($alias . '.montacargas_volts');
+            $criteria->addSelectColumn($alias . '.montacargas_amperaje');
+            $criteria->addSelectColumn($alias . '.montacargas_nombre');
+            $criteria->addSelectColumn($alias . '.montacargas_numserie');
         }
     }
 
@@ -302,7 +337,7 @@ abstract class BaseMontacargasPeer
     {
         if (Propel::isInstancePoolingEnabled()) {
             if ($key === null) {
-                $key = (string) $obj->getId();
+                $key = (string) $obj->getIdmontacargas();
             } // if key === null
             MontacargasPeer::$instances[$key] = $obj;
         }
@@ -325,7 +360,7 @@ abstract class BaseMontacargasPeer
     {
         if (Propel::isInstancePoolingEnabled() && $value !== null) {
             if (is_object($value) && $value instanceof Montacargas) {
-                $key = (string) $value->getId();
+                $key = (string) $value->getIdmontacargas();
             } elseif (is_scalar($value)) {
                 // assume we've been passed a primary key
                 $key = (string) $value;
@@ -380,6 +415,9 @@ abstract class BaseMontacargasPeer
      */
     public static function clearRelatedInstancePool()
     {
+        // Invalidate objects in DeshabilitamcPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        DeshabilitamcPeer::clearInstancePool();
     }
 
     /**
@@ -476,6 +514,244 @@ abstract class BaseMontacargasPeer
         return array($obj, $col);
     }
 
+
+    /**
+     * Returns the number of rows matching criteria, joining the related Sucursal table
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return int Number of matching rows.
+     */
+    public static function doCountJoinSucursal(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        // we're going to modify criteria, so copy it first
+        $criteria = clone $criteria;
+
+        // We need to set the primary table name, since in the case that there are no WHERE columns
+        // it will be impossible for the BasePeer::createSelectSql() method to determine which
+        // tables go into the FROM clause.
+        $criteria->setPrimaryTableName(MontacargasPeer::TABLE_NAME);
+
+        if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
+            $criteria->setDistinct();
+        }
+
+        if (!$criteria->hasSelectClause()) {
+            MontacargasPeer::addSelectColumns($criteria);
+        }
+
+        $criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
+
+        // Set the correct dbName
+        $criteria->setDbName(MontacargasPeer::DATABASE_NAME);
+
+        if ($con === null) {
+            $con = Propel::getConnection(MontacargasPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+        }
+
+        $criteria->addJoin(MontacargasPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
+
+        $stmt = BasePeer::doCount($criteria, $con);
+
+        if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $count = (int) $row[0];
+        } else {
+            $count = 0; // no rows returned; we infer that means 0 matches.
+        }
+        $stmt->closeCursor();
+
+        return $count;
+    }
+
+
+    /**
+     * Selects a collection of Montacargas objects pre-filled with their Sucursal objects.
+     * @param      Criteria  $criteria
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return array           Array of Montacargas objects.
+     * @throws PropelException Any exceptions caught during processing will be
+     *		 rethrown wrapped into a PropelException.
+     */
+    public static function doSelectJoinSucursal(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $criteria = clone $criteria;
+
+        // Set the correct dbName if it has not been overridden
+        if ($criteria->getDbName() == Propel::getDefaultDB()) {
+            $criteria->setDbName(MontacargasPeer::DATABASE_NAME);
+        }
+
+        MontacargasPeer::addSelectColumns($criteria);
+        $startcol = MontacargasPeer::NUM_HYDRATE_COLUMNS;
+        SucursalPeer::addSelectColumns($criteria);
+
+        $criteria->addJoin(MontacargasPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
+
+        $stmt = BasePeer::doSelect($criteria, $con);
+        $results = array();
+
+        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $key1 = MontacargasPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = MontacargasPeer::getInstanceFromPool($key1))) {
+                // We no longer rehydrate the object, since this can cause data loss.
+                // See http://www.propelorm.org/ticket/509
+                // $obj1->hydrate($row, 0, true); // rehydrate
+            } else {
+
+                $cls = MontacargasPeer::getOMClass();
+
+                $obj1 = new $cls();
+                $obj1->hydrate($row);
+                MontacargasPeer::addInstanceToPool($obj1, $key1);
+            } // if $obj1 already loaded
+
+            $key2 = SucursalPeer::getPrimaryKeyHashFromRow($row, $startcol);
+            if ($key2 !== null) {
+                $obj2 = SucursalPeer::getInstanceFromPool($key2);
+                if (!$obj2) {
+
+                    $cls = SucursalPeer::getOMClass();
+
+                    $obj2 = new $cls();
+                    $obj2->hydrate($row, $startcol);
+                    SucursalPeer::addInstanceToPool($obj2, $key2);
+                } // if obj2 already loaded
+
+                // Add the $obj1 (Montacargas) to $obj2 (Sucursal)
+                $obj2->addMontacargas($obj1);
+
+            } // if joined row was not null
+
+            $results[] = $obj1;
+        }
+        $stmt->closeCursor();
+
+        return $results;
+    }
+
+
+    /**
+     * Returns the number of rows matching criteria, joining all related tables
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return int Number of matching rows.
+     */
+    public static function doCountJoinAll(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        // we're going to modify criteria, so copy it first
+        $criteria = clone $criteria;
+
+        // We need to set the primary table name, since in the case that there are no WHERE columns
+        // it will be impossible for the BasePeer::createSelectSql() method to determine which
+        // tables go into the FROM clause.
+        $criteria->setPrimaryTableName(MontacargasPeer::TABLE_NAME);
+
+        if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
+            $criteria->setDistinct();
+        }
+
+        if (!$criteria->hasSelectClause()) {
+            MontacargasPeer::addSelectColumns($criteria);
+        }
+
+        $criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
+
+        // Set the correct dbName
+        $criteria->setDbName(MontacargasPeer::DATABASE_NAME);
+
+        if ($con === null) {
+            $con = Propel::getConnection(MontacargasPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+        }
+
+        $criteria->addJoin(MontacargasPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
+
+        $stmt = BasePeer::doCount($criteria, $con);
+
+        if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $count = (int) $row[0];
+        } else {
+            $count = 0; // no rows returned; we infer that means 0 matches.
+        }
+        $stmt->closeCursor();
+
+        return $count;
+    }
+
+    /**
+     * Selects a collection of Montacargas objects pre-filled with all related objects.
+     *
+     * @param      Criteria  $criteria
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return array           Array of Montacargas objects.
+     * @throws PropelException Any exceptions caught during processing will be
+     *		 rethrown wrapped into a PropelException.
+     */
+    public static function doSelectJoinAll(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $criteria = clone $criteria;
+
+        // Set the correct dbName if it has not been overridden
+        if ($criteria->getDbName() == Propel::getDefaultDB()) {
+            $criteria->setDbName(MontacargasPeer::DATABASE_NAME);
+        }
+
+        MontacargasPeer::addSelectColumns($criteria);
+        $startcol2 = MontacargasPeer::NUM_HYDRATE_COLUMNS;
+
+        SucursalPeer::addSelectColumns($criteria);
+        $startcol3 = $startcol2 + SucursalPeer::NUM_HYDRATE_COLUMNS;
+
+        $criteria->addJoin(MontacargasPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
+
+        $stmt = BasePeer::doSelect($criteria, $con);
+        $results = array();
+
+        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $key1 = MontacargasPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = MontacargasPeer::getInstanceFromPool($key1))) {
+                // We no longer rehydrate the object, since this can cause data loss.
+                // See http://www.propelorm.org/ticket/509
+                // $obj1->hydrate($row, 0, true); // rehydrate
+            } else {
+                $cls = MontacargasPeer::getOMClass();
+
+                $obj1 = new $cls();
+                $obj1->hydrate($row);
+                MontacargasPeer::addInstanceToPool($obj1, $key1);
+            } // if obj1 already loaded
+
+            // Add objects for joined Sucursal rows
+
+            $key2 = SucursalPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+            if ($key2 !== null) {
+                $obj2 = SucursalPeer::getInstanceFromPool($key2);
+                if (!$obj2) {
+
+                    $cls = SucursalPeer::getOMClass();
+
+                    $obj2 = new $cls();
+                    $obj2->hydrate($row, $startcol2);
+                    SucursalPeer::addInstanceToPool($obj2, $key2);
+                } // if obj2 loaded
+
+                // Add the $obj1 (Montacargas) to the collection in $obj2 (Sucursal)
+                $obj2->addMontacargas($obj1);
+            } // if joined row not null
+
+            $results[] = $obj1;
+        }
+        $stmt->closeCursor();
+
+        return $results;
+    }
+
     /**
      * Returns the TableMap related to this peer.
      * This method is not needed for general use but a specific application could have a need.
@@ -531,8 +807,8 @@ abstract class BaseMontacargasPeer
             $criteria = $values->buildCriteria(); // build Criteria from Montacargas object
         }
 
-        if ($criteria->containsKey(MontacargasPeer::ID) && $criteria->keyContainsValue(MontacargasPeer::ID) ) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key ('.MontacargasPeer::ID.')');
+        if ($criteria->containsKey(MontacargasPeer::IDMONTACARGAS) && $criteria->keyContainsValue(MontacargasPeer::IDMONTACARGAS) ) {
+            throw new PropelException('Cannot insert a value for auto-increment primary key ('.MontacargasPeer::IDMONTACARGAS.')');
         }
 
 
@@ -573,10 +849,10 @@ abstract class BaseMontacargasPeer
         if ($values instanceof Criteria) {
             $criteria = clone $values; // rename for clarity
 
-            $comparison = $criteria->getComparison(MontacargasPeer::ID);
-            $value = $criteria->remove(MontacargasPeer::ID);
+            $comparison = $criteria->getComparison(MontacargasPeer::IDMONTACARGAS);
+            $value = $criteria->remove(MontacargasPeer::IDMONTACARGAS);
             if ($value) {
-                $selectCriteria->add(MontacargasPeer::ID, $value, $comparison);
+                $selectCriteria->add(MontacargasPeer::IDMONTACARGAS, $value, $comparison);
             } else {
                 $selectCriteria->setPrimaryTableName(MontacargasPeer::TABLE_NAME);
             }
@@ -609,6 +885,7 @@ abstract class BaseMontacargasPeer
             // use transaction because $criteria could contain info
             // for more than one table or we could emulating ON DELETE CASCADE, etc.
             $con->beginTransaction();
+            $affectedRows += MontacargasPeer::doOnDeleteCascade(new Criteria(MontacargasPeer::DATABASE_NAME), $con);
             $affectedRows += BasePeer::doDeleteAll(MontacargasPeer::TABLE_NAME, $con, MontacargasPeer::DATABASE_NAME);
             // Because this db requires some delete cascade/set null emulation, we have to
             // clear the cached instance *after* the emulation has happened (since
@@ -642,24 +919,14 @@ abstract class BaseMontacargasPeer
         }
 
         if ($values instanceof Criteria) {
-            // invalidate the cache for all objects of this type, since we have no
-            // way of knowing (without running a query) what objects should be invalidated
-            // from the cache based on this Criteria.
-            MontacargasPeer::clearInstancePool();
             // rename for clarity
             $criteria = clone $values;
         } elseif ($values instanceof Montacargas) { // it's a model object
-            // invalidate the cache for this single object
-            MontacargasPeer::removeInstanceFromPool($values);
             // create criteria based on pk values
             $criteria = $values->buildPkeyCriteria();
         } else { // it's a primary key, or an array of pks
             $criteria = new Criteria(MontacargasPeer::DATABASE_NAME);
-            $criteria->add(MontacargasPeer::ID, (array) $values, Criteria::IN);
-            // invalidate the cache for this object(s)
-            foreach ((array) $values as $singleval) {
-                MontacargasPeer::removeInstanceFromPool($singleval);
-            }
+            $criteria->add(MontacargasPeer::IDMONTACARGAS, (array) $values, Criteria::IN);
         }
 
         // Set the correct dbName
@@ -672,6 +939,23 @@ abstract class BaseMontacargasPeer
             // for more than one table or we could emulating ON DELETE CASCADE, etc.
             $con->beginTransaction();
 
+            // cloning the Criteria in case it's modified by doSelect() or doSelectStmt()
+            $c = clone $criteria;
+            $affectedRows += MontacargasPeer::doOnDeleteCascade($c, $con);
+
+            // Because this db requires some delete cascade/set null emulation, we have to
+            // clear the cached instance *after* the emulation has happened (since
+            // instances get re-added by the select statement contained therein).
+            if ($values instanceof Criteria) {
+                MontacargasPeer::clearInstancePool();
+            } elseif ($values instanceof Montacargas) { // it's a model object
+                MontacargasPeer::removeInstanceFromPool($values);
+            } else { // it's a primary key, or an array of pks
+                foreach ((array) $values as $singleval) {
+                    MontacargasPeer::removeInstanceFromPool($singleval);
+                }
+            }
+
             $affectedRows += BasePeer::doDelete($criteria, $con);
             MontacargasPeer::clearRelatedInstancePool();
             $con->commit();
@@ -681,6 +965,39 @@ abstract class BaseMontacargasPeer
             $con->rollBack();
             throw $e;
         }
+    }
+
+    /**
+     * This is a method for emulating ON DELETE CASCADE for DBs that don't support this
+     * feature (like MySQL or SQLite).
+     *
+     * This method is not very speedy because it must perform a query first to get
+     * the implicated records and then perform the deletes by calling those Peer classes.
+     *
+     * This method should be used within a transaction if possible.
+     *
+     * @param      Criteria $criteria
+     * @param      PropelPDO $con
+     * @return int The number of affected rows (if supported by underlying database driver).
+     */
+    protected static function doOnDeleteCascade(Criteria $criteria, PropelPDO $con)
+    {
+        // initialize var to track total num of affected rows
+        $affectedRows = 0;
+
+        // first find the objects that are implicated by the $criteria
+        $objects = MontacargasPeer::doSelect($criteria, $con);
+        foreach ($objects as $obj) {
+
+
+            // delete related Deshabilitamc objects
+            $criteria = new Criteria(DeshabilitamcPeer::DATABASE_NAME);
+
+            $criteria->add(DeshabilitamcPeer::IDMONTACARGAS, $obj->getIdmontacargas());
+            $affectedRows += DeshabilitamcPeer::doDelete($criteria, $con);
+        }
+
+        return $affectedRows;
     }
 
     /**
@@ -739,7 +1056,7 @@ abstract class BaseMontacargasPeer
         }
 
         $criteria = new Criteria(MontacargasPeer::DATABASE_NAME);
-        $criteria->add(MontacargasPeer::ID, $pk);
+        $criteria->add(MontacargasPeer::IDMONTACARGAS, $pk);
 
         $v = MontacargasPeer::doSelect($criteria, $con);
 
@@ -766,7 +1083,7 @@ abstract class BaseMontacargasPeer
             $objs = array();
         } else {
             $criteria = new Criteria(MontacargasPeer::DATABASE_NAME);
-            $criteria->add(MontacargasPeer::ID, $pks, Criteria::IN);
+            $criteria->add(MontacargasPeer::IDMONTACARGAS, $pks, Criteria::IN);
             $objs = MontacargasPeer::doSelect($criteria, $con);
         }
 

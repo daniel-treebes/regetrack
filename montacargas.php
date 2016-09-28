@@ -1,17 +1,25 @@
 <?php
 
-$nombrePagina="Montacargas";
-$acciones=[];
-$acciones[0][0]="Exportar";
-$acciones[0][1]="javascript:exporta();";
-$acciones[1][0]="Importar";
-$acciones[1][1]='javascript:importa();';
+
+
 
 
 require_once("models/config.php");
 if (!securePage($_SERVER['PHP_SELF'])){die();}
 
 require_once("models/header.php");
+
+$nombrePagina="Montacargas";
+$acciones=[];
+$acciones[0][0]="Exportar";
+$acciones[0][1]="javascript:exporta();";
+$acciones[1][0]="Importar";
+$acciones[1][1]='javascript:importa();';
+if($loggedInUser->checkPermission(array(2))){
+   $acciones[2][0]="Alta";
+   $acciones[2][1]='/sistema.php?ruta=alta/montacargas'; 
+}
+
 $query="
     SELECT
         m.id as Id,
@@ -19,8 +27,8 @@ $query="
         m.modelo as Modelo,
         CONCAT(t.volts,'V - ',t.ah,'Ah') as Tipo
     FROM
-        montacargas as m, bateriastipos as t
-    WHERE m.tipo = t.id
+        bateriastipos as btt,montacargas as m, bateriastipos as t
+    WHERE m.tipo = t.id AND m.tipo = btt.id AND btt.idsucursal = ".$loggedInUser->sucursal_activa."
 	ORDER BY Nombre
 ";
 
@@ -59,6 +67,7 @@ function importa2(){
 						data: form_data,                         
 						type: 'post',
 						success: function(php_script_response){
+                                                        
 							location.reload(); // display response from the PHP script, if any
 						},
 						  error: function(XMLHttpRequest, textStatus, errorThrown) {
@@ -106,11 +115,14 @@ function deshabilita(cual) {
 //					 (cictot-IF(COUNT(d.id) IS NULL,0,COUNT(d.id)))/IF(m.ciclos_mant IS NULL OR m.ciclos_mant=0,1,m.ciclos_mant)) AS  'cicres'
 
 			   $qciclos="
-				  SELECT COUNT(id) as ciclos
+				  SELECT COUNT(uso_baterias_montacargas.id) as ciclos
 				  FROM uso_baterias_montacargas
+                                  JOIN montacargas ON uso_baterias_montacargas.mc = montacargas.id
+                                  JOIN bateriastipos ON montacargas.tipo = bateriastipos.id
 				  WHERE mc =".$fila['Id']."
-					 AND fecha_salida!='0000-00-00 00:00:00'
+					 AND fecha_salida!='0000-00-00 00:00:00' AND bateriastipos.idsucursal = ".$loggedInUser->sucursal_activa."
 			   ";
+                           
 			   $resC1=$mysqli->query($qciclos);
 			   $filaC1 = $resC1->fetch_array();
 			   $ciclos = $filaC1['ciclos'];
@@ -118,19 +130,24 @@ function deshabilita(cual) {
 			   $qcicman="
 				  SELECT IF(MAX(fecha_entrada) IS NULL,0,MAX(fecha_entrada)) as ultman
 				  FROM deshabilitamc
+                                  JOIN montacargas ON deshabilitamc.mc = montacargas.id
+                                  JOIN bateriastipos ON montacargas.tipo = bateriastipos.id
 				  WHERE mc =".$fila['Id']."
 					 AND fecha_salida!='0000-00-00 00:00:00'
 					 AND motivo='Mantenimiento'
+                                         AND bateriastipos.idsucursal= ".$loggedInUser->sucursal_activa."
 			   ";
 			   $resC1=$mysqli->query($qcicman);
 			   $filaC1 = $resC1->fetch_array();
 			   $ultman = $filaC1['ultman'];
 
 			   $qcicact="
-				  SELECT COUNT(id) as cicact
+				  SELECT COUNT(uso_baterias_montacargas.id) as cicact
 				  FROM uso_baterias_montacargas
+                                   JOIN montacargas ON uso_baterias_montacargas.mc = montacargas.id
+                                  JOIN bateriastipos ON montacargas.tipo = bateriastipos.id 
 				  WHERE mc =".$fila['Id']."
-					 AND fecha_salida>'".$ultman."'
+					 AND fecha_salida>'".$ultman."' AND bateriastipos.idsucursal = ".$loggedInUser->sucursal_activa."
 			   ";
 
 			   $resC1=$mysqli->query($qcicact);
@@ -140,8 +157,10 @@ function deshabilita(cual) {
 			   $qcicmei="SELECT IF(ciclos_iniciales IS NULL,0,ciclos_iniciales) as cicini,
 					 IF(ciclos_mant IS NULL OR ciclos_mant=0,1,ciclos_mant) as cicman
 				  FROM  montacargas
-				  WHERE  id = ".$fila['Id'];
-			   $resC1=$mysqli->query($qcicmei);
+                                  JOIN bateriastipos ON montacargas.tipo = bateriastipos.id 
+				  WHERE  montacargas.id = ".$fila['Id']." AND bateriastipos.idsucursal = ".$loggedInUser->sucursal_activa.";";
+			   
+                           $resC1=$mysqli->query($qcicmei);
 			   $filaC1 = $resC1->fetch_array();
 			   $cicini = $filaC1['cicini'];
 			   $cicman = $filaC1['cicman'];
@@ -163,9 +182,11 @@ function deshabilita(cual) {
 					 TIMESTAMPDIFF(hour, fecha_entrada, now())-TIMESTAMPDIFF(day, fecha_entrada, now())*24,'H  ',
 					 TIMESTAMPDIFF(minute, fecha_entrada, now())-(TIMESTAMPDIFF(hour, fecha_entrada, now()))*60,'M')
 					 as 'tiempo'
-				  FROM uso_baterias_montacargas as u, baterias as b
+				  FROM bateriastipos as btt ,uso_baterias_montacargas as u, baterias as b
 				  WHERE fecha_salida = '0000-00-00 00:00:00'
 					 AND u.bt = b.id
+                                         AND btt.id = b.tipo
+                                         AND btt.idsucursal = ".$loggedInUser->sucursal_activa."
 					 AND u.mc =".$fila['Id'];
   
 			   $resultadobateria=$mysqli->query($querybateria);
@@ -188,8 +209,10 @@ function deshabilita(cual) {
 						   TIMESTAMPDIFF(minute, fecha_entrada, now())-(TIMESTAMPDIFF(hour, fecha_entrada, now()))*60,'M')
 						as 'tiempo'
 					 FROM deshabilitamc
+                                         JOIN montacargas ON deshabilitamc.mc = montacargas.id
+                                         JOIN bateriastipos ON bateriastipos.id = montacargas.tipo
 					 WHERE mc=".$fila['Id']."
-						AND fecha_salida='0000-00-00 00:00:00'";
+						AND fecha_salida='0000-00-00 00:00:00' AND bateriastipos.idsucursal=".$loggedInUser->sucursal_activa;
 			   if ($resultadostatus=$mysqli->query($querystatus)){
 				  $filastatus = $resultadostatus->fetch_array();
 						 
@@ -242,7 +265,7 @@ function deshabilita(cual) {
 <script src="assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js" type="text/javascript"></script>
 
 <?php
-$grafica=pinta_grafica('mc','reporteMC','uso','todo');
+$grafica=pinta_grafica('mc','reporteMC','uso','todo',$loggedInUser->sucursal_activa);
 echo $grafica;
 
 require_once("tema/comun/footer.php");

@@ -48,7 +48,7 @@
                     ?>
                 </div>
                 <div class="col-s-4 ">
-                    <a href="https://regetrack.com/escanear.php" class="btn default btn-block" style="height: 110px;"><h2> <i class="fa fa-arrow-left"></i></h2><h5>Regresar</h5></a>
+                    <a href="/escanear.php" class="btn default btn-block" style="height: 110px;"><h2> <i class="fa fa-arrow-left"></i></h2><h5>Regresar</h5></a>
                 </div>
                 <div class="col-s-4 ">
                     <a href="javascript:deshabilita('montacargas','<?php  echo $_GET['id'] ?>')" class="btn red btn-block" style="height: 110px;"><h2> <i class="fa fa-warning"></i></h2><h5>Deshabilitar Montacargas</h5></a>

@@ -5,14 +5,14 @@
    if (!securePage($_SERVER['PHP_SELF'])){die();}
    
    require_once("models/header.php");
-   
+  
    $queryBateriasEsperando="
-	  SELECT bt.num_serie as nombrebt,
-		 cg.nombre as nombrecg,
+	  SELECT bt.baterias_numserie as nombrebt,
+		 cg.cargadores_nombre as nombrecg,
 		 if (tiempopcargar IS NULL,'0H 0M',tiempopcargar) as t_pcargar
-	  FROM baterias as bt, bodegas as bg, uso_baterias_bodega as tubb, cargadores as cg LEFT JOIN 
+	  FROM baterias as bt, bodegas as bg, uso_baterias_bodega as tubb, cargadores as cg JOIN 
 		(SELECT
-			cg.id as id,
+			cg.idcargadores as id,
 			(if (TIMESTAMPDIFF(second, now(),DATE_ADD(tubb.fecha_carga, INTERVAL 8 HOUR))>0,
 			   CONCAT(TIMESTAMPDIFF(hour, now(),DATE_ADD(tubb.fecha_carga, INTERVAL 8 HOUR)),'H ',
 				  (TIMESTAMPDIFF(minute, now(),DATE_ADD(tubb.fecha_carga, INTERVAL 8 HOUR))-TIMESTAMPDIFF(hour, now(),DATE_ADD(tubb.fecha_carga, INTERVAL 8 HOUR))*60),'M')
@@ -20,16 +20,18 @@
 			   as tiempopcargar
 			FROM uso_baterias_bodega as tubb, cargadores as cg, bodegas as bg
 			WHERE bg.id=tubb.bg
-				AND bg.cg=cg.id
+				AND bg.cg=cg.idcargadores
 				AND tubb.fecha_carga!='0000-00-00 00:00:00'
 				AND tubb.fecha_descanso='0000-00-00 00:00:00'
+                                AND cg.idsucursal = ".$loggedInUser->sucursal_activa."
 			GROUP BY id
-		) as tu ON tu.id=cg.id 
-	  WHERE bt.id=tubb.bt
+		) as tu ON tu.id=cg.idcargadores 
+	  WHERE bt.idbaterias=tubb.bt
 		 AND bg.id=tubb.bg
-		 AND bg.cg=cg.id
+		 AND bg.cg=cg.idcargadores
 		 AND tubb.fecha_carga='0000-00-00 00:00:00'
-   ";
+        ";
+      
 	$resultado = $mysqli->query($queryBateriasEsperando);
 	$btEsperando=array();
 	while($fila = $resultado->fetch_array()) {
@@ -37,82 +39,87 @@
 		$btEsperando[$fila['nombrebt']]['t']=$fila['t_pcargar'];
 	}
 	
-   $queryBateriasSinLugar="
-	  SELECT num_serie as nombrebt
+   $queryBateriasSinLugar="SELECT baterias_numserie as nombrebt
 	  FROM baterias
-	  WHERE id NOT IN (
+	  
+	  WHERE baterias.idbaterias NOT IN (
 			SELECT bt
 			FROM uso_baterias_bodega
 			WHERE fecha_salida='0000-00-00 00:00:00'
 			GROUP BY bt
 		 )
-		 AND id NOT IN (
+		 AND baterias.idbaterias NOT IN (
 			SELECT bt
 			FROM uso_baterias_montacargas
 			WHERE fecha_salida='0000-00-00 00:00:00'
 			GROUP BY bt
 		 )
-   ";
+		 AND baterias.idsucursal = ".$loggedInUser->sucursal_activa;
+                 
    $resultado = $mysqli->query($queryBateriasSinLugar);
 	$btSinlugar=array();
 	while($fila = $resultado->fetch_array()) {
 		$btSinlugar[]=$fila['nombrebt'];
 	}
 
-   $queryUltimoLugar="
-	  SELECT a.nombrebt,
+   $queryUltimoLugar="SELECT a.nombrebt,
 		 a.nombrel as lugar,
 		 MAX(a.ufecha) as desde
 	  FROM
-		 (  SELECT bt.num_serie as nombrebt,
+		 (  SELECT bt.baterias_numserie as nombrebt,
 			   'C' as tipol,
-			   cg.nombre as nombrel,
+			   cg.cargadores_nombre as nombrel,
 			   MAX(u.fecha_salida) as ufecha
-			FROM baterias as bt, cargadores as cg, bodegas as bg, uso_baterias_bodega as u
-			WHERE bt.id=u.bt
+			FROM  baterias as bt, cargadores as cg, bodegas as bg, uso_baterias_bodega as u
+			WHERE bt.idbaterias=u.bt
+			  
 			   AND bg.id=u.bg
-			   AND bg.cg=cg.id
+			   AND bg.cg=cg.idcargadores
+			  
 			GROUP BY nombrebt
 			
 			UNION ALL
 			
-			SELECT bt.num_serie as nombrebt,
+			SELECT bt.baterias_numserie as nombrebt,
 			   'M' as tipol,
-			   m.nombre as nombrel,
+			   m.montacargas_nombre as nombrel,
 			   MAX(u.fecha_salida) as ufecha
 			FROM baterias as bt, montacargas as m, uso_baterias_montacargas as u
-			WHERE bt.id=u.bt
-			   AND m.id=u.mc
+			WHERE bt.idbaterias=u.bt
+			   AND m.idmontacargas=u.mc
 			GROUP BY nombrebt
 			
 			UNION ALL
 			
-			SELECT bt.num_serie as nombrebt,
+			SELECT bt.baterias_numserie as nombrebt,
 			   'S' as tipol,
 			   'SIN REGISTROS' as nombrel,
 			   '0000-00-00 00:00:00' as ufecha
 			FROM baterias as bt
 			GROUP BY nombrebt
 		 ) as a,
-		(  SELECT num_serie as nombrebt
+		(  SELECT baterias_numserie as nombrebt
 			FROM baterias
-			WHERE id NOT IN (
+		
+			WHERE baterias.idbaterias NOT IN (
 				  SELECT bt
 				  FROM uso_baterias_bodega
 				  WHERE fecha_salida='0000-00-00 00:00:00'
 				  GROUP BY bt
 			   )
-			   AND id NOT IN (
+			   AND baterias.idbaterias NOT IN (
 				  SELECT bt
 				  FROM uso_baterias_montacargas
 				  WHERE fecha_salida='0000-00-00 00:00:00'
 				  GROUP BY bt
 			   )
+			
 		) as b
 	  WHERE a.nombrebt=b.nombrebt
 	  GROUP BY a.nombrebt
 	  ORDER BY a.nombrebt		
    ";
+
    $resultado = $mysqli->query($queryUltimoLugar);
 	$btSinlugar=array();
 	while($fila = $resultado->fetch_array()) {

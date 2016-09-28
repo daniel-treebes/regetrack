@@ -30,22 +30,81 @@ abstract class BaseCargadores extends BaseObject implements Persistent
     protected $startCopy = false;
 
     /**
-     * The value for the id field.
+     * The value for the idcargadores field.
      * @var        int
      */
-    protected $id;
+    protected $idcargadores;
 
     /**
-     * The value for the nombre field.
+     * The value for the idsucursal field.
+     * @var        int
+     */
+    protected $idsucursal;
+
+    /**
+     * The value for the cargadores_modelo field.
      * @var        string
      */
-    protected $nombre;
+    protected $cargadores_modelo;
 
     /**
-     * The value for the tipo field.
+     * The value for the cargadores_marca field.
+     * @var        string
+     */
+    protected $cargadores_marca;
+
+    /**
+     * The value for the cargadores_e field.
+     * @var        string
+     */
+    protected $cargadores_e;
+
+    /**
+     * The value for the cargadores_volts field.
      * @var        int
      */
-    protected $tipo;
+    protected $cargadores_volts;
+
+    /**
+     * The value for the cargadores_amperaje field.
+     * @var        int
+     */
+    protected $cargadores_amperaje;
+
+    /**
+     * The value for the cargadores_comprador field.
+     * @var        string
+     */
+    protected $cargadores_comprador;
+
+    /**
+     * The value for the cargadores_nombre field.
+     * @var        string
+     */
+    protected $cargadores_nombre;
+
+    /**
+     * The value for the cargadores_numserie field.
+     * @var        string
+     */
+    protected $cargadores_numserie;
+
+    /**
+     * @var        Sucursal
+     */
+    protected $aSucursal;
+
+    /**
+     * @var        PropelObjectCollection|Bodegas[] Collection to store aggregation of Bodegas objects.
+     */
+    protected $collBodegass;
+    protected $collBodegassPartial;
+
+    /**
+     * @var        PropelObjectCollection|Deshabilitacg[] Collection to store aggregation of Deshabilitacg objects.
+     */
+    protected $collDeshabilitacgs;
+    protected $collDeshabilitacgsPartial;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -68,100 +127,340 @@ abstract class BaseCargadores extends BaseObject implements Persistent
     protected $alreadyInClearAllReferencesDeep = false;
 
     /**
-     * Get the [id] column value.
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $bodegassScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $deshabilitacgsScheduledForDeletion = null;
+
+    /**
+     * Get the [idcargadores] column value.
      *
      * @return int
      */
-    public function getId()
+    public function getIdcargadores()
     {
 
-        return $this->id;
+        return $this->idcargadores;
     }
 
     /**
-     * Get the [nombre] column value.
+     * Get the [idsucursal] column value.
+     *
+     * @return int
+     */
+    public function getIdsucursal()
+    {
+
+        return $this->idsucursal;
+    }
+
+    /**
+     * Get the [cargadores_modelo] column value.
      *
      * @return string
      */
-    public function getNombre()
+    public function getCargadoresModelo()
     {
 
-        return $this->nombre;
+        return $this->cargadores_modelo;
     }
 
     /**
-     * Get the [tipo] column value.
+     * Get the [cargadores_marca] column value.
+     *
+     * @return string
+     */
+    public function getCargadoresMarca()
+    {
+
+        return $this->cargadores_marca;
+    }
+
+    /**
+     * Get the [cargadores_e] column value.
+     *
+     * @return string
+     */
+    public function getCargadoresE()
+    {
+
+        return $this->cargadores_e;
+    }
+
+    /**
+     * Get the [cargadores_volts] column value.
      *
      * @return int
      */
-    public function getTipo()
+    public function getCargadoresVolts()
     {
 
-        return $this->tipo;
+        return $this->cargadores_volts;
     }
 
     /**
-     * Set the value of [id] column.
+     * Get the [cargadores_amperaje] column value.
+     *
+     * @return int
+     */
+    public function getCargadoresAmperaje()
+    {
+
+        return $this->cargadores_amperaje;
+    }
+
+    /**
+     * Get the [cargadores_comprador] column value.
+     *
+     * @return string
+     */
+    public function getCargadoresComprador()
+    {
+
+        return $this->cargadores_comprador;
+    }
+
+    /**
+     * Get the [cargadores_nombre] column value.
+     *
+     * @return string
+     */
+    public function getCargadoresNombre()
+    {
+
+        return $this->cargadores_nombre;
+    }
+
+    /**
+     * Get the [cargadores_numserie] column value.
+     *
+     * @return string
+     */
+    public function getCargadoresNumserie()
+    {
+
+        return $this->cargadores_numserie;
+    }
+
+    /**
+     * Set the value of [idcargadores] column.
      *
      * @param  int $v new value
      * @return Cargadores The current object (for fluent API support)
      */
-    public function setId($v)
+    public function setIdcargadores($v)
     {
         if ($v !== null && is_numeric($v)) {
             $v = (int) $v;
         }
 
-        if ($this->id !== $v) {
-            $this->id = $v;
-            $this->modifiedColumns[] = CargadoresPeer::ID;
+        if ($this->idcargadores !== $v) {
+            $this->idcargadores = $v;
+            $this->modifiedColumns[] = CargadoresPeer::IDCARGADORES;
         }
 
 
         return $this;
-    } // setId()
+    } // setIdcargadores()
 
     /**
-     * Set the value of [nombre] column.
+     * Set the value of [idsucursal] column.
+     *
+     * @param  int $v new value
+     * @return Cargadores The current object (for fluent API support)
+     */
+    public function setIdsucursal($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (int) $v;
+        }
+
+        if ($this->idsucursal !== $v) {
+            $this->idsucursal = $v;
+            $this->modifiedColumns[] = CargadoresPeer::IDSUCURSAL;
+        }
+
+        if ($this->aSucursal !== null && $this->aSucursal->getIdsucursal() !== $v) {
+            $this->aSucursal = null;
+        }
+
+
+        return $this;
+    } // setIdsucursal()
+
+    /**
+     * Set the value of [cargadores_modelo] column.
      *
      * @param  string $v new value
      * @return Cargadores The current object (for fluent API support)
      */
-    public function setNombre($v)
+    public function setCargadoresModelo($v)
     {
         if ($v !== null) {
             $v = (string) $v;
         }
 
-        if ($this->nombre !== $v) {
-            $this->nombre = $v;
-            $this->modifiedColumns[] = CargadoresPeer::NOMBRE;
+        if ($this->cargadores_modelo !== $v) {
+            $this->cargadores_modelo = $v;
+            $this->modifiedColumns[] = CargadoresPeer::CARGADORES_MODELO;
         }
 
 
         return $this;
-    } // setNombre()
+    } // setCargadoresModelo()
 
     /**
-     * Set the value of [tipo] column.
+     * Set the value of [cargadores_marca] column.
+     *
+     * @param  string $v new value
+     * @return Cargadores The current object (for fluent API support)
+     */
+    public function setCargadoresMarca($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->cargadores_marca !== $v) {
+            $this->cargadores_marca = $v;
+            $this->modifiedColumns[] = CargadoresPeer::CARGADORES_MARCA;
+        }
+
+
+        return $this;
+    } // setCargadoresMarca()
+
+    /**
+     * Set the value of [cargadores_e] column.
+     *
+     * @param  string $v new value
+     * @return Cargadores The current object (for fluent API support)
+     */
+    public function setCargadoresE($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->cargadores_e !== $v) {
+            $this->cargadores_e = $v;
+            $this->modifiedColumns[] = CargadoresPeer::CARGADORES_E;
+        }
+
+
+        return $this;
+    } // setCargadoresE()
+
+    /**
+     * Set the value of [cargadores_volts] column.
      *
      * @param  int $v new value
      * @return Cargadores The current object (for fluent API support)
      */
-    public function setTipo($v)
+    public function setCargadoresVolts($v)
     {
         if ($v !== null && is_numeric($v)) {
             $v = (int) $v;
         }
 
-        if ($this->tipo !== $v) {
-            $this->tipo = $v;
-            $this->modifiedColumns[] = CargadoresPeer::TIPO;
+        if ($this->cargadores_volts !== $v) {
+            $this->cargadores_volts = $v;
+            $this->modifiedColumns[] = CargadoresPeer::CARGADORES_VOLTS;
         }
 
 
         return $this;
-    } // setTipo()
+    } // setCargadoresVolts()
+
+    /**
+     * Set the value of [cargadores_amperaje] column.
+     *
+     * @param  int $v new value
+     * @return Cargadores The current object (for fluent API support)
+     */
+    public function setCargadoresAmperaje($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (int) $v;
+        }
+
+        if ($this->cargadores_amperaje !== $v) {
+            $this->cargadores_amperaje = $v;
+            $this->modifiedColumns[] = CargadoresPeer::CARGADORES_AMPERAJE;
+        }
+
+
+        return $this;
+    } // setCargadoresAmperaje()
+
+    /**
+     * Set the value of [cargadores_comprador] column.
+     *
+     * @param  string $v new value
+     * @return Cargadores The current object (for fluent API support)
+     */
+    public function setCargadoresComprador($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->cargadores_comprador !== $v) {
+            $this->cargadores_comprador = $v;
+            $this->modifiedColumns[] = CargadoresPeer::CARGADORES_COMPRADOR;
+        }
+
+
+        return $this;
+    } // setCargadoresComprador()
+
+    /**
+     * Set the value of [cargadores_nombre] column.
+     *
+     * @param  string $v new value
+     * @return Cargadores The current object (for fluent API support)
+     */
+    public function setCargadoresNombre($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->cargadores_nombre !== $v) {
+            $this->cargadores_nombre = $v;
+            $this->modifiedColumns[] = CargadoresPeer::CARGADORES_NOMBRE;
+        }
+
+
+        return $this;
+    } // setCargadoresNombre()
+
+    /**
+     * Set the value of [cargadores_numserie] column.
+     *
+     * @param  string $v new value
+     * @return Cargadores The current object (for fluent API support)
+     */
+    public function setCargadoresNumserie($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->cargadores_numserie !== $v) {
+            $this->cargadores_numserie = $v;
+            $this->modifiedColumns[] = CargadoresPeer::CARGADORES_NUMSERIE;
+        }
+
+
+        return $this;
+    } // setCargadoresNumserie()
 
     /**
      * Indicates whether the columns in this object are only set to default values.
@@ -195,9 +494,16 @@ abstract class BaseCargadores extends BaseObject implements Persistent
     {
         try {
 
-            $this->id = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
-            $this->nombre = ($row[$startcol + 1] !== null) ? (string) $row[$startcol + 1] : null;
-            $this->tipo = ($row[$startcol + 2] !== null) ? (int) $row[$startcol + 2] : null;
+            $this->idcargadores = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
+            $this->idsucursal = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
+            $this->cargadores_modelo = ($row[$startcol + 2] !== null) ? (string) $row[$startcol + 2] : null;
+            $this->cargadores_marca = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
+            $this->cargadores_e = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
+            $this->cargadores_volts = ($row[$startcol + 5] !== null) ? (int) $row[$startcol + 5] : null;
+            $this->cargadores_amperaje = ($row[$startcol + 6] !== null) ? (int) $row[$startcol + 6] : null;
+            $this->cargadores_comprador = ($row[$startcol + 7] !== null) ? (string) $row[$startcol + 7] : null;
+            $this->cargadores_nombre = ($row[$startcol + 8] !== null) ? (string) $row[$startcol + 8] : null;
+            $this->cargadores_numserie = ($row[$startcol + 9] !== null) ? (string) $row[$startcol + 9] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -207,7 +513,7 @@ abstract class BaseCargadores extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 3; // 3 = CargadoresPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 10; // 10 = CargadoresPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Cargadores object", $e);
@@ -230,6 +536,9 @@ abstract class BaseCargadores extends BaseObject implements Persistent
     public function ensureConsistency()
     {
 
+        if ($this->aSucursal !== null && $this->idsucursal !== $this->aSucursal->getIdsucursal()) {
+            $this->aSucursal = null;
+        }
     } // ensureConsistency
 
     /**
@@ -268,6 +577,11 @@ abstract class BaseCargadores extends BaseObject implements Persistent
         $this->hydrate($row, 0, true); // rehydrate
 
         if ($deep) {  // also de-associate any related objects?
+
+            $this->aSucursal = null;
+            $this->collBodegass = null;
+
+            $this->collDeshabilitacgs = null;
 
         } // if (deep)
     }
@@ -382,6 +696,18 @@ abstract class BaseCargadores extends BaseObject implements Persistent
         if (!$this->alreadyInSave) {
             $this->alreadyInSave = true;
 
+            // We call the save method on the following object(s) if they
+            // were passed to this object by their corresponding set
+            // method.  This object relates to these object(s) by a
+            // foreign key reference.
+
+            if ($this->aSucursal !== null) {
+                if ($this->aSucursal->isModified() || $this->aSucursal->isNew()) {
+                    $affectedRows += $this->aSucursal->save($con);
+                }
+                $this->setSucursal($this->aSucursal);
+            }
+
             if ($this->isNew() || $this->isModified()) {
                 // persist changes
                 if ($this->isNew()) {
@@ -391,6 +717,40 @@ abstract class BaseCargadores extends BaseObject implements Persistent
                 }
                 $affectedRows += 1;
                 $this->resetModified();
+            }
+
+            if ($this->bodegassScheduledForDeletion !== null) {
+                if (!$this->bodegassScheduledForDeletion->isEmpty()) {
+                    BodegasQuery::create()
+                        ->filterByPrimaryKeys($this->bodegassScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->bodegassScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collBodegass !== null) {
+                foreach ($this->collBodegass as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->deshabilitacgsScheduledForDeletion !== null) {
+                if (!$this->deshabilitacgsScheduledForDeletion->isEmpty()) {
+                    DeshabilitacgQuery::create()
+                        ->filterByPrimaryKeys($this->deshabilitacgsScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->deshabilitacgsScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collDeshabilitacgs !== null) {
+                foreach ($this->collDeshabilitacgs as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
             }
 
             $this->alreadyInSave = false;
@@ -413,20 +773,41 @@ abstract class BaseCargadores extends BaseObject implements Persistent
         $modifiedColumns = array();
         $index = 0;
 
-        $this->modifiedColumns[] = CargadoresPeer::ID;
-        if (null !== $this->id) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key (' . CargadoresPeer::ID . ')');
+        $this->modifiedColumns[] = CargadoresPeer::IDCARGADORES;
+        if (null !== $this->idcargadores) {
+            throw new PropelException('Cannot insert a value for auto-increment primary key (' . CargadoresPeer::IDCARGADORES . ')');
         }
 
          // check the columns in natural order for more readable SQL queries
-        if ($this->isColumnModified(CargadoresPeer::ID)) {
-            $modifiedColumns[':p' . $index++]  = '`id`';
+        if ($this->isColumnModified(CargadoresPeer::IDCARGADORES)) {
+            $modifiedColumns[':p' . $index++]  = '`idcargadores`';
         }
-        if ($this->isColumnModified(CargadoresPeer::NOMBRE)) {
-            $modifiedColumns[':p' . $index++]  = '`nombre`';
+        if ($this->isColumnModified(CargadoresPeer::IDSUCURSAL)) {
+            $modifiedColumns[':p' . $index++]  = '`idsucursal`';
         }
-        if ($this->isColumnModified(CargadoresPeer::TIPO)) {
-            $modifiedColumns[':p' . $index++]  = '`tipo`';
+        if ($this->isColumnModified(CargadoresPeer::CARGADORES_MODELO)) {
+            $modifiedColumns[':p' . $index++]  = '`cargadores_modelo`';
+        }
+        if ($this->isColumnModified(CargadoresPeer::CARGADORES_MARCA)) {
+            $modifiedColumns[':p' . $index++]  = '`cargadores_marca`';
+        }
+        if ($this->isColumnModified(CargadoresPeer::CARGADORES_E)) {
+            $modifiedColumns[':p' . $index++]  = '`cargadores_e`';
+        }
+        if ($this->isColumnModified(CargadoresPeer::CARGADORES_VOLTS)) {
+            $modifiedColumns[':p' . $index++]  = '`cargadores_volts`';
+        }
+        if ($this->isColumnModified(CargadoresPeer::CARGADORES_AMPERAJE)) {
+            $modifiedColumns[':p' . $index++]  = '`cargadores_amperaje`';
+        }
+        if ($this->isColumnModified(CargadoresPeer::CARGADORES_COMPRADOR)) {
+            $modifiedColumns[':p' . $index++]  = '`cargadores_comprador`';
+        }
+        if ($this->isColumnModified(CargadoresPeer::CARGADORES_NOMBRE)) {
+            $modifiedColumns[':p' . $index++]  = '`cargadores_nombre`';
+        }
+        if ($this->isColumnModified(CargadoresPeer::CARGADORES_NUMSERIE)) {
+            $modifiedColumns[':p' . $index++]  = '`cargadores_numserie`';
         }
 
         $sql = sprintf(
@@ -439,14 +820,35 @@ abstract class BaseCargadores extends BaseObject implements Persistent
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case '`id`':
-                        $stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
+                    case '`idcargadores`':
+                        $stmt->bindValue($identifier, $this->idcargadores, PDO::PARAM_INT);
                         break;
-                    case '`nombre`':
-                        $stmt->bindValue($identifier, $this->nombre, PDO::PARAM_STR);
+                    case '`idsucursal`':
+                        $stmt->bindValue($identifier, $this->idsucursal, PDO::PARAM_INT);
                         break;
-                    case '`tipo`':
-                        $stmt->bindValue($identifier, $this->tipo, PDO::PARAM_INT);
+                    case '`cargadores_modelo`':
+                        $stmt->bindValue($identifier, $this->cargadores_modelo, PDO::PARAM_STR);
+                        break;
+                    case '`cargadores_marca`':
+                        $stmt->bindValue($identifier, $this->cargadores_marca, PDO::PARAM_STR);
+                        break;
+                    case '`cargadores_e`':
+                        $stmt->bindValue($identifier, $this->cargadores_e, PDO::PARAM_STR);
+                        break;
+                    case '`cargadores_volts`':
+                        $stmt->bindValue($identifier, $this->cargadores_volts, PDO::PARAM_INT);
+                        break;
+                    case '`cargadores_amperaje`':
+                        $stmt->bindValue($identifier, $this->cargadores_amperaje, PDO::PARAM_INT);
+                        break;
+                    case '`cargadores_comprador`':
+                        $stmt->bindValue($identifier, $this->cargadores_comprador, PDO::PARAM_STR);
+                        break;
+                    case '`cargadores_nombre`':
+                        $stmt->bindValue($identifier, $this->cargadores_nombre, PDO::PARAM_STR);
+                        break;
+                    case '`cargadores_numserie`':
+                        $stmt->bindValue($identifier, $this->cargadores_numserie, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -461,7 +863,7 @@ abstract class BaseCargadores extends BaseObject implements Persistent
         } catch (Exception $e) {
             throw new PropelException('Unable to get autoincrement id.', $e);
         }
-        $this->setId($pk);
+        $this->setIdcargadores($pk);
 
         $this->setNew(false);
     }
@@ -542,10 +944,38 @@ abstract class BaseCargadores extends BaseObject implements Persistent
             $failureMap = array();
 
 
+            // We call the validate method on the following object(s) if they
+            // were passed to this object by their corresponding set
+            // method.  This object relates to these object(s) by a
+            // foreign key reference.
+
+            if ($this->aSucursal !== null) {
+                if (!$this->aSucursal->validate($columns)) {
+                    $failureMap = array_merge($failureMap, $this->aSucursal->getValidationFailures());
+                }
+            }
+
+
             if (($retval = CargadoresPeer::doValidate($this, $columns)) !== true) {
                 $failureMap = array_merge($failureMap, $retval);
             }
 
+
+                if ($this->collBodegass !== null) {
+                    foreach ($this->collBodegass as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
+                if ($this->collDeshabilitacgs !== null) {
+                    foreach ($this->collDeshabilitacgs as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
 
 
             $this->alreadyInValidation = false;
@@ -583,13 +1013,34 @@ abstract class BaseCargadores extends BaseObject implements Persistent
     {
         switch ($pos) {
             case 0:
-                return $this->getId();
+                return $this->getIdcargadores();
                 break;
             case 1:
-                return $this->getNombre();
+                return $this->getIdsucursal();
                 break;
             case 2:
-                return $this->getTipo();
+                return $this->getCargadoresModelo();
+                break;
+            case 3:
+                return $this->getCargadoresMarca();
+                break;
+            case 4:
+                return $this->getCargadoresE();
+                break;
+            case 5:
+                return $this->getCargadoresVolts();
+                break;
+            case 6:
+                return $this->getCargadoresAmperaje();
+                break;
+            case 7:
+                return $this->getCargadoresComprador();
+                break;
+            case 8:
+                return $this->getCargadoresNombre();
+                break;
+            case 9:
+                return $this->getCargadoresNumserie();
                 break;
             default:
                 return null;
@@ -608,10 +1059,11 @@ abstract class BaseCargadores extends BaseObject implements Persistent
      *                    Defaults to BasePeer::TYPE_PHPNAME.
      * @param     boolean $includeLazyLoadColumns (optional) Whether to include lazy loaded columns. Defaults to true.
      * @param     array $alreadyDumpedObjects List of objects to skip to avoid recursion
+     * @param     boolean $includeForeignObjects (optional) Whether to include hydrated related objects. Default to FALSE.
      *
      * @return array an associative array containing the field names (as keys) and field values
      */
-    public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array())
+    public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array(), $includeForeignObjects = false)
     {
         if (isset($alreadyDumpedObjects['Cargadores'][$this->getPrimaryKey()])) {
             return '*RECURSION*';
@@ -619,15 +1071,33 @@ abstract class BaseCargadores extends BaseObject implements Persistent
         $alreadyDumpedObjects['Cargadores'][$this->getPrimaryKey()] = true;
         $keys = CargadoresPeer::getFieldNames($keyType);
         $result = array(
-            $keys[0] => $this->getId(),
-            $keys[1] => $this->getNombre(),
-            $keys[2] => $this->getTipo(),
+            $keys[0] => $this->getIdcargadores(),
+            $keys[1] => $this->getIdsucursal(),
+            $keys[2] => $this->getCargadoresModelo(),
+            $keys[3] => $this->getCargadoresMarca(),
+            $keys[4] => $this->getCargadoresE(),
+            $keys[5] => $this->getCargadoresVolts(),
+            $keys[6] => $this->getCargadoresAmperaje(),
+            $keys[7] => $this->getCargadoresComprador(),
+            $keys[8] => $this->getCargadoresNombre(),
+            $keys[9] => $this->getCargadoresNumserie(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
             $result[$key] = $virtualColumn;
         }
 
+        if ($includeForeignObjects) {
+            if (null !== $this->aSucursal) {
+                $result['Sucursal'] = $this->aSucursal->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->collBodegass) {
+                $result['Bodegass'] = $this->collBodegass->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collDeshabilitacgs) {
+                $result['Deshabilitacgs'] = $this->collDeshabilitacgs->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+        }
 
         return $result;
     }
@@ -662,13 +1132,34 @@ abstract class BaseCargadores extends BaseObject implements Persistent
     {
         switch ($pos) {
             case 0:
-                $this->setId($value);
+                $this->setIdcargadores($value);
                 break;
             case 1:
-                $this->setNombre($value);
+                $this->setIdsucursal($value);
                 break;
             case 2:
-                $this->setTipo($value);
+                $this->setCargadoresModelo($value);
+                break;
+            case 3:
+                $this->setCargadoresMarca($value);
+                break;
+            case 4:
+                $this->setCargadoresE($value);
+                break;
+            case 5:
+                $this->setCargadoresVolts($value);
+                break;
+            case 6:
+                $this->setCargadoresAmperaje($value);
+                break;
+            case 7:
+                $this->setCargadoresComprador($value);
+                break;
+            case 8:
+                $this->setCargadoresNombre($value);
+                break;
+            case 9:
+                $this->setCargadoresNumserie($value);
                 break;
         } // switch()
     }
@@ -694,9 +1185,16 @@ abstract class BaseCargadores extends BaseObject implements Persistent
     {
         $keys = CargadoresPeer::getFieldNames($keyType);
 
-        if (array_key_exists($keys[0], $arr)) $this->setId($arr[$keys[0]]);
-        if (array_key_exists($keys[1], $arr)) $this->setNombre($arr[$keys[1]]);
-        if (array_key_exists($keys[2], $arr)) $this->setTipo($arr[$keys[2]]);
+        if (array_key_exists($keys[0], $arr)) $this->setIdcargadores($arr[$keys[0]]);
+        if (array_key_exists($keys[1], $arr)) $this->setIdsucursal($arr[$keys[1]]);
+        if (array_key_exists($keys[2], $arr)) $this->setCargadoresModelo($arr[$keys[2]]);
+        if (array_key_exists($keys[3], $arr)) $this->setCargadoresMarca($arr[$keys[3]]);
+        if (array_key_exists($keys[4], $arr)) $this->setCargadoresE($arr[$keys[4]]);
+        if (array_key_exists($keys[5], $arr)) $this->setCargadoresVolts($arr[$keys[5]]);
+        if (array_key_exists($keys[6], $arr)) $this->setCargadoresAmperaje($arr[$keys[6]]);
+        if (array_key_exists($keys[7], $arr)) $this->setCargadoresComprador($arr[$keys[7]]);
+        if (array_key_exists($keys[8], $arr)) $this->setCargadoresNombre($arr[$keys[8]]);
+        if (array_key_exists($keys[9], $arr)) $this->setCargadoresNumserie($arr[$keys[9]]);
     }
 
     /**
@@ -708,9 +1206,16 @@ abstract class BaseCargadores extends BaseObject implements Persistent
     {
         $criteria = new Criteria(CargadoresPeer::DATABASE_NAME);
 
-        if ($this->isColumnModified(CargadoresPeer::ID)) $criteria->add(CargadoresPeer::ID, $this->id);
-        if ($this->isColumnModified(CargadoresPeer::NOMBRE)) $criteria->add(CargadoresPeer::NOMBRE, $this->nombre);
-        if ($this->isColumnModified(CargadoresPeer::TIPO)) $criteria->add(CargadoresPeer::TIPO, $this->tipo);
+        if ($this->isColumnModified(CargadoresPeer::IDCARGADORES)) $criteria->add(CargadoresPeer::IDCARGADORES, $this->idcargadores);
+        if ($this->isColumnModified(CargadoresPeer::IDSUCURSAL)) $criteria->add(CargadoresPeer::IDSUCURSAL, $this->idsucursal);
+        if ($this->isColumnModified(CargadoresPeer::CARGADORES_MODELO)) $criteria->add(CargadoresPeer::CARGADORES_MODELO, $this->cargadores_modelo);
+        if ($this->isColumnModified(CargadoresPeer::CARGADORES_MARCA)) $criteria->add(CargadoresPeer::CARGADORES_MARCA, $this->cargadores_marca);
+        if ($this->isColumnModified(CargadoresPeer::CARGADORES_E)) $criteria->add(CargadoresPeer::CARGADORES_E, $this->cargadores_e);
+        if ($this->isColumnModified(CargadoresPeer::CARGADORES_VOLTS)) $criteria->add(CargadoresPeer::CARGADORES_VOLTS, $this->cargadores_volts);
+        if ($this->isColumnModified(CargadoresPeer::CARGADORES_AMPERAJE)) $criteria->add(CargadoresPeer::CARGADORES_AMPERAJE, $this->cargadores_amperaje);
+        if ($this->isColumnModified(CargadoresPeer::CARGADORES_COMPRADOR)) $criteria->add(CargadoresPeer::CARGADORES_COMPRADOR, $this->cargadores_comprador);
+        if ($this->isColumnModified(CargadoresPeer::CARGADORES_NOMBRE)) $criteria->add(CargadoresPeer::CARGADORES_NOMBRE, $this->cargadores_nombre);
+        if ($this->isColumnModified(CargadoresPeer::CARGADORES_NUMSERIE)) $criteria->add(CargadoresPeer::CARGADORES_NUMSERIE, $this->cargadores_numserie);
 
         return $criteria;
     }
@@ -726,7 +1231,7 @@ abstract class BaseCargadores extends BaseObject implements Persistent
     public function buildPkeyCriteria()
     {
         $criteria = new Criteria(CargadoresPeer::DATABASE_NAME);
-        $criteria->add(CargadoresPeer::ID, $this->id);
+        $criteria->add(CargadoresPeer::IDCARGADORES, $this->idcargadores);
 
         return $criteria;
     }
@@ -737,18 +1242,18 @@ abstract class BaseCargadores extends BaseObject implements Persistent
      */
     public function getPrimaryKey()
     {
-        return $this->getId();
+        return $this->getIdcargadores();
     }
 
     /**
-     * Generic method to set the primary key (id column).
+     * Generic method to set the primary key (idcargadores column).
      *
      * @param  int $key Primary key.
      * @return void
      */
     public function setPrimaryKey($key)
     {
-        $this->setId($key);
+        $this->setIdcargadores($key);
     }
 
     /**
@@ -758,7 +1263,7 @@ abstract class BaseCargadores extends BaseObject implements Persistent
     public function isPrimaryKeyNull()
     {
 
-        return null === $this->getId();
+        return null === $this->getIdcargadores();
     }
 
     /**
@@ -774,11 +1279,42 @@ abstract class BaseCargadores extends BaseObject implements Persistent
      */
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
-        $copyObj->setNombre($this->getNombre());
-        $copyObj->setTipo($this->getTipo());
+        $copyObj->setIdsucursal($this->getIdsucursal());
+        $copyObj->setCargadoresModelo($this->getCargadoresModelo());
+        $copyObj->setCargadoresMarca($this->getCargadoresMarca());
+        $copyObj->setCargadoresE($this->getCargadoresE());
+        $copyObj->setCargadoresVolts($this->getCargadoresVolts());
+        $copyObj->setCargadoresAmperaje($this->getCargadoresAmperaje());
+        $copyObj->setCargadoresComprador($this->getCargadoresComprador());
+        $copyObj->setCargadoresNombre($this->getCargadoresNombre());
+        $copyObj->setCargadoresNumserie($this->getCargadoresNumserie());
+
+        if ($deepCopy && !$this->startCopy) {
+            // important: temporarily setNew(false) because this affects the behavior of
+            // the getter/setter methods for fkey referrer objects.
+            $copyObj->setNew(false);
+            // store object hash to prevent cycle
+            $this->startCopy = true;
+
+            foreach ($this->getBodegass() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addBodegas($relObj->copy($deepCopy));
+                }
+            }
+
+            foreach ($this->getDeshabilitacgs() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addDeshabilitacg($relObj->copy($deepCopy));
+                }
+            }
+
+            //unflag object copy
+            $this->startCopy = false;
+        } // if ($deepCopy)
+
         if ($makeNew) {
             $copyObj->setNew(true);
-            $copyObj->setId(NULL); // this is a auto-increment column, so set to default value
+            $copyObj->setIdcargadores(NULL); // this is a auto-increment column, so set to default value
         }
     }
 
@@ -823,13 +1359,541 @@ abstract class BaseCargadores extends BaseObject implements Persistent
     }
 
     /**
+     * Declares an association between this object and a Sucursal object.
+     *
+     * @param                  Sucursal $v
+     * @return Cargadores The current object (for fluent API support)
+     * @throws PropelException
+     */
+    public function setSucursal(Sucursal $v = null)
+    {
+        if ($v === null) {
+            $this->setIdsucursal(NULL);
+        } else {
+            $this->setIdsucursal($v->getIdsucursal());
+        }
+
+        $this->aSucursal = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the Sucursal object, it will not be re-added.
+        if ($v !== null) {
+            $v->addCargadores($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated Sucursal object
+     *
+     * @param PropelPDO $con Optional Connection object.
+     * @param $doQuery Executes a query to get the object if required
+     * @return Sucursal The associated Sucursal object.
+     * @throws PropelException
+     */
+    public function getSucursal(PropelPDO $con = null, $doQuery = true)
+    {
+        if ($this->aSucursal === null && ($this->idsucursal !== null) && $doQuery) {
+            $this->aSucursal = SucursalQuery::create()->findPk($this->idsucursal, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aSucursal->addCargadoress($this);
+             */
+        }
+
+        return $this->aSucursal;
+    }
+
+
+    /**
+     * Initializes a collection based on the name of a relation.
+     * Avoids crafting an 'init[$relationName]s' method name
+     * that wouldn't work when StandardEnglishPluralizer is used.
+     *
+     * @param string $relationName The name of the relation to initialize
+     * @return void
+     */
+    public function initRelation($relationName)
+    {
+        if ('Bodegas' == $relationName) {
+            $this->initBodegass();
+        }
+        if ('Deshabilitacg' == $relationName) {
+            $this->initDeshabilitacgs();
+        }
+    }
+
+    /**
+     * Clears out the collBodegass collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Cargadores The current object (for fluent API support)
+     * @see        addBodegass()
+     */
+    public function clearBodegass()
+    {
+        $this->collBodegass = null; // important to set this to null since that means it is uninitialized
+        $this->collBodegassPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collBodegass collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialBodegass($v = true)
+    {
+        $this->collBodegassPartial = $v;
+    }
+
+    /**
+     * Initializes the collBodegass collection.
+     *
+     * By default this just sets the collBodegass collection to an empty array (like clearcollBodegass());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initBodegass($overrideExisting = true)
+    {
+        if (null !== $this->collBodegass && !$overrideExisting) {
+            return;
+        }
+        $this->collBodegass = new PropelObjectCollection();
+        $this->collBodegass->setModel('Bodegas');
+    }
+
+    /**
+     * Gets an array of Bodegas objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Cargadores is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|Bodegas[] List of Bodegas objects
+     * @throws PropelException
+     */
+    public function getBodegass($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collBodegassPartial && !$this->isNew();
+        if (null === $this->collBodegass || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collBodegass) {
+                // return empty collection
+                $this->initBodegass();
+            } else {
+                $collBodegass = BodegasQuery::create(null, $criteria)
+                    ->filterByCargadores($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collBodegassPartial && count($collBodegass)) {
+                      $this->initBodegass(false);
+
+                      foreach ($collBodegass as $obj) {
+                        if (false == $this->collBodegass->contains($obj)) {
+                          $this->collBodegass->append($obj);
+                        }
+                      }
+
+                      $this->collBodegassPartial = true;
+                    }
+
+                    $collBodegass->getInternalIterator()->rewind();
+
+                    return $collBodegass;
+                }
+
+                if ($partial && $this->collBodegass) {
+                    foreach ($this->collBodegass as $obj) {
+                        if ($obj->isNew()) {
+                            $collBodegass[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collBodegass = $collBodegass;
+                $this->collBodegassPartial = false;
+            }
+        }
+
+        return $this->collBodegass;
+    }
+
+    /**
+     * Sets a collection of Bodegas objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $bodegass A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Cargadores The current object (for fluent API support)
+     */
+    public function setBodegass(PropelCollection $bodegass, PropelPDO $con = null)
+    {
+        $bodegassToDelete = $this->getBodegass(new Criteria(), $con)->diff($bodegass);
+
+
+        $this->bodegassScheduledForDeletion = $bodegassToDelete;
+
+        foreach ($bodegassToDelete as $bodegasRemoved) {
+            $bodegasRemoved->setCargadores(null);
+        }
+
+        $this->collBodegass = null;
+        foreach ($bodegass as $bodegas) {
+            $this->addBodegas($bodegas);
+        }
+
+        $this->collBodegass = $bodegass;
+        $this->collBodegassPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Bodegas objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related Bodegas objects.
+     * @throws PropelException
+     */
+    public function countBodegass(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collBodegassPartial && !$this->isNew();
+        if (null === $this->collBodegass || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collBodegass) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getBodegass());
+            }
+            $query = BodegasQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByCargadores($this)
+                ->count($con);
+        }
+
+        return count($this->collBodegass);
+    }
+
+    /**
+     * Method called to associate a Bodegas object to this object
+     * through the Bodegas foreign key attribute.
+     *
+     * @param    Bodegas $l Bodegas
+     * @return Cargadores The current object (for fluent API support)
+     */
+    public function addBodegas(Bodegas $l)
+    {
+        if ($this->collBodegass === null) {
+            $this->initBodegass();
+            $this->collBodegassPartial = true;
+        }
+
+        if (!in_array($l, $this->collBodegass->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddBodegas($l);
+
+            if ($this->bodegassScheduledForDeletion and $this->bodegassScheduledForDeletion->contains($l)) {
+                $this->bodegassScheduledForDeletion->remove($this->bodegassScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	Bodegas $bodegas The bodegas object to add.
+     */
+    protected function doAddBodegas($bodegas)
+    {
+        $this->collBodegass[]= $bodegas;
+        $bodegas->setCargadores($this);
+    }
+
+    /**
+     * @param	Bodegas $bodegas The bodegas object to remove.
+     * @return Cargadores The current object (for fluent API support)
+     */
+    public function removeBodegas($bodegas)
+    {
+        if ($this->getBodegass()->contains($bodegas)) {
+            $this->collBodegass->remove($this->collBodegass->search($bodegas));
+            if (null === $this->bodegassScheduledForDeletion) {
+                $this->bodegassScheduledForDeletion = clone $this->collBodegass;
+                $this->bodegassScheduledForDeletion->clear();
+            }
+            $this->bodegassScheduledForDeletion[]= clone $bodegas;
+            $bodegas->setCargadores(null);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Clears out the collDeshabilitacgs collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Cargadores The current object (for fluent API support)
+     * @see        addDeshabilitacgs()
+     */
+    public function clearDeshabilitacgs()
+    {
+        $this->collDeshabilitacgs = null; // important to set this to null since that means it is uninitialized
+        $this->collDeshabilitacgsPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collDeshabilitacgs collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialDeshabilitacgs($v = true)
+    {
+        $this->collDeshabilitacgsPartial = $v;
+    }
+
+    /**
+     * Initializes the collDeshabilitacgs collection.
+     *
+     * By default this just sets the collDeshabilitacgs collection to an empty array (like clearcollDeshabilitacgs());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initDeshabilitacgs($overrideExisting = true)
+    {
+        if (null !== $this->collDeshabilitacgs && !$overrideExisting) {
+            return;
+        }
+        $this->collDeshabilitacgs = new PropelObjectCollection();
+        $this->collDeshabilitacgs->setModel('Deshabilitacg');
+    }
+
+    /**
+     * Gets an array of Deshabilitacg objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Cargadores is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|Deshabilitacg[] List of Deshabilitacg objects
+     * @throws PropelException
+     */
+    public function getDeshabilitacgs($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collDeshabilitacgsPartial && !$this->isNew();
+        if (null === $this->collDeshabilitacgs || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collDeshabilitacgs) {
+                // return empty collection
+                $this->initDeshabilitacgs();
+            } else {
+                $collDeshabilitacgs = DeshabilitacgQuery::create(null, $criteria)
+                    ->filterByCargadores($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collDeshabilitacgsPartial && count($collDeshabilitacgs)) {
+                      $this->initDeshabilitacgs(false);
+
+                      foreach ($collDeshabilitacgs as $obj) {
+                        if (false == $this->collDeshabilitacgs->contains($obj)) {
+                          $this->collDeshabilitacgs->append($obj);
+                        }
+                      }
+
+                      $this->collDeshabilitacgsPartial = true;
+                    }
+
+                    $collDeshabilitacgs->getInternalIterator()->rewind();
+
+                    return $collDeshabilitacgs;
+                }
+
+                if ($partial && $this->collDeshabilitacgs) {
+                    foreach ($this->collDeshabilitacgs as $obj) {
+                        if ($obj->isNew()) {
+                            $collDeshabilitacgs[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collDeshabilitacgs = $collDeshabilitacgs;
+                $this->collDeshabilitacgsPartial = false;
+            }
+        }
+
+        return $this->collDeshabilitacgs;
+    }
+
+    /**
+     * Sets a collection of Deshabilitacg objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $deshabilitacgs A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Cargadores The current object (for fluent API support)
+     */
+    public function setDeshabilitacgs(PropelCollection $deshabilitacgs, PropelPDO $con = null)
+    {
+        $deshabilitacgsToDelete = $this->getDeshabilitacgs(new Criteria(), $con)->diff($deshabilitacgs);
+
+
+        $this->deshabilitacgsScheduledForDeletion = $deshabilitacgsToDelete;
+
+        foreach ($deshabilitacgsToDelete as $deshabilitacgRemoved) {
+            $deshabilitacgRemoved->setCargadores(null);
+        }
+
+        $this->collDeshabilitacgs = null;
+        foreach ($deshabilitacgs as $deshabilitacg) {
+            $this->addDeshabilitacg($deshabilitacg);
+        }
+
+        $this->collDeshabilitacgs = $deshabilitacgs;
+        $this->collDeshabilitacgsPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Deshabilitacg objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related Deshabilitacg objects.
+     * @throws PropelException
+     */
+    public function countDeshabilitacgs(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collDeshabilitacgsPartial && !$this->isNew();
+        if (null === $this->collDeshabilitacgs || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collDeshabilitacgs) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getDeshabilitacgs());
+            }
+            $query = DeshabilitacgQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByCargadores($this)
+                ->count($con);
+        }
+
+        return count($this->collDeshabilitacgs);
+    }
+
+    /**
+     * Method called to associate a Deshabilitacg object to this object
+     * through the Deshabilitacg foreign key attribute.
+     *
+     * @param    Deshabilitacg $l Deshabilitacg
+     * @return Cargadores The current object (for fluent API support)
+     */
+    public function addDeshabilitacg(Deshabilitacg $l)
+    {
+        if ($this->collDeshabilitacgs === null) {
+            $this->initDeshabilitacgs();
+            $this->collDeshabilitacgsPartial = true;
+        }
+
+        if (!in_array($l, $this->collDeshabilitacgs->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddDeshabilitacg($l);
+
+            if ($this->deshabilitacgsScheduledForDeletion and $this->deshabilitacgsScheduledForDeletion->contains($l)) {
+                $this->deshabilitacgsScheduledForDeletion->remove($this->deshabilitacgsScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	Deshabilitacg $deshabilitacg The deshabilitacg object to add.
+     */
+    protected function doAddDeshabilitacg($deshabilitacg)
+    {
+        $this->collDeshabilitacgs[]= $deshabilitacg;
+        $deshabilitacg->setCargadores($this);
+    }
+
+    /**
+     * @param	Deshabilitacg $deshabilitacg The deshabilitacg object to remove.
+     * @return Cargadores The current object (for fluent API support)
+     */
+    public function removeDeshabilitacg($deshabilitacg)
+    {
+        if ($this->getDeshabilitacgs()->contains($deshabilitacg)) {
+            $this->collDeshabilitacgs->remove($this->collDeshabilitacgs->search($deshabilitacg));
+            if (null === $this->deshabilitacgsScheduledForDeletion) {
+                $this->deshabilitacgsScheduledForDeletion = clone $this->collDeshabilitacgs;
+                $this->deshabilitacgsScheduledForDeletion->clear();
+            }
+            $this->deshabilitacgsScheduledForDeletion[]= clone $deshabilitacg;
+            $deshabilitacg->setCargadores(null);
+        }
+
+        return $this;
+    }
+
+    /**
      * Clears the current object and sets all attributes to their default values
      */
     public function clear()
     {
-        $this->id = null;
-        $this->nombre = null;
-        $this->tipo = null;
+        $this->idcargadores = null;
+        $this->idsucursal = null;
+        $this->cargadores_modelo = null;
+        $this->cargadores_marca = null;
+        $this->cargadores_e = null;
+        $this->cargadores_volts = null;
+        $this->cargadores_amperaje = null;
+        $this->cargadores_comprador = null;
+        $this->cargadores_nombre = null;
+        $this->cargadores_numserie = null;
         $this->alreadyInSave = false;
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;
@@ -852,10 +1916,32 @@ abstract class BaseCargadores extends BaseObject implements Persistent
     {
         if ($deep && !$this->alreadyInClearAllReferencesDeep) {
             $this->alreadyInClearAllReferencesDeep = true;
+            if ($this->collBodegass) {
+                foreach ($this->collBodegass as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
+            if ($this->collDeshabilitacgs) {
+                foreach ($this->collDeshabilitacgs as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
+            if ($this->aSucursal instanceof Persistent) {
+              $this->aSucursal->clearAllReferences($deep);
+            }
 
             $this->alreadyInClearAllReferencesDeep = false;
         } // if ($deep)
 
+        if ($this->collBodegass instanceof PropelCollection) {
+            $this->collBodegass->clearIterator();
+        }
+        $this->collBodegass = null;
+        if ($this->collDeshabilitacgs instanceof PropelCollection) {
+            $this->collDeshabilitacgs->clearIterator();
+        }
+        $this->collDeshabilitacgs = null;
+        $this->aSucursal = null;
     }
 
     /**

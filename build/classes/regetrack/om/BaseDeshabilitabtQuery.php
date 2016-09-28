@@ -26,6 +26,10 @@
  * @method DeshabilitabtQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
  * @method DeshabilitabtQuery innerJoin($relation) Adds a INNER JOIN clause to the query
  *
+ * @method DeshabilitabtQuery leftJoinBaterias($relationAlias = null) Adds a LEFT JOIN clause to the query using the Baterias relation
+ * @method DeshabilitabtQuery rightJoinBaterias($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Baterias relation
+ * @method DeshabilitabtQuery innerJoinBaterias($relationAlias = null) Adds a INNER JOIN clause to the query using the Baterias relation
+ *
  * @method Deshabilitabt findOne(PropelPDO $con = null) Return the first Deshabilitabt matching the query
  * @method Deshabilitabt findOneOrCreate(PropelPDO $con = null) Return the first Deshabilitabt matching the query, or a new Deshabilitabt object populated from the query conditions when no match is found
  *
@@ -292,6 +296,8 @@ abstract class BaseDeshabilitabtQuery extends ModelCriteria
      * $query->filterByBt(array('max' => 12)); // WHERE bt <= 12
      * </code>
      *
+     * @see       filterByBaterias()
+     *
      * @param     mixed $bt The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
@@ -520,6 +526,82 @@ abstract class BaseDeshabilitabtQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(DeshabilitabtPeer::USUARIO_SALIDA, $usuarioSalida, $comparison);
+    }
+
+    /**
+     * Filter the query by a related Baterias object
+     *
+     * @param   Baterias|PropelObjectCollection $baterias The related object(s) to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 DeshabilitabtQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByBaterias($baterias, $comparison = null)
+    {
+        if ($baterias instanceof Baterias) {
+            return $this
+                ->addUsingAlias(DeshabilitabtPeer::BT, $baterias->getIdbaterias(), $comparison);
+        } elseif ($baterias instanceof PropelObjectCollection) {
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+
+            return $this
+                ->addUsingAlias(DeshabilitabtPeer::BT, $baterias->toKeyValue('PrimaryKey', 'Idbaterias'), $comparison);
+        } else {
+            throw new PropelException('filterByBaterias() only accepts arguments of type Baterias or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Baterias relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return DeshabilitabtQuery The current query, for fluid interface
+     */
+    public function joinBaterias($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Baterias');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Baterias');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Baterias relation Baterias object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   BateriasQuery A secondary query class using the current class as primary query
+     */
+    public function useBateriasQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinBaterias($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Baterias', 'BateriasQuery');
     }
 
     /**

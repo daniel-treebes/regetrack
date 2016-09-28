@@ -332,19 +332,24 @@ function fetchUserDetails($username=NULL,$token=NULL, $id=NULL)
 		active,
 		title,
 		sign_up_stamp,
-		last_sign_in_stamp
+		last_sign_in_stamp,
+                idsucursal,
+                idempresa
 		FROM ".$db_table_prefix."users
+                JOIN empresa ON empresa.idusuario = id
 		WHERE
 		$column = ?
 		LIMIT 1");
 		$stmt->bind_param("s", $data);
 	
 	$stmt->execute();
-	$stmt->bind_result($id, $user, $display, $password, $email, $token, $activationRequest, $passwordRequest, $active, $title, $signUp, $signIn);
+        
+	$stmt->bind_result($id, $user, $display, $password, $email, $token, $activationRequest, $passwordRequest, $active, $title, $signUp, $signIn,$idsucursal,$idempresa);
 	while ($stmt->fetch()){
-		$row = array('id' => $id, 'user_name' => $user, 'display_name' => $display, 'password' => $password, 'email' => $email, 'activation_token' => $token, 'last_activation_request' => $activationRequest, 'lost_password_request' => $passwordRequest, 'active' => $active, 'title' => $title, 'sign_up_stamp' => $signUp, 'last_sign_in_stamp' => $signIn);
+		$row = array('id' => $id, 'user_name' => $user, 'display_name' => $display, 'password' => $password, 'email' => $email, 'activation_token' => $token, 'last_activation_request' => $activationRequest, 'lost_password_request' => $passwordRequest, 'active' => $active, 'title' => $title, 'sign_up_stamp' => $signUp, 'last_sign_in_stamp' => $signIn,'idsucursal' => $idsucursal,'idempresa' => $idempresa);
 	}
 	$stmt->close();
+        
 	return ($row);
 }
 
@@ -808,8 +813,10 @@ function fetchUserPermissions($user_id)
 	$stmt->bind_param("i", $user_id);	
 	$stmt->execute();
 	$stmt->bind_result($id, $permission);
+        $i = 0;
 	while ($stmt->fetch()){
-		$row[$permission] = array('id' => $id, 'permission_id' => $permission);
+		$row[$i] = array('id' => $id, 'permission_id' => $permission);
+                $i++;
 	}
 	$stmt->close();
 	if (isset($row)){
@@ -1185,7 +1192,8 @@ function securePage($uri){
 }
 
 //Treebes JLFV a partir de aqui
-function pinta_grafica($modulo,$divapintar,$estatus,$idapintar='todo'){
+function pinta_grafica($modulo,$divapintar,$estatus,$idapintar='todo',$sucursal_activa){
+      
 	global $mysqli;
 
 	date_default_timezone_set('UTC');
@@ -1209,42 +1217,52 @@ function pinta_grafica($modulo,$divapintar,$estatus,$idapintar='todo'){
 		$ffin='fecha_salida';
 	}
 	
-	$qwhere='m.id=u.'.$modulo;
+	if($modulo == 'cg'){
+            $qwhere='m.idcargadores=u.'.$modulo.' AND m.idsucursal ='.$sucursal_activa;
+        }elseif($modulo == 'mc'){
+            $qwhere='m.idmontacargas=u.'.$modulo.' AND m.idsucursal ='.$sucursal_activa;
+        }elseif($modulo == 'bt'){
+            $qwhere='m.idbaterias=u.'.$modulo.' AND m.idsucursal ='.$sucursal_activa;
+        }
 	if ($estatus=="uso"){
 		$tuso='uso_baterias_montacargas as u';
 		if ($modulo=="bt"){
-			$tuso.=', baterias as m';
+			$tuso.=' JOIN baterias as m ON u.bt = m.id';
 		}else{
-			$tuso.=', montacargas as m';
+			$tuso.=' JOIN montacargas as m ON u.mc = m.id';
 		}
 	}else{
 		$tuso='uso_baterias_bodega as u';
 		if ($modulo=="bt"){
-			$tuso.=', baterias as m';
+			$tuso.=' JOIN baterias as m ON u.bt = m.id';
 		}else{
-			$tuso.=', bodegas as b, cargadores as m';
+			$tuso.=' JOIN bodegas as b ON u.bg = b.id JOIN cargadores as m ON b.cg = m.id';
 			$qwhere='m.id=b.cg AND b.id=u.bg';
 		}
 	}
+	$tuso.=' LEFT JOIN bateriastipos btt ON btt.id = m.tipo';
 	
+        
 	$query="
-		select
-			m.id as id,
-			m.$nombre as nombre,
-			u.$fini as fecha_entrada,
-			u.$ffin as fecha_salida,
-			TIMESTAMPDIFF(hour, u.$fini, u.$ffin) as hrs,
-			TIMESTAMPDIFF(minute, u.$fini, u.$ffin)-(TIMESTAMPDIFF(hour, u.$fini, u.$ffin))*60 as min
+		SELECT
+                    m.id as id,
+                    m.$nombre as nombre,
+                    u.$fini as fecha_entrada,
+                    u.$ffin as fecha_salida,
+                    TIMESTAMPDIFF(hour, u.$fini, u.$ffin) as hrs,
+                    TIMESTAMPDIFF(minute, u.$fini, u.$ffin)-(TIMESTAMPDIFF(hour, u.$fini, u.$ffin))*60 as min
 		from $tuso
 		where $qwhere
-			AND u.$ffin!='0000-00-00 00:00:00'
+			AND u.$ffin!='0000-00-00 00:00:00' AND btt.idsucursal = ".$sucursal_activa."
 			$filtro
 		order by
 			nombre, u.$fini asc
 	";
+        
 
+       
     $respuesta = $mysqli->query($query);
-
+       
 	$data=array();
 	if ($respuesta) {
 	   while($renglon = $respuesta->fetch_array()){
@@ -1263,31 +1281,31 @@ function pinta_grafica($modulo,$divapintar,$estatus,$idapintar='todo'){
 	$tabladeh="deshabilita".$modulo." as d";
 	$titulo='HORAS DE '.strtoupper($estatus).' DE';
 	if ($modulo=='bt'){
-		$tabladeh.=', baterias as m';
+		$tabladeh.=' JOIN baterias as m ON d.bt = m.id';
 		if ($idapintar=='todo') $titulo.=' BATERIAS';
 		else $titulo.=' LA BATERIA '.$nombreid;
 	}
 	if ($modulo=='cg'){
-		$tabladeh.=', cargadores as m';
+		$tabladeh.=' JOIN cargadores as m ON d.cg = m.id';
 		if ($idapintar=='todo') $titulo.=' CARGADORES';
 		else $titulo.='L CARGADOR '.$nombreid;
 	}
 	if ($modulo=='mc'){
-		$tabladeh.=', montacargas as m';
+		$tabladeh.=' JOIN montacargas as m ON d.mc = m.id';
 		if ($idapintar=='todo') $titulo.=' MONTACARGAS';
 		else $titulo.='L MONTACARGAS '.$nombreid;
 	}
-
+        $tabladeh.= ' JOIN bateriastipos as btt ON btt.id = m.tipo';
 	$query="
 		SELECT
 			d.*,
 			m.$nombre as nombre
 		FROM  $tabladeh
-		WHERE m.id=d.$modulo
+		WHERE btt.idsucursal = ".$sucursal_activa."
 			$filtro
 		ORDER BY nombre, d.fecha_entrada
 	";
-
+        
 	$rep_alertas = $mysqli->query($query);
 	
 	$alertas=array();
@@ -1407,13 +1425,15 @@ function pinta_grafica($modulo,$divapintar,$estatus,$idapintar='todo'){
 		return $aregresar;
 }
 
-function eficiencia($modulo,$estatus,$divapintar,$idapintar='todo'){
+function eficiencia($modulo,$estatus,$divapintar,$sucursal_activa,$idapintar='todo'){
+            
+    
 	global $mysqli;
 	
 	$filtro="";
 	$notodas='';
 	$nombre='nombre';
-	if ($modulo=="bt") $nombre='num_serie';
+	//if ($modulo=="bt") $nombre='num_serie';
 	if ($idapintar!='todo'){
 		$filtro='AND m.id='.$idapintar;
 		$notodas='m.'.$nombre.' as nombre,';
@@ -1432,24 +1452,30 @@ function eficiencia($modulo,$estatus,$divapintar,$idapintar='todo'){
 		$ffin='fecha_salida';
 	}
 	
-	$qwhere='m.id=u.'.$modulo;
+        if($modulo == 'cg'){
+            $qwhere='m.idcargadores=u.'.$modulo.' AND m.idsucursal ='.$sucursal_activa;
+        }elseif($modulo == 'mc'){
+            $qwhere='m.idmontacargas=u.'.$modulo.' AND m.idsucursal ='.$sucursal_activa;
+        }elseif($modulo == 'bt'){
+            $qwhere='m.idbaterias=u.'.$modulo.' AND m.idsucursal ='.$sucursal_activa;
+        }
+	
 	if ($estatus=="uso"){
 		$tuso='uso_baterias_montacargas as u';
 		if ($modulo=="bt"){
-			$tuso.=', baterias as m';
+			$tuso.=' JOIN baterias as m ON u.bt = m.idbaterias';
 		}else{
-			$tuso.=', montacargas as m';
+			$tuso.=' JOIN montacargas as m ON u.mc = m.idmontacargas';
 		}
 	}else{
 		$tuso='uso_baterias_bodega as u';
 		if ($modulo=="bt"){
-			$tuso.=', baterias as m';
+			$tuso.=' JOIN baterias as m ON u.bt = m.idbaterias';
 		}else{
-			$tuso.=', bodegas as b, cargadores as m';
-			$qwhere='m.id=b.cg AND b.id=u.bg';
+			$tuso.=' JOIN bodegas as b ON u.bg = b.id JOIN cargadores as m ON b.cg = m.idcargadores';
+			$qwhere='m.idcargadores=b.cg AND b.id=u.bg';
 		}
 	}
-	
 	$query="
 		select
 			$notodas
@@ -1462,9 +1488,11 @@ function eficiencia($modulo,$estatus,$divapintar,$idapintar='todo'){
 			$filtro
 		order by u.$fini asc
 	";
-
+    
     $respuesta = $mysqli->query($query);
-
+    if(!$respuesta){
+        echo '<pre>';var_dump($qwhere);echo  '</pre>';
+    }
 	$query7d="
 		select
 			$notodas
@@ -1473,6 +1501,7 @@ function eficiencia($modulo,$estatus,$divapintar,$idapintar='todo'){
 			AVG(TIMESTAMPDIFF(hour, u.$fini, u.$ffin)) as promedio
 		from $tuso
 		where $qwhere
+                       
 			AND u.$ffin!='0000-00-00 00:00:00'
 			AND u.$fini>=DATE_SUB(now(), INTERVAL 7 DAY)
 			$filtro
@@ -1480,7 +1509,7 @@ function eficiencia($modulo,$estatus,$divapintar,$idapintar='todo'){
 	";
 
     $respuesta7d = $mysqli->query($query7d);
-	
+
 	$regresa['nombreid']='';
 	$regresa['datos']=0;
 	$regresa['horas']=0;
@@ -1510,7 +1539,6 @@ function eficiencia($modulo,$estatus,$divapintar,$idapintar='todo'){
 			if ($idapintar=='todo') $titulo.=' MONTACARGAS';
 			else $titulo.='L MONTACARGAS '.$nombreid;
 		}
-
 		$regresa['script']="
             <script>
 			$(function () {
@@ -1548,7 +1576,7 @@ function eficiencia($modulo,$estatus,$divapintar,$idapintar='todo'){
 		</script>
 		";
 	}
-
+         
 	$query7d="
 		select
 			$notodas
@@ -1557,6 +1585,7 @@ function eficiencia($modulo,$estatus,$divapintar,$idapintar='todo'){
 			AVG(TIMESTAMPDIFF(hour, IF(u.$fini>=DATE_SUB(now(), INTERVAL 7 DAY),u.$fini,DATE_SUB(now(), INTERVAL 7 DAY)), IF(u.$ffin!='0000-00-00 00:00:00',u.$ffin,now()))) as promedio
 		from $tuso
 		where $qwhere
+                       
 			AND (u.$fini>=DATE_SUB(now(), INTERVAL 7 DAY) || u.$ffin='0000-00-00 00:00:00')
 			AND u.$fini!='0000-00-00 00:00:00'
 			$filtro
@@ -1577,7 +1606,9 @@ function eficiencia($modulo,$estatus,$divapintar,$idapintar='todo'){
 		$regresa['7d']['horas']=$renglon['horas'];
 		$regresa['7d']['promedio']=$renglon['promedio'];
 	}
+        
 	return $regresa;
+       
 }
 
 

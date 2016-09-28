@@ -24,28 +24,55 @@ abstract class BaseBateriasPeer
     const TM_CLASS = 'BateriasTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 5;
+    const NUM_COLUMNS = 14;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 5;
+    const NUM_HYDRATE_COLUMNS = 14;
 
-    /** the column name for the id field */
-    const ID = 'baterias.id';
+    /** the column name for the idbaterias field */
+    const IDBATERIAS = 'baterias.idbaterias';
 
-    /** the column name for the tipo field */
-    const TIPO = 'baterias.tipo';
+    /** the column name for the idsucursal field */
+    const IDSUCURSAL = 'baterias.idsucursal';
 
-    /** the column name for the num_serie field */
-    const NUM_SERIE = 'baterias.num_serie';
+    /** the column name for the baterias_modelo field */
+    const BATERIAS_MODELO = 'baterias.baterias_modelo';
 
-    /** the column name for the ciclos_mant field */
-    const CICLOS_MANT = 'baterias.ciclos_mant';
+    /** the column name for the baterias_marca field */
+    const BATERIAS_MARCA = 'baterias.baterias_marca';
 
-    /** the column name for the ciclos_iniciales field */
-    const CICLOS_INICIALES = 'baterias.ciclos_iniciales';
+    /** the column name for the baterias_c field */
+    const BATERIAS_C = 'baterias.baterias_c';
+
+    /** the column name for the baterias_k field */
+    const BATERIAS_K = 'baterias.baterias_k';
+
+    /** the column name for the baterias_p field */
+    const BATERIAS_P = 'baterias.baterias_p';
+
+    /** the column name for the baterias_t field */
+    const BATERIAS_T = 'baterias.baterias_t';
+
+    /** the column name for the baterias_e field */
+    const BATERIAS_E = 'baterias.baterias_e';
+
+    /** the column name for the baterias_volts field */
+    const BATERIAS_VOLTS = 'baterias.baterias_volts';
+
+    /** the column name for the baterias_amperaje field */
+    const BATERIAS_AMPERAJE = 'baterias.baterias_amperaje';
+
+    /** the column name for the baterias_comprador field */
+    const BATERIAS_COMPRADOR = 'baterias.baterias_comprador';
+
+    /** the column name for the baterias_nombre field */
+    const BATERIAS_NOMBRE = 'baterias.baterias_nombre';
+
+    /** the column name for the baterias_numserie field */
+    const BATERIAS_NUMSERIE = 'baterias.baterias_numserie';
 
     /** The default string format for model objects of the related table **/
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -66,12 +93,12 @@ abstract class BaseBateriasPeer
      * e.g. BateriasPeer::$fieldNames[BateriasPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Id', 'Tipo', 'NumSerie', 'CiclosMant', 'CiclosIniciales', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'tipo', 'numSerie', 'ciclosMant', 'ciclosIniciales', ),
-        BasePeer::TYPE_COLNAME => array (BateriasPeer::ID, BateriasPeer::TIPO, BateriasPeer::NUM_SERIE, BateriasPeer::CICLOS_MANT, BateriasPeer::CICLOS_INICIALES, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'TIPO', 'NUM_SERIE', 'CICLOS_MANT', 'CICLOS_INICIALES', ),
-        BasePeer::TYPE_FIELDNAME => array ('id', 'tipo', 'num_serie', 'ciclos_mant', 'ciclos_iniciales', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, )
+        BasePeer::TYPE_PHPNAME => array ('Idbaterias', 'Idsucursal', 'BateriasModelo', 'BateriasMarca', 'BateriasC', 'BateriasK', 'BateriasP', 'BateriasT', 'BateriasE', 'BateriasVolts', 'BateriasAmperaje', 'BateriasComprador', 'BateriasNombre', 'BateriasNumserie', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idbaterias', 'idsucursal', 'bateriasModelo', 'bateriasMarca', 'bateriasC', 'bateriasK', 'bateriasP', 'bateriasT', 'bateriasE', 'bateriasVolts', 'bateriasAmperaje', 'bateriasComprador', 'bateriasNombre', 'bateriasNumserie', ),
+        BasePeer::TYPE_COLNAME => array (BateriasPeer::IDBATERIAS, BateriasPeer::IDSUCURSAL, BateriasPeer::BATERIAS_MODELO, BateriasPeer::BATERIAS_MARCA, BateriasPeer::BATERIAS_C, BateriasPeer::BATERIAS_K, BateriasPeer::BATERIAS_P, BateriasPeer::BATERIAS_T, BateriasPeer::BATERIAS_E, BateriasPeer::BATERIAS_VOLTS, BateriasPeer::BATERIAS_AMPERAJE, BateriasPeer::BATERIAS_COMPRADOR, BateriasPeer::BATERIAS_NOMBRE, BateriasPeer::BATERIAS_NUMSERIE, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDBATERIAS', 'IDSUCURSAL', 'BATERIAS_MODELO', 'BATERIAS_MARCA', 'BATERIAS_C', 'BATERIAS_K', 'BATERIAS_P', 'BATERIAS_T', 'BATERIAS_E', 'BATERIAS_VOLTS', 'BATERIAS_AMPERAJE', 'BATERIAS_COMPRADOR', 'BATERIAS_NOMBRE', 'BATERIAS_NUMSERIE', ),
+        BasePeer::TYPE_FIELDNAME => array ('idbaterias', 'idsucursal', 'baterias_modelo', 'baterias_marca', 'baterias_c', 'baterias_k', 'baterias_p', 'baterias_t', 'baterias_e', 'baterias_volts', 'baterias_amperaje', 'baterias_comprador', 'baterias_nombre', 'baterias_numserie', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, )
     );
 
     /**
@@ -81,12 +108,12 @@ abstract class BaseBateriasPeer
      * e.g. BateriasPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Tipo' => 1, 'NumSerie' => 2, 'CiclosMant' => 3, 'CiclosIniciales' => 4, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'tipo' => 1, 'numSerie' => 2, 'ciclosMant' => 3, 'ciclosIniciales' => 4, ),
-        BasePeer::TYPE_COLNAME => array (BateriasPeer::ID => 0, BateriasPeer::TIPO => 1, BateriasPeer::NUM_SERIE => 2, BateriasPeer::CICLOS_MANT => 3, BateriasPeer::CICLOS_INICIALES => 4, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'TIPO' => 1, 'NUM_SERIE' => 2, 'CICLOS_MANT' => 3, 'CICLOS_INICIALES' => 4, ),
-        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'tipo' => 1, 'num_serie' => 2, 'ciclos_mant' => 3, 'ciclos_iniciales' => 4, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, )
+        BasePeer::TYPE_PHPNAME => array ('Idbaterias' => 0, 'Idsucursal' => 1, 'BateriasModelo' => 2, 'BateriasMarca' => 3, 'BateriasC' => 4, 'BateriasK' => 5, 'BateriasP' => 6, 'BateriasT' => 7, 'BateriasE' => 8, 'BateriasVolts' => 9, 'BateriasAmperaje' => 10, 'BateriasComprador' => 11, 'BateriasNombre' => 12, 'BateriasNumserie' => 13, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idbaterias' => 0, 'idsucursal' => 1, 'bateriasModelo' => 2, 'bateriasMarca' => 3, 'bateriasC' => 4, 'bateriasK' => 5, 'bateriasP' => 6, 'bateriasT' => 7, 'bateriasE' => 8, 'bateriasVolts' => 9, 'bateriasAmperaje' => 10, 'bateriasComprador' => 11, 'bateriasNombre' => 12, 'bateriasNumserie' => 13, ),
+        BasePeer::TYPE_COLNAME => array (BateriasPeer::IDBATERIAS => 0, BateriasPeer::IDSUCURSAL => 1, BateriasPeer::BATERIAS_MODELO => 2, BateriasPeer::BATERIAS_MARCA => 3, BateriasPeer::BATERIAS_C => 4, BateriasPeer::BATERIAS_K => 5, BateriasPeer::BATERIAS_P => 6, BateriasPeer::BATERIAS_T => 7, BateriasPeer::BATERIAS_E => 8, BateriasPeer::BATERIAS_VOLTS => 9, BateriasPeer::BATERIAS_AMPERAJE => 10, BateriasPeer::BATERIAS_COMPRADOR => 11, BateriasPeer::BATERIAS_NOMBRE => 12, BateriasPeer::BATERIAS_NUMSERIE => 13, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDBATERIAS' => 0, 'IDSUCURSAL' => 1, 'BATERIAS_MODELO' => 2, 'BATERIAS_MARCA' => 3, 'BATERIAS_C' => 4, 'BATERIAS_K' => 5, 'BATERIAS_P' => 6, 'BATERIAS_T' => 7, 'BATERIAS_E' => 8, 'BATERIAS_VOLTS' => 9, 'BATERIAS_AMPERAJE' => 10, 'BATERIAS_COMPRADOR' => 11, 'BATERIAS_NOMBRE' => 12, 'BATERIAS_NUMSERIE' => 13, ),
+        BasePeer::TYPE_FIELDNAME => array ('idbaterias' => 0, 'idsucursal' => 1, 'baterias_modelo' => 2, 'baterias_marca' => 3, 'baterias_c' => 4, 'baterias_k' => 5, 'baterias_p' => 6, 'baterias_t' => 7, 'baterias_e' => 8, 'baterias_volts' => 9, 'baterias_amperaje' => 10, 'baterias_comprador' => 11, 'baterias_nombre' => 12, 'baterias_numserie' => 13, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, )
     );
 
     /**
@@ -160,17 +187,35 @@ abstract class BaseBateriasPeer
     public static function addSelectColumns(Criteria $criteria, $alias = null)
     {
         if (null === $alias) {
-            $criteria->addSelectColumn(BateriasPeer::ID);
-            $criteria->addSelectColumn(BateriasPeer::TIPO);
-            $criteria->addSelectColumn(BateriasPeer::NUM_SERIE);
-            $criteria->addSelectColumn(BateriasPeer::CICLOS_MANT);
-            $criteria->addSelectColumn(BateriasPeer::CICLOS_INICIALES);
+            $criteria->addSelectColumn(BateriasPeer::IDBATERIAS);
+            $criteria->addSelectColumn(BateriasPeer::IDSUCURSAL);
+            $criteria->addSelectColumn(BateriasPeer::BATERIAS_MODELO);
+            $criteria->addSelectColumn(BateriasPeer::BATERIAS_MARCA);
+            $criteria->addSelectColumn(BateriasPeer::BATERIAS_C);
+            $criteria->addSelectColumn(BateriasPeer::BATERIAS_K);
+            $criteria->addSelectColumn(BateriasPeer::BATERIAS_P);
+            $criteria->addSelectColumn(BateriasPeer::BATERIAS_T);
+            $criteria->addSelectColumn(BateriasPeer::BATERIAS_E);
+            $criteria->addSelectColumn(BateriasPeer::BATERIAS_VOLTS);
+            $criteria->addSelectColumn(BateriasPeer::BATERIAS_AMPERAJE);
+            $criteria->addSelectColumn(BateriasPeer::BATERIAS_COMPRADOR);
+            $criteria->addSelectColumn(BateriasPeer::BATERIAS_NOMBRE);
+            $criteria->addSelectColumn(BateriasPeer::BATERIAS_NUMSERIE);
         } else {
-            $criteria->addSelectColumn($alias . '.id');
-            $criteria->addSelectColumn($alias . '.tipo');
-            $criteria->addSelectColumn($alias . '.num_serie');
-            $criteria->addSelectColumn($alias . '.ciclos_mant');
-            $criteria->addSelectColumn($alias . '.ciclos_iniciales');
+            $criteria->addSelectColumn($alias . '.idbaterias');
+            $criteria->addSelectColumn($alias . '.idsucursal');
+            $criteria->addSelectColumn($alias . '.baterias_modelo');
+            $criteria->addSelectColumn($alias . '.baterias_marca');
+            $criteria->addSelectColumn($alias . '.baterias_c');
+            $criteria->addSelectColumn($alias . '.baterias_k');
+            $criteria->addSelectColumn($alias . '.baterias_p');
+            $criteria->addSelectColumn($alias . '.baterias_t');
+            $criteria->addSelectColumn($alias . '.baterias_e');
+            $criteria->addSelectColumn($alias . '.baterias_volts');
+            $criteria->addSelectColumn($alias . '.baterias_amperaje');
+            $criteria->addSelectColumn($alias . '.baterias_comprador');
+            $criteria->addSelectColumn($alias . '.baterias_nombre');
+            $criteria->addSelectColumn($alias . '.baterias_numserie');
         }
     }
 
@@ -297,7 +342,7 @@ abstract class BaseBateriasPeer
     {
         if (Propel::isInstancePoolingEnabled()) {
             if ($key === null) {
-                $key = (string) $obj->getId();
+                $key = (string) $obj->getIdbaterias();
             } // if key === null
             BateriasPeer::$instances[$key] = $obj;
         }
@@ -320,7 +365,7 @@ abstract class BaseBateriasPeer
     {
         if (Propel::isInstancePoolingEnabled() && $value !== null) {
             if (is_object($value) && $value instanceof Baterias) {
-                $key = (string) $value->getId();
+                $key = (string) $value->getIdbaterias();
             } elseif (is_scalar($value)) {
                 // assume we've been passed a primary key
                 $key = (string) $value;
@@ -375,6 +420,18 @@ abstract class BaseBateriasPeer
      */
     public static function clearRelatedInstancePool()
     {
+        // Invalidate objects in DeshabilitabtPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        DeshabilitabtPeer::clearInstancePool();
+        // Invalidate objects in LimboPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        LimboPeer::clearInstancePool();
+        // Invalidate objects in UsoBateriasBodegaPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        UsoBateriasBodegaPeer::clearInstancePool();
+        // Invalidate objects in UsoBateriasMontacargasPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        UsoBateriasMontacargasPeer::clearInstancePool();
     }
 
     /**
@@ -471,6 +528,244 @@ abstract class BaseBateriasPeer
         return array($obj, $col);
     }
 
+
+    /**
+     * Returns the number of rows matching criteria, joining the related Sucursal table
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return int Number of matching rows.
+     */
+    public static function doCountJoinSucursal(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        // we're going to modify criteria, so copy it first
+        $criteria = clone $criteria;
+
+        // We need to set the primary table name, since in the case that there are no WHERE columns
+        // it will be impossible for the BasePeer::createSelectSql() method to determine which
+        // tables go into the FROM clause.
+        $criteria->setPrimaryTableName(BateriasPeer::TABLE_NAME);
+
+        if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
+            $criteria->setDistinct();
+        }
+
+        if (!$criteria->hasSelectClause()) {
+            BateriasPeer::addSelectColumns($criteria);
+        }
+
+        $criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
+
+        // Set the correct dbName
+        $criteria->setDbName(BateriasPeer::DATABASE_NAME);
+
+        if ($con === null) {
+            $con = Propel::getConnection(BateriasPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+        }
+
+        $criteria->addJoin(BateriasPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
+
+        $stmt = BasePeer::doCount($criteria, $con);
+
+        if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $count = (int) $row[0];
+        } else {
+            $count = 0; // no rows returned; we infer that means 0 matches.
+        }
+        $stmt->closeCursor();
+
+        return $count;
+    }
+
+
+    /**
+     * Selects a collection of Baterias objects pre-filled with their Sucursal objects.
+     * @param      Criteria  $criteria
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return array           Array of Baterias objects.
+     * @throws PropelException Any exceptions caught during processing will be
+     *		 rethrown wrapped into a PropelException.
+     */
+    public static function doSelectJoinSucursal(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $criteria = clone $criteria;
+
+        // Set the correct dbName if it has not been overridden
+        if ($criteria->getDbName() == Propel::getDefaultDB()) {
+            $criteria->setDbName(BateriasPeer::DATABASE_NAME);
+        }
+
+        BateriasPeer::addSelectColumns($criteria);
+        $startcol = BateriasPeer::NUM_HYDRATE_COLUMNS;
+        SucursalPeer::addSelectColumns($criteria);
+
+        $criteria->addJoin(BateriasPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
+
+        $stmt = BasePeer::doSelect($criteria, $con);
+        $results = array();
+
+        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $key1 = BateriasPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = BateriasPeer::getInstanceFromPool($key1))) {
+                // We no longer rehydrate the object, since this can cause data loss.
+                // See http://www.propelorm.org/ticket/509
+                // $obj1->hydrate($row, 0, true); // rehydrate
+            } else {
+
+                $cls = BateriasPeer::getOMClass();
+
+                $obj1 = new $cls();
+                $obj1->hydrate($row);
+                BateriasPeer::addInstanceToPool($obj1, $key1);
+            } // if $obj1 already loaded
+
+            $key2 = SucursalPeer::getPrimaryKeyHashFromRow($row, $startcol);
+            if ($key2 !== null) {
+                $obj2 = SucursalPeer::getInstanceFromPool($key2);
+                if (!$obj2) {
+
+                    $cls = SucursalPeer::getOMClass();
+
+                    $obj2 = new $cls();
+                    $obj2->hydrate($row, $startcol);
+                    SucursalPeer::addInstanceToPool($obj2, $key2);
+                } // if obj2 already loaded
+
+                // Add the $obj1 (Baterias) to $obj2 (Sucursal)
+                $obj2->addBaterias($obj1);
+
+            } // if joined row was not null
+
+            $results[] = $obj1;
+        }
+        $stmt->closeCursor();
+
+        return $results;
+    }
+
+
+    /**
+     * Returns the number of rows matching criteria, joining all related tables
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return int Number of matching rows.
+     */
+    public static function doCountJoinAll(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        // we're going to modify criteria, so copy it first
+        $criteria = clone $criteria;
+
+        // We need to set the primary table name, since in the case that there are no WHERE columns
+        // it will be impossible for the BasePeer::createSelectSql() method to determine which
+        // tables go into the FROM clause.
+        $criteria->setPrimaryTableName(BateriasPeer::TABLE_NAME);
+
+        if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
+            $criteria->setDistinct();
+        }
+
+        if (!$criteria->hasSelectClause()) {
+            BateriasPeer::addSelectColumns($criteria);
+        }
+
+        $criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
+
+        // Set the correct dbName
+        $criteria->setDbName(BateriasPeer::DATABASE_NAME);
+
+        if ($con === null) {
+            $con = Propel::getConnection(BateriasPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+        }
+
+        $criteria->addJoin(BateriasPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
+
+        $stmt = BasePeer::doCount($criteria, $con);
+
+        if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $count = (int) $row[0];
+        } else {
+            $count = 0; // no rows returned; we infer that means 0 matches.
+        }
+        $stmt->closeCursor();
+
+        return $count;
+    }
+
+    /**
+     * Selects a collection of Baterias objects pre-filled with all related objects.
+     *
+     * @param      Criteria  $criteria
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return array           Array of Baterias objects.
+     * @throws PropelException Any exceptions caught during processing will be
+     *		 rethrown wrapped into a PropelException.
+     */
+    public static function doSelectJoinAll(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $criteria = clone $criteria;
+
+        // Set the correct dbName if it has not been overridden
+        if ($criteria->getDbName() == Propel::getDefaultDB()) {
+            $criteria->setDbName(BateriasPeer::DATABASE_NAME);
+        }
+
+        BateriasPeer::addSelectColumns($criteria);
+        $startcol2 = BateriasPeer::NUM_HYDRATE_COLUMNS;
+
+        SucursalPeer::addSelectColumns($criteria);
+        $startcol3 = $startcol2 + SucursalPeer::NUM_HYDRATE_COLUMNS;
+
+        $criteria->addJoin(BateriasPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
+
+        $stmt = BasePeer::doSelect($criteria, $con);
+        $results = array();
+
+        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $key1 = BateriasPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = BateriasPeer::getInstanceFromPool($key1))) {
+                // We no longer rehydrate the object, since this can cause data loss.
+                // See http://www.propelorm.org/ticket/509
+                // $obj1->hydrate($row, 0, true); // rehydrate
+            } else {
+                $cls = BateriasPeer::getOMClass();
+
+                $obj1 = new $cls();
+                $obj1->hydrate($row);
+                BateriasPeer::addInstanceToPool($obj1, $key1);
+            } // if obj1 already loaded
+
+            // Add objects for joined Sucursal rows
+
+            $key2 = SucursalPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+            if ($key2 !== null) {
+                $obj2 = SucursalPeer::getInstanceFromPool($key2);
+                if (!$obj2) {
+
+                    $cls = SucursalPeer::getOMClass();
+
+                    $obj2 = new $cls();
+                    $obj2->hydrate($row, $startcol2);
+                    SucursalPeer::addInstanceToPool($obj2, $key2);
+                } // if obj2 loaded
+
+                // Add the $obj1 (Baterias) to the collection in $obj2 (Sucursal)
+                $obj2->addBaterias($obj1);
+            } // if joined row not null
+
+            $results[] = $obj1;
+        }
+        $stmt->closeCursor();
+
+        return $results;
+    }
+
     /**
      * Returns the TableMap related to this peer.
      * This method is not needed for general use but a specific application could have a need.
@@ -526,8 +821,8 @@ abstract class BaseBateriasPeer
             $criteria = $values->buildCriteria(); // build Criteria from Baterias object
         }
 
-        if ($criteria->containsKey(BateriasPeer::ID) && $criteria->keyContainsValue(BateriasPeer::ID) ) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key ('.BateriasPeer::ID.')');
+        if ($criteria->containsKey(BateriasPeer::IDBATERIAS) && $criteria->keyContainsValue(BateriasPeer::IDBATERIAS) ) {
+            throw new PropelException('Cannot insert a value for auto-increment primary key ('.BateriasPeer::IDBATERIAS.')');
         }
 
 
@@ -568,10 +863,10 @@ abstract class BaseBateriasPeer
         if ($values instanceof Criteria) {
             $criteria = clone $values; // rename for clarity
 
-            $comparison = $criteria->getComparison(BateriasPeer::ID);
-            $value = $criteria->remove(BateriasPeer::ID);
+            $comparison = $criteria->getComparison(BateriasPeer::IDBATERIAS);
+            $value = $criteria->remove(BateriasPeer::IDBATERIAS);
             if ($value) {
-                $selectCriteria->add(BateriasPeer::ID, $value, $comparison);
+                $selectCriteria->add(BateriasPeer::IDBATERIAS, $value, $comparison);
             } else {
                 $selectCriteria->setPrimaryTableName(BateriasPeer::TABLE_NAME);
             }
@@ -604,6 +899,7 @@ abstract class BaseBateriasPeer
             // use transaction because $criteria could contain info
             // for more than one table or we could emulating ON DELETE CASCADE, etc.
             $con->beginTransaction();
+            $affectedRows += BateriasPeer::doOnDeleteCascade(new Criteria(BateriasPeer::DATABASE_NAME), $con);
             $affectedRows += BasePeer::doDeleteAll(BateriasPeer::TABLE_NAME, $con, BateriasPeer::DATABASE_NAME);
             // Because this db requires some delete cascade/set null emulation, we have to
             // clear the cached instance *after* the emulation has happened (since
@@ -637,24 +933,14 @@ abstract class BaseBateriasPeer
         }
 
         if ($values instanceof Criteria) {
-            // invalidate the cache for all objects of this type, since we have no
-            // way of knowing (without running a query) what objects should be invalidated
-            // from the cache based on this Criteria.
-            BateriasPeer::clearInstancePool();
             // rename for clarity
             $criteria = clone $values;
         } elseif ($values instanceof Baterias) { // it's a model object
-            // invalidate the cache for this single object
-            BateriasPeer::removeInstanceFromPool($values);
             // create criteria based on pk values
             $criteria = $values->buildPkeyCriteria();
         } else { // it's a primary key, or an array of pks
             $criteria = new Criteria(BateriasPeer::DATABASE_NAME);
-            $criteria->add(BateriasPeer::ID, (array) $values, Criteria::IN);
-            // invalidate the cache for this object(s)
-            foreach ((array) $values as $singleval) {
-                BateriasPeer::removeInstanceFromPool($singleval);
-            }
+            $criteria->add(BateriasPeer::IDBATERIAS, (array) $values, Criteria::IN);
         }
 
         // Set the correct dbName
@@ -667,6 +953,23 @@ abstract class BaseBateriasPeer
             // for more than one table or we could emulating ON DELETE CASCADE, etc.
             $con->beginTransaction();
 
+            // cloning the Criteria in case it's modified by doSelect() or doSelectStmt()
+            $c = clone $criteria;
+            $affectedRows += BateriasPeer::doOnDeleteCascade($c, $con);
+
+            // Because this db requires some delete cascade/set null emulation, we have to
+            // clear the cached instance *after* the emulation has happened (since
+            // instances get re-added by the select statement contained therein).
+            if ($values instanceof Criteria) {
+                BateriasPeer::clearInstancePool();
+            } elseif ($values instanceof Baterias) { // it's a model object
+                BateriasPeer::removeInstanceFromPool($values);
+            } else { // it's a primary key, or an array of pks
+                foreach ((array) $values as $singleval) {
+                    BateriasPeer::removeInstanceFromPool($singleval);
+                }
+            }
+
             $affectedRows += BasePeer::doDelete($criteria, $con);
             BateriasPeer::clearRelatedInstancePool();
             $con->commit();
@@ -676,6 +979,57 @@ abstract class BaseBateriasPeer
             $con->rollBack();
             throw $e;
         }
+    }
+
+    /**
+     * This is a method for emulating ON DELETE CASCADE for DBs that don't support this
+     * feature (like MySQL or SQLite).
+     *
+     * This method is not very speedy because it must perform a query first to get
+     * the implicated records and then perform the deletes by calling those Peer classes.
+     *
+     * This method should be used within a transaction if possible.
+     *
+     * @param      Criteria $criteria
+     * @param      PropelPDO $con
+     * @return int The number of affected rows (if supported by underlying database driver).
+     */
+    protected static function doOnDeleteCascade(Criteria $criteria, PropelPDO $con)
+    {
+        // initialize var to track total num of affected rows
+        $affectedRows = 0;
+
+        // first find the objects that are implicated by the $criteria
+        $objects = BateriasPeer::doSelect($criteria, $con);
+        foreach ($objects as $obj) {
+
+
+            // delete related Deshabilitabt objects
+            $criteria = new Criteria(DeshabilitabtPeer::DATABASE_NAME);
+
+            $criteria->add(DeshabilitabtPeer::BT, $obj->getIdbaterias());
+            $affectedRows += DeshabilitabtPeer::doDelete($criteria, $con);
+
+            // delete related Limbo objects
+            $criteria = new Criteria(LimboPeer::DATABASE_NAME);
+
+            $criteria->add(LimboPeer::BT, $obj->getIdbaterias());
+            $affectedRows += LimboPeer::doDelete($criteria, $con);
+
+            // delete related UsoBateriasBodega objects
+            $criteria = new Criteria(UsoBateriasBodegaPeer::DATABASE_NAME);
+
+            $criteria->add(UsoBateriasBodegaPeer::BT, $obj->getIdbaterias());
+            $affectedRows += UsoBateriasBodegaPeer::doDelete($criteria, $con);
+
+            // delete related UsoBateriasMontacargas objects
+            $criteria = new Criteria(UsoBateriasMontacargasPeer::DATABASE_NAME);
+
+            $criteria->add(UsoBateriasMontacargasPeer::BT, $obj->getIdbaterias());
+            $affectedRows += UsoBateriasMontacargasPeer::doDelete($criteria, $con);
+        }
+
+        return $affectedRows;
     }
 
     /**
@@ -734,7 +1088,7 @@ abstract class BaseBateriasPeer
         }
 
         $criteria = new Criteria(BateriasPeer::DATABASE_NAME);
-        $criteria->add(BateriasPeer::ID, $pk);
+        $criteria->add(BateriasPeer::IDBATERIAS, $pk);
 
         $v = BateriasPeer::doSelect($criteria, $con);
 
@@ -761,7 +1115,7 @@ abstract class BaseBateriasPeer
             $objs = array();
         } else {
             $criteria = new Criteria(BateriasPeer::DATABASE_NAME);
-            $criteria->add(BateriasPeer::ID, $pks, Criteria::IN);
+            $criteria->add(BateriasPeer::IDBATERIAS, $pks, Criteria::IN);
             $objs = BateriasPeer::doSelect($criteria, $con);
         }
 

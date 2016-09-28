@@ -30,40 +30,99 @@ abstract class BaseMontacargas extends BaseObject implements Persistent
     protected $startCopy = false;
 
     /**
-     * The value for the id field.
+     * The value for the idmontacargas field.
      * @var        int
      */
-    protected $id;
+    protected $idmontacargas;
 
     /**
-     * The value for the nombre field.
-     * @var        string
-     */
-    protected $nombre;
-
-    /**
-     * The value for the modelo field.
-     * @var        string
-     */
-    protected $modelo;
-
-    /**
-     * The value for the tipo field.
-     * @var        string
-     */
-    protected $tipo;
-
-    /**
-     * The value for the ciclos_mant field.
+     * The value for the idsucursal field.
      * @var        int
      */
-    protected $ciclos_mant;
+    protected $idsucursal;
 
     /**
-     * The value for the ciclos_iniciales field.
+     * The value for the montacargas_modelo field.
+     * @var        string
+     */
+    protected $montacargas_modelo;
+
+    /**
+     * The value for the montacargas_marca field.
+     * @var        string
+     */
+    protected $montacargas_marca;
+
+    /**
+     * The value for the montacargas_c field.
+     * @var        string
+     */
+    protected $montacargas_c;
+
+    /**
+     * The value for the montacargas_k field.
+     * @var        string
+     */
+    protected $montacargas_k;
+
+    /**
+     * The value for the montacargas_p field.
+     * @var        string
+     */
+    protected $montacargas_p;
+
+    /**
+     * The value for the montacargas_t field.
+     * @var        string
+     */
+    protected $montacargas_t;
+
+    /**
+     * The value for the montacargas_e field.
+     * @var        string
+     */
+    protected $montacargas_e;
+
+    /**
+     * The value for the montacargas_volts field.
      * @var        int
      */
-    protected $ciclos_iniciales;
+    protected $montacargas_volts;
+
+    /**
+     * The value for the montacargas_amperaje field.
+     * @var        int
+     */
+    protected $montacargas_amperaje;
+
+    /**
+     * The value for the montacargas_nombre field.
+     * @var        string
+     */
+    protected $montacargas_nombre;
+
+    /**
+     * The value for the montacargas_numserie field.
+     * @var        string
+     */
+    protected $montacargas_numserie;
+
+    /**
+     * @var        Sucursal
+     */
+    protected $aSucursal;
+
+    /**
+     * @var        PropelObjectCollection|Deshabilitamc[] Collection to store aggregation of Deshabilitamc objects.
+     */
+    protected $collDeshabilitamcs;
+    protected $collDeshabilitamcsPartial;
+
+    /**
+     * @var        PropelObjectCollection|UsoBateriasMontacargas[] Collection to store aggregation of UsoBateriasMontacargas objects.
+     */
+    protected $collUsoBateriasMontacargass;
+    protected $collUsoBateriasMontacargassPartial;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -86,196 +145,436 @@ abstract class BaseMontacargas extends BaseObject implements Persistent
     protected $alreadyInClearAllReferencesDeep = false;
 
     /**
-     * Get the [id] column value.
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $deshabilitamcsScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $usoBateriasMontacargassScheduledForDeletion = null;
+
+    /**
+     * Get the [idmontacargas] column value.
      *
      * @return int
      */
-    public function getId()
+    public function getIdmontacargas()
     {
 
-        return $this->id;
+        return $this->idmontacargas;
     }
 
     /**
-     * Get the [nombre] column value.
-     *
-     * @return string
-     */
-    public function getNombre()
-    {
-
-        return $this->nombre;
-    }
-
-    /**
-     * Get the [modelo] column value.
-     *
-     * @return string
-     */
-    public function getModelo()
-    {
-
-        return $this->modelo;
-    }
-
-    /**
-     * Get the [tipo] column value.
-     *
-     * @return string
-     */
-    public function getTipo()
-    {
-
-        return $this->tipo;
-    }
-
-    /**
-     * Get the [ciclos_mant] column value.
+     * Get the [idsucursal] column value.
      *
      * @return int
      */
-    public function getCiclosMant()
+    public function getIdsucursal()
     {
 
-        return $this->ciclos_mant;
+        return $this->idsucursal;
     }
 
     /**
-     * Get the [ciclos_iniciales] column value.
+     * Get the [montacargas_modelo] column value.
+     *
+     * @return string
+     */
+    public function getMontacargasModelo()
+    {
+
+        return $this->montacargas_modelo;
+    }
+
+    /**
+     * Get the [montacargas_marca] column value.
+     *
+     * @return string
+     */
+    public function getMontacargasMarca()
+    {
+
+        return $this->montacargas_marca;
+    }
+
+    /**
+     * Get the [montacargas_c] column value.
+     *
+     * @return string
+     */
+    public function getMontacargasC()
+    {
+
+        return $this->montacargas_c;
+    }
+
+    /**
+     * Get the [montacargas_k] column value.
+     *
+     * @return string
+     */
+    public function getMontacargasK()
+    {
+
+        return $this->montacargas_k;
+    }
+
+    /**
+     * Get the [montacargas_p] column value.
+     *
+     * @return string
+     */
+    public function getMontacargasP()
+    {
+
+        return $this->montacargas_p;
+    }
+
+    /**
+     * Get the [montacargas_t] column value.
+     *
+     * @return string
+     */
+    public function getMontacargasT()
+    {
+
+        return $this->montacargas_t;
+    }
+
+    /**
+     * Get the [montacargas_e] column value.
+     *
+     * @return string
+     */
+    public function getMontacargasE()
+    {
+
+        return $this->montacargas_e;
+    }
+
+    /**
+     * Get the [montacargas_volts] column value.
      *
      * @return int
      */
-    public function getCiclosIniciales()
+    public function getMontacargasVolts()
     {
 
-        return $this->ciclos_iniciales;
+        return $this->montacargas_volts;
     }
 
     /**
-     * Set the value of [id] column.
+     * Get the [montacargas_amperaje] column value.
+     *
+     * @return int
+     */
+    public function getMontacargasAmperaje()
+    {
+
+        return $this->montacargas_amperaje;
+    }
+
+    /**
+     * Get the [montacargas_nombre] column value.
+     *
+     * @return string
+     */
+    public function getMontacargasNombre()
+    {
+
+        return $this->montacargas_nombre;
+    }
+
+    /**
+     * Get the [montacargas_numserie] column value.
+     *
+     * @return string
+     */
+    public function getMontacargasNumserie()
+    {
+
+        return $this->montacargas_numserie;
+    }
+
+    /**
+     * Set the value of [idmontacargas] column.
      *
      * @param  int $v new value
      * @return Montacargas The current object (for fluent API support)
      */
-    public function setId($v)
+    public function setIdmontacargas($v)
     {
         if ($v !== null && is_numeric($v)) {
             $v = (int) $v;
         }
 
-        if ($this->id !== $v) {
-            $this->id = $v;
-            $this->modifiedColumns[] = MontacargasPeer::ID;
+        if ($this->idmontacargas !== $v) {
+            $this->idmontacargas = $v;
+            $this->modifiedColumns[] = MontacargasPeer::IDMONTACARGAS;
         }
 
 
         return $this;
-    } // setId()
+    } // setIdmontacargas()
 
     /**
-     * Set the value of [nombre] column.
-     *
-     * @param  string $v new value
-     * @return Montacargas The current object (for fluent API support)
-     */
-    public function setNombre($v)
-    {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->nombre !== $v) {
-            $this->nombre = $v;
-            $this->modifiedColumns[] = MontacargasPeer::NOMBRE;
-        }
-
-
-        return $this;
-    } // setNombre()
-
-    /**
-     * Set the value of [modelo] column.
-     *
-     * @param  string $v new value
-     * @return Montacargas The current object (for fluent API support)
-     */
-    public function setModelo($v)
-    {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->modelo !== $v) {
-            $this->modelo = $v;
-            $this->modifiedColumns[] = MontacargasPeer::MODELO;
-        }
-
-
-        return $this;
-    } // setModelo()
-
-    /**
-     * Set the value of [tipo] column.
-     *
-     * @param  string $v new value
-     * @return Montacargas The current object (for fluent API support)
-     */
-    public function setTipo($v)
-    {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->tipo !== $v) {
-            $this->tipo = $v;
-            $this->modifiedColumns[] = MontacargasPeer::TIPO;
-        }
-
-
-        return $this;
-    } // setTipo()
-
-    /**
-     * Set the value of [ciclos_mant] column.
+     * Set the value of [idsucursal] column.
      *
      * @param  int $v new value
      * @return Montacargas The current object (for fluent API support)
      */
-    public function setCiclosMant($v)
+    public function setIdsucursal($v)
     {
         if ($v !== null && is_numeric($v)) {
             $v = (int) $v;
         }
 
-        if ($this->ciclos_mant !== $v) {
-            $this->ciclos_mant = $v;
-            $this->modifiedColumns[] = MontacargasPeer::CICLOS_MANT;
+        if ($this->idsucursal !== $v) {
+            $this->idsucursal = $v;
+            $this->modifiedColumns[] = MontacargasPeer::IDSUCURSAL;
+        }
+
+        if ($this->aSucursal !== null && $this->aSucursal->getIdsucursal() !== $v) {
+            $this->aSucursal = null;
         }
 
 
         return $this;
-    } // setCiclosMant()
+    } // setIdsucursal()
 
     /**
-     * Set the value of [ciclos_iniciales] column.
+     * Set the value of [montacargas_modelo] column.
+     *
+     * @param  string $v new value
+     * @return Montacargas The current object (for fluent API support)
+     */
+    public function setMontacargasModelo($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->montacargas_modelo !== $v) {
+            $this->montacargas_modelo = $v;
+            $this->modifiedColumns[] = MontacargasPeer::MONTACARGAS_MODELO;
+        }
+
+
+        return $this;
+    } // setMontacargasModelo()
+
+    /**
+     * Set the value of [montacargas_marca] column.
+     *
+     * @param  string $v new value
+     * @return Montacargas The current object (for fluent API support)
+     */
+    public function setMontacargasMarca($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->montacargas_marca !== $v) {
+            $this->montacargas_marca = $v;
+            $this->modifiedColumns[] = MontacargasPeer::MONTACARGAS_MARCA;
+        }
+
+
+        return $this;
+    } // setMontacargasMarca()
+
+    /**
+     * Set the value of [montacargas_c] column.
+     *
+     * @param  string $v new value
+     * @return Montacargas The current object (for fluent API support)
+     */
+    public function setMontacargasC($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->montacargas_c !== $v) {
+            $this->montacargas_c = $v;
+            $this->modifiedColumns[] = MontacargasPeer::MONTACARGAS_C;
+        }
+
+
+        return $this;
+    } // setMontacargasC()
+
+    /**
+     * Set the value of [montacargas_k] column.
+     *
+     * @param  string $v new value
+     * @return Montacargas The current object (for fluent API support)
+     */
+    public function setMontacargasK($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->montacargas_k !== $v) {
+            $this->montacargas_k = $v;
+            $this->modifiedColumns[] = MontacargasPeer::MONTACARGAS_K;
+        }
+
+
+        return $this;
+    } // setMontacargasK()
+
+    /**
+     * Set the value of [montacargas_p] column.
+     *
+     * @param  string $v new value
+     * @return Montacargas The current object (for fluent API support)
+     */
+    public function setMontacargasP($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->montacargas_p !== $v) {
+            $this->montacargas_p = $v;
+            $this->modifiedColumns[] = MontacargasPeer::MONTACARGAS_P;
+        }
+
+
+        return $this;
+    } // setMontacargasP()
+
+    /**
+     * Set the value of [montacargas_t] column.
+     *
+     * @param  string $v new value
+     * @return Montacargas The current object (for fluent API support)
+     */
+    public function setMontacargasT($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->montacargas_t !== $v) {
+            $this->montacargas_t = $v;
+            $this->modifiedColumns[] = MontacargasPeer::MONTACARGAS_T;
+        }
+
+
+        return $this;
+    } // setMontacargasT()
+
+    /**
+     * Set the value of [montacargas_e] column.
+     *
+     * @param  string $v new value
+     * @return Montacargas The current object (for fluent API support)
+     */
+    public function setMontacargasE($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->montacargas_e !== $v) {
+            $this->montacargas_e = $v;
+            $this->modifiedColumns[] = MontacargasPeer::MONTACARGAS_E;
+        }
+
+
+        return $this;
+    } // setMontacargasE()
+
+    /**
+     * Set the value of [montacargas_volts] column.
      *
      * @param  int $v new value
      * @return Montacargas The current object (for fluent API support)
      */
-    public function setCiclosIniciales($v)
+    public function setMontacargasVolts($v)
     {
         if ($v !== null && is_numeric($v)) {
             $v = (int) $v;
         }
 
-        if ($this->ciclos_iniciales !== $v) {
-            $this->ciclos_iniciales = $v;
-            $this->modifiedColumns[] = MontacargasPeer::CICLOS_INICIALES;
+        if ($this->montacargas_volts !== $v) {
+            $this->montacargas_volts = $v;
+            $this->modifiedColumns[] = MontacargasPeer::MONTACARGAS_VOLTS;
         }
 
 
         return $this;
-    } // setCiclosIniciales()
+    } // setMontacargasVolts()
+
+    /**
+     * Set the value of [montacargas_amperaje] column.
+     *
+     * @param  int $v new value
+     * @return Montacargas The current object (for fluent API support)
+     */
+    public function setMontacargasAmperaje($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (int) $v;
+        }
+
+        if ($this->montacargas_amperaje !== $v) {
+            $this->montacargas_amperaje = $v;
+            $this->modifiedColumns[] = MontacargasPeer::MONTACARGAS_AMPERAJE;
+        }
+
+
+        return $this;
+    } // setMontacargasAmperaje()
+
+    /**
+     * Set the value of [montacargas_nombre] column.
+     *
+     * @param  string $v new value
+     * @return Montacargas The current object (for fluent API support)
+     */
+    public function setMontacargasNombre($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->montacargas_nombre !== $v) {
+            $this->montacargas_nombre = $v;
+            $this->modifiedColumns[] = MontacargasPeer::MONTACARGAS_NOMBRE;
+        }
+
+
+        return $this;
+    } // setMontacargasNombre()
+
+    /**
+     * Set the value of [montacargas_numserie] column.
+     *
+     * @param  string $v new value
+     * @return Montacargas The current object (for fluent API support)
+     */
+    public function setMontacargasNumserie($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->montacargas_numserie !== $v) {
+            $this->montacargas_numserie = $v;
+            $this->modifiedColumns[] = MontacargasPeer::MONTACARGAS_NUMSERIE;
+        }
+
+
+        return $this;
+    } // setMontacargasNumserie()
 
     /**
      * Indicates whether the columns in this object are only set to default values.
@@ -309,12 +608,19 @@ abstract class BaseMontacargas extends BaseObject implements Persistent
     {
         try {
 
-            $this->id = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
-            $this->nombre = ($row[$startcol + 1] !== null) ? (string) $row[$startcol + 1] : null;
-            $this->modelo = ($row[$startcol + 2] !== null) ? (string) $row[$startcol + 2] : null;
-            $this->tipo = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
-            $this->ciclos_mant = ($row[$startcol + 4] !== null) ? (int) $row[$startcol + 4] : null;
-            $this->ciclos_iniciales = ($row[$startcol + 5] !== null) ? (int) $row[$startcol + 5] : null;
+            $this->idmontacargas = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
+            $this->idsucursal = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
+            $this->montacargas_modelo = ($row[$startcol + 2] !== null) ? (string) $row[$startcol + 2] : null;
+            $this->montacargas_marca = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
+            $this->montacargas_c = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
+            $this->montacargas_k = ($row[$startcol + 5] !== null) ? (string) $row[$startcol + 5] : null;
+            $this->montacargas_p = ($row[$startcol + 6] !== null) ? (string) $row[$startcol + 6] : null;
+            $this->montacargas_t = ($row[$startcol + 7] !== null) ? (string) $row[$startcol + 7] : null;
+            $this->montacargas_e = ($row[$startcol + 8] !== null) ? (string) $row[$startcol + 8] : null;
+            $this->montacargas_volts = ($row[$startcol + 9] !== null) ? (int) $row[$startcol + 9] : null;
+            $this->montacargas_amperaje = ($row[$startcol + 10] !== null) ? (int) $row[$startcol + 10] : null;
+            $this->montacargas_nombre = ($row[$startcol + 11] !== null) ? (string) $row[$startcol + 11] : null;
+            $this->montacargas_numserie = ($row[$startcol + 12] !== null) ? (string) $row[$startcol + 12] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -324,7 +630,7 @@ abstract class BaseMontacargas extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 6; // 6 = MontacargasPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 13; // 13 = MontacargasPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Montacargas object", $e);
@@ -347,6 +653,9 @@ abstract class BaseMontacargas extends BaseObject implements Persistent
     public function ensureConsistency()
     {
 
+        if ($this->aSucursal !== null && $this->idsucursal !== $this->aSucursal->getIdsucursal()) {
+            $this->aSucursal = null;
+        }
     } // ensureConsistency
 
     /**
@@ -385,6 +694,11 @@ abstract class BaseMontacargas extends BaseObject implements Persistent
         $this->hydrate($row, 0, true); // rehydrate
 
         if ($deep) {  // also de-associate any related objects?
+
+            $this->aSucursal = null;
+            $this->collDeshabilitamcs = null;
+
+            $this->collUsoBateriasMontacargass = null;
 
         } // if (deep)
     }
@@ -499,6 +813,18 @@ abstract class BaseMontacargas extends BaseObject implements Persistent
         if (!$this->alreadyInSave) {
             $this->alreadyInSave = true;
 
+            // We call the save method on the following object(s) if they
+            // were passed to this object by their corresponding set
+            // method.  This object relates to these object(s) by a
+            // foreign key reference.
+
+            if ($this->aSucursal !== null) {
+                if ($this->aSucursal->isModified() || $this->aSucursal->isNew()) {
+                    $affectedRows += $this->aSucursal->save($con);
+                }
+                $this->setSucursal($this->aSucursal);
+            }
+
             if ($this->isNew() || $this->isModified()) {
                 // persist changes
                 if ($this->isNew()) {
@@ -508,6 +834,40 @@ abstract class BaseMontacargas extends BaseObject implements Persistent
                 }
                 $affectedRows += 1;
                 $this->resetModified();
+            }
+
+            if ($this->deshabilitamcsScheduledForDeletion !== null) {
+                if (!$this->deshabilitamcsScheduledForDeletion->isEmpty()) {
+                    DeshabilitamcQuery::create()
+                        ->filterByPrimaryKeys($this->deshabilitamcsScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->deshabilitamcsScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collDeshabilitamcs !== null) {
+                foreach ($this->collDeshabilitamcs as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->usoBateriasMontacargassScheduledForDeletion !== null) {
+                if (!$this->usoBateriasMontacargassScheduledForDeletion->isEmpty()) {
+                    UsoBateriasMontacargasQuery::create()
+                        ->filterByPrimaryKeys($this->usoBateriasMontacargassScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->usoBateriasMontacargassScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collUsoBateriasMontacargass !== null) {
+                foreach ($this->collUsoBateriasMontacargass as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
             }
 
             $this->alreadyInSave = false;
@@ -530,29 +890,50 @@ abstract class BaseMontacargas extends BaseObject implements Persistent
         $modifiedColumns = array();
         $index = 0;
 
-        $this->modifiedColumns[] = MontacargasPeer::ID;
-        if (null !== $this->id) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key (' . MontacargasPeer::ID . ')');
+        $this->modifiedColumns[] = MontacargasPeer::IDMONTACARGAS;
+        if (null !== $this->idmontacargas) {
+            throw new PropelException('Cannot insert a value for auto-increment primary key (' . MontacargasPeer::IDMONTACARGAS . ')');
         }
 
          // check the columns in natural order for more readable SQL queries
-        if ($this->isColumnModified(MontacargasPeer::ID)) {
-            $modifiedColumns[':p' . $index++]  = '`id`';
+        if ($this->isColumnModified(MontacargasPeer::IDMONTACARGAS)) {
+            $modifiedColumns[':p' . $index++]  = '`idmontacargas`';
         }
-        if ($this->isColumnModified(MontacargasPeer::NOMBRE)) {
-            $modifiedColumns[':p' . $index++]  = '`nombre`';
+        if ($this->isColumnModified(MontacargasPeer::IDSUCURSAL)) {
+            $modifiedColumns[':p' . $index++]  = '`idsucursal`';
         }
-        if ($this->isColumnModified(MontacargasPeer::MODELO)) {
-            $modifiedColumns[':p' . $index++]  = '`modelo`';
+        if ($this->isColumnModified(MontacargasPeer::MONTACARGAS_MODELO)) {
+            $modifiedColumns[':p' . $index++]  = '`montacargas_modelo`';
         }
-        if ($this->isColumnModified(MontacargasPeer::TIPO)) {
-            $modifiedColumns[':p' . $index++]  = '`tipo`';
+        if ($this->isColumnModified(MontacargasPeer::MONTACARGAS_MARCA)) {
+            $modifiedColumns[':p' . $index++]  = '`montacargas_marca`';
         }
-        if ($this->isColumnModified(MontacargasPeer::CICLOS_MANT)) {
-            $modifiedColumns[':p' . $index++]  = '`ciclos_mant`';
+        if ($this->isColumnModified(MontacargasPeer::MONTACARGAS_C)) {
+            $modifiedColumns[':p' . $index++]  = '`montacargas_c`';
         }
-        if ($this->isColumnModified(MontacargasPeer::CICLOS_INICIALES)) {
-            $modifiedColumns[':p' . $index++]  = '`ciclos_iniciales`';
+        if ($this->isColumnModified(MontacargasPeer::MONTACARGAS_K)) {
+            $modifiedColumns[':p' . $index++]  = '`montacargas_k`';
+        }
+        if ($this->isColumnModified(MontacargasPeer::MONTACARGAS_P)) {
+            $modifiedColumns[':p' . $index++]  = '`montacargas_p`';
+        }
+        if ($this->isColumnModified(MontacargasPeer::MONTACARGAS_T)) {
+            $modifiedColumns[':p' . $index++]  = '`montacargas_t`';
+        }
+        if ($this->isColumnModified(MontacargasPeer::MONTACARGAS_E)) {
+            $modifiedColumns[':p' . $index++]  = '`montacargas_e`';
+        }
+        if ($this->isColumnModified(MontacargasPeer::MONTACARGAS_VOLTS)) {
+            $modifiedColumns[':p' . $index++]  = '`montacargas_volts`';
+        }
+        if ($this->isColumnModified(MontacargasPeer::MONTACARGAS_AMPERAJE)) {
+            $modifiedColumns[':p' . $index++]  = '`montacargas_amperaje`';
+        }
+        if ($this->isColumnModified(MontacargasPeer::MONTACARGAS_NOMBRE)) {
+            $modifiedColumns[':p' . $index++]  = '`montacargas_nombre`';
+        }
+        if ($this->isColumnModified(MontacargasPeer::MONTACARGAS_NUMSERIE)) {
+            $modifiedColumns[':p' . $index++]  = '`montacargas_numserie`';
         }
 
         $sql = sprintf(
@@ -565,23 +946,44 @@ abstract class BaseMontacargas extends BaseObject implements Persistent
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case '`id`':
-                        $stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
+                    case '`idmontacargas`':
+                        $stmt->bindValue($identifier, $this->idmontacargas, PDO::PARAM_INT);
                         break;
-                    case '`nombre`':
-                        $stmt->bindValue($identifier, $this->nombre, PDO::PARAM_STR);
+                    case '`idsucursal`':
+                        $stmt->bindValue($identifier, $this->idsucursal, PDO::PARAM_INT);
                         break;
-                    case '`modelo`':
-                        $stmt->bindValue($identifier, $this->modelo, PDO::PARAM_STR);
+                    case '`montacargas_modelo`':
+                        $stmt->bindValue($identifier, $this->montacargas_modelo, PDO::PARAM_STR);
                         break;
-                    case '`tipo`':
-                        $stmt->bindValue($identifier, $this->tipo, PDO::PARAM_STR);
+                    case '`montacargas_marca`':
+                        $stmt->bindValue($identifier, $this->montacargas_marca, PDO::PARAM_STR);
                         break;
-                    case '`ciclos_mant`':
-                        $stmt->bindValue($identifier, $this->ciclos_mant, PDO::PARAM_INT);
+                    case '`montacargas_c`':
+                        $stmt->bindValue($identifier, $this->montacargas_c, PDO::PARAM_STR);
                         break;
-                    case '`ciclos_iniciales`':
-                        $stmt->bindValue($identifier, $this->ciclos_iniciales, PDO::PARAM_INT);
+                    case '`montacargas_k`':
+                        $stmt->bindValue($identifier, $this->montacargas_k, PDO::PARAM_STR);
+                        break;
+                    case '`montacargas_p`':
+                        $stmt->bindValue($identifier, $this->montacargas_p, PDO::PARAM_STR);
+                        break;
+                    case '`montacargas_t`':
+                        $stmt->bindValue($identifier, $this->montacargas_t, PDO::PARAM_STR);
+                        break;
+                    case '`montacargas_e`':
+                        $stmt->bindValue($identifier, $this->montacargas_e, PDO::PARAM_STR);
+                        break;
+                    case '`montacargas_volts`':
+                        $stmt->bindValue($identifier, $this->montacargas_volts, PDO::PARAM_INT);
+                        break;
+                    case '`montacargas_amperaje`':
+                        $stmt->bindValue($identifier, $this->montacargas_amperaje, PDO::PARAM_INT);
+                        break;
+                    case '`montacargas_nombre`':
+                        $stmt->bindValue($identifier, $this->montacargas_nombre, PDO::PARAM_STR);
+                        break;
+                    case '`montacargas_numserie`':
+                        $stmt->bindValue($identifier, $this->montacargas_numserie, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -596,7 +998,7 @@ abstract class BaseMontacargas extends BaseObject implements Persistent
         } catch (Exception $e) {
             throw new PropelException('Unable to get autoincrement id.', $e);
         }
-        $this->setId($pk);
+        $this->setIdmontacargas($pk);
 
         $this->setNew(false);
     }
@@ -677,10 +1079,38 @@ abstract class BaseMontacargas extends BaseObject implements Persistent
             $failureMap = array();
 
 
+            // We call the validate method on the following object(s) if they
+            // were passed to this object by their corresponding set
+            // method.  This object relates to these object(s) by a
+            // foreign key reference.
+
+            if ($this->aSucursal !== null) {
+                if (!$this->aSucursal->validate($columns)) {
+                    $failureMap = array_merge($failureMap, $this->aSucursal->getValidationFailures());
+                }
+            }
+
+
             if (($retval = MontacargasPeer::doValidate($this, $columns)) !== true) {
                 $failureMap = array_merge($failureMap, $retval);
             }
 
+
+                if ($this->collDeshabilitamcs !== null) {
+                    foreach ($this->collDeshabilitamcs as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
+                if ($this->collUsoBateriasMontacargass !== null) {
+                    foreach ($this->collUsoBateriasMontacargass as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
 
 
             $this->alreadyInValidation = false;
@@ -718,22 +1148,43 @@ abstract class BaseMontacargas extends BaseObject implements Persistent
     {
         switch ($pos) {
             case 0:
-                return $this->getId();
+                return $this->getIdmontacargas();
                 break;
             case 1:
-                return $this->getNombre();
+                return $this->getIdsucursal();
                 break;
             case 2:
-                return $this->getModelo();
+                return $this->getMontacargasModelo();
                 break;
             case 3:
-                return $this->getTipo();
+                return $this->getMontacargasMarca();
                 break;
             case 4:
-                return $this->getCiclosMant();
+                return $this->getMontacargasC();
                 break;
             case 5:
-                return $this->getCiclosIniciales();
+                return $this->getMontacargasK();
+                break;
+            case 6:
+                return $this->getMontacargasP();
+                break;
+            case 7:
+                return $this->getMontacargasT();
+                break;
+            case 8:
+                return $this->getMontacargasE();
+                break;
+            case 9:
+                return $this->getMontacargasVolts();
+                break;
+            case 10:
+                return $this->getMontacargasAmperaje();
+                break;
+            case 11:
+                return $this->getMontacargasNombre();
+                break;
+            case 12:
+                return $this->getMontacargasNumserie();
                 break;
             default:
                 return null;
@@ -752,10 +1203,11 @@ abstract class BaseMontacargas extends BaseObject implements Persistent
      *                    Defaults to BasePeer::TYPE_PHPNAME.
      * @param     boolean $includeLazyLoadColumns (optional) Whether to include lazy loaded columns. Defaults to true.
      * @param     array $alreadyDumpedObjects List of objects to skip to avoid recursion
+     * @param     boolean $includeForeignObjects (optional) Whether to include hydrated related objects. Default to FALSE.
      *
      * @return array an associative array containing the field names (as keys) and field values
      */
-    public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array())
+    public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array(), $includeForeignObjects = false)
     {
         if (isset($alreadyDumpedObjects['Montacargas'][$this->getPrimaryKey()])) {
             return '*RECURSION*';
@@ -763,18 +1215,36 @@ abstract class BaseMontacargas extends BaseObject implements Persistent
         $alreadyDumpedObjects['Montacargas'][$this->getPrimaryKey()] = true;
         $keys = MontacargasPeer::getFieldNames($keyType);
         $result = array(
-            $keys[0] => $this->getId(),
-            $keys[1] => $this->getNombre(),
-            $keys[2] => $this->getModelo(),
-            $keys[3] => $this->getTipo(),
-            $keys[4] => $this->getCiclosMant(),
-            $keys[5] => $this->getCiclosIniciales(),
+            $keys[0] => $this->getIdmontacargas(),
+            $keys[1] => $this->getIdsucursal(),
+            $keys[2] => $this->getMontacargasModelo(),
+            $keys[3] => $this->getMontacargasMarca(),
+            $keys[4] => $this->getMontacargasC(),
+            $keys[5] => $this->getMontacargasK(),
+            $keys[6] => $this->getMontacargasP(),
+            $keys[7] => $this->getMontacargasT(),
+            $keys[8] => $this->getMontacargasE(),
+            $keys[9] => $this->getMontacargasVolts(),
+            $keys[10] => $this->getMontacargasAmperaje(),
+            $keys[11] => $this->getMontacargasNombre(),
+            $keys[12] => $this->getMontacargasNumserie(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
             $result[$key] = $virtualColumn;
         }
 
+        if ($includeForeignObjects) {
+            if (null !== $this->aSucursal) {
+                $result['Sucursal'] = $this->aSucursal->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->collDeshabilitamcs) {
+                $result['Deshabilitamcs'] = $this->collDeshabilitamcs->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collUsoBateriasMontacargass) {
+                $result['UsoBateriasMontacargass'] = $this->collUsoBateriasMontacargass->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+        }
 
         return $result;
     }
@@ -809,22 +1279,43 @@ abstract class BaseMontacargas extends BaseObject implements Persistent
     {
         switch ($pos) {
             case 0:
-                $this->setId($value);
+                $this->setIdmontacargas($value);
                 break;
             case 1:
-                $this->setNombre($value);
+                $this->setIdsucursal($value);
                 break;
             case 2:
-                $this->setModelo($value);
+                $this->setMontacargasModelo($value);
                 break;
             case 3:
-                $this->setTipo($value);
+                $this->setMontacargasMarca($value);
                 break;
             case 4:
-                $this->setCiclosMant($value);
+                $this->setMontacargasC($value);
                 break;
             case 5:
-                $this->setCiclosIniciales($value);
+                $this->setMontacargasK($value);
+                break;
+            case 6:
+                $this->setMontacargasP($value);
+                break;
+            case 7:
+                $this->setMontacargasT($value);
+                break;
+            case 8:
+                $this->setMontacargasE($value);
+                break;
+            case 9:
+                $this->setMontacargasVolts($value);
+                break;
+            case 10:
+                $this->setMontacargasAmperaje($value);
+                break;
+            case 11:
+                $this->setMontacargasNombre($value);
+                break;
+            case 12:
+                $this->setMontacargasNumserie($value);
                 break;
         } // switch()
     }
@@ -850,12 +1341,19 @@ abstract class BaseMontacargas extends BaseObject implements Persistent
     {
         $keys = MontacargasPeer::getFieldNames($keyType);
 
-        if (array_key_exists($keys[0], $arr)) $this->setId($arr[$keys[0]]);
-        if (array_key_exists($keys[1], $arr)) $this->setNombre($arr[$keys[1]]);
-        if (array_key_exists($keys[2], $arr)) $this->setModelo($arr[$keys[2]]);
-        if (array_key_exists($keys[3], $arr)) $this->setTipo($arr[$keys[3]]);
-        if (array_key_exists($keys[4], $arr)) $this->setCiclosMant($arr[$keys[4]]);
-        if (array_key_exists($keys[5], $arr)) $this->setCiclosIniciales($arr[$keys[5]]);
+        if (array_key_exists($keys[0], $arr)) $this->setIdmontacargas($arr[$keys[0]]);
+        if (array_key_exists($keys[1], $arr)) $this->setIdsucursal($arr[$keys[1]]);
+        if (array_key_exists($keys[2], $arr)) $this->setMontacargasModelo($arr[$keys[2]]);
+        if (array_key_exists($keys[3], $arr)) $this->setMontacargasMarca($arr[$keys[3]]);
+        if (array_key_exists($keys[4], $arr)) $this->setMontacargasC($arr[$keys[4]]);
+        if (array_key_exists($keys[5], $arr)) $this->setMontacargasK($arr[$keys[5]]);
+        if (array_key_exists($keys[6], $arr)) $this->setMontacargasP($arr[$keys[6]]);
+        if (array_key_exists($keys[7], $arr)) $this->setMontacargasT($arr[$keys[7]]);
+        if (array_key_exists($keys[8], $arr)) $this->setMontacargasE($arr[$keys[8]]);
+        if (array_key_exists($keys[9], $arr)) $this->setMontacargasVolts($arr[$keys[9]]);
+        if (array_key_exists($keys[10], $arr)) $this->setMontacargasAmperaje($arr[$keys[10]]);
+        if (array_key_exists($keys[11], $arr)) $this->setMontacargasNombre($arr[$keys[11]]);
+        if (array_key_exists($keys[12], $arr)) $this->setMontacargasNumserie($arr[$keys[12]]);
     }
 
     /**
@@ -867,12 +1365,19 @@ abstract class BaseMontacargas extends BaseObject implements Persistent
     {
         $criteria = new Criteria(MontacargasPeer::DATABASE_NAME);
 
-        if ($this->isColumnModified(MontacargasPeer::ID)) $criteria->add(MontacargasPeer::ID, $this->id);
-        if ($this->isColumnModified(MontacargasPeer::NOMBRE)) $criteria->add(MontacargasPeer::NOMBRE, $this->nombre);
-        if ($this->isColumnModified(MontacargasPeer::MODELO)) $criteria->add(MontacargasPeer::MODELO, $this->modelo);
-        if ($this->isColumnModified(MontacargasPeer::TIPO)) $criteria->add(MontacargasPeer::TIPO, $this->tipo);
-        if ($this->isColumnModified(MontacargasPeer::CICLOS_MANT)) $criteria->add(MontacargasPeer::CICLOS_MANT, $this->ciclos_mant);
-        if ($this->isColumnModified(MontacargasPeer::CICLOS_INICIALES)) $criteria->add(MontacargasPeer::CICLOS_INICIALES, $this->ciclos_iniciales);
+        if ($this->isColumnModified(MontacargasPeer::IDMONTACARGAS)) $criteria->add(MontacargasPeer::IDMONTACARGAS, $this->idmontacargas);
+        if ($this->isColumnModified(MontacargasPeer::IDSUCURSAL)) $criteria->add(MontacargasPeer::IDSUCURSAL, $this->idsucursal);
+        if ($this->isColumnModified(MontacargasPeer::MONTACARGAS_MODELO)) $criteria->add(MontacargasPeer::MONTACARGAS_MODELO, $this->montacargas_modelo);
+        if ($this->isColumnModified(MontacargasPeer::MONTACARGAS_MARCA)) $criteria->add(MontacargasPeer::MONTACARGAS_MARCA, $this->montacargas_marca);
+        if ($this->isColumnModified(MontacargasPeer::MONTACARGAS_C)) $criteria->add(MontacargasPeer::MONTACARGAS_C, $this->montacargas_c);
+        if ($this->isColumnModified(MontacargasPeer::MONTACARGAS_K)) $criteria->add(MontacargasPeer::MONTACARGAS_K, $this->montacargas_k);
+        if ($this->isColumnModified(MontacargasPeer::MONTACARGAS_P)) $criteria->add(MontacargasPeer::MONTACARGAS_P, $this->montacargas_p);
+        if ($this->isColumnModified(MontacargasPeer::MONTACARGAS_T)) $criteria->add(MontacargasPeer::MONTACARGAS_T, $this->montacargas_t);
+        if ($this->isColumnModified(MontacargasPeer::MONTACARGAS_E)) $criteria->add(MontacargasPeer::MONTACARGAS_E, $this->montacargas_e);
+        if ($this->isColumnModified(MontacargasPeer::MONTACARGAS_VOLTS)) $criteria->add(MontacargasPeer::MONTACARGAS_VOLTS, $this->montacargas_volts);
+        if ($this->isColumnModified(MontacargasPeer::MONTACARGAS_AMPERAJE)) $criteria->add(MontacargasPeer::MONTACARGAS_AMPERAJE, $this->montacargas_amperaje);
+        if ($this->isColumnModified(MontacargasPeer::MONTACARGAS_NOMBRE)) $criteria->add(MontacargasPeer::MONTACARGAS_NOMBRE, $this->montacargas_nombre);
+        if ($this->isColumnModified(MontacargasPeer::MONTACARGAS_NUMSERIE)) $criteria->add(MontacargasPeer::MONTACARGAS_NUMSERIE, $this->montacargas_numserie);
 
         return $criteria;
     }
@@ -888,7 +1393,7 @@ abstract class BaseMontacargas extends BaseObject implements Persistent
     public function buildPkeyCriteria()
     {
         $criteria = new Criteria(MontacargasPeer::DATABASE_NAME);
-        $criteria->add(MontacargasPeer::ID, $this->id);
+        $criteria->add(MontacargasPeer::IDMONTACARGAS, $this->idmontacargas);
 
         return $criteria;
     }
@@ -899,18 +1404,18 @@ abstract class BaseMontacargas extends BaseObject implements Persistent
      */
     public function getPrimaryKey()
     {
-        return $this->getId();
+        return $this->getIdmontacargas();
     }
 
     /**
-     * Generic method to set the primary key (id column).
+     * Generic method to set the primary key (idmontacargas column).
      *
      * @param  int $key Primary key.
      * @return void
      */
     public function setPrimaryKey($key)
     {
-        $this->setId($key);
+        $this->setIdmontacargas($key);
     }
 
     /**
@@ -920,7 +1425,7 @@ abstract class BaseMontacargas extends BaseObject implements Persistent
     public function isPrimaryKeyNull()
     {
 
-        return null === $this->getId();
+        return null === $this->getIdmontacargas();
     }
 
     /**
@@ -936,14 +1441,45 @@ abstract class BaseMontacargas extends BaseObject implements Persistent
      */
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
-        $copyObj->setNombre($this->getNombre());
-        $copyObj->setModelo($this->getModelo());
-        $copyObj->setTipo($this->getTipo());
-        $copyObj->setCiclosMant($this->getCiclosMant());
-        $copyObj->setCiclosIniciales($this->getCiclosIniciales());
+        $copyObj->setIdsucursal($this->getIdsucursal());
+        $copyObj->setMontacargasModelo($this->getMontacargasModelo());
+        $copyObj->setMontacargasMarca($this->getMontacargasMarca());
+        $copyObj->setMontacargasC($this->getMontacargasC());
+        $copyObj->setMontacargasK($this->getMontacargasK());
+        $copyObj->setMontacargasP($this->getMontacargasP());
+        $copyObj->setMontacargasT($this->getMontacargasT());
+        $copyObj->setMontacargasE($this->getMontacargasE());
+        $copyObj->setMontacargasVolts($this->getMontacargasVolts());
+        $copyObj->setMontacargasAmperaje($this->getMontacargasAmperaje());
+        $copyObj->setMontacargasNombre($this->getMontacargasNombre());
+        $copyObj->setMontacargasNumserie($this->getMontacargasNumserie());
+
+        if ($deepCopy && !$this->startCopy) {
+            // important: temporarily setNew(false) because this affects the behavior of
+            // the getter/setter methods for fkey referrer objects.
+            $copyObj->setNew(false);
+            // store object hash to prevent cycle
+            $this->startCopy = true;
+
+            foreach ($this->getDeshabilitamcs() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addDeshabilitamc($relObj->copy($deepCopy));
+                }
+            }
+
+            foreach ($this->getUsoBateriasMontacargass() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addUsoBateriasMontacargas($relObj->copy($deepCopy));
+                }
+            }
+
+            //unflag object copy
+            $this->startCopy = false;
+        } // if ($deepCopy)
+
         if ($makeNew) {
             $copyObj->setNew(true);
-            $copyObj->setId(NULL); // this is a auto-increment column, so set to default value
+            $copyObj->setIdmontacargas(NULL); // this is a auto-increment column, so set to default value
         }
     }
 
@@ -988,16 +1524,669 @@ abstract class BaseMontacargas extends BaseObject implements Persistent
     }
 
     /**
+     * Declares an association between this object and a Sucursal object.
+     *
+     * @param                  Sucursal $v
+     * @return Montacargas The current object (for fluent API support)
+     * @throws PropelException
+     */
+    public function setSucursal(Sucursal $v = null)
+    {
+        if ($v === null) {
+            $this->setIdsucursal(NULL);
+        } else {
+            $this->setIdsucursal($v->getIdsucursal());
+        }
+
+        $this->aSucursal = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the Sucursal object, it will not be re-added.
+        if ($v !== null) {
+            $v->addMontacargas($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated Sucursal object
+     *
+     * @param PropelPDO $con Optional Connection object.
+     * @param $doQuery Executes a query to get the object if required
+     * @return Sucursal The associated Sucursal object.
+     * @throws PropelException
+     */
+    public function getSucursal(PropelPDO $con = null, $doQuery = true)
+    {
+        if ($this->aSucursal === null && ($this->idsucursal !== null) && $doQuery) {
+            $this->aSucursal = SucursalQuery::create()->findPk($this->idsucursal, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aSucursal->addMontacargass($this);
+             */
+        }
+
+        return $this->aSucursal;
+    }
+
+
+    /**
+     * Initializes a collection based on the name of a relation.
+     * Avoids crafting an 'init[$relationName]s' method name
+     * that wouldn't work when StandardEnglishPluralizer is used.
+     *
+     * @param string $relationName The name of the relation to initialize
+     * @return void
+     */
+    public function initRelation($relationName)
+    {
+        if ('Deshabilitamc' == $relationName) {
+            $this->initDeshabilitamcs();
+        }
+        if ('UsoBateriasMontacargas' == $relationName) {
+            $this->initUsoBateriasMontacargass();
+        }
+    }
+
+    /**
+     * Clears out the collDeshabilitamcs collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Montacargas The current object (for fluent API support)
+     * @see        addDeshabilitamcs()
+     */
+    public function clearDeshabilitamcs()
+    {
+        $this->collDeshabilitamcs = null; // important to set this to null since that means it is uninitialized
+        $this->collDeshabilitamcsPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collDeshabilitamcs collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialDeshabilitamcs($v = true)
+    {
+        $this->collDeshabilitamcsPartial = $v;
+    }
+
+    /**
+     * Initializes the collDeshabilitamcs collection.
+     *
+     * By default this just sets the collDeshabilitamcs collection to an empty array (like clearcollDeshabilitamcs());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initDeshabilitamcs($overrideExisting = true)
+    {
+        if (null !== $this->collDeshabilitamcs && !$overrideExisting) {
+            return;
+        }
+        $this->collDeshabilitamcs = new PropelObjectCollection();
+        $this->collDeshabilitamcs->setModel('Deshabilitamc');
+    }
+
+    /**
+     * Gets an array of Deshabilitamc objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Montacargas is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|Deshabilitamc[] List of Deshabilitamc objects
+     * @throws PropelException
+     */
+    public function getDeshabilitamcs($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collDeshabilitamcsPartial && !$this->isNew();
+        if (null === $this->collDeshabilitamcs || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collDeshabilitamcs) {
+                // return empty collection
+                $this->initDeshabilitamcs();
+            } else {
+                $collDeshabilitamcs = DeshabilitamcQuery::create(null, $criteria)
+                    ->filterByMontacargas($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collDeshabilitamcsPartial && count($collDeshabilitamcs)) {
+                      $this->initDeshabilitamcs(false);
+
+                      foreach ($collDeshabilitamcs as $obj) {
+                        if (false == $this->collDeshabilitamcs->contains($obj)) {
+                          $this->collDeshabilitamcs->append($obj);
+                        }
+                      }
+
+                      $this->collDeshabilitamcsPartial = true;
+                    }
+
+                    $collDeshabilitamcs->getInternalIterator()->rewind();
+
+                    return $collDeshabilitamcs;
+                }
+
+                if ($partial && $this->collDeshabilitamcs) {
+                    foreach ($this->collDeshabilitamcs as $obj) {
+                        if ($obj->isNew()) {
+                            $collDeshabilitamcs[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collDeshabilitamcs = $collDeshabilitamcs;
+                $this->collDeshabilitamcsPartial = false;
+            }
+        }
+
+        return $this->collDeshabilitamcs;
+    }
+
+    /**
+     * Sets a collection of Deshabilitamc objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $deshabilitamcs A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Montacargas The current object (for fluent API support)
+     */
+    public function setDeshabilitamcs(PropelCollection $deshabilitamcs, PropelPDO $con = null)
+    {
+        $deshabilitamcsToDelete = $this->getDeshabilitamcs(new Criteria(), $con)->diff($deshabilitamcs);
+
+
+        $this->deshabilitamcsScheduledForDeletion = $deshabilitamcsToDelete;
+
+        foreach ($deshabilitamcsToDelete as $deshabilitamcRemoved) {
+            $deshabilitamcRemoved->setMontacargas(null);
+        }
+
+        $this->collDeshabilitamcs = null;
+        foreach ($deshabilitamcs as $deshabilitamc) {
+            $this->addDeshabilitamc($deshabilitamc);
+        }
+
+        $this->collDeshabilitamcs = $deshabilitamcs;
+        $this->collDeshabilitamcsPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Deshabilitamc objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related Deshabilitamc objects.
+     * @throws PropelException
+     */
+    public function countDeshabilitamcs(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collDeshabilitamcsPartial && !$this->isNew();
+        if (null === $this->collDeshabilitamcs || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collDeshabilitamcs) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getDeshabilitamcs());
+            }
+            $query = DeshabilitamcQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByMontacargas($this)
+                ->count($con);
+        }
+
+        return count($this->collDeshabilitamcs);
+    }
+
+    /**
+     * Method called to associate a Deshabilitamc object to this object
+     * through the Deshabilitamc foreign key attribute.
+     *
+     * @param    Deshabilitamc $l Deshabilitamc
+     * @return Montacargas The current object (for fluent API support)
+     */
+    public function addDeshabilitamc(Deshabilitamc $l)
+    {
+        if ($this->collDeshabilitamcs === null) {
+            $this->initDeshabilitamcs();
+            $this->collDeshabilitamcsPartial = true;
+        }
+
+        if (!in_array($l, $this->collDeshabilitamcs->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddDeshabilitamc($l);
+
+            if ($this->deshabilitamcsScheduledForDeletion and $this->deshabilitamcsScheduledForDeletion->contains($l)) {
+                $this->deshabilitamcsScheduledForDeletion->remove($this->deshabilitamcsScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	Deshabilitamc $deshabilitamc The deshabilitamc object to add.
+     */
+    protected function doAddDeshabilitamc($deshabilitamc)
+    {
+        $this->collDeshabilitamcs[]= $deshabilitamc;
+        $deshabilitamc->setMontacargas($this);
+    }
+
+    /**
+     * @param	Deshabilitamc $deshabilitamc The deshabilitamc object to remove.
+     * @return Montacargas The current object (for fluent API support)
+     */
+    public function removeDeshabilitamc($deshabilitamc)
+    {
+        if ($this->getDeshabilitamcs()->contains($deshabilitamc)) {
+            $this->collDeshabilitamcs->remove($this->collDeshabilitamcs->search($deshabilitamc));
+            if (null === $this->deshabilitamcsScheduledForDeletion) {
+                $this->deshabilitamcsScheduledForDeletion = clone $this->collDeshabilitamcs;
+                $this->deshabilitamcsScheduledForDeletion->clear();
+            }
+            $this->deshabilitamcsScheduledForDeletion[]= clone $deshabilitamc;
+            $deshabilitamc->setMontacargas(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Montacargas is new, it will return
+     * an empty collection; or if this Montacargas has previously
+     * been saved, it will retrieve related Deshabilitamcs from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Montacargas.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Deshabilitamc[] List of Deshabilitamc objects
+     */
+    public function getDeshabilitamcsJoinUcUsersRelatedByUsuarioEntrada($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = DeshabilitamcQuery::create(null, $criteria);
+        $query->joinWith('UcUsersRelatedByUsuarioEntrada', $join_behavior);
+
+        return $this->getDeshabilitamcs($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Montacargas is new, it will return
+     * an empty collection; or if this Montacargas has previously
+     * been saved, it will retrieve related Deshabilitamcs from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Montacargas.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Deshabilitamc[] List of Deshabilitamc objects
+     */
+    public function getDeshabilitamcsJoinUcUsersRelatedByUsuarioSalida($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = DeshabilitamcQuery::create(null, $criteria);
+        $query->joinWith('UcUsersRelatedByUsuarioSalida', $join_behavior);
+
+        return $this->getDeshabilitamcs($query, $con);
+    }
+
+    /**
+     * Clears out the collUsoBateriasMontacargass collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Montacargas The current object (for fluent API support)
+     * @see        addUsoBateriasMontacargass()
+     */
+    public function clearUsoBateriasMontacargass()
+    {
+        $this->collUsoBateriasMontacargass = null; // important to set this to null since that means it is uninitialized
+        $this->collUsoBateriasMontacargassPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collUsoBateriasMontacargass collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialUsoBateriasMontacargass($v = true)
+    {
+        $this->collUsoBateriasMontacargassPartial = $v;
+    }
+
+    /**
+     * Initializes the collUsoBateriasMontacargass collection.
+     *
+     * By default this just sets the collUsoBateriasMontacargass collection to an empty array (like clearcollUsoBateriasMontacargass());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initUsoBateriasMontacargass($overrideExisting = true)
+    {
+        if (null !== $this->collUsoBateriasMontacargass && !$overrideExisting) {
+            return;
+        }
+        $this->collUsoBateriasMontacargass = new PropelObjectCollection();
+        $this->collUsoBateriasMontacargass->setModel('UsoBateriasMontacargas');
+    }
+
+    /**
+     * Gets an array of UsoBateriasMontacargas objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Montacargas is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|UsoBateriasMontacargas[] List of UsoBateriasMontacargas objects
+     * @throws PropelException
+     */
+    public function getUsoBateriasMontacargass($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collUsoBateriasMontacargassPartial && !$this->isNew();
+        if (null === $this->collUsoBateriasMontacargass || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collUsoBateriasMontacargass) {
+                // return empty collection
+                $this->initUsoBateriasMontacargass();
+            } else {
+                $collUsoBateriasMontacargass = UsoBateriasMontacargasQuery::create(null, $criteria)
+                    ->filterByMontacargas($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collUsoBateriasMontacargassPartial && count($collUsoBateriasMontacargass)) {
+                      $this->initUsoBateriasMontacargass(false);
+
+                      foreach ($collUsoBateriasMontacargass as $obj) {
+                        if (false == $this->collUsoBateriasMontacargass->contains($obj)) {
+                          $this->collUsoBateriasMontacargass->append($obj);
+                        }
+                      }
+
+                      $this->collUsoBateriasMontacargassPartial = true;
+                    }
+
+                    $collUsoBateriasMontacargass->getInternalIterator()->rewind();
+
+                    return $collUsoBateriasMontacargass;
+                }
+
+                if ($partial && $this->collUsoBateriasMontacargass) {
+                    foreach ($this->collUsoBateriasMontacargass as $obj) {
+                        if ($obj->isNew()) {
+                            $collUsoBateriasMontacargass[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collUsoBateriasMontacargass = $collUsoBateriasMontacargass;
+                $this->collUsoBateriasMontacargassPartial = false;
+            }
+        }
+
+        return $this->collUsoBateriasMontacargass;
+    }
+
+    /**
+     * Sets a collection of UsoBateriasMontacargas objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $usoBateriasMontacargass A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Montacargas The current object (for fluent API support)
+     */
+    public function setUsoBateriasMontacargass(PropelCollection $usoBateriasMontacargass, PropelPDO $con = null)
+    {
+        $usoBateriasMontacargassToDelete = $this->getUsoBateriasMontacargass(new Criteria(), $con)->diff($usoBateriasMontacargass);
+
+
+        $this->usoBateriasMontacargassScheduledForDeletion = $usoBateriasMontacargassToDelete;
+
+        foreach ($usoBateriasMontacargassToDelete as $usoBateriasMontacargasRemoved) {
+            $usoBateriasMontacargasRemoved->setMontacargas(null);
+        }
+
+        $this->collUsoBateriasMontacargass = null;
+        foreach ($usoBateriasMontacargass as $usoBateriasMontacargas) {
+            $this->addUsoBateriasMontacargas($usoBateriasMontacargas);
+        }
+
+        $this->collUsoBateriasMontacargass = $usoBateriasMontacargass;
+        $this->collUsoBateriasMontacargassPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related UsoBateriasMontacargas objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related UsoBateriasMontacargas objects.
+     * @throws PropelException
+     */
+    public function countUsoBateriasMontacargass(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collUsoBateriasMontacargassPartial && !$this->isNew();
+        if (null === $this->collUsoBateriasMontacargass || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collUsoBateriasMontacargass) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getUsoBateriasMontacargass());
+            }
+            $query = UsoBateriasMontacargasQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByMontacargas($this)
+                ->count($con);
+        }
+
+        return count($this->collUsoBateriasMontacargass);
+    }
+
+    /**
+     * Method called to associate a UsoBateriasMontacargas object to this object
+     * through the UsoBateriasMontacargas foreign key attribute.
+     *
+     * @param    UsoBateriasMontacargas $l UsoBateriasMontacargas
+     * @return Montacargas The current object (for fluent API support)
+     */
+    public function addUsoBateriasMontacargas(UsoBateriasMontacargas $l)
+    {
+        if ($this->collUsoBateriasMontacargass === null) {
+            $this->initUsoBateriasMontacargass();
+            $this->collUsoBateriasMontacargassPartial = true;
+        }
+
+        if (!in_array($l, $this->collUsoBateriasMontacargass->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddUsoBateriasMontacargas($l);
+
+            if ($this->usoBateriasMontacargassScheduledForDeletion and $this->usoBateriasMontacargassScheduledForDeletion->contains($l)) {
+                $this->usoBateriasMontacargassScheduledForDeletion->remove($this->usoBateriasMontacargassScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	UsoBateriasMontacargas $usoBateriasMontacargas The usoBateriasMontacargas object to add.
+     */
+    protected function doAddUsoBateriasMontacargas($usoBateriasMontacargas)
+    {
+        $this->collUsoBateriasMontacargass[]= $usoBateriasMontacargas;
+        $usoBateriasMontacargas->setMontacargas($this);
+    }
+
+    /**
+     * @param	UsoBateriasMontacargas $usoBateriasMontacargas The usoBateriasMontacargas object to remove.
+     * @return Montacargas The current object (for fluent API support)
+     */
+    public function removeUsoBateriasMontacargas($usoBateriasMontacargas)
+    {
+        if ($this->getUsoBateriasMontacargass()->contains($usoBateriasMontacargas)) {
+            $this->collUsoBateriasMontacargass->remove($this->collUsoBateriasMontacargass->search($usoBateriasMontacargas));
+            if (null === $this->usoBateriasMontacargassScheduledForDeletion) {
+                $this->usoBateriasMontacargassScheduledForDeletion = clone $this->collUsoBateriasMontacargass;
+                $this->usoBateriasMontacargassScheduledForDeletion->clear();
+            }
+            $this->usoBateriasMontacargassScheduledForDeletion[]= clone $usoBateriasMontacargas;
+            $usoBateriasMontacargas->setMontacargas(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Montacargas is new, it will return
+     * an empty collection; or if this Montacargas has previously
+     * been saved, it will retrieve related UsoBateriasMontacargass from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Montacargas.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|UsoBateriasMontacargas[] List of UsoBateriasMontacargas objects
+     */
+    public function getUsoBateriasMontacargassJoinBaterias($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = UsoBateriasMontacargasQuery::create(null, $criteria);
+        $query->joinWith('Baterias', $join_behavior);
+
+        return $this->getUsoBateriasMontacargass($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Montacargas is new, it will return
+     * an empty collection; or if this Montacargas has previously
+     * been saved, it will retrieve related UsoBateriasMontacargass from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Montacargas.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|UsoBateriasMontacargas[] List of UsoBateriasMontacargas objects
+     */
+    public function getUsoBateriasMontacargassJoinUcUsersRelatedByUsuarioEntrada($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = UsoBateriasMontacargasQuery::create(null, $criteria);
+        $query->joinWith('UcUsersRelatedByUsuarioEntrada', $join_behavior);
+
+        return $this->getUsoBateriasMontacargass($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Montacargas is new, it will return
+     * an empty collection; or if this Montacargas has previously
+     * been saved, it will retrieve related UsoBateriasMontacargass from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Montacargas.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|UsoBateriasMontacargas[] List of UsoBateriasMontacargas objects
+     */
+    public function getUsoBateriasMontacargassJoinUcUsersRelatedByUsuarioSalida($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = UsoBateriasMontacargasQuery::create(null, $criteria);
+        $query->joinWith('UcUsersRelatedByUsuarioSalida', $join_behavior);
+
+        return $this->getUsoBateriasMontacargass($query, $con);
+    }
+
+    /**
      * Clears the current object and sets all attributes to their default values
      */
     public function clear()
     {
-        $this->id = null;
-        $this->nombre = null;
-        $this->modelo = null;
-        $this->tipo = null;
-        $this->ciclos_mant = null;
-        $this->ciclos_iniciales = null;
+        $this->idmontacargas = null;
+        $this->idsucursal = null;
+        $this->montacargas_modelo = null;
+        $this->montacargas_marca = null;
+        $this->montacargas_c = null;
+        $this->montacargas_k = null;
+        $this->montacargas_p = null;
+        $this->montacargas_t = null;
+        $this->montacargas_e = null;
+        $this->montacargas_volts = null;
+        $this->montacargas_amperaje = null;
+        $this->montacargas_nombre = null;
+        $this->montacargas_numserie = null;
         $this->alreadyInSave = false;
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;
@@ -1020,10 +2209,32 @@ abstract class BaseMontacargas extends BaseObject implements Persistent
     {
         if ($deep && !$this->alreadyInClearAllReferencesDeep) {
             $this->alreadyInClearAllReferencesDeep = true;
+            if ($this->collDeshabilitamcs) {
+                foreach ($this->collDeshabilitamcs as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
+            if ($this->collUsoBateriasMontacargass) {
+                foreach ($this->collUsoBateriasMontacargass as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
+            if ($this->aSucursal instanceof Persistent) {
+              $this->aSucursal->clearAllReferences($deep);
+            }
 
             $this->alreadyInClearAllReferencesDeep = false;
         } // if ($deep)
 
+        if ($this->collDeshabilitamcs instanceof PropelCollection) {
+            $this->collDeshabilitamcs->clearIterator();
+        }
+        $this->collDeshabilitamcs = null;
+        if ($this->collUsoBateriasMontacargass instanceof PropelCollection) {
+            $this->collUsoBateriasMontacargass->clearIterator();
+        }
+        $this->collUsoBateriasMontacargass = null;
+        $this->aSucursal = null;
     }
 
     /**

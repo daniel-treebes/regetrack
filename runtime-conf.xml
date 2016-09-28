@@ -13,7 +13,7 @@
       <datasource id="regetrack">
         <adapter>mysql</adapter> <!-- sqlite, mysql, mssql, oracle, or pgsql -->
         <connection>
-          <dsn>mysql:host=localhost;dbname=regetrac_sistema</dsn>
+          <dsn>mysql:host=localhost;dbname=regetrac_sistemav2</dsn>
           <user>regetrac_sistema</user>
           <password>Hola.1234</password>
         </connection>

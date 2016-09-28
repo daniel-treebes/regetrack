@@ -34,7 +34,7 @@
                         <a href="javascript:deshabilitaEnvia('<?php  echo $_GET['id'] ?>')" class="btn red btn-block" style="height: 110px;"><h2> <i class="fa fa-send"></i></h2><h5>Deshabilitar Montacargas</h5></a>
                     </div>
                     <div class="col-s-12 ">
-                        <a href="https://regetrack.com/escanear.php" class="btn default btn-block" style="height: 110px;"><h2> <i class="fa fa-arrow-left"></i></h2><h5>Regresar</h5></a>
+                        <a href="/escanear.php" class="btn default btn-block" style="height: 110px;"><h2> <i class="fa fa-arrow-left"></i></h2><h5>Regresar</h5></a>
                     </div>
                 </div>
             </div>

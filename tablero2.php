@@ -943,6 +943,7 @@ $(document).ready(function ()
 		  <?php
 			 
 function eficiencia($tabla,$ref,$mysqli,$fechamenor,$fechamayor,$va=0){
+    
 			   //Aquí viene lo chingüengüenchón
 //Esta consulta nos regresa todos los montacargas
 $queryTODO="

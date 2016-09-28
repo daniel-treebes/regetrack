@@ -72,6 +72,11 @@ abstract class BaseDeshabilitacg extends BaseObject implements Persistent
     protected $usuario_salida;
 
     /**
+     * @var        Cargadores
+     */
+    protected $aCargadores;
+
+    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      * @var        boolean
@@ -264,6 +269,10 @@ abstract class BaseDeshabilitacg extends BaseObject implements Persistent
             $this->modifiedColumns[] = DeshabilitacgPeer::CG;
         }
 
+        if ($this->aCargadores !== null && $this->aCargadores->getIdcargadores() !== $v) {
+            $this->aCargadores = null;
+        }
+
 
         return $this;
     } // setCg()
@@ -448,6 +457,9 @@ abstract class BaseDeshabilitacg extends BaseObject implements Persistent
     public function ensureConsistency()
     {
 
+        if ($this->aCargadores !== null && $this->cg !== $this->aCargadores->getIdcargadores()) {
+            $this->aCargadores = null;
+        }
     } // ensureConsistency
 
     /**
@@ -487,6 +499,7 @@ abstract class BaseDeshabilitacg extends BaseObject implements Persistent
 
         if ($deep) {  // also de-associate any related objects?
 
+            $this->aCargadores = null;
         } // if (deep)
     }
 
@@ -599,6 +612,18 @@ abstract class BaseDeshabilitacg extends BaseObject implements Persistent
         $affectedRows = 0; // initialize var to track total num of affected rows
         if (!$this->alreadyInSave) {
             $this->alreadyInSave = true;
+
+            // We call the save method on the following object(s) if they
+            // were passed to this object by their corresponding set
+            // method.  This object relates to these object(s) by a
+            // foreign key reference.
+
+            if ($this->aCargadores !== null) {
+                if ($this->aCargadores->isModified() || $this->aCargadores->isNew()) {
+                    $affectedRows += $this->aCargadores->save($con);
+                }
+                $this->setCargadores($this->aCargadores);
+            }
 
             if ($this->isNew() || $this->isModified()) {
                 // persist changes
@@ -784,6 +809,18 @@ abstract class BaseDeshabilitacg extends BaseObject implements Persistent
             $failureMap = array();
 
 
+            // We call the validate method on the following object(s) if they
+            // were passed to this object by their corresponding set
+            // method.  This object relates to these object(s) by a
+            // foreign key reference.
+
+            if ($this->aCargadores !== null) {
+                if (!$this->aCargadores->validate($columns)) {
+                    $failureMap = array_merge($failureMap, $this->aCargadores->getValidationFailures());
+                }
+            }
+
+
             if (($retval = DeshabilitacgPeer::doValidate($this, $columns)) !== true) {
                 $failureMap = array_merge($failureMap, $retval);
             }
@@ -862,10 +899,11 @@ abstract class BaseDeshabilitacg extends BaseObject implements Persistent
      *                    Defaults to BasePeer::TYPE_PHPNAME.
      * @param     boolean $includeLazyLoadColumns (optional) Whether to include lazy loaded columns. Defaults to true.
      * @param     array $alreadyDumpedObjects List of objects to skip to avoid recursion
+     * @param     boolean $includeForeignObjects (optional) Whether to include hydrated related objects. Default to FALSE.
      *
      * @return array an associative array containing the field names (as keys) and field values
      */
-    public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array())
+    public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array(), $includeForeignObjects = false)
     {
         if (isset($alreadyDumpedObjects['Deshabilitacg'][$this->getPrimaryKey()])) {
             return '*RECURSION*';
@@ -886,6 +924,11 @@ abstract class BaseDeshabilitacg extends BaseObject implements Persistent
             $result[$key] = $virtualColumn;
         }
 
+        if ($includeForeignObjects) {
+            if (null !== $this->aCargadores) {
+                $result['Cargadores'] = $this->aCargadores->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+        }
 
         return $result;
     }
@@ -1058,6 +1101,18 @@ abstract class BaseDeshabilitacg extends BaseObject implements Persistent
         $copyObj->setFechaSalida($this->getFechaSalida());
         $copyObj->setUsuarioEntrada($this->getUsuarioEntrada());
         $copyObj->setUsuarioSalida($this->getUsuarioSalida());
+
+        if ($deepCopy && !$this->startCopy) {
+            // important: temporarily setNew(false) because this affects the behavior of
+            // the getter/setter methods for fkey referrer objects.
+            $copyObj->setNew(false);
+            // store object hash to prevent cycle
+            $this->startCopy = true;
+
+            //unflag object copy
+            $this->startCopy = false;
+        } // if ($deepCopy)
+
         if ($makeNew) {
             $copyObj->setNew(true);
             $copyObj->setId(NULL); // this is a auto-increment column, so set to default value
@@ -1105,6 +1160,58 @@ abstract class BaseDeshabilitacg extends BaseObject implements Persistent
     }
 
     /**
+     * Declares an association between this object and a Cargadores object.
+     *
+     * @param                  Cargadores $v
+     * @return Deshabilitacg The current object (for fluent API support)
+     * @throws PropelException
+     */
+    public function setCargadores(Cargadores $v = null)
+    {
+        if ($v === null) {
+            $this->setCg(NULL);
+        } else {
+            $this->setCg($v->getIdcargadores());
+        }
+
+        $this->aCargadores = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the Cargadores object, it will not be re-added.
+        if ($v !== null) {
+            $v->addDeshabilitacg($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated Cargadores object
+     *
+     * @param PropelPDO $con Optional Connection object.
+     * @param $doQuery Executes a query to get the object if required
+     * @return Cargadores The associated Cargadores object.
+     * @throws PropelException
+     */
+    public function getCargadores(PropelPDO $con = null, $doQuery = true)
+    {
+        if ($this->aCargadores === null && ($this->cg !== null) && $doQuery) {
+            $this->aCargadores = CargadoresQuery::create()->findPk($this->cg, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aCargadores->addDeshabilitacgs($this);
+             */
+        }
+
+        return $this->aCargadores;
+    }
+
+    /**
      * Clears the current object and sets all attributes to their default values
      */
     public function clear()
@@ -1138,10 +1245,14 @@ abstract class BaseDeshabilitacg extends BaseObject implements Persistent
     {
         if ($deep && !$this->alreadyInClearAllReferencesDeep) {
             $this->alreadyInClearAllReferencesDeep = true;
+            if ($this->aCargadores instanceof Persistent) {
+              $this->aCargadores->clearAllReferences($deep);
+            }
 
             $this->alreadyInClearAllReferencesDeep = false;
         } // if ($deep)
 
+        $this->aCargadores = null;
     }
 
     /**

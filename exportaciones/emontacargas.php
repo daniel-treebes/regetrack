@@ -1,12 +1,12 @@
 <?php
 
 require_once("../models/db-settings.php");
+require_once("../models/config.php");
 
 $uploaddir = getcwd()."/archivos";
 $filename = "montacargas-".date('Y-m-d-H:i:s');
 $uploadfile = $uploaddir."/".$filename.'.cvs';
-
-$result = $mysqli->query('SELECT * FROM montacargas');
+$result = $mysqli->query('SELECT montacargas.* FROM montacargas JOIN bateriastipos ON montacargas.tipo = bateriastipos.id WHERE bateriastipos.idsucursal = '.$loggedInUser->sucursal_activa);
 if (!$result) die('Couldn\'t fetch records');
 $num_fields = mysqli_num_fields($result);
 $headers = array();

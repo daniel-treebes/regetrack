@@ -16,7 +16,7 @@
            
             <li id="mtablero" class="start ">
                 <a href="tablero.php">
-                <i class="icon-home "></i>
+                <i class="fa fa-dashboard"></i>
                 <span class="title">Tablero</span>
                 <span class="selected"></span>
                 </a>

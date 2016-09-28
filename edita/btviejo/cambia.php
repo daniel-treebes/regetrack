@@ -24,14 +24,14 @@ if (!isset($estado_bateira )) $estado_bateira='';
 		  }elseif ($estado_bateira=="cargando") {	
 			echo '<a href="javascript:descansar(\'baterias\',\''.$_GET['id'].'\')" class="btn green-jungle btn-block" style="height: 110px;"><h2><i class="fa fa-battery-empty"></i></h2><h5>Forzar Descanso</h3></h5></a>';
 		  }elseif ($estado_bateira=="descanso"){
-			echo '<a href="https://regetrack.com/escanear.php" class="btn green-jungle btn-block" style="height: 110px;"><h2><i class="fa fa-battery-empty"></i></h2><h5>Escanear montacargas a usar</h3></h5></a>';
+			echo '<a href="/escanear.php" class="btn green-jungle btn-block" style="height: 110px;"><h2><i class="fa fa-battery-empty"></i></h2><h5>Escanear montacargas a usar</h3></h5></a>';
 		  }else{
 			echo '<a href="javascript:inventario(\'bateria\','.$_GET['id'].')" class="btn yellow btn-block" style="height: 110px;"><h2> <i class="fa fa-link"></i></h2><h5>Inventario</h5></a>';
 		  }
 		  ?>
 		</div>
 		<div class="col-s-4 ">
-		  <a href="https://regetrack.com/escanear.php" class="btn default btn-block" style="height: 110px;"><h2> <i class="fa fa-arrow-left"></i></h2><h5>Regresar</h5></a>
+		  <a href="/escanear.php" class="btn default btn-block" style="height: 110px;"><h2> <i class="fa fa-arrow-left"></i></h2><h5>Regresar</h5></a>
 		</div>
 		<div class="col-s-4 ">
 		  <a href="javascript:deshabilita('bateria','<?php  echo $_GET['id'] ?>')" class="btn red btn-block" style="height: 110px;"><h2> <i class="fa fa-warning"></i></h2><h5>Deshabilitar Bateria</h5></a>

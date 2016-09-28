@@ -6,39 +6,79 @@
  *
  *
  *
- * @method MontacargasQuery orderById($order = Criteria::ASC) Order by the id column
- * @method MontacargasQuery orderByNombre($order = Criteria::ASC) Order by the nombre column
- * @method MontacargasQuery orderByModelo($order = Criteria::ASC) Order by the modelo column
- * @method MontacargasQuery orderByTipo($order = Criteria::ASC) Order by the tipo column
- * @method MontacargasQuery orderByCiclosMant($order = Criteria::ASC) Order by the ciclos_mant column
- * @method MontacargasQuery orderByCiclosIniciales($order = Criteria::ASC) Order by the ciclos_iniciales column
+ * @method MontacargasQuery orderByIdmontacargas($order = Criteria::ASC) Order by the idmontacargas column
+ * @method MontacargasQuery orderByIdsucursal($order = Criteria::ASC) Order by the idsucursal column
+ * @method MontacargasQuery orderByMontacargasModelo($order = Criteria::ASC) Order by the montacargas_modelo column
+ * @method MontacargasQuery orderByMontacargasMarca($order = Criteria::ASC) Order by the montacargas_marca column
+ * @method MontacargasQuery orderByMontacargasC($order = Criteria::ASC) Order by the montacargas_c column
+ * @method MontacargasQuery orderByMontacargasK($order = Criteria::ASC) Order by the montacargas_k column
+ * @method MontacargasQuery orderByMontacargasP($order = Criteria::ASC) Order by the montacargas_p column
+ * @method MontacargasQuery orderByMontacargasT($order = Criteria::ASC) Order by the montacargas_t column
+ * @method MontacargasQuery orderByMontacargasE($order = Criteria::ASC) Order by the montacargas_e column
+ * @method MontacargasQuery orderByMontacargasVolts($order = Criteria::ASC) Order by the montacargas_volts column
+ * @method MontacargasQuery orderByMontacargasAmperaje($order = Criteria::ASC) Order by the montacargas_amperaje column
+ * @method MontacargasQuery orderByMontacargasNombre($order = Criteria::ASC) Order by the montacargas_nombre column
+ * @method MontacargasQuery orderByMontacargasNumserie($order = Criteria::ASC) Order by the montacargas_numserie column
  *
- * @method MontacargasQuery groupById() Group by the id column
- * @method MontacargasQuery groupByNombre() Group by the nombre column
- * @method MontacargasQuery groupByModelo() Group by the modelo column
- * @method MontacargasQuery groupByTipo() Group by the tipo column
- * @method MontacargasQuery groupByCiclosMant() Group by the ciclos_mant column
- * @method MontacargasQuery groupByCiclosIniciales() Group by the ciclos_iniciales column
+ * @method MontacargasQuery groupByIdmontacargas() Group by the idmontacargas column
+ * @method MontacargasQuery groupByIdsucursal() Group by the idsucursal column
+ * @method MontacargasQuery groupByMontacargasModelo() Group by the montacargas_modelo column
+ * @method MontacargasQuery groupByMontacargasMarca() Group by the montacargas_marca column
+ * @method MontacargasQuery groupByMontacargasC() Group by the montacargas_c column
+ * @method MontacargasQuery groupByMontacargasK() Group by the montacargas_k column
+ * @method MontacargasQuery groupByMontacargasP() Group by the montacargas_p column
+ * @method MontacargasQuery groupByMontacargasT() Group by the montacargas_t column
+ * @method MontacargasQuery groupByMontacargasE() Group by the montacargas_e column
+ * @method MontacargasQuery groupByMontacargasVolts() Group by the montacargas_volts column
+ * @method MontacargasQuery groupByMontacargasAmperaje() Group by the montacargas_amperaje column
+ * @method MontacargasQuery groupByMontacargasNombre() Group by the montacargas_nombre column
+ * @method MontacargasQuery groupByMontacargasNumserie() Group by the montacargas_numserie column
  *
  * @method MontacargasQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method MontacargasQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
  * @method MontacargasQuery innerJoin($relation) Adds a INNER JOIN clause to the query
  *
+ * @method MontacargasQuery leftJoinSucursal($relationAlias = null) Adds a LEFT JOIN clause to the query using the Sucursal relation
+ * @method MontacargasQuery rightJoinSucursal($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Sucursal relation
+ * @method MontacargasQuery innerJoinSucursal($relationAlias = null) Adds a INNER JOIN clause to the query using the Sucursal relation
+ *
+ * @method MontacargasQuery leftJoinDeshabilitamc($relationAlias = null) Adds a LEFT JOIN clause to the query using the Deshabilitamc relation
+ * @method MontacargasQuery rightJoinDeshabilitamc($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Deshabilitamc relation
+ * @method MontacargasQuery innerJoinDeshabilitamc($relationAlias = null) Adds a INNER JOIN clause to the query using the Deshabilitamc relation
+ *
+ * @method MontacargasQuery leftJoinUsoBateriasMontacargas($relationAlias = null) Adds a LEFT JOIN clause to the query using the UsoBateriasMontacargas relation
+ * @method MontacargasQuery rightJoinUsoBateriasMontacargas($relationAlias = null) Adds a RIGHT JOIN clause to the query using the UsoBateriasMontacargas relation
+ * @method MontacargasQuery innerJoinUsoBateriasMontacargas($relationAlias = null) Adds a INNER JOIN clause to the query using the UsoBateriasMontacargas relation
+ *
  * @method Montacargas findOne(PropelPDO $con = null) Return the first Montacargas matching the query
  * @method Montacargas findOneOrCreate(PropelPDO $con = null) Return the first Montacargas matching the query, or a new Montacargas object populated from the query conditions when no match is found
  *
- * @method Montacargas findOneByNombre(string $nombre) Return the first Montacargas filtered by the nombre column
- * @method Montacargas findOneByModelo(string $modelo) Return the first Montacargas filtered by the modelo column
- * @method Montacargas findOneByTipo(string $tipo) Return the first Montacargas filtered by the tipo column
- * @method Montacargas findOneByCiclosMant(int $ciclos_mant) Return the first Montacargas filtered by the ciclos_mant column
- * @method Montacargas findOneByCiclosIniciales(int $ciclos_iniciales) Return the first Montacargas filtered by the ciclos_iniciales column
+ * @method Montacargas findOneByIdsucursal(int $idsucursal) Return the first Montacargas filtered by the idsucursal column
+ * @method Montacargas findOneByMontacargasModelo(string $montacargas_modelo) Return the first Montacargas filtered by the montacargas_modelo column
+ * @method Montacargas findOneByMontacargasMarca(string $montacargas_marca) Return the first Montacargas filtered by the montacargas_marca column
+ * @method Montacargas findOneByMontacargasC(string $montacargas_c) Return the first Montacargas filtered by the montacargas_c column
+ * @method Montacargas findOneByMontacargasK(string $montacargas_k) Return the first Montacargas filtered by the montacargas_k column
+ * @method Montacargas findOneByMontacargasP(string $montacargas_p) Return the first Montacargas filtered by the montacargas_p column
+ * @method Montacargas findOneByMontacargasT(string $montacargas_t) Return the first Montacargas filtered by the montacargas_t column
+ * @method Montacargas findOneByMontacargasE(string $montacargas_e) Return the first Montacargas filtered by the montacargas_e column
+ * @method Montacargas findOneByMontacargasVolts(int $montacargas_volts) Return the first Montacargas filtered by the montacargas_volts column
+ * @method Montacargas findOneByMontacargasAmperaje(int $montacargas_amperaje) Return the first Montacargas filtered by the montacargas_amperaje column
+ * @method Montacargas findOneByMontacargasNombre(string $montacargas_nombre) Return the first Montacargas filtered by the montacargas_nombre column
+ * @method Montacargas findOneByMontacargasNumserie(string $montacargas_numserie) Return the first Montacargas filtered by the montacargas_numserie column
  *
- * @method array findById(int $id) Return Montacargas objects filtered by the id column
- * @method array findByNombre(string $nombre) Return Montacargas objects filtered by the nombre column
- * @method array findByModelo(string $modelo) Return Montacargas objects filtered by the modelo column
- * @method array findByTipo(string $tipo) Return Montacargas objects filtered by the tipo column
- * @method array findByCiclosMant(int $ciclos_mant) Return Montacargas objects filtered by the ciclos_mant column
- * @method array findByCiclosIniciales(int $ciclos_iniciales) Return Montacargas objects filtered by the ciclos_iniciales column
+ * @method array findByIdmontacargas(int $idmontacargas) Return Montacargas objects filtered by the idmontacargas column
+ * @method array findByIdsucursal(int $idsucursal) Return Montacargas objects filtered by the idsucursal column
+ * @method array findByMontacargasModelo(string $montacargas_modelo) Return Montacargas objects filtered by the montacargas_modelo column
+ * @method array findByMontacargasMarca(string $montacargas_marca) Return Montacargas objects filtered by the montacargas_marca column
+ * @method array findByMontacargasC(string $montacargas_c) Return Montacargas objects filtered by the montacargas_c column
+ * @method array findByMontacargasK(string $montacargas_k) Return Montacargas objects filtered by the montacargas_k column
+ * @method array findByMontacargasP(string $montacargas_p) Return Montacargas objects filtered by the montacargas_p column
+ * @method array findByMontacargasT(string $montacargas_t) Return Montacargas objects filtered by the montacargas_t column
+ * @method array findByMontacargasE(string $montacargas_e) Return Montacargas objects filtered by the montacargas_e column
+ * @method array findByMontacargasVolts(int $montacargas_volts) Return Montacargas objects filtered by the montacargas_volts column
+ * @method array findByMontacargasAmperaje(int $montacargas_amperaje) Return Montacargas objects filtered by the montacargas_amperaje column
+ * @method array findByMontacargasNombre(string $montacargas_nombre) Return Montacargas objects filtered by the montacargas_nombre column
+ * @method array findByMontacargasNumserie(string $montacargas_numserie) Return Montacargas objects filtered by the montacargas_numserie column
  *
  * @package    propel.generator.regetrack.om
  */
@@ -129,7 +169,7 @@ abstract class BaseMontacargasQuery extends ModelCriteria
      * @return                 Montacargas A model object, or null if the key is not found
      * @throws PropelException
      */
-     public function findOneById($key, $con = null)
+     public function findOneByIdmontacargas($key, $con = null)
      {
         return $this->findPk($key, $con);
      }
@@ -146,7 +186,7 @@ abstract class BaseMontacargasQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `id`, `nombre`, `modelo`, `tipo`, `ciclos_mant`, `ciclos_iniciales` FROM `montacargas` WHERE `id` = :p0';
+        $sql = 'SELECT `idmontacargas`, `idsucursal`, `montacargas_modelo`, `montacargas_marca`, `montacargas_c`, `montacargas_k`, `montacargas_p`, `montacargas_t`, `montacargas_e`, `montacargas_volts`, `montacargas_amperaje`, `montacargas_nombre`, `montacargas_numserie` FROM `montacargas` WHERE `idmontacargas` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -219,7 +259,7 @@ abstract class BaseMontacargasQuery extends ModelCriteria
     public function filterByPrimaryKey($key)
     {
 
-        return $this->addUsingAlias(MontacargasPeer::ID, $key, Criteria::EQUAL);
+        return $this->addUsingAlias(MontacargasPeer::IDMONTACARGAS, $key, Criteria::EQUAL);
     }
 
     /**
@@ -232,21 +272,21 @@ abstract class BaseMontacargasQuery extends ModelCriteria
     public function filterByPrimaryKeys($keys)
     {
 
-        return $this->addUsingAlias(MontacargasPeer::ID, $keys, Criteria::IN);
+        return $this->addUsingAlias(MontacargasPeer::IDMONTACARGAS, $keys, Criteria::IN);
     }
 
     /**
-     * Filter the query on the id column
+     * Filter the query on the idmontacargas column
      *
      * Example usage:
      * <code>
-     * $query->filterById(1234); // WHERE id = 1234
-     * $query->filterById(array(12, 34)); // WHERE id IN (12, 34)
-     * $query->filterById(array('min' => 12)); // WHERE id >= 12
-     * $query->filterById(array('max' => 12)); // WHERE id <= 12
+     * $query->filterByIdmontacargas(1234); // WHERE idmontacargas = 1234
+     * $query->filterByIdmontacargas(array(12, 34)); // WHERE idmontacargas IN (12, 34)
+     * $query->filterByIdmontacargas(array('min' => 12)); // WHERE idmontacargas >= 12
+     * $query->filterByIdmontacargas(array('max' => 12)); // WHERE idmontacargas <= 12
      * </code>
      *
-     * @param     mixed $id The value to use as filter.
+     * @param     mixed $idmontacargas The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
@@ -254,16 +294,16 @@ abstract class BaseMontacargasQuery extends ModelCriteria
      *
      * @return MontacargasQuery The current query, for fluid interface
      */
-    public function filterById($id = null, $comparison = null)
+    public function filterByIdmontacargas($idmontacargas = null, $comparison = null)
     {
-        if (is_array($id)) {
+        if (is_array($idmontacargas)) {
             $useMinMax = false;
-            if (isset($id['min'])) {
-                $this->addUsingAlias(MontacargasPeer::ID, $id['min'], Criteria::GREATER_EQUAL);
+            if (isset($idmontacargas['min'])) {
+                $this->addUsingAlias(MontacargasPeer::IDMONTACARGAS, $idmontacargas['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
-            if (isset($id['max'])) {
-                $this->addUsingAlias(MontacargasPeer::ID, $id['max'], Criteria::LESS_EQUAL);
+            if (isset($idmontacargas['max'])) {
+                $this->addUsingAlias(MontacargasPeer::IDMONTACARGAS, $idmontacargas['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -274,108 +314,23 @@ abstract class BaseMontacargasQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(MontacargasPeer::ID, $id, $comparison);
+        return $this->addUsingAlias(MontacargasPeer::IDMONTACARGAS, $idmontacargas, $comparison);
     }
 
     /**
-     * Filter the query on the nombre column
+     * Filter the query on the idsucursal column
      *
      * Example usage:
      * <code>
-     * $query->filterByNombre('fooValue');   // WHERE nombre = 'fooValue'
-     * $query->filterByNombre('%fooValue%'); // WHERE nombre LIKE '%fooValue%'
+     * $query->filterByIdsucursal(1234); // WHERE idsucursal = 1234
+     * $query->filterByIdsucursal(array(12, 34)); // WHERE idsucursal IN (12, 34)
+     * $query->filterByIdsucursal(array('min' => 12)); // WHERE idsucursal >= 12
+     * $query->filterByIdsucursal(array('max' => 12)); // WHERE idsucursal <= 12
      * </code>
      *
-     * @param     string $nombre The value to use as filter.
-     *              Accepts wildcards (* and % trigger a LIKE)
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @see       filterBySucursal()
      *
-     * @return MontacargasQuery The current query, for fluid interface
-     */
-    public function filterByNombre($nombre = null, $comparison = null)
-    {
-        if (null === $comparison) {
-            if (is_array($nombre)) {
-                $comparison = Criteria::IN;
-            } elseif (preg_match('/[\%\*]/', $nombre)) {
-                $nombre = str_replace('*', '%', $nombre);
-                $comparison = Criteria::LIKE;
-            }
-        }
-
-        return $this->addUsingAlias(MontacargasPeer::NOMBRE, $nombre, $comparison);
-    }
-
-    /**
-     * Filter the query on the modelo column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByModelo('fooValue');   // WHERE modelo = 'fooValue'
-     * $query->filterByModelo('%fooValue%'); // WHERE modelo LIKE '%fooValue%'
-     * </code>
-     *
-     * @param     string $modelo The value to use as filter.
-     *              Accepts wildcards (* and % trigger a LIKE)
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return MontacargasQuery The current query, for fluid interface
-     */
-    public function filterByModelo($modelo = null, $comparison = null)
-    {
-        if (null === $comparison) {
-            if (is_array($modelo)) {
-                $comparison = Criteria::IN;
-            } elseif (preg_match('/[\%\*]/', $modelo)) {
-                $modelo = str_replace('*', '%', $modelo);
-                $comparison = Criteria::LIKE;
-            }
-        }
-
-        return $this->addUsingAlias(MontacargasPeer::MODELO, $modelo, $comparison);
-    }
-
-    /**
-     * Filter the query on the tipo column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByTipo('fooValue');   // WHERE tipo = 'fooValue'
-     * $query->filterByTipo('%fooValue%'); // WHERE tipo LIKE '%fooValue%'
-     * </code>
-     *
-     * @param     string $tipo The value to use as filter.
-     *              Accepts wildcards (* and % trigger a LIKE)
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return MontacargasQuery The current query, for fluid interface
-     */
-    public function filterByTipo($tipo = null, $comparison = null)
-    {
-        if (null === $comparison) {
-            if (is_array($tipo)) {
-                $comparison = Criteria::IN;
-            } elseif (preg_match('/[\%\*]/', $tipo)) {
-                $tipo = str_replace('*', '%', $tipo);
-                $comparison = Criteria::LIKE;
-            }
-        }
-
-        return $this->addUsingAlias(MontacargasPeer::TIPO, $tipo, $comparison);
-    }
-
-    /**
-     * Filter the query on the ciclos_mant column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByCiclosMant(1234); // WHERE ciclos_mant = 1234
-     * $query->filterByCiclosMant(array(12, 34)); // WHERE ciclos_mant IN (12, 34)
-     * $query->filterByCiclosMant(array('min' => 12)); // WHERE ciclos_mant >= 12
-     * $query->filterByCiclosMant(array('max' => 12)); // WHERE ciclos_mant <= 12
-     * </code>
-     *
-     * @param     mixed $ciclosMant The value to use as filter.
+     * @param     mixed $idsucursal The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
@@ -383,16 +338,16 @@ abstract class BaseMontacargasQuery extends ModelCriteria
      *
      * @return MontacargasQuery The current query, for fluid interface
      */
-    public function filterByCiclosMant($ciclosMant = null, $comparison = null)
+    public function filterByIdsucursal($idsucursal = null, $comparison = null)
     {
-        if (is_array($ciclosMant)) {
+        if (is_array($idsucursal)) {
             $useMinMax = false;
-            if (isset($ciclosMant['min'])) {
-                $this->addUsingAlias(MontacargasPeer::CICLOS_MANT, $ciclosMant['min'], Criteria::GREATER_EQUAL);
+            if (isset($idsucursal['min'])) {
+                $this->addUsingAlias(MontacargasPeer::IDSUCURSAL, $idsucursal['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
-            if (isset($ciclosMant['max'])) {
-                $this->addUsingAlias(MontacargasPeer::CICLOS_MANT, $ciclosMant['max'], Criteria::LESS_EQUAL);
+            if (isset($idsucursal['max'])) {
+                $this->addUsingAlias(MontacargasPeer::IDSUCURSAL, $idsucursal['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -403,21 +358,224 @@ abstract class BaseMontacargasQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(MontacargasPeer::CICLOS_MANT, $ciclosMant, $comparison);
+        return $this->addUsingAlias(MontacargasPeer::IDSUCURSAL, $idsucursal, $comparison);
     }
 
     /**
-     * Filter the query on the ciclos_iniciales column
+     * Filter the query on the montacargas_modelo column
      *
      * Example usage:
      * <code>
-     * $query->filterByCiclosIniciales(1234); // WHERE ciclos_iniciales = 1234
-     * $query->filterByCiclosIniciales(array(12, 34)); // WHERE ciclos_iniciales IN (12, 34)
-     * $query->filterByCiclosIniciales(array('min' => 12)); // WHERE ciclos_iniciales >= 12
-     * $query->filterByCiclosIniciales(array('max' => 12)); // WHERE ciclos_iniciales <= 12
+     * $query->filterByMontacargasModelo('fooValue');   // WHERE montacargas_modelo = 'fooValue'
+     * $query->filterByMontacargasModelo('%fooValue%'); // WHERE montacargas_modelo LIKE '%fooValue%'
      * </code>
      *
-     * @param     mixed $ciclosIniciales The value to use as filter.
+     * @param     string $montacargasModelo The value to use as filter.
+     *              Accepts wildcards (* and % trigger a LIKE)
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return MontacargasQuery The current query, for fluid interface
+     */
+    public function filterByMontacargasModelo($montacargasModelo = null, $comparison = null)
+    {
+        if (null === $comparison) {
+            if (is_array($montacargasModelo)) {
+                $comparison = Criteria::IN;
+            } elseif (preg_match('/[\%\*]/', $montacargasModelo)) {
+                $montacargasModelo = str_replace('*', '%', $montacargasModelo);
+                $comparison = Criteria::LIKE;
+            }
+        }
+
+        return $this->addUsingAlias(MontacargasPeer::MONTACARGAS_MODELO, $montacargasModelo, $comparison);
+    }
+
+    /**
+     * Filter the query on the montacargas_marca column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByMontacargasMarca('fooValue');   // WHERE montacargas_marca = 'fooValue'
+     * $query->filterByMontacargasMarca('%fooValue%'); // WHERE montacargas_marca LIKE '%fooValue%'
+     * </code>
+     *
+     * @param     string $montacargasMarca The value to use as filter.
+     *              Accepts wildcards (* and % trigger a LIKE)
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return MontacargasQuery The current query, for fluid interface
+     */
+    public function filterByMontacargasMarca($montacargasMarca = null, $comparison = null)
+    {
+        if (null === $comparison) {
+            if (is_array($montacargasMarca)) {
+                $comparison = Criteria::IN;
+            } elseif (preg_match('/[\%\*]/', $montacargasMarca)) {
+                $montacargasMarca = str_replace('*', '%', $montacargasMarca);
+                $comparison = Criteria::LIKE;
+            }
+        }
+
+        return $this->addUsingAlias(MontacargasPeer::MONTACARGAS_MARCA, $montacargasMarca, $comparison);
+    }
+
+    /**
+     * Filter the query on the montacargas_c column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByMontacargasC('fooValue');   // WHERE montacargas_c = 'fooValue'
+     * $query->filterByMontacargasC('%fooValue%'); // WHERE montacargas_c LIKE '%fooValue%'
+     * </code>
+     *
+     * @param     string $montacargasC The value to use as filter.
+     *              Accepts wildcards (* and % trigger a LIKE)
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return MontacargasQuery The current query, for fluid interface
+     */
+    public function filterByMontacargasC($montacargasC = null, $comparison = null)
+    {
+        if (null === $comparison) {
+            if (is_array($montacargasC)) {
+                $comparison = Criteria::IN;
+            } elseif (preg_match('/[\%\*]/', $montacargasC)) {
+                $montacargasC = str_replace('*', '%', $montacargasC);
+                $comparison = Criteria::LIKE;
+            }
+        }
+
+        return $this->addUsingAlias(MontacargasPeer::MONTACARGAS_C, $montacargasC, $comparison);
+    }
+
+    /**
+     * Filter the query on the montacargas_k column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByMontacargasK('fooValue');   // WHERE montacargas_k = 'fooValue'
+     * $query->filterByMontacargasK('%fooValue%'); // WHERE montacargas_k LIKE '%fooValue%'
+     * </code>
+     *
+     * @param     string $montacargasK The value to use as filter.
+     *              Accepts wildcards (* and % trigger a LIKE)
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return MontacargasQuery The current query, for fluid interface
+     */
+    public function filterByMontacargasK($montacargasK = null, $comparison = null)
+    {
+        if (null === $comparison) {
+            if (is_array($montacargasK)) {
+                $comparison = Criteria::IN;
+            } elseif (preg_match('/[\%\*]/', $montacargasK)) {
+                $montacargasK = str_replace('*', '%', $montacargasK);
+                $comparison = Criteria::LIKE;
+            }
+        }
+
+        return $this->addUsingAlias(MontacargasPeer::MONTACARGAS_K, $montacargasK, $comparison);
+    }
+
+    /**
+     * Filter the query on the montacargas_p column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByMontacargasP('fooValue');   // WHERE montacargas_p = 'fooValue'
+     * $query->filterByMontacargasP('%fooValue%'); // WHERE montacargas_p LIKE '%fooValue%'
+     * </code>
+     *
+     * @param     string $montacargasP The value to use as filter.
+     *              Accepts wildcards (* and % trigger a LIKE)
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return MontacargasQuery The current query, for fluid interface
+     */
+    public function filterByMontacargasP($montacargasP = null, $comparison = null)
+    {
+        if (null === $comparison) {
+            if (is_array($montacargasP)) {
+                $comparison = Criteria::IN;
+            } elseif (preg_match('/[\%\*]/', $montacargasP)) {
+                $montacargasP = str_replace('*', '%', $montacargasP);
+                $comparison = Criteria::LIKE;
+            }
+        }
+
+        return $this->addUsingAlias(MontacargasPeer::MONTACARGAS_P, $montacargasP, $comparison);
+    }
+
+    /**
+     * Filter the query on the montacargas_t column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByMontacargasT('fooValue');   // WHERE montacargas_t = 'fooValue'
+     * $query->filterByMontacargasT('%fooValue%'); // WHERE montacargas_t LIKE '%fooValue%'
+     * </code>
+     *
+     * @param     string $montacargasT The value to use as filter.
+     *              Accepts wildcards (* and % trigger a LIKE)
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return MontacargasQuery The current query, for fluid interface
+     */
+    public function filterByMontacargasT($montacargasT = null, $comparison = null)
+    {
+        if (null === $comparison) {
+            if (is_array($montacargasT)) {
+                $comparison = Criteria::IN;
+            } elseif (preg_match('/[\%\*]/', $montacargasT)) {
+                $montacargasT = str_replace('*', '%', $montacargasT);
+                $comparison = Criteria::LIKE;
+            }
+        }
+
+        return $this->addUsingAlias(MontacargasPeer::MONTACARGAS_T, $montacargasT, $comparison);
+    }
+
+    /**
+     * Filter the query on the montacargas_e column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByMontacargasE('fooValue');   // WHERE montacargas_e = 'fooValue'
+     * $query->filterByMontacargasE('%fooValue%'); // WHERE montacargas_e LIKE '%fooValue%'
+     * </code>
+     *
+     * @param     string $montacargasE The value to use as filter.
+     *              Accepts wildcards (* and % trigger a LIKE)
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return MontacargasQuery The current query, for fluid interface
+     */
+    public function filterByMontacargasE($montacargasE = null, $comparison = null)
+    {
+        if (null === $comparison) {
+            if (is_array($montacargasE)) {
+                $comparison = Criteria::IN;
+            } elseif (preg_match('/[\%\*]/', $montacargasE)) {
+                $montacargasE = str_replace('*', '%', $montacargasE);
+                $comparison = Criteria::LIKE;
+            }
+        }
+
+        return $this->addUsingAlias(MontacargasPeer::MONTACARGAS_E, $montacargasE, $comparison);
+    }
+
+    /**
+     * Filter the query on the montacargas_volts column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByMontacargasVolts(1234); // WHERE montacargas_volts = 1234
+     * $query->filterByMontacargasVolts(array(12, 34)); // WHERE montacargas_volts IN (12, 34)
+     * $query->filterByMontacargasVolts(array('min' => 12)); // WHERE montacargas_volts >= 12
+     * $query->filterByMontacargasVolts(array('max' => 12)); // WHERE montacargas_volts <= 12
+     * </code>
+     *
+     * @param     mixed $montacargasVolts The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
@@ -425,16 +583,16 @@ abstract class BaseMontacargasQuery extends ModelCriteria
      *
      * @return MontacargasQuery The current query, for fluid interface
      */
-    public function filterByCiclosIniciales($ciclosIniciales = null, $comparison = null)
+    public function filterByMontacargasVolts($montacargasVolts = null, $comparison = null)
     {
-        if (is_array($ciclosIniciales)) {
+        if (is_array($montacargasVolts)) {
             $useMinMax = false;
-            if (isset($ciclosIniciales['min'])) {
-                $this->addUsingAlias(MontacargasPeer::CICLOS_INICIALES, $ciclosIniciales['min'], Criteria::GREATER_EQUAL);
+            if (isset($montacargasVolts['min'])) {
+                $this->addUsingAlias(MontacargasPeer::MONTACARGAS_VOLTS, $montacargasVolts['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
-            if (isset($ciclosIniciales['max'])) {
-                $this->addUsingAlias(MontacargasPeer::CICLOS_INICIALES, $ciclosIniciales['max'], Criteria::LESS_EQUAL);
+            if (isset($montacargasVolts['max'])) {
+                $this->addUsingAlias(MontacargasPeer::MONTACARGAS_VOLTS, $montacargasVolts['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -445,7 +603,331 @@ abstract class BaseMontacargasQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(MontacargasPeer::CICLOS_INICIALES, $ciclosIniciales, $comparison);
+        return $this->addUsingAlias(MontacargasPeer::MONTACARGAS_VOLTS, $montacargasVolts, $comparison);
+    }
+
+    /**
+     * Filter the query on the montacargas_amperaje column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByMontacargasAmperaje(1234); // WHERE montacargas_amperaje = 1234
+     * $query->filterByMontacargasAmperaje(array(12, 34)); // WHERE montacargas_amperaje IN (12, 34)
+     * $query->filterByMontacargasAmperaje(array('min' => 12)); // WHERE montacargas_amperaje >= 12
+     * $query->filterByMontacargasAmperaje(array('max' => 12)); // WHERE montacargas_amperaje <= 12
+     * </code>
+     *
+     * @param     mixed $montacargasAmperaje The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return MontacargasQuery The current query, for fluid interface
+     */
+    public function filterByMontacargasAmperaje($montacargasAmperaje = null, $comparison = null)
+    {
+        if (is_array($montacargasAmperaje)) {
+            $useMinMax = false;
+            if (isset($montacargasAmperaje['min'])) {
+                $this->addUsingAlias(MontacargasPeer::MONTACARGAS_AMPERAJE, $montacargasAmperaje['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($montacargasAmperaje['max'])) {
+                $this->addUsingAlias(MontacargasPeer::MONTACARGAS_AMPERAJE, $montacargasAmperaje['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(MontacargasPeer::MONTACARGAS_AMPERAJE, $montacargasAmperaje, $comparison);
+    }
+
+    /**
+     * Filter the query on the montacargas_nombre column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByMontacargasNombre('fooValue');   // WHERE montacargas_nombre = 'fooValue'
+     * $query->filterByMontacargasNombre('%fooValue%'); // WHERE montacargas_nombre LIKE '%fooValue%'
+     * </code>
+     *
+     * @param     string $montacargasNombre The value to use as filter.
+     *              Accepts wildcards (* and % trigger a LIKE)
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return MontacargasQuery The current query, for fluid interface
+     */
+    public function filterByMontacargasNombre($montacargasNombre = null, $comparison = null)
+    {
+        if (null === $comparison) {
+            if (is_array($montacargasNombre)) {
+                $comparison = Criteria::IN;
+            } elseif (preg_match('/[\%\*]/', $montacargasNombre)) {
+                $montacargasNombre = str_replace('*', '%', $montacargasNombre);
+                $comparison = Criteria::LIKE;
+            }
+        }
+
+        return $this->addUsingAlias(MontacargasPeer::MONTACARGAS_NOMBRE, $montacargasNombre, $comparison);
+    }
+
+    /**
+     * Filter the query on the montacargas_numserie column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByMontacargasNumserie('fooValue');   // WHERE montacargas_numserie = 'fooValue'
+     * $query->filterByMontacargasNumserie('%fooValue%'); // WHERE montacargas_numserie LIKE '%fooValue%'
+     * </code>
+     *
+     * @param     string $montacargasNumserie The value to use as filter.
+     *              Accepts wildcards (* and % trigger a LIKE)
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return MontacargasQuery The current query, for fluid interface
+     */
+    public function filterByMontacargasNumserie($montacargasNumserie = null, $comparison = null)
+    {
+        if (null === $comparison) {
+            if (is_array($montacargasNumserie)) {
+                $comparison = Criteria::IN;
+            } elseif (preg_match('/[\%\*]/', $montacargasNumserie)) {
+                $montacargasNumserie = str_replace('*', '%', $montacargasNumserie);
+                $comparison = Criteria::LIKE;
+            }
+        }
+
+        return $this->addUsingAlias(MontacargasPeer::MONTACARGAS_NUMSERIE, $montacargasNumserie, $comparison);
+    }
+
+    /**
+     * Filter the query by a related Sucursal object
+     *
+     * @param   Sucursal|PropelObjectCollection $sucursal The related object(s) to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 MontacargasQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterBySucursal($sucursal, $comparison = null)
+    {
+        if ($sucursal instanceof Sucursal) {
+            return $this
+                ->addUsingAlias(MontacargasPeer::IDSUCURSAL, $sucursal->getIdsucursal(), $comparison);
+        } elseif ($sucursal instanceof PropelObjectCollection) {
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+
+            return $this
+                ->addUsingAlias(MontacargasPeer::IDSUCURSAL, $sucursal->toKeyValue('PrimaryKey', 'Idsucursal'), $comparison);
+        } else {
+            throw new PropelException('filterBySucursal() only accepts arguments of type Sucursal or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Sucursal relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return MontacargasQuery The current query, for fluid interface
+     */
+    public function joinSucursal($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Sucursal');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Sucursal');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Sucursal relation Sucursal object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   SucursalQuery A secondary query class using the current class as primary query
+     */
+    public function useSucursalQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinSucursal($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Sucursal', 'SucursalQuery');
+    }
+
+    /**
+     * Filter the query by a related Deshabilitamc object
+     *
+     * @param   Deshabilitamc|PropelObjectCollection $deshabilitamc  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 MontacargasQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByDeshabilitamc($deshabilitamc, $comparison = null)
+    {
+        if ($deshabilitamc instanceof Deshabilitamc) {
+            return $this
+                ->addUsingAlias(MontacargasPeer::IDMONTACARGAS, $deshabilitamc->getIdmontacargas(), $comparison);
+        } elseif ($deshabilitamc instanceof PropelObjectCollection) {
+            return $this
+                ->useDeshabilitamcQuery()
+                ->filterByPrimaryKeys($deshabilitamc->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByDeshabilitamc() only accepts arguments of type Deshabilitamc or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Deshabilitamc relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return MontacargasQuery The current query, for fluid interface
+     */
+    public function joinDeshabilitamc($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Deshabilitamc');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Deshabilitamc');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Deshabilitamc relation Deshabilitamc object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   DeshabilitamcQuery A secondary query class using the current class as primary query
+     */
+    public function useDeshabilitamcQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinDeshabilitamc($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Deshabilitamc', 'DeshabilitamcQuery');
+    }
+
+    /**
+     * Filter the query by a related UsoBateriasMontacargas object
+     *
+     * @param   UsoBateriasMontacargas|PropelObjectCollection $usoBateriasMontacargas  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 MontacargasQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByUsoBateriasMontacargas($usoBateriasMontacargas, $comparison = null)
+    {
+        if ($usoBateriasMontacargas instanceof UsoBateriasMontacargas) {
+            return $this
+                ->addUsingAlias(MontacargasPeer::IDMONTACARGAS, $usoBateriasMontacargas->getMc(), $comparison);
+        } elseif ($usoBateriasMontacargas instanceof PropelObjectCollection) {
+            return $this
+                ->useUsoBateriasMontacargasQuery()
+                ->filterByPrimaryKeys($usoBateriasMontacargas->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByUsoBateriasMontacargas() only accepts arguments of type UsoBateriasMontacargas or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the UsoBateriasMontacargas relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return MontacargasQuery The current query, for fluid interface
+     */
+    public function joinUsoBateriasMontacargas($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('UsoBateriasMontacargas');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'UsoBateriasMontacargas');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the UsoBateriasMontacargas relation UsoBateriasMontacargas object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   UsoBateriasMontacargasQuery A secondary query class using the current class as primary query
+     */
+    public function useUsoBateriasMontacargasQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinUsoBateriasMontacargas($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'UsoBateriasMontacargas', 'UsoBateriasMontacargasQuery');
     }
 
     /**
@@ -458,7 +940,7 @@ abstract class BaseMontacargasQuery extends ModelCriteria
     public function prune($montacargas = null)
     {
         if ($montacargas) {
-            $this->addUsingAlias(MontacargasPeer::ID, $montacargas->getId(), Criteria::NOT_EQUAL);
+            $this->addUsingAlias(MontacargasPeer::IDMONTACARGAS, $montacargas->getIdmontacargas(), Criteria::NOT_EQUAL);
         }
 
         return $this;
