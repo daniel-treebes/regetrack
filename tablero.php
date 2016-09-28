@@ -11,7 +11,7 @@ $b= BateriasQuery::create()->findPk(58);
 $b->setBateriasVolts(NULL)->setBateriasAmperaje(NULL)->setBateriasC(NULL)->setBateriasK(NULL)->setBateriasP(NULL)->save();
 exit();
 */
-
+/*
 $inputFileName = 'bat monta carga de pisa repartido.xlsx';
 $inputFileType = PHPExcel_IOFactory::identify($inputFileName);
 $objReader = PHPExcel_IOFactory::createReader($inputFileType);
@@ -55,7 +55,7 @@ for ($row = 3; $row <= $highestRow; $row++){
     
 }
 exit();
-
+*/
 require_once("models/config.php");
 
 if (!securePage($_SERVER['PHP_SELF'])){die();}
