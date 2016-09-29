@@ -15,14 +15,16 @@ require_once("models/header.php");
 
 $query="
 SELECT
-   b.id as 'Id',
-   b.num_serie as 'Nombre',
-   CONCAT(t.volts,'V - ',t.ah,'Ah') as Tipo,
-   b.ciclos_iniciales,
-   b.ciclos_mant
+   b.idbaterias as 'Id',
+   b.baterias_nombre as 'Nombre',
+   b.baterias_modelo as 'Modelo',
+   b.baterias_marca as 'Marca',
+   CONCAT(b.baterias_c,'-',b.baterias_k,'-',b.baterias_p,'-',b.baterias_t,'-',b.baterias_e,' (',b.baterias_volts,'V - ',b.baterias_amperaje,'Ah)') as Tipo,
+   b.baterias_ciclosiniciales,
+   b.baterias_ciclosmant
 FROM
-   baterias as b, bateriastipos as t
-WHERE b.tipo=t.id
+   baterias as b
+WHERE b.idsucursal = ".$loggedInUser->sucursal_activa."
 ORDER BY Nombre
 ";
 
@@ -81,9 +83,9 @@ function deshabilita(cual) {
         <thead>
             <tr>
 				<th>Nombre</th>
+                                <th>Modelo</th>
+                                <th>Marca</th>
 				<th>Tipo</th>
-				<th>Total de Cliclos</th>
-                <th>Ciclos Restantes</th>
 				<th>Dónde está</th>
 				<th>Estado</th>
 				<th>Tiempo</th>
@@ -97,10 +99,12 @@ function deshabilita(cual) {
 	  while($fila = $resultado->fetch_array()) {
 		 echo "<tr>";
 		 echo "<th>".$fila['Nombre']."</th>";
+                  echo "<th>".$fila['Modelo']."</th>";
+                   echo "<th>".$fila['Marca']."</th>";
 		 echo "<th>".$fila['Tipo']."</th>";
 
 		 $querydonde="
-			SELECT  u.id, u.bg, u.bt, CONCAT(c.nombre,'-',b.nombre) as bg_nombre,
+			SELECT  u.id, u.bg, u.bt, CONCAT(c.cargadores_nombre,'-',b.nombre) as bg_nombre,
 			   CONCAT(
 				  TIMESTAMPDIFF(day, fecha_entrada, now()),'D ',    
 				  TIMESTAMPDIFF(hour, fecha_entrada, now())-TIMESTAMPDIFF(day, fecha_entrada, now())*24,'H  ',
@@ -125,105 +129,181 @@ function deshabilita(cual) {
 			WHERE
 			   bt =".$fila['Id']." AND 
 			   b.id=u.bg AND
-			   b.cg=c.id
+			   b.cg=c.idcargadores
 			ORDER BY id desc 
 			LIMIT 1
 		 ";
-						
+                 	
 		 $resultadodonde = $mysqli->query($querydonde);
-		 $filadonde = $resultadodonde->fetch_array();
-		 
+                 $filadonde = $resultadodonde->fetch_array();
+                 
 		 $querycuantos="
-			SELECT COUNT(id) as c
-			FROM  uso_baterias_bodega 
-			WHERE  bt = ".$filadonde['bt'];
+			SELECT COUNT(*) as c
+                        FROM  uso_baterias_bodega 
+                        JOIN baterias b ON uso_baterias_bodega.bt = b.idbaterias
+			WHERE  b.idsucursal = ".$loggedInUser->sucursal_activa." AND bt = '".$filadonde['bt']."'";
+                 
+                
 		 $resultadocuantos=$mysqli->query($querycuantos);
 		 $filacuantos = $resultadocuantos->fetch_array();
-
-		  $ca=$fila['ciclos_iniciales']+$filacuantos['c'];
-		  echo "<th>".$ca."</th>";
+                
+                 $fila['baterias_ciclosiniciales'] = (!is_null($fila['baterias_ciclosiniciales'])) ? $fila['baterias_ciclosiniciales']:0;
+                 $fila['baterias_ciclosmant'] = (!is_null($fila['baterias_ciclosmant'])) ? $fila['baterias_ciclosmant']:1;
+                 
+		  $ca=$fila['baterias_ciclosiniciales']+$filacuantos['c'];
+		
 		  //calculando ciclos para preventivo
-		  $todo=$ca/$fila['ciclos_mant'];
-		  $entero=floor($ca/$fila['ciclos_mant']);
+		  $todo=$ca/$fila['baterias_ciclosmant'];
+		  $entero=floor($ca/$fila['baterias_ciclosmant']);
 		  $decimal=$todo-$entero;
-		  $cpp=(1-$decimal)*$fila['ciclos_mant'];
+		  $cpp=(1-$decimal)*$fila['baterias_ciclosmant'];
 		  //calculando ciclos para correctivo
-		  echo "<th>".$cpp."</th>";
+		  //echo "<th>".$cpp."</th>";
 		 
-		 if($filadonde['salida']!=NULL){
-			$querymc="SELECT m.id as mc, m.nombre as nombre,
-				  CONCAT(
-					 TIMESTAMPDIFF(day, fecha_entrada, now()),'D ',    
-					 TIMESTAMPDIFF(hour, fecha_entrada, now())-TIMESTAMPDIFF(day, fecha_entrada, now())*24,'H  ',
-					 TIMESTAMPDIFF(minute, fecha_entrada, now())-(TIMESTAMPDIFF(hour, fecha_entrada, now()))*60,'M') 
-				  as 'entrada'
-			   FROM uso_baterias_montacargas as u, montacargas as m
-			   WHERE bt=".$filadonde['bt']."
-				  AND m.id=u.mc
-				  AND fecha_salida='0000-00-00 00:00:00'
-			   ORDER BY m.id desc
-			   LIMIT 1";
-			$resultadomc = $mysqli->query($querymc);
-			$filamc = $resultadomc->fetch_array();
-			$estadomc = 'En uso';
-			if (!isset($filamc['nombre'])){
-			   $queryultimaubicacion="
-				  SELECT lugar, fecha_salida
-				  FROM
-					(
-						SELECT
-						   c.nombre as lugar,
-						   MAX(u.fecha_salida) as fecha_salida
-						FROM uso_baterias_bodega as u, bodegas as b, cargadores as c
-						WHERE u.fecha_salida!='0000-00-00 00:00:00'
-						   AND u.bt=".$filadonde['bt']."
-						   AND u.bg=b.id
-						   AND b.cg=c.id
-						
-						UNION ALL
-						
-						SELECT
-						   m.nombre as lugar,
-						   MAX(u.fecha_salida) as fecha_salida
-						FROM uso_baterias_montacargas as u, montacargas as m
-						WHERE u.fecha_salida!='0000-00-00 00:00:00'
-						   AND u.bt=".$filadonde['bt']."
-						   AND u.mc=m.id
-						
-						UNION ALL
-						
-						SELECT
-						   'SIN REGISTROS' as lugar,
-						   '0000-00-00 00:00:00' as fecha_salida
-					) as a
-				  ORDER BY fecha_salida DESC
-				  LIMIT 1
-			   ";
-      		   $resultadoul = $mysqli->query($queryultimaubicacion);
-		 	   $filaul = $resultadoul->fetch_array();
+                  if($filadonde != NULL){
+                    if(isset($filadonde['salida']) && $filadonde['salida']!=NULL){
+                           $querymc="SELECT m.id as mc, m.nombre as nombre,
+                                     CONCAT(
+                                            TIMESTAMPDIFF(day, fecha_entrada, now()),'D ',    
+                                            TIMESTAMPDIFF(hour, fecha_entrada, now())-TIMESTAMPDIFF(day, fecha_entrada, now())*24,'H  ',
+                                            TIMESTAMPDIFF(minute, fecha_entrada, now())-(TIMESTAMPDIFF(hour, fecha_entrada, now()))*60,'M') 
+                                     as 'entrada'
+                              FROM uso_baterias_montacargas as u, baterias as m
+                              WHERE bt=".$filadonde['bt']."
+                                     AND m.id=u.mc
+                                     AND fecha_salida='0000-00-00 00:00:00'
+                              ORDER BY m.id desc
+                              LIMIT 1";
+                           $resultadomc = $mysqli->query($querymc);
+                           $filamc = $resultadomc->fetch_array();
+                           $estadomc = 'En uso';
+                           if (!isset($filamc['nombre'])){
+                              $queryultimaubicacion="
+                                     SELECT lugar, fecha_salida
+                                     FROM
+                                           (
+                                                   SELECT
+                                                      c.nombre as lugar,
+                                                      MAX(u.fecha_salida) as fecha_salida
+                                                   FROM uso_baterias_bodega as u, bodegas as b, cargadores as c
+                                                   WHERE u.fecha_salida!='0000-00-00 00:00:00'
+                                                      AND u.bt=".$filadonde['bt']."
+                                                      AND u.bg=b.id
+                                                      AND b.cg=c.id
 
-			   $filamc['nombre']='<span style="color:red">ANT.: '.$filaul['lugar'].'</span>';
-			   $estadomc = '<span style="color:red">SIN ESTADO</span>';
-			   $filamc['entrada'] = '<span style="color:red">'.$filaul['fecha_salida'].'</span>';
-			}else{
-			   $filamc['nombre']="<i class='fa icon-montacarga'></i> ".$filamc['nombre'];
-			}
-			echo "<th>".$filamc['nombre']."</th>";
-  			echo "<th>$estadomc</th>";
-			echo "<th>".$filamc['entrada']."</th>";
-		  }elseif($filadonde['descanso']!=NULL){
-			echo "<th><i class='fa icon-cargador'></i> ".$filadonde['bg_nombre']."</th>";
-			echo "<th>En descanso</th>";
-			echo "<th>".$filadonde['descanso']."</th>";
-		  }elseif($filadonde['carga']!=NULL){
-			echo "<th><i class='fa icon-cargador'></i> ".$filadonde['bg_nombre']."</th>";
-			echo "<th>En carga</th>";
-			echo "<th>".$filadonde['carga']."</th>";				  
-		  }else{
-			echo "<th><i class='fa icon-cargador'></i> ".$filadonde['bg_nombre']."</th>";
-			echo "<th>En espera</th>";
-			echo "<th>".$filadonde['entrada']."</th>";				  
-		  }
+                                                   UNION ALL
+
+                                                   SELECT
+                                                      m.nombre as lugar,
+                                                      MAX(u.fecha_salida) as fecha_salida
+                                                   FROM uso_baterias_baterias as u, baterias as m
+                                                   WHERE u.fecha_salida!='0000-00-00 00:00:00'
+                                                      AND u.bt=".$filadonde['bt']."
+                                                      AND u.mc=m.id
+
+                                                   UNION ALL
+
+                                                   SELECT
+                                                      'SIN REGISTROS' as lugar,
+                                                      '0000-00-00 00:00:00' as fecha_salida
+                                           ) as a
+                                     ORDER BY fecha_salida DESC
+                                     LIMIT 1
+                              ";
+                      $resultadoul = $mysqli->query($queryultimaubicacion);
+                              $filaul = $resultadoul->fetch_array();
+
+                              $filamc['nombre']='<span style="color:red">ANT.: '.$filaul['lugar'].'</span>';
+                              $estadomc = '<span style="color:red">SIN ESTADO</span>';
+                              $filamc['entrada'] = '<span style="color:red">'.$filaul['fecha_salida'].'</span>';
+                           }else{
+                              $filamc['nombre']="<i class='fa icon-montacarga'></i> ".$filamc['nombre'];
+                           }
+                           echo "<th>".$filamc['nombre']."</th>";
+                           echo "<th>$estadomc</th>";
+                           echo "<th>".$filamc['entrada']."</th>";
+                     }elseif(isset($filadonde['descanso']) && $filadonde['descanso']!=NULL){
+                           echo "<th><i class='fa icon-cargador'></i> ".$filadonde['bg_nombre']."</th>";
+                           echo "<th>En descanso</th>";
+                           echo "<th>".$filadonde['descanso']."</th>";
+                     }elseif(isset($filadonde['carga']) && $filadonde['carga'] !=NULL){
+                           echo "<th><i class='fa icon-cargador'></i> ".$filadonde['bg_nombre']."</th>";
+                           echo "<th>En carga</th>";
+                           echo "<th>".$filadonde['carga']."</th>";				  
+                     }elseif(isset($filadonde['entrada']) && $filadonde['entrada'] !=NULL){
+                           echo "<th><i class='fa icon-cargador'></i> ".$filadonde['bg_nombr]."e']."</th>";
+                           echo "<th>En espera</th>";
+                           echo "<th>".$filadonde['entrada']."</th>";				  
+                     }else{
+                           //echo "<th></th>";
+                           echo "<th style='color:red'>Sin asignar</th>";
+                           echo "<th style='color:red'>N/A</th>";
+                           echo "<th style='color:red'>N/A</th>";
+                     }
+                }else{ //SI NO EXISTE REGISTRO DE LA BATERIA EN LAS BODEGAS (BUSCAMOS EN MONTACARGAS)
+                    $querymc="SELECT m.idmontacargas as mc, m.montacargas_nombre as nombre,
+                                CONCAT(
+                                       TIMESTAMPDIFF(day, fecha_entrada, now()),'D ',    
+                                       TIMESTAMPDIFF(hour, fecha_entrada, now())-TIMESTAMPDIFF(day, fecha_entrada, now())*24,'H  ',
+                                       TIMESTAMPDIFF(minute, fecha_entrada, now())-(TIMESTAMPDIFF(hour, fecha_entrada, now()))*60,'M') 
+                                as 'entrada'
+                                FROM uso_baterias_montacargas as u, montacargas as m
+                                WHERE bt=".$fila['Id']."
+                                     AND m.idmontacargas=u.mc
+                                     AND fecha_salida='0000-00-00 00:00:00'
+                              ORDER BY m.idmontacargas desc
+                              LIMIT 1";
+                           $resultadomc = $mysqli->query($querymc);
+                           $filamc = $resultadomc->fetch_array();
+                           
+                           $estadomc = 'En uso';
+                           if (!isset($filamc['nombre'])){
+                              $queryultimaubicacion="
+                                     SELECT lugar, fecha_salida
+                                     FROM
+                                           (
+                                                   SELECT
+                                                      c.cargadores_nombre as lugar,
+                                                      MAX(u.fecha_salida) as fecha_salida
+                                                   FROM uso_baterias_bodega as u, bodegas as b, cargadores as c
+                                                   WHERE u.fecha_salida!='0000-00-00 00:00:00'
+                                                      AND u.bt=".$fila['Id']."
+                                                     AND u.bg=b.id
+                                                      AND b.cg=c.idcargadores
+
+                                                   UNION ALL
+
+                                                   SELECT
+                                                      m.montacargas_nombre as lugar,
+                                                      MAX(u.fecha_salida) as fecha_salida
+                                                   FROM uso_baterias_montacargas as u, montacargas as m
+                                                   WHERE u.fecha_salida!='0000-00-00 00:00:00'
+                                                      AND u.bt=".$fila['Id']."
+                                                     AND u.mc=m.idmontacargas
+
+                                                   UNION ALL
+
+                                                   SELECT
+                                                      'SIN REGISTROS' as lugar,
+                                                      '0000-00-00 00:00:00' as fecha_salida
+                                           ) as a
+                                     ORDER BY fecha_salida DESC
+                                     LIMIT 1
+                              ";
+                        
+                      $resultadoul = $mysqli->query($queryultimaubicacion);
+                              $filaul = $resultadoul->fetch_array();
+
+                              $filamc['nombre']='<span style="color:red">ANT.: '.$filaul['lugar'].'</span>';
+                              $estadomc = '<span style="color:red">SIN ESTADO</span>';
+                              $filamc['entrada'] = '<span style="color:red">'.$filaul['fecha_salida'].'</span>';
+                           }else{
+                              $filamc['nombre']="<i class='fa icon-montacarga'></i> ".$filamc['nombre'];
+                           }
+                           echo "<th>".$filamc['nombre']."</th>";
+                           echo "<th>$estadomc</th>";
+                           echo "<th>".$filamc['entrada']."</th>";
+                }
 
 		 $querystatus="SELECT motivo,
 				 CONCAT(TIMESTAMPDIFF(day, fecha_entrada, now()),'D ',    
@@ -231,8 +311,9 @@ function deshabilita(cual) {
 					TIMESTAMPDIFF(minute, fecha_entrada, now())-(TIMESTAMPDIFF(hour, fecha_entrada, now()))*60,'M')
 				 as 'tiempo'
 			  FROM deshabilitabt
-			  WHERE mc=".$fila['Id']."
+			  WHERE bt=".$fila['Id']."
 				 AND fecha_salida='0000-00-00 00:00:00'";
+                 
 		 if ($resultadostatus=$mysqli->query($querystatus)){
 			$filastatus = $resultadostatus->fetch_array();
 				   
@@ -298,13 +379,13 @@ function deshabilita(cual) {
         <!-- END PAGE LEVEL PLUGINS -->
 <?php
 
-	$grafica=pinta_grafica('bt','reporteBTC','carga');
+	$grafica=pinta_grafica('bt','reporteBTC','carga','todo',$loggedInUser->sucursal_activa);
 	echo $grafica;
-	$grafica=pinta_grafica('bt','reporteBTD','descanso');
+	$grafica=pinta_grafica('bt','reporteBTD','descanso','todo',$loggedInUser->sucursal_activa);
 	echo $grafica;
-	$grafica=pinta_grafica('bt','reporteBTU','uso');
+	$grafica=pinta_grafica('bt','reporteBTU','uso','todo',$loggedInUser->sucursal_activa);
 	echo $grafica;
-	$grafica=pinta_grafica('bt','reporteBTE','espera');
+	$grafica=pinta_grafica('bt','reporteBTE','espera','todo',$loggedInUser->sucursal_activa);
 	echo $grafica;
 
 require_once("tema/comun/footer.php");

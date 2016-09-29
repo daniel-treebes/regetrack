@@ -10,7 +10,7 @@ $queryBateriaSiguiente="
 		tcg.idcargadores as cg_id,
 		tcg.cargadores_nombre as cg_nombre,
 		tbt.idbaterias as bt_id,
-		tbt.baterias_numserie as bt_nombre,
+		tbt.baterias_nombre as bt_nombre,
 		tubb.bg as bg_id,
 		CONCAT(TIMESTAMPDIFF(hour, tubb.fecha_descanso, now()),'H ',
 			(TIMESTAMPDIFF(minute, tubb.fecha_descanso, now())-TIMESTAMPDIFF(hour, tubb.fecha_descanso, now())*60),'M')
@@ -33,8 +33,6 @@ $queryBateriaSiguiente="
 		AND tbg.id=tubb.bg
 		AND tbg.cg=tcg.idcargadores
 		AND tbt.idbaterias=tubb.bt
-		AND tbt.tipo=tmc.tipo
-		AND tcg.tipo=tmc.tipo
 		AND tmc.idmontacargas=".$_GET['id']."
 		AND tbt.idbaterias NOT IN (
 			SELECT bt
@@ -42,10 +40,15 @@ $queryBateriaSiguiente="
 			WHERE fecha_salida ='0000-00-00 00:00:00'
 			GROUP BY bt
 		)
+                AND tbt.idbaterias IN (
+			SELECT idbaterias
+			FROM montacargas_baterias
+			WHERE idmontacargas =".$_GET['id']."
+		)
 	ORDER BY estado, t_descanso DESC, t_carga DESC
 	LIMIT 1
 ";
-echo '<pre>';var_dump($queryBateriaSiguiente);echo  '</pre>';exit();
+
 $res = $mysqli->query($queryBateriaSiguiente);
 $bateriaSiguiente=array();
 while($fila = $res->fetch_array()) {
@@ -80,7 +83,7 @@ $queryEspacioDisponible="
 		AND tmc.id=".$_GET['id']."
 	GROUP BY cg_id
 ";
-
+echo '<pre>';var_dump($queryEspacioDisponible);echo  '</pre>';exit();
 //Los ocupados serviran para saber si está vacío!
 $queryCargadorOcupado="
 	SELECT

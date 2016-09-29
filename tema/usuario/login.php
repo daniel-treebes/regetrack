@@ -14,7 +14,7 @@
         <!-- BEGIN LOGIN -->
         <div class="content">
             <!-- BEGIN LOGIN FORM -->
-            <form name='login' action='<?php $_SERVER['PHP_SELF'] ?>' method='post'>
+            <form name='login' action='/login.php' method='post'>
                 <h3 class="form-title font-green">Ingresar</h3>
                 <div class="alert alert-danger display-hide">
                     <button class="close" data-close="alert"></button>

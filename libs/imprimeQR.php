@@ -33,12 +33,11 @@ if($tipo=="baterias"){
     $stingurl=urlencode("https://v2.regetrack.com/sistema.php?ruta=edita/baterias&id=".$id);
     $query="
         SELECT
-            m.num_serie as nombre,
-            CONCAT(t.volts,'V ',t.ah,'Ah') as tipo
-        FROM baterias as m,
-            bateriastipos as t
-        WHERE t.id=m.tipo
-            AND m.id=".$id;
+            b.baterias_nombre as nombre,
+            CONCAT(b.baterias_c,'-',b.baterias_k,'-',b.baterias_p,'-',b.baterias_t,'-',b.baterias_e,' (',b.baterias_volts,'V - ',b.baterias_amperaje,'Ah)') as tipo
+        FROM baterias as b
+        WHERE b.idbaterias=".$id;
+         
     $res = $mysqli->query($query);
     $datos = $res->fetch_array();
     ?>

@@ -21,7 +21,8 @@ $query="
         m.idmontacargas as Id,
         m.montacargas_nombre as Nombre,
         m.montacargas_modelo as Modelo,
-         m.montacargas_marca as Marca,
+        m.montacargas_marca as Marca,
+        m.montacargas_comprador as Empresa,
         CONCAT(m.montacargas_c,'-',m.montacargas_k,'-',m.montacargas_p,'-',m.montacargas_t,'-',m.montacargas_e,' (',m.montacargas_volts,'V - ',m.montacargas_amperaje,'Ah)') as Tipo
     FROM
         montacargas as m
@@ -90,9 +91,11 @@ function deshabilita(cual) {
                 <th>Nombre</th>
                 <th>Modelo</th>
                 <th>Marca</th>
+                <th>Empresa</th>
                 <th>Tipo</th>
-                <th>Total de Ciclos</th>
-                <th>Ciclos Restantes</th>
+                
+<!--                <th>Total de Ciclos</th>
+                <th>Ciclos Restantes</th>-->
 			    <th>Batería</th>
 			    <th>Tiempo con/sin batería</th>
 				<th>Uso P. Hist.</th>
@@ -109,6 +112,7 @@ function deshabilita(cual) {
 			    echo "<th>".$fila['Nombre']."</th>";
 				echo "<th>".$fila['Modelo']."</th>";
                                   echo "<th>".$fila['Marca']."</th>";
+                                   echo "<th>".$fila['Empresa']."</th>";
 				echo "<th>".$fila['Tipo']."</th>";
                               
 
@@ -170,9 +174,9 @@ function deshabilita(cual) {
 			   $cictot = $ciclos;
 			   $cicres = $cicman-$cicact-$sumaini;
 
-			   echo "<th>".$cictot."</th>";
+			  // echo "<th>".$cictot."</th>";
 
-			   echo "<th>".$cicres."</th>";
+			   //echo "<th>".$cicres."</th>";
 				
 				$saludBateriaActualValor = mt_rand(1, 100);
 				

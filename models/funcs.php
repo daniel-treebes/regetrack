@@ -1227,20 +1227,20 @@ function pinta_grafica($modulo,$divapintar,$estatus,$idapintar='todo',$sucursal_
 	if ($estatus=="uso"){
 		$tuso='uso_baterias_montacargas as u';
 		if ($modulo=="bt"){
-			$tuso.=' JOIN baterias as m ON u.bt = m.id';
+			$tuso.=' JOIN baterias as m ON u.bt = m.idbaterias';
 		}else{
-			$tuso.=' JOIN montacargas as m ON u.mc = m.id';
+			$tuso.=' JOIN montacargas as m ON u.mc = m.idmontacargas';
 		}
 	}else{
 		$tuso='uso_baterias_bodega as u';
 		if ($modulo=="bt"){
-			$tuso.=' JOIN baterias as m ON u.bt = m.id';
+			$tuso.=' JOIN baterias as m ON u.bt = m.idbaterias';
 		}else{
-			$tuso.=' JOIN bodegas as b ON u.bg = b.id JOIN cargadores as m ON b.cg = m.id';
-			$qwhere='m.id=b.cg AND b.id=u.bg';
+                    $tuso.=' JOIN bodegas as b ON u.bg = b.id JOIN cargadores as m ON b.cg = m.idcargadores';
+                    $qwhere='m.ididcargadores=b.cg AND b.id=u.bg';
 		}
 	}
-	$tuso.=' LEFT JOIN bateriastipos btt ON btt.id = m.tipo';
+	
 	
         
 	$query="
@@ -1260,7 +1260,7 @@ function pinta_grafica($modulo,$divapintar,$estatus,$idapintar='todo',$sucursal_
 	";
         
 
-       
+       echo '<pre>';var_dump($query);echo  '</pre>';exit();
     $respuesta = $mysqli->query($query);
        
 	$data=array();
