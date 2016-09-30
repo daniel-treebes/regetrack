@@ -73,24 +73,29 @@ function deshabilita(cual) {
 	alert()
 }
 		
+$(document).ready( function () {
+    $('#tablabaterias').DataTable();
+} );
 	</script>   
+	<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.css">
+	<script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.js"></script>
 
         <div class="row">
             <div class="col-md-12">
               <?php require_once("tema/comun/topcontenedor.php");?>
 
-	<table id="example" class="table table-striped table-bordered table-hover" cellspacing="0" width="100%">
+	<table id="tablabaterias" class="display table table-striped table-bordered table-hover" cellspacing="0" width="100%">
         <thead>
             <tr>
-				<th>Nombre</th>
-                                <th>Modelo</th>
-                                <th>Marca</th>
-				<th>Tipo</th>
-				<th>Dónde está</th>
-				<th>Estado</th>
-				<th>Tiempo</th>
-                <th>Estatus</th>
-		        <th></th>
+					<th>Nombre</th>
+					<th>Modelo</th>
+					<th>Marca</th>
+					<th>Tipo</th>
+					<th>Dónde está</th>
+					<th>Estado</th>
+					<th>Tiempo</th>
+					<th>Estatus</th>
+					<th></th>
             </tr>
         </thead>
        

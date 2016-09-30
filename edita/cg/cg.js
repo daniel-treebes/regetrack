@@ -10,7 +10,7 @@ function cancelacambios() {
 }
 
 function imprimeQr(tipo,id) {
-   var stingurl="https://v2.regetrack.com/libs/imprimeQR.php?tipo="+tipo+"&id="+id;
+   var stingurl="https://regetrack.com/libs/imprimeQR.php?tipo="+tipo+"&id="+id;
    //url="<img src='https://chart.googleapis.com/chart?chs=250x250&cht=qr&chl="+encodeURIComponent(data)+"'/>";
    window.open(stingurl,'_self');
 }

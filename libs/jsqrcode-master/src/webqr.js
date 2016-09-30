@@ -108,7 +108,7 @@ var html
 function read(a)
 {
   var data=htmlEntities(a);
-  var stingurl="https://v2.regetrack.com/sistema.php?ruta=edita/";
+  var stingurl="https://regetrack.com/sistema.php?ruta=edita/";
   var res = data.substring(0, stingurl.length);
   var cadena = data.substring(stingurl.length,data.length);
   if (res==stingurl) {

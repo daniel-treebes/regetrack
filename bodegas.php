@@ -20,7 +20,7 @@ SELECT * FROM
         c.idcargadores as cgid,
         cbg.cantbg as cantbg,
         b.nombre as Espacio,
-        CONCAT(c.cargadores_volts,'V ',c.cargadores_amperaje,'Ah') as Tipo,
+        CONCAT(c.cargadores_volts,'V ',c.cargadores_amperaje,'Ah (',c.cargadores_e,')') as Tipo,
         bat.baterias_nombre as Bateria,
         usos.entrada,
         usos.carga,
@@ -64,7 +64,7 @@ SELECT * FROM
     WHERE
         usos.bg=b.id AND
         usos.bt=bat.idbaterias AND
-        c.idsucursal = ".$loggedInUser->sucursal_activa." AND 
+        c.idsucursal IN (".$loggedInUser->sucursales.") AND 
         c.idcargadores=b.cg AND
         cbg.cg=c.idcargadores
     
@@ -76,7 +76,7 @@ SELECT * FROM
         c.idcargadores as cgid,
         cbg.cantbg as cantbg,
         b.nombre as Espacio,
-        CONCAT(c.cargadores_volts,'V ',c.cargadores_amperaje,'Ah') as Tipo,
+        CONCAT(c.cargadores_volts,'V ',c.cargadores_amperaje,'Ah (',c.cargadores_e,')') as Tipo,
         NULL as Bateria,
         NULL as entrada,
         NULL as carga,
@@ -107,7 +107,7 @@ SELECT * FROM
         ) as cbg
     WHERE
         libres.bg=b.id AND
-        c.idsucursal = ".$loggedInUser->sucursal_activa." AND
+        c.idsucursal IN (".$loggedInUser->sucursales.") AND
         c.idcargadores=b.cg AND
         cbg.cg=c.idcargadores AND
         b.id not in (
@@ -119,6 +119,42 @@ SELECT * FROM
                fecha_salida='0000-00-00 00:00:00'
             GROUP BY bg
         )
+		
+	UNION ALL
+    
+    SELECT
+        b.id as 'Id',
+        c.cargadores_nombre as Cargador,
+        c.idcargadores as cgid,
+        cbg.cantbg as cantbg,
+        b.nombre as Espacio,
+        CONCAT(c.cargadores_volts,'V ',c.cargadores_amperaje,'Ah (',c.cargadores_e,')') as Tipo,
+        NULL as Bateria,
+        NULL as entrada,
+        NULL as carga,
+        NULL as descanso,
+        NULL as disponible
+    FROM
+        bodegas as b,
+        cargadores as c,
+        (
+            SELECT cg,
+                COUNT(id) as cantbg
+            FROM bodegas
+            GROUP BY cg
+        ) as cbg
+    WHERE
+        b.id NOT IN (
+				SELECT bg
+				FROM uso_baterias_bodega, bodegas as b, cargadores as c
+				WHERE b.id=bg
+					AND b.cg=c.idcargadores
+					AND c.idsucursal IN (".$loggedInUser->sucursales.")
+				GROUP BY bg
+			) AND
+        c.idsucursal IN (".$loggedInUser->sucursales.") AND
+        c.idcargadores=b.cg AND
+        cbg.cg=c.idcargadores
 ) as todo
 
 ORDER BY Cargador, Espacio
@@ -150,13 +186,13 @@ $( "#sortpicture" ).change(function() {
 
 	
 function importa(){
-    $("#sortpicture").trigger('click');		
+	$("#sortpicture").trigger('click');		
 }
+
 function exporta(){
 		   url=location.href.substring(0, location.href.lastIndexOf("/")+1)
 		   window.open(url+'exportaciones/ebodegas.php','_blank');
 }
-
 	
 function importa2(){
     var file_data = $('#sortpicture').prop('files')[0];   
@@ -189,7 +225,7 @@ function deshabilita(cual) {
 		<div class="col-md-12">
             <?php require_once("tema/comun/topcontenedor.php");?>
 
-			<table id="example" class="table table-striped table-bordered table-hover" cellspacing="0" width="100%">
+			<table id="tablacargadores" class="table table-striped table-bordered table-hover" cellspacing="0" width="100%">
 				<thead>
 					<tr>
 						<th>Cargador</th>
@@ -218,12 +254,12 @@ function deshabilita(cual) {
 					   echo "<th rowspan='".$fila['cantbg']."'>".$fila['Tipo']."</th>";
 				   }
    //				echo "<th>".$fila['Espacio']."</th>";
-				   if($fila['disponible']!=NULL){
+				   if($fila['disponible']!=NULL || $fila['Bateria']==NULL){
 					   echo '<th style="color:green">Sin Batería</th>';
 				   }else{
 					   echo "<th>".$fila['Bateria']."</th>";
 				   }
-				   if($fila['disponible']!=NULL){
+				   if($fila['disponible']!=NULL || $fila['Bateria']==NULL){
 					 echo '<th style="color:green">Disponible</th>';
 					 echo "<th>".$fila['disponible']."</th>";
 				   }elseif($fila['descanso']!=NULL){

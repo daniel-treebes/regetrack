@@ -6,7 +6,7 @@
  *Inicializamos variables
  */
 //MONTACARGAS
-   $id;
+   $id=$_GET['id'];
    $nombre;
    $modelo;
    $tipo;

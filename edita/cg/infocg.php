@@ -22,12 +22,6 @@ include('infobd.php');
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-md-3 control-label">Nombre</label>
-                        <div class="col-md-9">
-                            <input type="text" class="form-control datos-cosa" placeholder="Default Input" value="<?php  echo $datosCargador['Nombre'] ?> "> 
-                        </div>
-                    </div>
-                    <div class="form-group">
                         <label class="col-md-3 control-label">Tipo</label>
                         <div class="col-md-9">
                             <input type="text" class="form-control datos-cosa" placeholder="Default Input" value="<?php  echo $datosCargador['Tipo'] ?> "> 

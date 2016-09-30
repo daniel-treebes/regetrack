@@ -95,7 +95,7 @@ function colocaBateriaEnBodega(){
    })
    .done(function( data, textStatus, jqXHR) {
 //      alert( "Bateria desmontada exitosamente");
-      window.location.replace("https://v2.regetrack.com/sistema.php?ruta=edita/montacargas&id="+data);
+      window.location.replace("https://regetrack.com/sistema.php?ruta=edita/montacargas&id="+data);
    })
    .fail(function( jqXHR, textStatus, errorThrown ) {
       alert( "El registro a fallado: " +  textStatus + " Inicie nuevamente");
@@ -124,7 +124,7 @@ function ponBateriaEnMC(){
    .done(function( data, textStatus, jqXHR) {
       
 //      alert("Se ha montado la bateria excitosamente");
-      window.location.replace("https://v2.regetrack.com/sistema.php?ruta=edita/montacargas&id="+data);
+      window.location.replace("https://regetrack.com/sistema.php?ruta=edita/montacargas&id="+data);
    })
    .fail(function( jqXHR, textStatus, errorThrown ) {
       alert( "La solicitud a fallado: " +  textStatus + " Inicie nuevamente");
@@ -132,7 +132,7 @@ function ponBateriaEnMC(){
 }
 
 function imprimeQr(tipo,id) {
-   var stingurl="https://v2.regetrack.com/libs/imprimeQR.php?tipo="+tipo+"&id="+id;
+   var stingurl="https://regetrack.com/libs/imprimeQR.php?tipo="+tipo+"&id="+id;
    //url="<img src='https://chart.googleapis.com/chart?chs=250x250&cht=qr&chl="+encodeURIComponent(data)+"'/>";
    window.open(stingurl,'_self');
 }

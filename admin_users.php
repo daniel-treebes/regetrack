@@ -49,7 +49,7 @@ require_once("tema/comun/header.php");?>
 echo resultBlock($errors,$successes);
 
 echo "
-<form action='https://v2.regetrack.com/register.php'>
+<form action='https://regetrack.com/register.php'>
     <input type='submit' value='Crear Nuevo usuario'>
 </form>
 

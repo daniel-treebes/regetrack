@@ -58,6 +58,8 @@ $horas['h']['idle']=0;
 $horas['h']['cargap']=0;
 $horas['h']['idlep']=0;
 while($fila = $resultado->fetch_array()) {
+	if ($fila['diastotal']==0) $fila['diastotal']=1;
+	if ($fila['horastotal']==0) $fila['horastotal']=1;
     $horas['h']['total']= round($fila['horastotal'],0);
     $horas['h']['carga']= round($fila['horascarga'],0);
     $horas['h']['idle']= round($fila['horasidle'],0);
