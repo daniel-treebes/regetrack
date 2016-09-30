@@ -11,7 +11,7 @@ date_default_timezone_set("America/Mexico_City");
 //Database Information
 $db_host = "localhost"; //Host address (most likely localhost)
 $db_name = "regetrac_sistema"; //Name of Database
-$db_user = "regetrac_sistema"; //Name of database user
+$db_user = "regetrac_sistemav2"; //Name of database user
 $db_pass = "Hola.1234"; //Password for database user
 
 

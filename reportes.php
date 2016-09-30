@@ -6,8 +6,8 @@
    $ffin='';
    if (isset($_GET['fechaini']) && isset($_GET['fechafin'])){
       $rangoferchasBAT=" AND Fecha_Carga>='".$_GET['fechaini']." 00:00:00' AND Fecha_Carga<='".$_GET['fechafin']." 23:59:59'";
-      $rangoferchasDES=" fecha_entrada>='".$_GET['fechaini']." 00:00:00' AND fecha_entrada<='".$_GET['fechafin']." 23:59:59'";
-      $rangoferchasMON=" fecha_entrada>='".$_GET['fechaini']." 00:00:00' AND fecha_entrada<='".$_GET['fechafin']." 23:59:59'";
+      $rangoferchasDES=" AND fecha_entrada>='".$_GET['fechaini']." 00:00:00' AND fecha_entrada<='".$_GET['fechafin']." 23:59:59'";
+      $rangoferchasMON=" AND fecha_entrada>='".$_GET['fechaini']." 00:00:00' AND fecha_entrada<='".$_GET['fechafin']." 23:59:59'";
       $fini=$_GET['fechaini'];
       $ffin=$_GET['fechafin'];
    }
@@ -16,7 +16,7 @@
    $acciones=[];
 /*
    $acciones[0][0]="Nuevo";
-   $acciones[0][1]="accionAñadir";
+   $acciones[0][1]="accionAï¿½adir";
    $acciones[1][0]="Exportar";
    $acciones[1][1]="javascript:exporta();";
    $acciones[2][0]="Importar";
@@ -53,7 +53,7 @@
 <script>
    function recargaconfechas() {
       if ($("#fechaini").val()!='') {
-         window.location.assign("https://regetrack.com/reportes.php?fechaini="+$("#fechaini").val()+"&fechafin="+$("#fechafin").val());
+         window.location.assign("http://v2.regetreack.com/reportes.php?fechaini="+$("#fechaini").val()+"&fechafin="+$("#fechafin").val());
       }
    }
 
@@ -73,8 +73,8 @@
       <?php
 
       $query="SELECT b.id,
-                  cg.nombre as 'CARGADOR',
-                  bt.num_serie as 'BATERIA',
+                  cg.cargadores_nombre as 'CARGADOR',
+                  bt.baterias_nombre as 'BATERIA',
                   b.fecha_entrada as 'Fecha_Espera',
                   b.fecha_carga as 'Fecha_Carga',
                   b.fecha_descanso as 'Fecha_Descanso',
@@ -107,9 +107,11 @@
                      LEFT JOIN uc_users as uc ON b.usuario_carga=uc.id
                      LEFT JOIN uc_users as ud ON b.usuario_descanso=ud.id
                      LEFT JOIN uc_users as us ON b.usuario_salida=us.id";
+     
       $dg = new C_DataGrid($query, "id", "USO_DE_BATERIAS_Y_CARGADORES");
+      
       $dg -> set_caption("USO DE BATER&Iacute;AS Y CARGADORES");
-      $dg -> set_query_filter("bg.id=b.bg AND bg.cg=cg.id AND bt.id=b.bt".$rangoferchasBAT);
+      $dg -> set_query_filter("bg.id=b.bg AND bg.cg=cg.idcargadores AND bt.idbaterias=b.bt ".$rangoferchasBAT." AND cg.idsucursal = ".$loggedInUser->sucursal_activa);
       $dg -> set_col_hidden("id");
       $dg -> set_col_align('CARGADOR', 'center');
       $dg -> set_col_align('BATERIA', 'center');
@@ -133,7 +135,7 @@
       $dg -> set_col_width('UC', 50);
       $dg -> set_col_width('UD', 50);
       $dg -> set_col_width('US', 50);
-      
+     
 
 /*      
       $dg -> set_col_edittype("UE", "select", "Select user_name,user_name from uc_users",false);
@@ -151,10 +153,10 @@
       $dg -> display();
       
       echo '<br><br>';
-
+      
       $query="SELECT b.id,
-                  mc.nombre as 'MONTACARGAS',
-                  bt.num_serie as 'BATERIA',
+                  mc.montacargas_nombre as 'MONTACARGAS',
+                  bt.baterias_nombre as 'BATERIA',
                   b.fecha_entrada as 'Fecha_Uso',
                   b.fecha_salida as 'Fecha_Salida',
                   CONCAT(TIMESTAMPDIFF(DAY, fecha_entrada, fecha_salida),':',
@@ -169,10 +171,11 @@
                    uso_baterias_montacargas as b
                      LEFT JOIN uc_users as ue ON b.usuario_entrada=ue.id
                      LEFT JOIN uc_users as us ON b.usuario_salida=us.id";
+
+      
       $dg = new C_DataGrid($query, "id", "USO_DE_BATERIAS_Y_MONTACARGAS");
       $dg -> set_caption("USO DE BATER&Iacute;AS Y MONTACARGAS");
-      $dg -> set_query_filter("mc.id=b.mc AND b.bt=bt.id".$rangoferchasBAT);
-      $dg -> set_query_filter($rangoferchasMON);
+      $dg -> set_query_filter("mc.idmontacargas=b.mc AND b.bt=bt.idbaterias ".$rangoferchasMON." AND mc.idsucursal = ".$loggedInUser->sucursal_activa);
       $dg -> set_col_hidden("id");
       $dg -> set_col_align('MONTACARGAS', 'center');
       $dg -> set_col_align('BATERIA', 'center');
@@ -187,10 +190,10 @@
 //      $dg -> enable_search(true);
       $dg -> enable_export('EXCEL');
       $dg -> display();
-
+    
       echo '<br><br>';
       $query="SELECT b.id,
-                  mc.nombre as 'MONTACARGAS',
+                  mc.montacargas_nombre as 'MONTACARGAS',
                   b.fecha_entrada as 'Fecha_Inicio',
                   b.fecha_salida as 'Fecha_Fin',
                   CONCAT(TIMESTAMPDIFF(DAY, fecha_entrada, fecha_salida),':',
@@ -206,9 +209,10 @@
                    deshabilitamc as b
                      LEFT JOIN uc_users as ue ON b.usuario_entrada=ue.id
                      LEFT JOIN uc_users as us ON b.usuario_salida=us.id";
+      
       $dg = new C_DataGrid($query, "id", "Alertas_Montacargas");
       $dg -> set_caption("Alertas Montacargas");
-      $dg -> set_query_filter("mc.id=b.mc".$rangoferchasBAT);
+      $dg -> set_query_filter("mc.idmontacargas=b.idmontacargas ".$rangoferchasMON." AND mc.idsucursal = ".$loggedInUser->sucursal_activa);
       $dg -> set_col_hidden("id");
       $dg -> set_col_align('MONTACARGAS', 'center');
       $dg -> set_col_align('Motivo', 'left');
@@ -228,10 +232,10 @@
 //      $dg -> enable_search(true);
       $dg -> enable_export('EXCEL');
       $dg -> display();
-
+       
       echo '<br><br>';
       $query="SELECT b.id,
-                  bt.num_serie as 'BATERIA',
+                  bt.baterias_nombre as 'BATERIA',
                   b.fecha_entrada as 'Fecha_Inicio',
                   b.fecha_salida as 'Fecha_Fin',
                   CONCAT(TIMESTAMPDIFF(DAY, fecha_entrada, fecha_salida),':',
@@ -247,9 +251,10 @@
                    deshabilitabt as b
                      LEFT JOIN uc_users as ue ON b.usuario_entrada=ue.id
                      LEFT JOIN uc_users as us ON b.usuario_salida=us.id";
+      
       $dg = new C_DataGrid($query, "id", "Alertas_Baterias");
       $dg -> set_caption("Alertas Bater&iacute;as");
-      $dg -> set_query_filter("bt.id=b.bt".$rangoferchasBAT);
+      $dg -> set_query_filter("bt.idbaterias=b.bt ".$rangoferchasDES." AND bt.idsucursal = ".$loggedInUser->sucursal_activa);
       $dg -> set_col_hidden("id");
       $dg -> set_col_align('BATERIA', 'center');
       $dg -> set_col_align('Motivo', 'left');
@@ -269,10 +274,10 @@
 //      $dg -> enable_search(true);
       $dg -> enable_export('EXCEL');
       $dg -> display();
-
+     
       echo '<br><br>';
       $query="SELECT b.id,
-                  cg.nombre as 'CARGADOR',
+                  cg.cargadores_nombre as 'CARGADOR',
                   b.fecha_entrada as 'Fecha_Inicio',
                   b.fecha_salida as 'Fecha_Fin',
                   CONCAT(TIMESTAMPDIFF(DAY, fecha_entrada, fecha_salida),':',
@@ -288,9 +293,10 @@
                    deshabilitacg as b
                      LEFT JOIN uc_users as ue ON b.usuario_entrada=ue.id
                      LEFT JOIN uc_users as us ON b.usuario_salida=us.id";
+    
       $dg = new C_DataGrid($query, "id", "Alertas_Cargadores");
       $dg -> set_caption("Alertas Cargadores");
-      $dg -> set_query_filter("cg.id=b.cg".$rangoferchasBAT);
+      $dg -> set_query_filter("cg.idcargadores=b.cg ".$rangoferchasDES." AND cg.idsucursal = ".$loggedInUser->sucursal_activa);
       $dg -> set_col_hidden("id");
       $dg -> set_col_align('CARGADOR', 'center');
       $dg -> set_col_align('Motivo', 'left');

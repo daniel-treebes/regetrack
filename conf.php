@@ -4,7 +4,7 @@
 define('PHPGRID_DB_HOSTNAME', 'localhost:3306'); // database host name
 define('PHPGRID_DB_USERNAME', 'regetrac_sistema');     // database user name
 define('PHPGRID_DB_PASSWORD', 'Hola.1234'); // database password
-define('PHPGRID_DB_NAME', 'regetrac_sistema'); // database name
+define('PHPGRID_DB_NAME', 'regetrac_sistemav2'); // database name
 define('PHPGRID_DB_TYPE', 'mysql');  // database type
 define('PHPGRID_DB_CHARSET','utf8'); // ex: utf8(for mysql),AL32UTF8 (for oracle), leave blank to use the default charset
 

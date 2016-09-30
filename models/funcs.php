@@ -1193,15 +1193,13 @@ function securePage($uri){
 
 //Treebes JLFV a partir de aqui
 function pinta_grafica($modulo,$divapintar,$estatus,$idapintar='todo',$sucursal_activa){
-      
+        
 	global $mysqli;
 
 	date_default_timezone_set('UTC');
 	date_default_timezone_set("America/Mexico_City");
 
 	$filtro="";
-	$nombre='nombre';
-	if ($modulo=="bt") $nombre='num_serie';
 	if ($idapintar!='todo') $filtro='AND m.id='.$idapintar;
 	if ($estatus=='uso'){
 		$fini='fecha_entrada';
@@ -1242,10 +1240,20 @@ function pinta_grafica($modulo,$divapintar,$estatus,$idapintar='todo',$sucursal_
 	}
 	
 	
-        
+        if($modulo=="bt"){
+            $id = 'idbaterias';
+            $nombre = 'baterias_nombre';
+        }else if($modulo=="cg"){
+            $id = 'idcargadores';
+            $nombre = 'cargadores_nombre';
+        }else{
+             $id = 'idmontacargas';
+            $nombre = 'montacargas_nombre';
+        }
+       
 	$query="
 		SELECT
-                    m.id as id,
+                    m.".$id." as id,
                     m.$nombre as nombre,
                     u.$fini as fecha_entrada,
                     u.$ffin as fecha_salida,
@@ -1253,14 +1261,13 @@ function pinta_grafica($modulo,$divapintar,$estatus,$idapintar='todo',$sucursal_
                     TIMESTAMPDIFF(minute, u.$fini, u.$ffin)-(TIMESTAMPDIFF(hour, u.$fini, u.$ffin))*60 as min
 		from $tuso
 		where $qwhere
-			AND u.$ffin!='0000-00-00 00:00:00' AND btt.idsucursal = ".$sucursal_activa."
+			AND u.$ffin!='0000-00-00 00:00:00' AND m.idsucursal = ".$sucursal_activa."
 			$filtro
 		order by
 			nombre, u.$fini asc
 	";
         
-
-       echo '<pre>';var_dump($query);echo  '</pre>';exit();
+         
     $respuesta = $mysqli->query($query);
        
 	$data=array();
@@ -1281,38 +1288,39 @@ function pinta_grafica($modulo,$divapintar,$estatus,$idapintar='todo',$sucursal_
 	$tabladeh="deshabilita".$modulo." as d";
 	$titulo='HORAS DE '.strtoupper($estatus).' DE';
 	if ($modulo=='bt'){
-		$tabladeh.=' JOIN baterias as m ON d.bt = m.id';
+		$tabladeh.=' JOIN baterias as m ON d.bt = m.idbaterias';
 		if ($idapintar=='todo') $titulo.=' BATERIAS';
 		else $titulo.=' LA BATERIA '.$nombreid;
 	}
 	if ($modulo=='cg'){
-		$tabladeh.=' JOIN cargadores as m ON d.cg = m.id';
+		$tabladeh.=' JOIN cargadores as m ON d.cg = m.idcargadores';
 		if ($idapintar=='todo') $titulo.=' CARGADORES';
 		else $titulo.='L CARGADOR '.$nombreid;
 	}
 	if ($modulo=='mc'){
-		$tabladeh.=' JOIN montacargas as m ON d.mc = m.id';
+		$tabladeh.=' JOIN montacargas as m ON d.idmontacargas = m.idmontacargas';
 		if ($idapintar=='todo') $titulo.=' MONTACARGAS';
 		else $titulo.='L MONTACARGAS '.$nombreid;
 	}
-        $tabladeh.= ' JOIN bateriastipos as btt ON btt.id = m.tipo';
+       
 	$query="
 		SELECT
 			d.*,
 			m.$nombre as nombre
 		FROM  $tabladeh
-		WHERE btt.idsucursal = ".$sucursal_activa."
+		WHERE m.idsucursal = ".$sucursal_activa."
 			$filtro
 		ORDER BY nombre, d.fecha_entrada
 	";
-        
+     
 	$rep_alertas = $mysqli->query($query);
 	
 	$alertas=array();
-
+         
 	if ($rep_alertas){
 	   while($renglon = $rep_alertas->fetch_array()){
-		  $mc=$renglon[$modulo];
+                
+		  $mc= isset($renglon[$modulo]) ? $renglon[$modulo] : 'idmontacargas' ;
 		  if (!isset($alertas[$mc])){
 			 $alertas[$mc]['data']='';
 			 $alertas[$mc]['nombre']=$renglon['nombre'];
@@ -1488,8 +1496,9 @@ function eficiencia($modulo,$estatus,$divapintar,$sucursal_activa,$idapintar='to
 			$filtro
 		order by u.$fini asc
 	";
-    
+        
     $respuesta = $mysqli->query($query);
+
     if(!$respuesta){
         echo '<pre>';var_dump($qwhere);echo  '</pre>';
     }

@@ -53,12 +53,11 @@ if($tipo=="cargadores"){
     $stingurl=urlencode("https://v2.regetrack.com/sistema.php?ruta=edita/cargadores&id=".$id);
     $query="
         SELECT
-            m.nombre,
-            CONCAT(t.volts,'V ',t.ah,'Ah') as tipo
-        FROM cargadores as m,
-            bateriastipos as t
-        WHERE t.id=m.tipo
-            AND m.id=".$id;
+            c.cargadores_nombre as nombre,
+            CONCAT(c.cargadores_volts,'V ',c.cargadores_amperaje,'Ah') as tipo
+        FROM cargadores as c
+        WHERE  c.idcargadores=".$id;
+    
     $res = $mysqli->query($query);
     $datos = $res->fetch_array();
     ?>

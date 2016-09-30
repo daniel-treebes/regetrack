@@ -16,12 +16,12 @@ SELECT * FROM
 (
     SELECT
         b.id as Id,
-        c.nombre as Cargador,
-        c.id as cgid,
+        c.cargadores_nombre as Cargador,
+        c.idcargadores as cgid,
         cbg.cantbg as cantbg,
         b.nombre as Espacio,
-        CONCAT(t.volts,'V ',t.ah,'Ah') as Tipo,
-        bat.num_serie as Bateria,
+        CONCAT(c.cargadores_volts,'V ',c.cargadores_amperaje,'Ah') as Tipo,
+        bat.baterias_nombre as Bateria,
         usos.entrada,
         usos.carga,
         usos.descanso,
@@ -29,7 +29,6 @@ SELECT * FROM
     FROM
         bodegas as b,
         cargadores as c,
-        bateriastipos as t,
         baterias as bat,
         (
             SELECT 
@@ -64,20 +63,20 @@ SELECT * FROM
         ) as cbg
     WHERE
         usos.bg=b.id AND
-        usos.bt=bat.id AND
-        t.id=c.tipo AND
-        c.id=b.cg AND
-        cbg.cg=c.id
+        usos.bt=bat.idbaterias AND
+        c.idsucursal = ".$loggedInUser->sucursal_activa." AND 
+        c.idcargadores=b.cg AND
+        cbg.cg=c.idcargadores
     
     UNION ALL
     
     SELECT
         b.id as 'Id',
-        c.nombre as Cargador,
-        c.id as cgid,
+        c.cargadores_nombre as Cargador,
+        c.idcargadores as cgid,
         cbg.cantbg as cantbg,
         b.nombre as Espacio,
-        CONCAT(t.volts,'V ',t.ah,'Ah') as Tipo,
+        CONCAT(c.cargadores_volts,'V ',c.cargadores_amperaje,'Ah') as Tipo,
         NULL as Bateria,
         NULL as entrada,
         NULL as carga,
@@ -90,7 +89,6 @@ SELECT * FROM
     FROM
         bodegas as b,
         cargadores as c,
-        bateriastipos as t,
         (
           SELECT  
             bg,
@@ -109,9 +107,9 @@ SELECT * FROM
         ) as cbg
     WHERE
         libres.bg=b.id AND
-        t.id=c.tipo AND
-        c.id=b.cg AND
-        cbg.cg=c.id AND
+        c.idsucursal = ".$loggedInUser->sucursal_activa." AND
+        c.idcargadores=b.cg AND
+        cbg.cg=c.idcargadores AND
         b.id not in (
             SELECT 
                bg   
@@ -122,6 +120,7 @@ SELECT * FROM
             GROUP BY bg
         )
 ) as todo
+
 ORDER BY Cargador, Espacio
 ";
 
@@ -285,11 +284,11 @@ function deshabilita(cual) {
         <!-- END PAGE LEVEL PLUGINS -->
 <?php
 
-	$grafica=pinta_grafica('cg','reporteCC','carga');
+	$grafica=pinta_grafica('cg','reporteCC','carga','todo',$loggedInUser->sucursal_activa);
 	echo $grafica;
-	$grafica=pinta_grafica('cg','reporteCD','descanso');
+	$grafica=pinta_grafica('cg','reporteCD','descanso','todo',$loggedInUser->sucursal_activa);
 	echo $grafica;
-	$grafica=pinta_grafica('cg','reporteCE','espera');
+	$grafica=pinta_grafica('cg','reporteCE','espera','todo',$loggedInUser->sucursal_activa);
 	echo $grafica;
 	
 require_once("tema/comun/footer.php");
