@@ -1,22 +1,22 @@
 <?php
 $query="
     SELECT
-        m.id as Id,
-        m.nombre as Nombre,
-        CONCAT(t.volts,'V - ',t.ah,'Ah') as Tipo
+        c.idcargadores as Id,
+        c.cargadores_nombre as Nombre,
+        c.cargadores_modelo as Modelo,
+        c.cargadores_marca as Marca,
+        c.cargadores_comprador as Comprador,
+        c.cargadores_numserie as Serie,
+        CONCAT(c.cargadores_volts,'V ',c.cargadores_amperaje,'Ah (',c.cargadores_e,')') as Tipo
     FROM
-        cargadores as m, bateriastipos as t
+        cargadores as c
     WHERE
-        m.id= ".$_GET['id']."
-        AND m.tipo = t.id
+        c.idcargadores= ".$_GET['id']."
     limit 1
 ";
-
 $resultado = $mysqli->query($query);
 while($fila = $resultado->fetch_array()) {
-    $id= $fila['Id'];
-    $nombre= $fila['Nombre'];
-    $tipo= $fila['Tipo'];
+	$datosCargador=$fila;
 }
 
 $querydeshabilitado="
@@ -47,9 +47,9 @@ $queryhoras="
 			AS horasidle
 	FROM uso_baterias_bodega AS u, bodegas AS b, cargadores AS c
 	WHERE u.bg = b.id
-		AND b.cg = c.id
+		AND b.cg = c.idcargadores
 		AND u.fecha_carga != '0000-00-00 00:00:00'
-		AND c.id =$id
+		AND c.idcargadores =$id
 	";
 $resultado = $mysqli->query($queryhoras);
 $horas['h']['total']=0;
@@ -83,10 +83,10 @@ $queryhoras7d="
 		)AS horasidle
 	FROM uso_baterias_bodega AS u, bodegas AS b, cargadores AS c
 	WHERE u.bg = b.id
-		AND b.cg = c.id
+		AND b.cg = c.idcargadores
 		AND (u.fecha_carga>=DATE_SUB(now(), INTERVAL 7 DAY) || u.fecha_descanso='0000-00-00 00:00:00')
 		AND u.fecha_carga != '0000-00-00 00:00:00'
-		AND c.id =$id
+		AND c.idcargadores =$id
 	";
 $resultado = $mysqli->query($queryhoras7d);
 $horas['7']['total']=0;
@@ -108,12 +108,12 @@ $querybodegas="
 	(
 		SELECT
 			b.id as Id,
-			c.nombre as Cargador,
-			c.id as cgid,
+			c.cargadores_nombre as Cargador,
+			c.idcargadores as cgid,
 			cbg.cantbg as cantbg,
 			b.nombre as Espacio,
-			CONCAT(t.volts,'V ',t.ah,'Ah') as Tipo,
-			bat.num_serie as Bateria,
+			CONCAT(c.cargadores_volts,'V ',c.cargadores_amperaje,'Ah (',c.cargadores_e,')') as Tipo,
+			bat.baterias_nombre as Bateria,
 			usos.entrada,
 			usos.entradat,
 			usos.carga,
@@ -125,7 +125,6 @@ $querybodegas="
 		FROM
 			bodegas as b,
 			cargadores as c,
-			bateriastipos as t,
 			baterias as bat,
 			(
 				SELECT 
@@ -150,9 +149,13 @@ $querybodegas="
 					as 'descanso',
 					TIMESTAMPDIFF(hour, fecha_descanso, now()) as 'descansot'
 				FROM 
-					uso_baterias_bodega
+					uso_baterias_bodega,
+					(SELECT id as bdcid
+					 FROM bodegas
+					 WHERE cg=$id) as bdc
 				WHERE 
 					fecha_salida ='0000-00-00 00:00:00'
+					AND bg=bdc.bdcid
 			) as usos,
 			(
 				SELECT cg,
@@ -163,20 +166,24 @@ $querybodegas="
 			) as cbg
 		WHERE
 			usos.bg=b.id AND
-			usos.bt=bat.id AND
-			t.id=c.tipo AND
-			c.id=b.cg AND
-			cbg.cg=c.id
+			usos.bt=bat.idbaterias AND
+			bat.idbaterias IN (
+				SELECT idbaterias
+				FROM cargadores_baterias
+				WHERE idcargadores =$id
+			) AND 
+			c.idcargadores=b.cg AND
+			cbg.cg=c.idcargadores
 		
 		UNION ALL
 		
 		SELECT
 			b.id as 'Id',
-			c.nombre as Cargador,
-			c.id as cgid,
+			c.cargadores_nombre as Cargador,
+			c.idcargadores as cgid,
 			cbg.cantbg as cantbg,
 			b.nombre as Espacio,
-			CONCAT(t.volts,'V ',t.ah,'Ah') as Tipo,
+			CONCAT(c.cargadores_volts,'V ',c.cargadores_amperaje,'Ah (',c.cargadores_e,')') as Tipo,
 			NULL as Bateria,
 			NULL as entrada,
 			NULL as entradah,
@@ -193,15 +200,18 @@ $querybodegas="
 		FROM
 			bodegas as b,
 			cargadores as c,
-			bateriastipos as t,
 			(
 			  SELECT  
 				bg,
 				MAX(fecha_salida) as fecha_salida
 			  FROM 
-				uso_baterias_bodega
+				uso_baterias_bodega,
+				(SELECT id as bdcid
+					 FROM bodegas
+					 WHERE cg=$id) as bdc
 			  WHERE 
 				fecha_salida !='0000-00-00 00:00:00'
+				AND bg=bdc.bdcid
 			  GROUP BY bg
 			) as libres,
 			(
@@ -213,18 +223,60 @@ $querybodegas="
 			) as cbg
 		WHERE
 			libres.bg=b.id AND
-			t.id=c.tipo AND
-			c.id=b.cg AND
-			cbg.cg=c.id AND
+			c.idcargadores=b.cg AND
+			cbg.cg=c.idcargadores AND
 			b.id not in (
 				SELECT 
 				   bg   
 				FROM 
-				   uso_baterias_bodega
+				   uso_baterias_bodega,
+				   (SELECT id as bdcid
+					 FROM bodegas
+					 WHERE cg=$id) as bdc
 				WHERE 
 				   fecha_salida='0000-00-00 00:00:00'
+				   AND bg=bdc.bdcid
 				GROUP BY bg
 			)
+	
+		UNION ALL
+		
+		SELECT
+			b.id as 'Id',
+			c.cargadores_nombre as Cargador,
+			c.idcargadores as cgid,
+			cbg.cantbg as cantbg,
+			b.nombre as Espacio,
+			CONCAT(c.cargadores_volts,'V ',c.cargadores_amperaje,'Ah (',c.cargadores_e,')') as Tipo,
+			NULL as Bateria,
+			NULL as entrada,
+			NULL as entradah,
+			NULL as carga,
+			NULL as cargah,
+			NULL as descanso,
+			NULL as descansoh,
+			NULL as disponible,
+			NULL as disponibleh
+		FROM
+			bodegas as b,
+			cargadores as c,
+			(
+				SELECT cg,
+					COUNT(id) as cantbg
+				FROM bodegas
+				WHERE cg=$id
+				GROUP BY cg
+			) as cbg
+		WHERE
+			b.id NOT IN (
+				SELECT bg
+				FROM uso_baterias_bodega, bodegas as b
+				WHERE b.id=bg
+					AND b.cg=$id
+				GROUP BY bg
+			) AND
+			c.idcargadores=b.cg AND
+			cbg.cg=c.idcargadores			
 	) as todo
 	ORDER BY Cargador, Espacio
 ";
@@ -254,6 +306,11 @@ while($fila = $resultado->fetch_array()) {
 		$bodegas[$fila['Espacio']]['estado']='<span style="color:red">Espera</span>';
 		$bodegas[$fila['Espacio']]['tiempo']=$fila['entrada'];
 		$bodegas[$fila['Espacio']]['horas']=$fila['entradat'];
+	}elseif ($fila['disponible']==NULL && $fila['Bateria']==NULL){
+		$bodegas[$fila['Espacio']]['bt']='<span style="color:green">Sin Batería</span>';
+		$bodegas[$fila['Espacio']]['estado']='<span style="color:green">Disponible</span>';
+		$bodegas[$fila['Espacio']]['tiempo']=0;
+		$bodegas[$fila['Espacio']]['horas']=0;
 	}
 }
 

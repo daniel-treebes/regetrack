@@ -9,7 +9,8 @@ $querydondecg="
 	   bt =".$_GET['id']." AND 
 	   b.id=u.bg AND
 	   b.cg=c.idcargadores AND
-	   fecha_salida='0000-00-00 00:00:00'
+	   fecha_salida='0000-00-00 00:00:00' AND
+	   c.idsucursal IN (".$loggedInUser->sucursales.") 
 	ORDER BY u.id desc 
 	LIMIT 1
 ";
@@ -21,6 +22,7 @@ $querydondemc="
 	WHERE bt=".$_GET['id']."
 		AND m.idmontacargas=u.mc
 		AND fecha_salida='0000-00-00 00:00:00'
+		AND m.idsucursal IN (".$loggedInUser->sucursales.")
 	ORDER BY u.id desc
 	LIMIT 1
 ";

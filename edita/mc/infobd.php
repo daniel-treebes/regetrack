@@ -40,7 +40,7 @@ $queryBateriaSiguiente="
 			WHERE fecha_salida ='0000-00-00 00:00:00'
 			GROUP BY bt
 		)
-                AND tbt.idbaterias IN (
+        AND tbt.idbaterias IN (
 			SELECT idbaterias
 			FROM montacargas_baterias
 			WHERE idmontacargas =".$_GET['id']."

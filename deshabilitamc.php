@@ -15,7 +15,7 @@ function deshabilita($mysqli,$idMC,$motivo,$usuario){
     $query="
         INSERT
         INTO deshabilitamc(
-            mc,
+            idmontacargas,
             motivo,
             fecha_entrada,
 			fecha_salida,
@@ -37,7 +37,7 @@ function habilita($mysqli,$idMC,$usuario){
         UPDATE deshabilitamc
         SET fecha_salida=now(),
             usuario_salida=".$usuario."
-        WHERE mc =".$idMC."
+        WHERE idmontacargas =".$idMC."
 			AND fecha_salida='0000-00-00 00:00:00'
 		ORDER BY id DESC
 		LIMIT 1";
