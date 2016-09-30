@@ -109,7 +109,7 @@ class PropelAutoloader
         
         if (isset($this->classes[$class])) {
 
-            require $_SERVER['DOCUMENT_ROOT'].'/build/classes/'.$this->classes[$class];
+            require DOCUMENT_ROOT.'build/classes/'.$this->classes[$class];
 
             return true;
         }
