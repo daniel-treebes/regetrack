@@ -77,18 +77,32 @@ if(!empty($_POST))
 					$loggedInUser->title = $userdetails["title"];
 					$loggedInUser->displayname = $userdetails["display_name"];
 					$loggedInUser->username = $userdetails["user_name"];
-                                        $loggedInUser->idempresa = $userdetails["idempresa"];
-                                        $loggedInUser->idsucursal = $userdetails["idsucursal"];
-                                    
-                                        //SI ES ADMINISTRADOR Y NO TIENE UNA SUCURSAL ASIGNADA LE ASIGNAMOS LA PRIMERA ACTIVA
-                                        if(is_null($loggedInUser->idsucursal)){
-                                            $hoy = time();
-                                            $sucursal_activa = SucursalQuery::create()->filterByIdempresa($loggedInUser->idempresa)->findOne();
-                                            $loggedInUser->sucursal_activa = $sucursal_activa->getIdsucursal();
-                                        }else{
-                                            $loggedInUser->sucursal_activa = $loggedInUser->idsucursal;
-                                        }
-                                        
+					$loggedInUser->idempresa = $userdetails["idempresa"];
+					$loggedInUser->idsucursal = $userdetails["idsucursal"];
+				
+					//SI ES ADMINISTRADOR Y NO TIENE UNA SUCURSAL ASIGNADA LE ASIGNAMOS LA PRIMERA ACTIVA
+					if(is_null($loggedInUser->idsucursal)){
+						$hoy = time();
+						$sucursal_activa = SucursalQuery::create()->filterByIdempresa($loggedInUser->idempresa)->findOne();
+						$loggedInUser->sucursal_activa = $sucursal_activa->getIdsucursal();
+						
+						$query=" SELECT idsucursal
+							FROM sucursal
+							WHERE idempresa=".$loggedInUser->idempresa."
+							ORDER BY idsucursal						
+						";
+						$res = $mysqli->query($query);
+						$loggedInUser->sucursales="";
+						while($fila = $res->fetch_array()) {
+							$loggedInUser->sucursales.=$fila['idsucursal'].',';
+						}
+						$loggedInUser->sucursales=substr($loggedInUser->sucursales,0,-1);
+						
+					}else{
+						$loggedInUser->sucursal_activa = $loggedInUser->idsucursal;
+						$loggedInUser->sucursales=$loggedInUser->sucursal_activa;
+					}
+                              
 					//Update last sign in
 					$loggedInUser->updateLastSignIn();
 					$_SESSION["userCakeUser"] = $loggedInUser;

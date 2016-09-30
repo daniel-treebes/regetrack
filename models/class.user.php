@@ -9,6 +9,13 @@ class loggedInUser {
 	public $hash_pw = NULL;
 	public $user_id = NULL;
 	public $tipo = NULL;
+	public $title = NULL;
+	public $displayname = NULL;
+	public $username = NULL;
+	public $idempresa = NULL;
+	public $idsucursal = NULL;
+	public $sucursal_activa = NULL;
+	public $sucursales = NULL;
 	
 	//Simple function to update the last sign in of a user
 	public function updateLastSignIn()

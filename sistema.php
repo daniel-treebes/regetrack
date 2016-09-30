@@ -1,13 +1,9 @@
 <?php
 require_once("models/config.php");
 if (!securePage($_SERVER['PHP_SELF']))
-
-
 {
 	die();
 }
-
-
 
 $module = explode('edita/', $_GET['ruta'])[1];
 if($module == 'montacargas'){

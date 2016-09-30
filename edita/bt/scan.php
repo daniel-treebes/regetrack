@@ -36,7 +36,7 @@
         </div>
     <?php
     }
-    $titulo="Forzar ubicación y estado de la bartería <strong>".$nombreBateria."</strong>";
+    $titulo="Forzar ubicación y estado de la bartería <strong>".$datosBateria['Nombre']."</strong>";
     ?>
     <div id="divInventario" class="portlet box blue-sharp" style="display:none;">
         <div class="portlet-title">
@@ -53,7 +53,7 @@
                         <br>
                         <i class="fa fa-question-circle iconscannext"></i><i class="fa icon-cargador iconscannext"></i><i class="fa icon-montacarga iconscannext"></i><br>
                         <br>
-                        Escanea el cargador o montacargas donde se encuentra la batería <?php  echo $nombreBateria ?>
+                        Escanea el cargador o montacargas donde se encuentra la batería <?php  echo $datosBateria['Nombre'] ?>
                     </center>
                     <span></span>
                 </div>
@@ -61,7 +61,7 @@
                     <!--Este paso solo aparecerá si está en cargador-->
                     <center><h3>PASO 2</h3>
                         <br>
-                        Elige el estatus de la Batería <?php  echo $nombreBateria ?>
+                        Elige el estatus de la Batería <?php  echo $datosBateria['Nombre'] ?>
                         <br><br>
                         <div class="col-xs-6" >
                             <span onclick="cambiaestado('ESPERA');" class="btn default btn-block" style="height:100px;"><h2>ESPERA</h2></span>

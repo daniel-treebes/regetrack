@@ -1,6 +1,6 @@
 <?php
 $querydondecg="
-	SELECT u.id, CONCAT(c.nombre,'-',b.nombre) as nombre, c.id as cgid,
+	SELECT u.id, CONCAT(c.cargadores_nombre,'-',b.nombre) as nombre, c.idcargadores as cgid,
 	   TIMESTAMPDIFF(hour, fecha_entrada, now()) as espera,
 	   TIMESTAMPDIFF(hour, fecha_carga, now()) as carga,
 	   TIMESTAMPDIFF(hour, fecha_descanso, now()) as descanso
@@ -8,18 +8,18 @@ $querydondecg="
 	WHERE
 	   bt =".$_GET['id']." AND 
 	   b.id=u.bg AND
-	   b.cg=c.id AND
+	   b.cg=c.idcargadores AND
 	   fecha_salida='0000-00-00 00:00:00'
 	ORDER BY u.id desc 
 	LIMIT 1
 ";
 
 $querydondemc="
-	SELECT m.nombre as nombre,
+	SELECT m.montacargas_nombre as nombre,
 		TIMESTAMPDIFF(hour, fecha_entrada, now()) as uso
 	FROM uso_baterias_montacargas as u, montacargas as m
 	WHERE bt=".$_GET['id']."
-		AND m.id=u.mc
+		AND m.idmontacargas=u.mc
 		AND fecha_salida='0000-00-00 00:00:00'
 	ORDER BY u.id desc
 	LIMIT 1

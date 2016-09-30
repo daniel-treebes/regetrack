@@ -29,17 +29,13 @@
   $horasBateriaDescansada=0;
   $minutosBateriaDescansada=0;
    
-   ?>
-   <div class="row">
-	  <?php include("mc/infomc.php");?>
-   </div>
-   <?php
    require_once("libs/libreriasJquery.php");
    ?>
-   	<script src="https://code.highcharts.com/stock/highstock.js"></script>
-	<script src="https://code.highcharts.com/stock/modules/exporting.js"></script>
 
    <script src="edita/mc/mc.js" type="text/javascript"></script>
+
+   <script src="https://code.highcharts.com/stock/highstock.js"></script>
+	<script src="https://code.highcharts.com/stock/modules/exporting.js"></script>
 
    <script>
 	   $('.easy-pie-chart .number.btact').easyPieChart({
@@ -62,6 +58,9 @@
 		 display: none;
 	  }
    </style>
+   <div class="row">
+	  <?php include("mc/infomc.php");?>
+   </div>
    <?php                                                       
    require_once("tema/comun/footer.php");
    ?>

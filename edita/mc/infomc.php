@@ -5,11 +5,13 @@ $query="
         m.idmontacargas as Id,
         m.montacargas_nombre as Nombre,
         m.montacargas_modelo as Modelo,
+        m.montacargas_marca as Marca,
+        m.montacargas_comprador as Comprador,
+        m.montacargas_numserie as Serie,
         CONCAT(m.montacargas_c,'-',m.montacargas_k,'-',m.montacargas_p,'-',m.montacargas_t,'-',m.montacargas_e,' (',m.montacargas_volts,'V - ',m.montacargas_amperaje,'Ah)') as Tipo
-    FROM
-        montacargas as m
-    WHERE
-        m.idmontacargas= ".$_GET['id']."
+    FROM montacargas as m
+    WHERE m.idmontacargas= ".$_GET['id']."
+        AND m.idsucursal IN (".$loggedInUser->sucursales.")
     limit 1
 ";
 
@@ -19,12 +21,18 @@ while($fila = $resultado->fetch_array()) {
     $nombre= $fila['Nombre'];
     $modelo= $fila['Modelo'];
     $tipo= $fila['Tipo'];
+    $marca= $fila['Marca'];
+    $comprador= $fila['Comprador'];
+    $serie= $fila['Serie'];
 }
 
 $querydeshabilitado="
-    SELECT *
-    FROM deshabilitamc
-    WHERE idmontacargas= ".$_GET['id']." and fecha_salida='0000-00-00 00:00:00'
+    SELECT dmc.*
+    FROM deshabilitamc as dmc, montacargas as tmc
+    WHERE dmc.idmontacargas= ".$_GET['id']."
+        AND tmc.idmontacargas=dmc.idmontacargas
+        AND dmc.fecha_salida='0000-00-00 00:00:00'
+        AND tmc.idsucursal IN (".$loggedInUser->sucursales.")
 ";
 $resultado = $mysqli->query($querydeshabilitado);
 $habilitaid=0;
@@ -59,15 +67,33 @@ while($fila = $resultado->fetch_array()) {
                         </div>
                     </div>
                     <div class="form-group">
+                        <label class="col-md-3 control-label">Tipo</label>
+                        <div class="col-md-9">
+                            <input readonly type="text" class="form-control datos-cosa" placeholder="Default Input" value="<?php  echo $tipo ?> "> 
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <label class="col-md-3 control-label">Modelo</label>
                         <div class="col-md-9">
                             <input readonly type="text" class="form-control datos-cosa" placeholder="Default Input" value="<?php  echo $modelo ?> "> 
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-md-3 control-label">Tipo</label>
+                        <label class="col-md-3 control-label">Marca</label>
                         <div class="col-md-9">
-                            <input readonly type="text" class="form-control datos-cosa" placeholder="Default Input" value="<?php  echo $tipo ?> "> 
+                            <input readonly type="text" class="form-control datos-cosa" placeholder="Default Input" value="<?php  echo $marca ?> "> 
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">Comprador</label>
+                        <div class="col-md-9">
+                            <input readonly type="text" class="form-control datos-cosa" placeholder="Default Input" value="<?php  echo $comprador ?> "> 
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">Serie</label>
+                        <div class="col-md-9">
+                            <input readonly type="text" class="form-control datos-cosa" placeholder="Default Input" value="<?php  echo $serie ?> "> 
                         </div>
                     </div>
                 </div>

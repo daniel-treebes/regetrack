@@ -1,22 +1,24 @@
 <?php
 $query="
     SELECT
-        b.id as Id,
-        b.num_serie as Nombre,
-        CONCAT(t.volts,'V - ',t.ah,'Ah') as Tipo
+        b.idbaterias as Id,
+        b.baterias_nombre as Nombre,
+        b.baterias_modelo as Modelo,
+        b.baterias_marca as Marca,
+        b.baterias_comprador as Comprador,
+        b.baterias_numserie as Serie,
+        CONCAT(b.baterias_c,'-',b.baterias_k,'-',b.baterias_p,'-',b.baterias_t,'-',b.baterias_e,' (',b.baterias_volts,'V ',b.baterias_amperaje,'Ah)') as Tipo
     FROM
-        baterias as b, bateriastipos as t
+        baterias as b
     WHERE
-        b.id= ".$_GET['id']."
-        AND b.tipo = t.id
+        b.idbaterias= ".$_GET['id']."
     limit 1
 ";
 
 $resultado = $mysqli->query($query);
+
 while($fila = $resultado->fetch_array()) {
-    $id= $fila['Id'];
-    $nombreBateria= $fila['Nombre'];
-    $tipo= $fila['Tipo'];
+    $datosBateria=$fila;
 }
 
 $querydeshabilitado="
@@ -43,7 +45,7 @@ include("infobd.php");
     <div class="portlet box  blue-sharp">
         <div class="portlet-title">
             <div class="caption">
-                <i class="fa fa-battery-full"></i>Batería <?php echo $id.'-'.$nombreBateria; ?>
+                <i class="fa fa-battery-full"></i>Batería <?php echo $id.'-'.$datosBateria['Nombre']; ?>
             </div>
             <div class="tools">
                 <a href="" class="collapse" data-original-title="" title=""> </a>
@@ -55,13 +57,37 @@ include("infobd.php");
                     <div class="form-group">
                         <label class="col-md-3 control-label">Nombre</label>
                         <div class="col-md-9">
-                            <input type="text" class="form-control datos-cosa" placeholder="Default Input" value="<?php  echo $nombreBateria ?> "> 
+                            <input type="text" class="form-control datos-cosa" placeholder="Default Input" value="<?php  echo $datosBateria['Nombre'] ?> "> 
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-md-3 control-label">Tipo</label>
                         <div class="col-md-9">
-                            <input type="text" class="form-control datos-cosa" placeholder="Default Input" value="<?php  echo $tipo ?> "> 
+                            <input type="text" class="form-control datos-cosa" placeholder="Default Input" value="<?php  echo $datosBateria['Tipo'] ?> "> 
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">Modelo</label>
+                        <div class="col-md-9">
+                            <input type="text" class="form-control datos-cosa" placeholder="Default Input" value="<?php  echo $datosBateria['Modelo'] ?> "> 
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">Marca</label>
+                        <div class="col-md-9">
+                            <input type="text" class="form-control datos-cosa" placeholder="Default Input" value="<?php  echo $datosBateria['Marca'] ?> "> 
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">Comprador</label>
+                        <div class="col-md-9">
+                            <input type="text" class="form-control datos-cosa" placeholder="Default Input" value="<?php  echo $datosBateria['Comprador'] ?> "> 
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">Serie</label>
+                        <div class="col-md-9">
+                            <input type="text" class="form-control datos-cosa" placeholder="Default Input" value="<?php  echo $datosBateria['Serie'] ?> "> 
                         </div>
                     </div>
                     <div class="form-group">

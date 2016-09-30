@@ -1,4 +1,5 @@
 <?php
+
    $nombrePagina="Edita Baterias";
    $acciones=[];
   
@@ -29,17 +30,12 @@
   $horasBateriaDescansada=0;
   $minutosBateriaDescansada=0;
    
-   ?>
-   <div class="row">
-	  <?php include("bt/infobt.php");?>
-   </div>
-   <?php
    require_once("libs/libreriasJquery.php");
    ?>
-   	<script src="https://code.highcharts.com/stock/highstock.js"></script>
+	<script src="edita/bt/bt.js" type="text/javascript"></script>
+   <script src="https://code.highcharts.com/stock/highstock.js"></script>
 	<script src="https://code.highcharts.com/stock/modules/exporting.js"></script>
 
-	<script src="edita/bt/bt.js" type="text/javascript"></script>
 	<script>
 		$('.easy-pie-chart .number.btestado').easyPieChart({
 		  animate: 1000,
@@ -68,6 +64,9 @@
 			display: none;
 		}
 	</style>
-   <?php                                                       
+   <div class="row">
+	  <?php include("bt/infobt.php");?>
+   </div>
+   <?php
    require_once("tema/comun/footer.php");
    ?>

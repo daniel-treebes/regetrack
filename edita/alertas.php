@@ -1,6 +1,19 @@
 <?php
 function pinta_alertas($mysqli, $modulo, $id){
+    global $loggedInUser;
     $tabla='deshabilita'.$modulo;
+    $columna=$modulo;
+    if ($columna=="mc"){
+        $columna="idmontacargas";
+        $otracolumna="idmontacargas";
+        $otratabla="montacargas";
+    }elseif ($columna=="cg"){
+        $otracolumna="idcargadores";
+        $otratabla="cargadores";
+    }elseif ($columna=="bt"){
+        $otracolumna="idbaterias";
+        $otratabla="baterias";
+    }
     $query="SELECT
             SUM(alertas)/(TIMESTAMPDIFF(month,inicio,now())+1) as promedio,
             IF (CONCAT(YEAR(now()),'-',MONTH(now()))=mes,alertas,0) as actual,
@@ -11,8 +24,10 @@ function pinta_alertas($mysqli, $modulo, $id){
                 MIN(fecha_entrada) as inicio,
                 COUNT(*) as alertas,
                 CONCAT(YEAR(fecha_entrada),'-',MONTH(fecha_entrada)) as mes
-            FROM ".$tabla."
-            WHERE ".$modulo."=".$id."
+            FROM ".$tabla." as a,".$otratabla." as o 
+            WHERE a.".$columna."=".$id."
+                AND a.".$columna."=o.".$otracolumna."
+                AND o.idsucursal IN (".$loggedInUser->sucursales.")
             GROUP BY mes
         ) as tabla
         limit 1

@@ -45,6 +45,9 @@ $queryBateriaSiguiente="
 			FROM montacargas_baterias
 			WHERE idmontacargas =".$_GET['id']."
 		)
+		AND tcg.idsucursal IN (".$loggedInUser->sucursales.")
+		AND tmc.idsucursal IN (".$loggedInUser->sucursales.")
+		AND tbt.idsucursal IN (".$loggedInUser->sucursales.")
 	ORDER BY estado, t_descanso DESC, t_carga DESC
 	LIMIT 1
 ";
@@ -57,14 +60,16 @@ while($fila = $res->fetch_array()) {
 
 $queryEspacioDisponible="
 	SELECT
-		tcg.id as cg_id,
-		tcg.nombre as cg_nombre,
+		tcg.idcargadores as cg_id,
+		tcg.cargadores_nombre as cg_nombre,
 		tbg.id as bg_id
-	FROM uso_baterias_bodega as tubb, bodegas as tbg, cargadores as tcg, montacargas as tmc
+	FROM bodegas as tbg, cargadores as tcg, montacargas as tmc,
+		montacargas_baterias as tmb, cargadores_baterias as tcb
 	WHERE
-		tubb.bg NOT IN (
+		tbg.id NOT IN (
 			SELECT tubb.bg as bg
-			FROM uso_baterias_bodega as tubb, bodegas as tbg, cargadores as tcg, montacargas as tmc
+			FROM uso_baterias_bodega as tubb, bodegas as tbg, cargadores as tcg, montacargas as tmc,
+				montacargas_baterias as tmb, cargadores_baterias as tcb
 			WHERE
 				(
 					tubb.fecha_salida='0000-00-00 00:00:00'
@@ -72,25 +77,32 @@ $queryEspacioDisponible="
 					OR tubb.fecha_carga='0000-00-00 00:00:00'
 				)
 				AND tbg.id=tubb.bg
-				AND tbg.cg=tcg.id
-				AND tcg.tipo=tmc.tipo
-				AND tmc.id=".$_GET['id']."
-			ORDER BY tubb.id 
+				AND tbg.cg=tcg.idcargadores
+				AND tcg.idcargadores=tcb.idcargadores
+				AND tmc.idmontacargas=tmb.idmontacargas
+				AND tmc.idmontacargas=".$_GET['id']."
+				AND tcg.idsucursal IN (".$loggedInUser->sucursales.")
+				AND tmc.idsucursal IN (".$loggedInUser->sucursales.")
+			GROUP BY bg
+			ORDER BY tubb.id
 		)
-		AND tbg.id=tubb.bg
-		AND tbg.cg=tcg.id
-		AND tcg.tipo=tmc.tipo
-		AND tmc.id=".$_GET['id']."
+		AND tbg.cg=tcg.idcargadores
+		AND tcg.idcargadores=tcb.idcargadores
+		AND tmc.idmontacargas=tmb.idmontacargas
+		AND tmc.idmontacargas=".$_GET['id']."
+		AND tcg.idsucursal IN (".$loggedInUser->sucursales.")
+		AND tmc.idsucursal IN (".$loggedInUser->sucursales.")
 	GROUP BY cg_id
 ";
-echo '<pre>';var_dump($queryEspacioDisponible);echo  '</pre>';exit();
+//echo '<pre>';var_dump($queryEspacioDisponible);echo  '</pre>';exit();
 //Los ocupados serviran para saber si está vacío!
 $queryCargadorOcupado="
 	SELECT
 		tbg.cg as cg,
 		MAX(tubb.fecha_carga) as maxfc,
 		MIN(tubb.fecha_descanso) as minfd
-	FROM uso_baterias_bodega as tubb, bodegas as tbg, cargadores as tcg, montacargas as tmc
+	FROM uso_baterias_bodega as tubb, bodegas as tbg, cargadores as tcg, montacargas as tmc,
+		montacargas_baterias as tmb, cargadores_baterias as tcb
 	WHERE
 		(
 			tubb.fecha_salida='0000-00-00 00:00:00'
@@ -98,18 +110,23 @@ $queryCargadorOcupado="
 			OR tubb.fecha_carga='0000-00-00 00:00:00'
 		)
 		AND tbg.id=tubb.bg
-		AND tbg.cg=tcg.id
-		AND tcg.tipo=tmc.tipo
-		AND tmc.id=".$_GET['id']."
+		AND tbg.cg=tcg.idcargadores
+		AND tcg.idcargadores=tcb.idcargadores
+		AND tmc.idmontacargas=tmb.idmontacargas
+		AND tmc.idmontacargas=".$_GET['id']."
+		AND tcg.idsucursal IN (".$loggedInUser->sucursales.")
+		AND tmc.idsucursal IN (".$loggedInUser->sucursales.")
 	GROUP BY cg
 	ORDER BY minfd, maxfc
 ";
 
 //los cargadores deshabilitados... pueden usar los espacios pero no cargar!
 $queryCargadorDeshabilitado="
-	SELECT cg, fecha_entrada
-	FROM deshabilitacg
-	WHERE fecha_salida ='0000-00-00 00:00:00'
+	SELECT dcg.cg, dcg.fecha_entrada
+	FROM deshabilitacg as dcg, cargadores as tcg
+	WHERE dcg.fecha_salida ='0000-00-00 00:00:00'
+		AND dcg.cg=tcg.idcargadores
+		AND tcg.idsucursal IN (".$loggedInUser->sucursales.")
 	GROUP BY cg
 ";
 
@@ -189,7 +206,7 @@ foreach ($espaciosDisponibles as $cg_id => $datos){
 		SELECT
 			u.id as Id,
 			u.bt as bt,
-			b.num_serie as bt_nombre,
+			b.baterias_nombre as bt_nombre,
 			TIMESTAMPDIFF(hour, u.fecha_entrada, now()) as horas,
 			CONCAT(
 				TIMESTAMPDIFF(day, u.fecha_entrada, now()),'D ',    
@@ -200,9 +217,10 @@ foreach ($espaciosDisponibles as $cg_id => $datos){
 		FROM
 			uso_baterias_montacargas as u, baterias as b
 		WHERE
-			u.bt = b.id
+			u.bt = b.idbaterias
 			AND u.mc = ".$_GET['id']."
 			AND u.fecha_salida='0000-00-00 00:00:00'
+			AND b.idsucursal IN (".$loggedInUser->sucursales.")
 		limit 1
    ";
    
@@ -223,7 +241,7 @@ foreach ($espaciosDisponibles as $cg_id => $datos){
 	  SELECT
 		 u.id as Id,
 		 u.bt as bt,
-		 b.num_serie as btnombre,
+		 b.baterias_nombre as btnombre,
 		 TIMESTAMPDIFF(hour, fecha_entrada, fecha_salida) as horas,
 		 CONCAT(
 			TIMESTAMPDIFF(day, fecha_entrada, fecha_salida),'D ',    
@@ -232,9 +250,10 @@ foreach ($espaciosDisponibles as $cg_id => $datos){
 		 TIMESTAMPDIFF(second, fecha_entrada, fecha_salida) seg
 	  FROM
 		 uso_baterias_montacargas as u, baterias as b
-	  WHERE b.id=u.bt AND
-		 u.mc= ".$_GET['id']."
-	  ORDER BY fecha_salidaid DESC
+	  WHERE b.idbaterias=u.bt
+		 AND u.mc= ".$_GET['id']."
+		 AND b.idsucursal IN (".$loggedInUser->sucursales.")
+	  ORDER BY fecha_salida DESC
 	  limit 1
    ";
    
@@ -285,7 +304,12 @@ foreach ($espaciosDisponibles as $cg_id => $datos){
 	$min=intval($segundossinuso/60)-((($dias*24)+($horas))*60);
 	$sinuso=$dias.'D '.$horas.'H '.$min.'M';
 
-   $queryNombreMontacargas="SELECT nombre FROM montacargas WHERE id=".$_GET['id'];
+   $queryNombreMontacargas="
+		SELECT montacargas_nombre as nombre
+		FROM montacargas
+		WHERE idmontacargas=".$_GET['id']."
+			AND idsucursal IN (".$loggedInUser->sucursales.")
+		";
    $resultado = $mysqli->query($queryNombreMontacargas);
    $nombreMontacargas=$_GET['id'];
    while($fila = $resultado->fetch_array()) {

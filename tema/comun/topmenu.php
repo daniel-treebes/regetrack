@@ -1,10 +1,8 @@
-					
-						<?php
-
+<?php
 
 if($loggedInUser->checkPermission(array(2))){
                 
-                $sucursa_activa = SucursalQuery::create()->findPk($loggedInUser->sucursal_activa);
+                $sucursal_activa = SucursalQuery::create()->findPk($loggedInUser->sucursal_activa);
                 $sucursales = \SucursalQuery::create()->filterByIdempresa($loggedInUser->idempresa)->find();
 
 		?>
@@ -14,7 +12,7 @@ if($loggedInUser->checkPermission(array(2))){
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
                     <!--img alt="" class="img-circle" src="../assets/layouts/layout/img/avatar3_small.jpg"/-->
                     <span class="username" >
-                    <?php echo $loggedInUser->displayname ?> (<?php echo $sucursa_activa->getSucursalNombre()?>) </span>
+                    <?php echo $loggedInUser->displayname ?> (<?php //echo $sucursal_activa->getSucursalNombre()?>) </span>
                     <i class="fa fa-angle-down"></i>
                     </a>
                     <ul class="dropdown-menu">
