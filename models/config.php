@@ -12,13 +12,7 @@ include_once("db-settings.php"); //Require DB connection
 /*
  * PROPEL
  */
-
-if($_SERVER['HTTP_HOST'] == 'regetrack.local'){
-    define('DOCUMENT_ROOT', $_SERVER['DOCUMENT_ROOT'].'/');
-}else{
-    define('DOCUMENT_ROOT', $_SERVER['DOCUMENT_ROOT'].'/v2/');
-}
-
+define('DOCUMENT_ROOT', $_SERVER['DOCUMENT_ROOT'].'/');
 require_once DOCUMENT_ROOT.'vendor/propel/propel1/runtime/lib/Propel.php';
 Propel::init(DOCUMENT_ROOT.'build/conf/regetrack-conf.php');
 require_once DOCUMENT_ROOT.'vendor/autoload.php';
