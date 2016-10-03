@@ -24,13 +24,13 @@ abstract class BaseCargadoresPeer
     const TM_CLASS = 'CargadoresTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 10;
+    const NUM_COLUMNS = 11;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 10;
+    const NUM_HYDRATE_COLUMNS = 11;
 
     /** the column name for the idcargadores field */
     const IDCARGADORES = 'cargadores.idcargadores';
@@ -62,6 +62,13 @@ abstract class BaseCargadoresPeer
     /** the column name for the cargadores_numserie field */
     const CARGADORES_NUMSERIE = 'cargadores.cargadores_numserie';
 
+    /** the column name for the cargadores_tipo field */
+    const CARGADORES_TIPO = 'cargadores.cargadores_tipo';
+
+    /** The enumerated values for the cargadores_tipo field */
+    const CARGADORES_TIPO_CARGADOR = 'Cargador';
+    const CARGADORES_TIPO_BODEGA = 'Bodega';
+
     /** The default string format for model objects of the related table **/
     const DEFAULT_STRING_FORMAT = 'YAML';
 
@@ -81,12 +88,12 @@ abstract class BaseCargadoresPeer
      * e.g. CargadoresPeer::$fieldNames[CargadoresPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Idcargadores', 'Idsucursal', 'CargadoresModelo', 'CargadoresMarca', 'CargadoresE', 'CargadoresVolts', 'CargadoresAmperaje', 'CargadoresComprador', 'CargadoresNombre', 'CargadoresNumserie', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idcargadores', 'idsucursal', 'cargadoresModelo', 'cargadoresMarca', 'cargadoresE', 'cargadoresVolts', 'cargadoresAmperaje', 'cargadoresComprador', 'cargadoresNombre', 'cargadoresNumserie', ),
-        BasePeer::TYPE_COLNAME => array (CargadoresPeer::IDCARGADORES, CargadoresPeer::IDSUCURSAL, CargadoresPeer::CARGADORES_MODELO, CargadoresPeer::CARGADORES_MARCA, CargadoresPeer::CARGADORES_E, CargadoresPeer::CARGADORES_VOLTS, CargadoresPeer::CARGADORES_AMPERAJE, CargadoresPeer::CARGADORES_COMPRADOR, CargadoresPeer::CARGADORES_NOMBRE, CargadoresPeer::CARGADORES_NUMSERIE, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDCARGADORES', 'IDSUCURSAL', 'CARGADORES_MODELO', 'CARGADORES_MARCA', 'CARGADORES_E', 'CARGADORES_VOLTS', 'CARGADORES_AMPERAJE', 'CARGADORES_COMPRADOR', 'CARGADORES_NOMBRE', 'CARGADORES_NUMSERIE', ),
-        BasePeer::TYPE_FIELDNAME => array ('idcargadores', 'idsucursal', 'cargadores_modelo', 'cargadores_marca', 'cargadores_e', 'cargadores_volts', 'cargadores_amperaje', 'cargadores_comprador', 'cargadores_nombre', 'cargadores_numserie', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, )
+        BasePeer::TYPE_PHPNAME => array ('Idcargadores', 'Idsucursal', 'CargadoresModelo', 'CargadoresMarca', 'CargadoresE', 'CargadoresVolts', 'CargadoresAmperaje', 'CargadoresComprador', 'CargadoresNombre', 'CargadoresNumserie', 'CargadoresTipo', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idcargadores', 'idsucursal', 'cargadoresModelo', 'cargadoresMarca', 'cargadoresE', 'cargadoresVolts', 'cargadoresAmperaje', 'cargadoresComprador', 'cargadoresNombre', 'cargadoresNumserie', 'cargadoresTipo', ),
+        BasePeer::TYPE_COLNAME => array (CargadoresPeer::IDCARGADORES, CargadoresPeer::IDSUCURSAL, CargadoresPeer::CARGADORES_MODELO, CargadoresPeer::CARGADORES_MARCA, CargadoresPeer::CARGADORES_E, CargadoresPeer::CARGADORES_VOLTS, CargadoresPeer::CARGADORES_AMPERAJE, CargadoresPeer::CARGADORES_COMPRADOR, CargadoresPeer::CARGADORES_NOMBRE, CargadoresPeer::CARGADORES_NUMSERIE, CargadoresPeer::CARGADORES_TIPO, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDCARGADORES', 'IDSUCURSAL', 'CARGADORES_MODELO', 'CARGADORES_MARCA', 'CARGADORES_E', 'CARGADORES_VOLTS', 'CARGADORES_AMPERAJE', 'CARGADORES_COMPRADOR', 'CARGADORES_NOMBRE', 'CARGADORES_NUMSERIE', 'CARGADORES_TIPO', ),
+        BasePeer::TYPE_FIELDNAME => array ('idcargadores', 'idsucursal', 'cargadores_modelo', 'cargadores_marca', 'cargadores_e', 'cargadores_volts', 'cargadores_amperaje', 'cargadores_comprador', 'cargadores_nombre', 'cargadores_numserie', 'cargadores_tipo', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, )
     );
 
     /**
@@ -96,12 +103,20 @@ abstract class BaseCargadoresPeer
      * e.g. CargadoresPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Idcargadores' => 0, 'Idsucursal' => 1, 'CargadoresModelo' => 2, 'CargadoresMarca' => 3, 'CargadoresE' => 4, 'CargadoresVolts' => 5, 'CargadoresAmperaje' => 6, 'CargadoresComprador' => 7, 'CargadoresNombre' => 8, 'CargadoresNumserie' => 9, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idcargadores' => 0, 'idsucursal' => 1, 'cargadoresModelo' => 2, 'cargadoresMarca' => 3, 'cargadoresE' => 4, 'cargadoresVolts' => 5, 'cargadoresAmperaje' => 6, 'cargadoresComprador' => 7, 'cargadoresNombre' => 8, 'cargadoresNumserie' => 9, ),
-        BasePeer::TYPE_COLNAME => array (CargadoresPeer::IDCARGADORES => 0, CargadoresPeer::IDSUCURSAL => 1, CargadoresPeer::CARGADORES_MODELO => 2, CargadoresPeer::CARGADORES_MARCA => 3, CargadoresPeer::CARGADORES_E => 4, CargadoresPeer::CARGADORES_VOLTS => 5, CargadoresPeer::CARGADORES_AMPERAJE => 6, CargadoresPeer::CARGADORES_COMPRADOR => 7, CargadoresPeer::CARGADORES_NOMBRE => 8, CargadoresPeer::CARGADORES_NUMSERIE => 9, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDCARGADORES' => 0, 'IDSUCURSAL' => 1, 'CARGADORES_MODELO' => 2, 'CARGADORES_MARCA' => 3, 'CARGADORES_E' => 4, 'CARGADORES_VOLTS' => 5, 'CARGADORES_AMPERAJE' => 6, 'CARGADORES_COMPRADOR' => 7, 'CARGADORES_NOMBRE' => 8, 'CARGADORES_NUMSERIE' => 9, ),
-        BasePeer::TYPE_FIELDNAME => array ('idcargadores' => 0, 'idsucursal' => 1, 'cargadores_modelo' => 2, 'cargadores_marca' => 3, 'cargadores_e' => 4, 'cargadores_volts' => 5, 'cargadores_amperaje' => 6, 'cargadores_comprador' => 7, 'cargadores_nombre' => 8, 'cargadores_numserie' => 9, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, )
+        BasePeer::TYPE_PHPNAME => array ('Idcargadores' => 0, 'Idsucursal' => 1, 'CargadoresModelo' => 2, 'CargadoresMarca' => 3, 'CargadoresE' => 4, 'CargadoresVolts' => 5, 'CargadoresAmperaje' => 6, 'CargadoresComprador' => 7, 'CargadoresNombre' => 8, 'CargadoresNumserie' => 9, 'CargadoresTipo' => 10, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idcargadores' => 0, 'idsucursal' => 1, 'cargadoresModelo' => 2, 'cargadoresMarca' => 3, 'cargadoresE' => 4, 'cargadoresVolts' => 5, 'cargadoresAmperaje' => 6, 'cargadoresComprador' => 7, 'cargadoresNombre' => 8, 'cargadoresNumserie' => 9, 'cargadoresTipo' => 10, ),
+        BasePeer::TYPE_COLNAME => array (CargadoresPeer::IDCARGADORES => 0, CargadoresPeer::IDSUCURSAL => 1, CargadoresPeer::CARGADORES_MODELO => 2, CargadoresPeer::CARGADORES_MARCA => 3, CargadoresPeer::CARGADORES_E => 4, CargadoresPeer::CARGADORES_VOLTS => 5, CargadoresPeer::CARGADORES_AMPERAJE => 6, CargadoresPeer::CARGADORES_COMPRADOR => 7, CargadoresPeer::CARGADORES_NOMBRE => 8, CargadoresPeer::CARGADORES_NUMSERIE => 9, CargadoresPeer::CARGADORES_TIPO => 10, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDCARGADORES' => 0, 'IDSUCURSAL' => 1, 'CARGADORES_MODELO' => 2, 'CARGADORES_MARCA' => 3, 'CARGADORES_E' => 4, 'CARGADORES_VOLTS' => 5, 'CARGADORES_AMPERAJE' => 6, 'CARGADORES_COMPRADOR' => 7, 'CARGADORES_NOMBRE' => 8, 'CARGADORES_NUMSERIE' => 9, 'CARGADORES_TIPO' => 10, ),
+        BasePeer::TYPE_FIELDNAME => array ('idcargadores' => 0, 'idsucursal' => 1, 'cargadores_modelo' => 2, 'cargadores_marca' => 3, 'cargadores_e' => 4, 'cargadores_volts' => 5, 'cargadores_amperaje' => 6, 'cargadores_comprador' => 7, 'cargadores_nombre' => 8, 'cargadores_numserie' => 9, 'cargadores_tipo' => 10, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, )
+    );
+
+    /** The enumerated values for this table */
+    protected static $enumValueSets = array(
+        CargadoresPeer::CARGADORES_TIPO => array(
+            CargadoresPeer::CARGADORES_TIPO_CARGADOR,
+            CargadoresPeer::CARGADORES_TIPO_BODEGA,
+        ),
     );
 
     /**
@@ -141,6 +156,51 @@ abstract class BaseCargadoresPeer
         }
 
         return CargadoresPeer::$fieldNames[$type];
+    }
+
+    /**
+     * Gets the list of values for all ENUM columns
+     * @return array
+     */
+    public static function getValueSets()
+    {
+      return CargadoresPeer::$enumValueSets;
+    }
+
+    /**
+     * Gets the list of values for an ENUM column
+     *
+     * @param string $colname The ENUM column name.
+     *
+     * @return array list of possible values for the column
+     */
+    public static function getValueSet($colname)
+    {
+        $valueSets = CargadoresPeer::getValueSets();
+
+        if (!isset($valueSets[$colname])) {
+            throw new PropelException(sprintf('Column "%s" has no ValueSet.', $colname));
+        }
+
+        return $valueSets[$colname];
+    }
+
+    /**
+     * Gets the SQL value for the ENUM column value
+     *
+     * @param string $colname ENUM column name.
+     * @param string $enumVal ENUM value.
+     *
+     * @return int SQL value
+     */
+    public static function getSqlValueForEnum($colname, $enumVal)
+    {
+        $values = CargadoresPeer::getValueSet($colname);
+        if (!in_array($enumVal, $values)) {
+            throw new PropelException(sprintf('Value "%s" is not accepted in this enumerated column', $colname));
+        }
+
+        return array_search($enumVal, $values);
     }
 
     /**
@@ -185,6 +245,7 @@ abstract class BaseCargadoresPeer
             $criteria->addSelectColumn(CargadoresPeer::CARGADORES_COMPRADOR);
             $criteria->addSelectColumn(CargadoresPeer::CARGADORES_NOMBRE);
             $criteria->addSelectColumn(CargadoresPeer::CARGADORES_NUMSERIE);
+            $criteria->addSelectColumn(CargadoresPeer::CARGADORES_TIPO);
         } else {
             $criteria->addSelectColumn($alias . '.idcargadores');
             $criteria->addSelectColumn($alias . '.idsucursal');
@@ -196,6 +257,7 @@ abstract class BaseCargadoresPeer
             $criteria->addSelectColumn($alias . '.cargadores_comprador');
             $criteria->addSelectColumn($alias . '.cargadores_nombre');
             $criteria->addSelectColumn($alias . '.cargadores_numserie');
+            $criteria->addSelectColumn($alias . '.cargadores_tipo');
         }
     }
 

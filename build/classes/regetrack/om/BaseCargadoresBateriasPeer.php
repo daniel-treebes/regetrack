@@ -463,57 +463,6 @@ abstract class BaseCargadoresBateriasPeer
 
 
     /**
-     * Returns the number of rows matching criteria, joining the related Cargadores table
-     *
-     * @param      Criteria $criteria
-     * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
-     * @param      PropelPDO $con
-     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-     * @return int Number of matching rows.
-     */
-    public static function doCountJoinCargadores(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
-    {
-        // we're going to modify criteria, so copy it first
-        $criteria = clone $criteria;
-
-        // We need to set the primary table name, since in the case that there are no WHERE columns
-        // it will be impossible for the BasePeer::createSelectSql() method to determine which
-        // tables go into the FROM clause.
-        $criteria->setPrimaryTableName(CargadoresBateriasPeer::TABLE_NAME);
-
-        if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
-            $criteria->setDistinct();
-        }
-
-        if (!$criteria->hasSelectClause()) {
-            CargadoresBateriasPeer::addSelectColumns($criteria);
-        }
-
-        $criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
-
-        // Set the correct dbName
-        $criteria->setDbName(CargadoresBateriasPeer::DATABASE_NAME);
-
-        if ($con === null) {
-            $con = Propel::getConnection(CargadoresBateriasPeer::DATABASE_NAME, Propel::CONNECTION_READ);
-        }
-
-        $criteria->addJoin(CargadoresBateriasPeer::IDCARGADORES, CargadoresPeer::IDCARGADORES, $join_behavior);
-
-        $stmt = BasePeer::doCount($criteria, $con);
-
-        if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-            $count = (int) $row[0];
-        } else {
-            $count = 0; // no rows returned; we infer that means 0 matches.
-        }
-        $stmt->closeCursor();
-
-        return $count;
-    }
-
-
-    /**
      * Returns the number of rows matching criteria, joining the related Baterias table
      *
      * @param      Criteria $criteria
@@ -565,69 +514,53 @@ abstract class BaseCargadoresBateriasPeer
 
 
     /**
-     * Selects a collection of CargadoresBaterias objects pre-filled with their Cargadores objects.
-     * @param      Criteria  $criteria
+     * Returns the number of rows matching criteria, joining the related Cargadores table
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
      * @param      PropelPDO $con
      * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-     * @return array           Array of CargadoresBaterias objects.
-     * @throws PropelException Any exceptions caught during processing will be
-     *		 rethrown wrapped into a PropelException.
+     * @return int Number of matching rows.
      */
-    public static function doSelectJoinCargadores(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    public static function doCountJoinCargadores(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
     {
+        // we're going to modify criteria, so copy it first
         $criteria = clone $criteria;
 
-        // Set the correct dbName if it has not been overridden
-        if ($criteria->getDbName() == Propel::getDefaultDB()) {
-            $criteria->setDbName(CargadoresBateriasPeer::DATABASE_NAME);
+        // We need to set the primary table name, since in the case that there are no WHERE columns
+        // it will be impossible for the BasePeer::createSelectSql() method to determine which
+        // tables go into the FROM clause.
+        $criteria->setPrimaryTableName(CargadoresBateriasPeer::TABLE_NAME);
+
+        if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
+            $criteria->setDistinct();
         }
 
-        CargadoresBateriasPeer::addSelectColumns($criteria);
-        $startcol = CargadoresBateriasPeer::NUM_HYDRATE_COLUMNS;
-        CargadoresPeer::addSelectColumns($criteria);
+        if (!$criteria->hasSelectClause()) {
+            CargadoresBateriasPeer::addSelectColumns($criteria);
+        }
+
+        $criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
+
+        // Set the correct dbName
+        $criteria->setDbName(CargadoresBateriasPeer::DATABASE_NAME);
+
+        if ($con === null) {
+            $con = Propel::getConnection(CargadoresBateriasPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+        }
 
         $criteria->addJoin(CargadoresBateriasPeer::IDCARGADORES, CargadoresPeer::IDCARGADORES, $join_behavior);
 
-        $stmt = BasePeer::doSelect($criteria, $con);
-        $results = array();
+        $stmt = BasePeer::doCount($criteria, $con);
 
-        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-            $key1 = CargadoresBateriasPeer::getPrimaryKeyHashFromRow($row, 0);
-            if (null !== ($obj1 = CargadoresBateriasPeer::getInstanceFromPool($key1))) {
-                // We no longer rehydrate the object, since this can cause data loss.
-                // See http://www.propelorm.org/ticket/509
-                // $obj1->hydrate($row, 0, true); // rehydrate
-            } else {
-
-                $cls = CargadoresBateriasPeer::getOMClass();
-
-                $obj1 = new $cls();
-                $obj1->hydrate($row);
-                CargadoresBateriasPeer::addInstanceToPool($obj1, $key1);
-            } // if $obj1 already loaded
-
-            $key2 = CargadoresPeer::getPrimaryKeyHashFromRow($row, $startcol);
-            if ($key2 !== null) {
-                $obj2 = CargadoresPeer::getInstanceFromPool($key2);
-                if (!$obj2) {
-
-                    $cls = CargadoresPeer::getOMClass();
-
-                    $obj2 = new $cls();
-                    $obj2->hydrate($row, $startcol);
-                    CargadoresPeer::addInstanceToPool($obj2, $key2);
-                } // if obj2 already loaded
-
-                // Add the $obj1 (CargadoresBaterias) to $obj2 (Cargadores)
-                $obj2->addCargadoresBaterias($obj1);
-
-            } // if joined row was not null
-
-            $results[] = $obj1;
+        if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $count = (int) $row[0];
+        } else {
+            $count = 0; // no rows returned; we infer that means 0 matches.
         }
         $stmt->closeCursor();
 
-        return $results;
+        return $count;
     }
 
 
@@ -699,6 +632,73 @@ abstract class BaseCargadoresBateriasPeer
 
 
     /**
+     * Selects a collection of CargadoresBaterias objects pre-filled with their Cargadores objects.
+     * @param      Criteria  $criteria
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return array           Array of CargadoresBaterias objects.
+     * @throws PropelException Any exceptions caught during processing will be
+     *		 rethrown wrapped into a PropelException.
+     */
+    public static function doSelectJoinCargadores(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $criteria = clone $criteria;
+
+        // Set the correct dbName if it has not been overridden
+        if ($criteria->getDbName() == Propel::getDefaultDB()) {
+            $criteria->setDbName(CargadoresBateriasPeer::DATABASE_NAME);
+        }
+
+        CargadoresBateriasPeer::addSelectColumns($criteria);
+        $startcol = CargadoresBateriasPeer::NUM_HYDRATE_COLUMNS;
+        CargadoresPeer::addSelectColumns($criteria);
+
+        $criteria->addJoin(CargadoresBateriasPeer::IDCARGADORES, CargadoresPeer::IDCARGADORES, $join_behavior);
+
+        $stmt = BasePeer::doSelect($criteria, $con);
+        $results = array();
+
+        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $key1 = CargadoresBateriasPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = CargadoresBateriasPeer::getInstanceFromPool($key1))) {
+                // We no longer rehydrate the object, since this can cause data loss.
+                // See http://www.propelorm.org/ticket/509
+                // $obj1->hydrate($row, 0, true); // rehydrate
+            } else {
+
+                $cls = CargadoresBateriasPeer::getOMClass();
+
+                $obj1 = new $cls();
+                $obj1->hydrate($row);
+                CargadoresBateriasPeer::addInstanceToPool($obj1, $key1);
+            } // if $obj1 already loaded
+
+            $key2 = CargadoresPeer::getPrimaryKeyHashFromRow($row, $startcol);
+            if ($key2 !== null) {
+                $obj2 = CargadoresPeer::getInstanceFromPool($key2);
+                if (!$obj2) {
+
+                    $cls = CargadoresPeer::getOMClass();
+
+                    $obj2 = new $cls();
+                    $obj2->hydrate($row, $startcol);
+                    CargadoresPeer::addInstanceToPool($obj2, $key2);
+                } // if obj2 already loaded
+
+                // Add the $obj1 (CargadoresBaterias) to $obj2 (Cargadores)
+                $obj2->addCargadoresBaterias($obj1);
+
+            } // if joined row was not null
+
+            $results[] = $obj1;
+        }
+        $stmt->closeCursor();
+
+        return $results;
+    }
+
+
+    /**
      * Returns the number of rows matching criteria, joining all related tables
      *
      * @param      Criteria $criteria
@@ -734,9 +734,9 @@ abstract class BaseCargadoresBateriasPeer
             $con = Propel::getConnection(CargadoresBateriasPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
 
-        $criteria->addJoin(CargadoresBateriasPeer::IDCARGADORES, CargadoresPeer::IDCARGADORES, $join_behavior);
-
         $criteria->addJoin(CargadoresBateriasPeer::IDBATERIAS, BateriasPeer::IDBATERIAS, $join_behavior);
+
+        $criteria->addJoin(CargadoresBateriasPeer::IDCARGADORES, CargadoresPeer::IDCARGADORES, $join_behavior);
 
         $stmt = BasePeer::doCount($criteria, $con);
 
@@ -772,15 +772,15 @@ abstract class BaseCargadoresBateriasPeer
         CargadoresBateriasPeer::addSelectColumns($criteria);
         $startcol2 = CargadoresBateriasPeer::NUM_HYDRATE_COLUMNS;
 
-        CargadoresPeer::addSelectColumns($criteria);
-        $startcol3 = $startcol2 + CargadoresPeer::NUM_HYDRATE_COLUMNS;
-
         BateriasPeer::addSelectColumns($criteria);
-        $startcol4 = $startcol3 + BateriasPeer::NUM_HYDRATE_COLUMNS;
+        $startcol3 = $startcol2 + BateriasPeer::NUM_HYDRATE_COLUMNS;
 
-        $criteria->addJoin(CargadoresBateriasPeer::IDCARGADORES, CargadoresPeer::IDCARGADORES, $join_behavior);
+        CargadoresPeer::addSelectColumns($criteria);
+        $startcol4 = $startcol3 + CargadoresPeer::NUM_HYDRATE_COLUMNS;
 
         $criteria->addJoin(CargadoresBateriasPeer::IDBATERIAS, BateriasPeer::IDBATERIAS, $join_behavior);
+
+        $criteria->addJoin(CargadoresBateriasPeer::IDCARGADORES, CargadoresPeer::IDCARGADORES, $join_behavior);
 
         $stmt = BasePeer::doSelect($criteria, $con);
         $results = array();
@@ -799,39 +799,39 @@ abstract class BaseCargadoresBateriasPeer
                 CargadoresBateriasPeer::addInstanceToPool($obj1, $key1);
             } // if obj1 already loaded
 
-            // Add objects for joined Cargadores rows
-
-            $key2 = CargadoresPeer::getPrimaryKeyHashFromRow($row, $startcol2);
-            if ($key2 !== null) {
-                $obj2 = CargadoresPeer::getInstanceFromPool($key2);
-                if (!$obj2) {
-
-                    $cls = CargadoresPeer::getOMClass();
-
-                    $obj2 = new $cls();
-                    $obj2->hydrate($row, $startcol2);
-                    CargadoresPeer::addInstanceToPool($obj2, $key2);
-                } // if obj2 loaded
-
-                // Add the $obj1 (CargadoresBaterias) to the collection in $obj2 (Cargadores)
-                $obj2->addCargadoresBaterias($obj1);
-            } // if joined row not null
-
             // Add objects for joined Baterias rows
 
-            $key3 = BateriasPeer::getPrimaryKeyHashFromRow($row, $startcol3);
-            if ($key3 !== null) {
-                $obj3 = BateriasPeer::getInstanceFromPool($key3);
-                if (!$obj3) {
+            $key2 = BateriasPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+            if ($key2 !== null) {
+                $obj2 = BateriasPeer::getInstanceFromPool($key2);
+                if (!$obj2) {
 
                     $cls = BateriasPeer::getOMClass();
 
+                    $obj2 = new $cls();
+                    $obj2->hydrate($row, $startcol2);
+                    BateriasPeer::addInstanceToPool($obj2, $key2);
+                } // if obj2 loaded
+
+                // Add the $obj1 (CargadoresBaterias) to the collection in $obj2 (Baterias)
+                $obj2->addCargadoresBaterias($obj1);
+            } // if joined row not null
+
+            // Add objects for joined Cargadores rows
+
+            $key3 = CargadoresPeer::getPrimaryKeyHashFromRow($row, $startcol3);
+            if ($key3 !== null) {
+                $obj3 = CargadoresPeer::getInstanceFromPool($key3);
+                if (!$obj3) {
+
+                    $cls = CargadoresPeer::getOMClass();
+
                     $obj3 = new $cls();
                     $obj3->hydrate($row, $startcol3);
-                    BateriasPeer::addInstanceToPool($obj3, $key3);
+                    CargadoresPeer::addInstanceToPool($obj3, $key3);
                 } // if obj3 loaded
 
-                // Add the $obj1 (CargadoresBaterias) to the collection in $obj3 (Baterias)
+                // Add the $obj1 (CargadoresBaterias) to the collection in $obj3 (Cargadores)
                 $obj3->addCargadoresBaterias($obj1);
             } // if joined row not null
 
@@ -840,57 +840,6 @@ abstract class BaseCargadoresBateriasPeer
         $stmt->closeCursor();
 
         return $results;
-    }
-
-
-    /**
-     * Returns the number of rows matching criteria, joining the related Cargadores table
-     *
-     * @param      Criteria $criteria
-     * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
-     * @param      PropelPDO $con
-     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-     * @return int Number of matching rows.
-     */
-    public static function doCountJoinAllExceptCargadores(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
-    {
-        // we're going to modify criteria, so copy it first
-        $criteria = clone $criteria;
-
-        // We need to set the primary table name, since in the case that there are no WHERE columns
-        // it will be impossible for the BasePeer::createSelectSql() method to determine which
-        // tables go into the FROM clause.
-        $criteria->setPrimaryTableName(CargadoresBateriasPeer::TABLE_NAME);
-
-        if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
-            $criteria->setDistinct();
-        }
-
-        if (!$criteria->hasSelectClause()) {
-            CargadoresBateriasPeer::addSelectColumns($criteria);
-        }
-
-        $criteria->clearOrderByColumns(); // ORDER BY should not affect count
-
-        // Set the correct dbName
-        $criteria->setDbName(CargadoresBateriasPeer::DATABASE_NAME);
-
-        if ($con === null) {
-            $con = Propel::getConnection(CargadoresBateriasPeer::DATABASE_NAME, Propel::CONNECTION_READ);
-        }
-
-        $criteria->addJoin(CargadoresBateriasPeer::IDBATERIAS, BateriasPeer::IDBATERIAS, $join_behavior);
-
-        $stmt = BasePeer::doCount($criteria, $con);
-
-        if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-            $count = (int) $row[0];
-        } else {
-            $count = 0; // no rows returned; we infer that means 0 matches.
-        }
-        $stmt->closeCursor();
-
-        return $count;
     }
 
 
@@ -946,76 +895,53 @@ abstract class BaseCargadoresBateriasPeer
 
 
     /**
-     * Selects a collection of CargadoresBaterias objects pre-filled with all related objects except Cargadores.
+     * Returns the number of rows matching criteria, joining the related Cargadores table
      *
-     * @param      Criteria  $criteria
+     * @param      Criteria $criteria
+     * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
      * @param      PropelPDO $con
      * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-     * @return array           Array of CargadoresBaterias objects.
-     * @throws PropelException Any exceptions caught during processing will be
-     *		 rethrown wrapped into a PropelException.
+     * @return int Number of matching rows.
      */
-    public static function doSelectJoinAllExceptCargadores(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    public static function doCountJoinAllExceptCargadores(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
     {
+        // we're going to modify criteria, so copy it first
         $criteria = clone $criteria;
 
-        // Set the correct dbName if it has not been overridden
-        // $criteria->getDbName() will return the same object if not set to another value
-        // so == check is okay and faster
-        if ($criteria->getDbName() == Propel::getDefaultDB()) {
-            $criteria->setDbName(CargadoresBateriasPeer::DATABASE_NAME);
+        // We need to set the primary table name, since in the case that there are no WHERE columns
+        // it will be impossible for the BasePeer::createSelectSql() method to determine which
+        // tables go into the FROM clause.
+        $criteria->setPrimaryTableName(CargadoresBateriasPeer::TABLE_NAME);
+
+        if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
+            $criteria->setDistinct();
         }
 
-        CargadoresBateriasPeer::addSelectColumns($criteria);
-        $startcol2 = CargadoresBateriasPeer::NUM_HYDRATE_COLUMNS;
+        if (!$criteria->hasSelectClause()) {
+            CargadoresBateriasPeer::addSelectColumns($criteria);
+        }
 
-        BateriasPeer::addSelectColumns($criteria);
-        $startcol3 = $startcol2 + BateriasPeer::NUM_HYDRATE_COLUMNS;
+        $criteria->clearOrderByColumns(); // ORDER BY should not affect count
+
+        // Set the correct dbName
+        $criteria->setDbName(CargadoresBateriasPeer::DATABASE_NAME);
+
+        if ($con === null) {
+            $con = Propel::getConnection(CargadoresBateriasPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+        }
 
         $criteria->addJoin(CargadoresBateriasPeer::IDBATERIAS, BateriasPeer::IDBATERIAS, $join_behavior);
 
+        $stmt = BasePeer::doCount($criteria, $con);
 
-        $stmt = BasePeer::doSelect($criteria, $con);
-        $results = array();
-
-        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-            $key1 = CargadoresBateriasPeer::getPrimaryKeyHashFromRow($row, 0);
-            if (null !== ($obj1 = CargadoresBateriasPeer::getInstanceFromPool($key1))) {
-                // We no longer rehydrate the object, since this can cause data loss.
-                // See http://www.propelorm.org/ticket/509
-                // $obj1->hydrate($row, 0, true); // rehydrate
-            } else {
-                $cls = CargadoresBateriasPeer::getOMClass();
-
-                $obj1 = new $cls();
-                $obj1->hydrate($row);
-                CargadoresBateriasPeer::addInstanceToPool($obj1, $key1);
-            } // if obj1 already loaded
-
-                // Add objects for joined Baterias rows
-
-                $key2 = BateriasPeer::getPrimaryKeyHashFromRow($row, $startcol2);
-                if ($key2 !== null) {
-                    $obj2 = BateriasPeer::getInstanceFromPool($key2);
-                    if (!$obj2) {
-
-                        $cls = BateriasPeer::getOMClass();
-
-                    $obj2 = new $cls();
-                    $obj2->hydrate($row, $startcol2);
-                    BateriasPeer::addInstanceToPool($obj2, $key2);
-                } // if $obj2 already loaded
-
-                // Add the $obj1 (CargadoresBaterias) to the collection in $obj2 (Baterias)
-                $obj2->addCargadoresBaterias($obj1);
-
-            } // if joined row is not null
-
-            $results[] = $obj1;
+        if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $count = (int) $row[0];
+        } else {
+            $count = 0; // no rows returned; we infer that means 0 matches.
         }
         $stmt->closeCursor();
 
-        return $results;
+        return $count;
     }
 
 
@@ -1081,6 +1007,80 @@ abstract class BaseCargadoresBateriasPeer
                 } // if $obj2 already loaded
 
                 // Add the $obj1 (CargadoresBaterias) to the collection in $obj2 (Cargadores)
+                $obj2->addCargadoresBaterias($obj1);
+
+            } // if joined row is not null
+
+            $results[] = $obj1;
+        }
+        $stmt->closeCursor();
+
+        return $results;
+    }
+
+
+    /**
+     * Selects a collection of CargadoresBaterias objects pre-filled with all related objects except Cargadores.
+     *
+     * @param      Criteria  $criteria
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return array           Array of CargadoresBaterias objects.
+     * @throws PropelException Any exceptions caught during processing will be
+     *		 rethrown wrapped into a PropelException.
+     */
+    public static function doSelectJoinAllExceptCargadores(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $criteria = clone $criteria;
+
+        // Set the correct dbName if it has not been overridden
+        // $criteria->getDbName() will return the same object if not set to another value
+        // so == check is okay and faster
+        if ($criteria->getDbName() == Propel::getDefaultDB()) {
+            $criteria->setDbName(CargadoresBateriasPeer::DATABASE_NAME);
+        }
+
+        CargadoresBateriasPeer::addSelectColumns($criteria);
+        $startcol2 = CargadoresBateriasPeer::NUM_HYDRATE_COLUMNS;
+
+        BateriasPeer::addSelectColumns($criteria);
+        $startcol3 = $startcol2 + BateriasPeer::NUM_HYDRATE_COLUMNS;
+
+        $criteria->addJoin(CargadoresBateriasPeer::IDBATERIAS, BateriasPeer::IDBATERIAS, $join_behavior);
+
+
+        $stmt = BasePeer::doSelect($criteria, $con);
+        $results = array();
+
+        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $key1 = CargadoresBateriasPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = CargadoresBateriasPeer::getInstanceFromPool($key1))) {
+                // We no longer rehydrate the object, since this can cause data loss.
+                // See http://www.propelorm.org/ticket/509
+                // $obj1->hydrate($row, 0, true); // rehydrate
+            } else {
+                $cls = CargadoresBateriasPeer::getOMClass();
+
+                $obj1 = new $cls();
+                $obj1->hydrate($row);
+                CargadoresBateriasPeer::addInstanceToPool($obj1, $key1);
+            } // if obj1 already loaded
+
+                // Add objects for joined Baterias rows
+
+                $key2 = BateriasPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+                if ($key2 !== null) {
+                    $obj2 = BateriasPeer::getInstanceFromPool($key2);
+                    if (!$obj2) {
+
+                        $cls = BateriasPeer::getOMClass();
+
+                    $obj2 = new $cls();
+                    $obj2->hydrate($row, $startcol2);
+                    BateriasPeer::addInstanceToPool($obj2, $key2);
+                } // if $obj2 already loaded
+
+                // Add the $obj1 (CargadoresBaterias) to the collection in $obj2 (Baterias)
                 $obj2->addCargadoresBaterias($obj1);
 
             } // if joined row is not null

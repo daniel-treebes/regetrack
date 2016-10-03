@@ -74,6 +74,7 @@ CREATE TABLE `cargadores`
     `cargadores_comprador` VARCHAR(255),
     `cargadores_nombre` VARCHAR(255),
     `cargadores_numserie` VARCHAR(45),
+    `cargadores_tipo` enum('Cargador','Bodega') DEFAULT 'Cargador' NOT NULL,
     PRIMARY KEY (`idcargadores`),
     INDEX `idsucursal` (`idsucursal`),
     CONSTRAINT `cargadores_idsucursal`
@@ -97,12 +98,12 @@ CREATE TABLE `cargadores_baterias`
     PRIMARY KEY (`idcargadores_baterias`),
     INDEX `idcargadores` (`idcargadores`),
     INDEX `idbaterias` (`idbaterias`),
-    CONSTRAINT `cargadores_baterias_idcargadores`
-        FOREIGN KEY (`idcargadores`)
-        REFERENCES `cargadores` (`idcargadores`),
     CONSTRAINT `cargadores_baterias_idbaterias`
         FOREIGN KEY (`idbaterias`)
-        REFERENCES `baterias` (`idbaterias`)
+        REFERENCES `baterias` (`idbaterias`),
+    CONSTRAINT `cargadores_baterias_idcargadores`
+        FOREIGN KEY (`idcargadores`)
+        REFERENCES `cargadores` (`idcargadores`)
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
@@ -279,12 +280,12 @@ CREATE TABLE `montacargas_baterias`
     PRIMARY KEY (`idmontacargas_baterias`),
     INDEX `idmontacargas` (`idmontacargas`),
     INDEX `idbaterias` (`idbaterias`),
-    CONSTRAINT `cargadores_baterias_idcargadores0`
-        FOREIGN KEY (`idmontacargas`)
-        REFERENCES `montacargas` (`idmontacargas`),
     CONSTRAINT `cargadores_baterias_idbaterias0`
         FOREIGN KEY (`idbaterias`)
-        REFERENCES `baterias` (`idbaterias`)
+        REFERENCES `baterias` (`idbaterias`),
+    CONSTRAINT `cargadores_baterias_idcargadores0`
+        FOREIGN KEY (`idmontacargas`)
+        REFERENCES `montacargas` (`idmontacargas`)
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
@@ -442,7 +443,7 @@ CREATE TABLE `uso_baterias_montacargas`
     `mc` INTEGER NOT NULL,
     `bt` INTEGER NOT NULL,
     `fecha_entrada` DATETIME NOT NULL,
-    `fecha_salida` DATETIME NOT NULL,
+    `fecha_salida` DATETIME,
     `usuario_entrada` INTEGER,
     `usuario_salida` INTEGER,
     PRIMARY KEY (`id`),
