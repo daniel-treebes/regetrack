@@ -1192,7 +1192,7 @@ function securePage($uri){
 }
 
 //Treebes JLFV a partir de aqui
-function pinta_grafica($modulo,$divapintar,$estatus,$idapintar='todo',$sucursal_activa){
+function pinta_grafica($modulo,$divapintar,$estatus,$idapintar='todo',$sucursal_activa, $cargador_tipo= 'Cargador'){
         
 	global $mysqli;
 
@@ -1215,7 +1215,7 @@ function pinta_grafica($modulo,$divapintar,$estatus,$idapintar='todo',$sucursal_
 		$ffin='fecha_salida';
 	}
 	
-	if($modulo == 'cg'){
+	if($modulo == 'cg' || $modulo=="li"){
             $qwhere='m.idcargadores=u.'.$modulo.' AND m.idsucursal ='.$sucursal_activa;
         }elseif($modulo == 'mc'){
             $qwhere='m.idmontacargas=u.'.$modulo.' AND m.idsucursal ='.$sucursal_activa;
@@ -1235,7 +1235,8 @@ function pinta_grafica($modulo,$divapintar,$estatus,$idapintar='todo',$sucursal_
 			$tuso.=' JOIN baterias as m ON u.bt = m.idbaterias';
 		}else{
                     $tuso.=' JOIN bodegas as b ON u.bg = b.id JOIN cargadores as m ON b.cg = m.idcargadores';
-                    $qwhere='m.ididcargadores=b.cg AND b.id=u.bg';
+                    $qwhere='m.idcargadores=b.cg AND b.id=u.bg AND cg.cargadores_tipo = "'.$cargador_tipo.'"';
+                    
 		}
 	}
 	
@@ -1243,14 +1244,14 @@ function pinta_grafica($modulo,$divapintar,$estatus,$idapintar='todo',$sucursal_
         if($modulo=="bt"){
             $id = 'idbaterias';
             $nombre = 'baterias_nombre';
-        }else if($modulo=="cg"){
+        }else if($modulo=="cg" || $modulo=="li"){
             $id = 'idcargadores';
             $nombre = 'cargadores_nombre';
         }else{
             $id = 'idmontacargas';
             $nombre = 'montacargas_nombre';
         }
-       
+     
 	$query="
 		SELECT
 			m.".$id." as id,
@@ -1266,8 +1267,7 @@ function pinta_grafica($modulo,$divapintar,$estatus,$idapintar='todo',$sucursal_
 		order by
 			nombre, u.$fini asc
 	";
-        
-         
+
     $respuesta = $mysqli->query($query);
        
 	$data=array();
@@ -1298,6 +1298,11 @@ function pinta_grafica($modulo,$divapintar,$estatus,$idapintar='todo',$sucursal_
 		if ($idapintar=='todo') $titulo.=' CARGADORES';
 		else $titulo.='L CARGADOR '.$nombreid;
 	}
+        if ($modulo=='li'){
+		$tabladeh.=' JOIN cargadores as m ON d.cg = m.idcargadores WHERE m.cargadores_tipo = "'.$cargador_tipo.'"';
+		if ($idapintar=='todo') $titulo.=' BODEGAS';
+		else $titulo.='L BODEGA '.$nombreid;
+	}
 	if ($modulo=='mc'){
 		$tabladeh.=' JOIN montacargas as m ON d.idmontacargas = m.idmontacargas';
 		if ($idapintar=='todo') $titulo.=' MONTACARGAS';
@@ -1313,7 +1318,7 @@ function pinta_grafica($modulo,$divapintar,$estatus,$idapintar='todo',$sucursal_
 			$filtro
 		ORDER BY nombre, d.fecha_entrada
 	";
-     
+      
 	$rep_alertas = $mysqli->query($query);
 	
 	$alertas=array();

@@ -9,7 +9,10 @@ $acciones[1][1]='javascript:importa();';
 
 require_once("models/config.php");
 if (!securePage($_SERVER['PHP_SELF'])){die();}
-
+$tipo = $_GET['tipo'];
+if($tipo == 'Bodega'){
+    $nombrePagina="Bodegas";
+}
 require_once("models/header.php");
 $query="
 SELECT * FROM
@@ -160,7 +163,7 @@ GROUP BY Cargador
 ORDER BY Cargador, Espacio
 ";
 
-$resultado = $mysqli->query($query);
+//$resultado = $mysqli->query($query);
 
 $queryCargadoresDes="
     SELECT *, CONCAT(
@@ -171,11 +174,11 @@ $queryCargadoresDes="
     FROM deshabilitacg
     WHERE fecha_salida='0000-00-00 00:00:00'
 ";
-$resCgDes = $mysqli->query($queryCargadoresDes);
-$cgDes=array();
-while($fila = $resCgDes->fetch_array()) {
-    $cgDes[$fila['cg']]=$fila;
-}
+//$resCgDes = $mysqli->query($queryCargadoresDes);
+//$cgDes=array();
+//while($fila = $resCgDes->fetch_array()) {
+//   $cgDes[$fila['cg']]=$fila;
+//}
 ?>
 
 <input id="sortpicture" type="file" name="sortpic" style="display: none"; />
@@ -255,7 +258,11 @@ function deshabilita(cual) {
 					<div class="portlet light portlet-fit bordered">
 						<div class="portlet-title">
 							<div class="caption">
+                                                            <?php if($tipo == 'Cargador') :?>
 								<span class="caption-subject font-green bold uppercase">Desempeño de Cargadores</span>
+                                                            <?php else:?>
+                                                                <span class="caption-subject font-green bold uppercase">Desempeño de Bodegas</span>
+                                                            <?php endif;?>
 							</div>
 						</div>
 						<div class="portlet-body">
@@ -283,13 +290,18 @@ function deshabilita(cual) {
         <script src="assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js" type="text/javascript"></script>
         <!-- END PAGE LEVEL PLUGINS -->
 <?php
-
-	$grafica=pinta_grafica('cg','reporteCC','carga','todo',$loggedInUser->sucursal_activa);
-	echo $grafica;
-	$grafica=pinta_grafica('cg','reporteCD','descanso','todo',$loggedInUser->sucursal_activa);
-	echo $grafica;
-	$grafica=pinta_grafica('cg','reporteCE','espera','todo',$loggedInUser->sucursal_activa);
-	echo $grafica;
+        
+        if($tipo == 'Cargador'){
+            $grafica=pinta_grafica('cg','reporteCC','carga','todo',$loggedInUser->sucursal_activa);
+            echo $grafica;
+            $grafica=pinta_grafica('cg','reporteCD','descanso','todo',$loggedInUser->sucursal_activa);
+            echo $grafica;
+            $grafica=pinta_grafica('cg','reporteCE','espera','todo',$loggedInUser->sucursal_activa);
+            echo $grafica;
+        }else{
+            $grafica=pinta_grafica('li','reporteCE','espera','todo',$loggedInUser->sucursal_activa,'Bodega');
+            echo $grafica;
+        }
 	
 require_once("tema/comun/footer.php");
 ?>
@@ -302,6 +314,7 @@ require_once("tema/comun/footer.php");
             "contentType": "application/json; charset=utf-8",
             "type": "GET",
             "url":"/json/cargadores.php",
+            data:{tipo:"<?php echo $tipo?>"},
             success: function (data, textStatus, jqXHR) {
                 var table = $('#tablacargadores').DataTable({
                     data: data,
