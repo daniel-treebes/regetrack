@@ -240,13 +240,21 @@ function deshabilita(cual) {
 					<tr>
                                                 <th></th>
 						<th>Nombre</th>
+                                                <?php if($tipo == 'Cargador') :?>
 						<th>Tipo</th>
+                                                <?php else: ?>
+                                                <th style="display:none">Tipo</th>
+                                                <?php endif;?>
 		<!--				<th>Espacio</th>-->
 						<th>Num. Lugares</th>
 						<th>Lugares Disp.</th>
 						<th>Bat. En Espera</th>
                                                 <th>Bat. En Descanso</th>
+						<?php if($tipo == 'Cargador') :?>
 						<th>Tiempo En Carga</th>
+                                                <?php else: ?>
+                                                <th style="display:none">Tiempo En Carga</th>
+                                                <?php endif;?>
                                                 <th>Estatus</th>
 						<th>Opciones</th>
 					</tr>
