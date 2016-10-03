@@ -1247,18 +1247,18 @@ function pinta_grafica($modulo,$divapintar,$estatus,$idapintar='todo',$sucursal_
             $id = 'idcargadores';
             $nombre = 'cargadores_nombre';
         }else{
-             $id = 'idmontacargas';
+            $id = 'idmontacargas';
             $nombre = 'montacargas_nombre';
         }
        
 	$query="
 		SELECT
-                    m.".$id." as id,
-                    m.$nombre as nombre,
-                    u.$fini as fecha_entrada,
-                    u.$ffin as fecha_salida,
-                    TIMESTAMPDIFF(hour, u.$fini, u.$ffin) as hrs,
-                    TIMESTAMPDIFF(minute, u.$fini, u.$ffin)-(TIMESTAMPDIFF(hour, u.$fini, u.$ffin))*60 as min
+			m.".$id." as id,
+			m.$nombre as nombre,
+			u.$fini as fecha_entrada,
+			u.$ffin as fecha_salida,
+			TIMESTAMPDIFF(hour, u.$fini, u.$ffin) as hrs,
+			TIMESTAMPDIFF(minute, u.$fini, u.$ffin)-(TIMESTAMPDIFF(hour, u.$fini, u.$ffin))*60 as min
 		from $tuso
 		where $qwhere
 			AND u.$ffin!='0000-00-00 00:00:00' AND m.idsucursal = ".$sucursal_activa."
@@ -1271,6 +1271,7 @@ function pinta_grafica($modulo,$divapintar,$estatus,$idapintar='todo',$sucursal_
     $respuesta = $mysqli->query($query);
        
 	$data=array();
+	$nombreid='SIN USO';
 	if ($respuesta) {
 	   while($renglon = $respuesta->fetch_array()){
 		  $mc=$renglon['id'];

@@ -43,10 +43,17 @@
                 <span class="selected"></span>
                 </a>
             </li>
-            <li id="mbodegas">
-            <a href="bodegas.php">
+            <li id="mcargadores">
+            <a href="bodegas.php?tipo=Cargador">
                 <i class="fa icon-cargador"></i>
                 <span class="title">Cargadores</span>
+                <span class="selected"></span>
+                </a>
+            </li>
+            <li id="mbodegas">
+            <a href="bodegas.php?tipo=Bodega">
+                <i class="fa icon-cargador"></i>
+                <span class="title">Bodegas</span>
                 <span class="selected"></span>
                 </a>
             </li>

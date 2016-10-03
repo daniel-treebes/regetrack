@@ -28,15 +28,19 @@ $mysqli = new mysqli($db_host, $db_user, $db_pass, $db_name);
 
 GLOBAL $mysqli;
 
-//Treebes TRIGGER de cargado a descacnso
+//Treebes TRIGGER de cargado a descanso
+/* CAMBIADO POR EVENTO EN BD
 $query="
-	UPDATE uso_baterias_bodega
+	UPDATE uso_baterias_bodega as u, bodegas as b, cargadores as c
 	SET fecha_descanso=DATE_ADD(fecha_carga, INTERVAL 8 HOUR)
 	WHERE fecha_descanso='0000-00-00 00:00:00'
 		AND now()>=DATE_ADD(fecha_carga, INTERVAL 8 HOUR)
+		AND c.idcargadores=b.cg
+		AND b.id=u.bg
+		AND c.cargadores_tipo='Cargador'
 	";
 $mysqli->query($query);
-
+*/
 if(mysqli_connect_errno()) {
 	echo "Connection Failed: " . mysqli_connect_errno();
 	exit();

@@ -46,8 +46,9 @@ $( "#sortpicture" ).change(function() {
 function importa(){
     $("#sortpicture").trigger('click');		
 }
+
 function exporta(){
-		   url=location.href.substring(0, location.href.lastIndexOf("/")+1)
+		   url=location.href.substring(0, location.href.lastIndexOf("/")+1);
 		   window.open(url+'exportaciones/emontacargas.php','_blank');
 }
 
@@ -65,7 +66,6 @@ function importa2(){
 						data: form_data,                         
 						type: 'post',
 						success: function(php_script_response){
-                                                        
 							location.reload(); // display response from the PHP script, if any
 						},
 						  error: function(XMLHttpRequest, textStatus, errorThrown) {
@@ -80,12 +80,29 @@ function deshabilita(cual) {
 }
 		
 	</script>   
+
+	<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.css">
+	<script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.js"></script>
+	<script type="text/javascript">
+    $(document).ready(function() {
+        $('#tablamontacargas').dataTable( {
+			  "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.10.12/i18n/Spanish.json"
+           }
+        } );
+    } );
+	</script>
+	<style>
+		div.container {
+        width: 80%;
+    }
+	</style>
         <div class="row">
             <div class="col-md-12">
               <?php require_once("tema/comun/topcontenedor.php");?>
 
 
-	<table id="example" class="table table-striped table-bordered table-hover" cellspacing="0" width="100%">
+	<table id="tablamontacargas" class="display table table-striped table-bordered table-hover" cellspacing="0" width="50%">
         <thead>
             <tr>
                 <th>Nombre</th>

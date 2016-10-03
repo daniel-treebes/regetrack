@@ -62,7 +62,8 @@ $queryEspacioDisponible="
 	SELECT
 		tcg.idcargadores as cg_id,
 		tcg.cargadores_nombre as cg_nombre,
-		tbg.id as bg_id
+		tbg.id as bg_id,
+		tcg.cargadores_tipo as tipo
 	FROM bodegas as tbg, cargadores as tcg, montacargas as tmc,
 		montacargas_baterias as tmb, cargadores_baterias as tcb
 	WHERE
@@ -93,6 +94,7 @@ $queryEspacioDisponible="
 		AND tcg.idsucursal IN (".$loggedInUser->sucursales.")
 		AND tmc.idsucursal IN (".$loggedInUser->sucursales.")
 	GROUP BY cg_id
+	ORDER BY tcg.cargadores_tipo DESC
 ";
 //echo '<pre>';var_dump($queryEspacioDisponible);echo  '</pre>';exit();
 //Los ocupados serviran para saber si está vacío!
@@ -100,7 +102,8 @@ $queryCargadorOcupado="
 	SELECT
 		tbg.cg as cg,
 		MAX(tubb.fecha_carga) as maxfc,
-		MIN(tubb.fecha_descanso) as minfd
+		MIN(tubb.fecha_descanso) as minfd,
+		tcg.cargadores_tipo as tipo
 	FROM uso_baterias_bodega as tubb, bodegas as tbg, cargadores as tcg, montacargas as tmc,
 		montacargas_baterias as tmb, cargadores_baterias as tcb
 	WHERE
@@ -117,17 +120,19 @@ $queryCargadorOcupado="
 		AND tcg.idsucursal IN (".$loggedInUser->sucursales.")
 		AND tmc.idsucursal IN (".$loggedInUser->sucursales.")
 	GROUP BY cg
-	ORDER BY minfd, maxfc
+	ORDER BY minfd, maxfc, tcg.cargadores_tipo DESC
 ";
 
 //los cargadores deshabilitados... pueden usar los espacios pero no cargar!
 $queryCargadorDeshabilitado="
-	SELECT dcg.cg, dcg.fecha_entrada
+	SELECT dcg.cg, dcg.fecha_entrada,
+		tcg.cargadores_tipo as tipo
 	FROM deshabilitacg as dcg, cargadores as tcg
 	WHERE dcg.fecha_salida ='0000-00-00 00:00:00'
 		AND dcg.cg=tcg.idcargadores
 		AND tcg.idsucursal IN (".$loggedInUser->sucursales.")
 	GROUP BY cg
+	ORDER BY tcg.cargadores_tipo DESC
 ";
 
 $espaciosDisponibles=array();
@@ -193,6 +198,14 @@ foreach ($espaciosDisponibles as $cg_id => $datos){
 			}
 		}
 	}
+	
+	$cargadorSiguiente['tipo']=$espaciosDisponibles[$cg_id]['tipo'];
+	
+	if ($cargadorSiguiente['tipo']=="Bodega"){
+		$cargadorSiguiente['minfd']='0000-00-00 00:00:00';
+		$cargadorSiguiente['maxfc']='0000-00-00 00:00:00';
+	}
+	
 	if (array_key_exists ($cg_id,$cargadoresDeshabilitados)){
 		$cargadorSiguiente['f_des']=$cargadoresDeshabilitados[$cg_id]['fecha_entrada'];
 	}else{
@@ -200,8 +213,6 @@ foreach ($espaciosDisponibles as $cg_id => $datos){
 	}
 	if ($termina==1) break;
 }
-
-
 	$queryBateriaActual="
 		SELECT
 			u.id as Id,

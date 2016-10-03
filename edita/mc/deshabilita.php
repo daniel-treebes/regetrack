@@ -5,7 +5,7 @@
     <div class="portlet box  blue-sharp">
         <div class="portlet-title">
             <div class="caption">
-                <i class="fa fa-car"></i>Desabilita montacargas <strong><?php  echo $_GET['id'] ?> </strong>
+                <i class="fa fa-car"></i>Desabilitar<strong><?php  echo $_GET['id'] ?> </strong>
             </div>
             <div class="tools">
                 <a href="" class="collapse" data-original-title="" title=""> </a>
@@ -31,7 +31,7 @@
                 <br><br><br><br>
                 <div class="btn-group btn-group btn-group-justified">
                     <div class="col-s-12 ">
-                        <a href="javascript:deshabilitaEnvia('<?php  echo $_GET['id'] ?>')" class="btn red btn-block" style="height: 110px;"><h2> <i class="fa fa-send"></i></h2><h5>Deshabilitar Montacargas</h5></a>
+                        <a href="javascript:deshabilitaEnvia('<?php  echo $_GET['id'] ?>')" class="btn red btn-block" style="height: 110px;"><h2> <i class="fa fa-send"></i></h2><h5>Deshabilitar</h5></a>
                     </div>
                     <div class="col-s-12 ">
                         <a href="/escanear.php" class="btn default btn-block" style="height: 110px;"><h2> <i class="fa fa-arrow-left"></i></h2><h5>Regresar</h5></a>
