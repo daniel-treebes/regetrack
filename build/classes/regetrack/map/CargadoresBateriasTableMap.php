@@ -49,8 +49,8 @@ class CargadoresBateriasTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('Cargadores', 'Cargadores', RelationMap::MANY_TO_ONE, array('idcargadores' => 'idcargadores', ), null, null);
         $this->addRelation('Baterias', 'Baterias', RelationMap::MANY_TO_ONE, array('idbaterias' => 'idbaterias', ), null, null);
+        $this->addRelation('Cargadores', 'Cargadores', RelationMap::MANY_TO_ONE, array('idcargadores' => 'idcargadores', ), null, null);
     } // buildRelations()
 
 } // CargadoresBateriasTableMap

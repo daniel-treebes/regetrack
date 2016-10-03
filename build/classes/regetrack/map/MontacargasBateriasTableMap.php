@@ -49,8 +49,8 @@ class MontacargasBateriasTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('Montacargas', 'Montacargas', RelationMap::MANY_TO_ONE, array('idmontacargas' => 'idmontacargas', ), null, null);
         $this->addRelation('Baterias', 'Baterias', RelationMap::MANY_TO_ONE, array('idbaterias' => 'idbaterias', ), null, null);
+        $this->addRelation('Montacargas', 'Montacargas', RelationMap::MANY_TO_ONE, array('idmontacargas' => 'idmontacargas', ), null, null);
     } // buildRelations()
 
 } // MontacargasBateriasTableMap

@@ -53,6 +53,7 @@
     <column name="cargadores_comprador" phpName="CargadoresComprador" type="VARCHAR" size="255" required="false"/>
     <column name="cargadores_nombre" phpName="CargadoresNombre" type="VARCHAR" size="255" required="false"/>
     <column name="cargadores_numserie" phpName="CargadoresNumserie" type="VARCHAR" size="45" required="false"/>
+    <column name="cargadores_tipo" phpName="CargadoresTipo" type="CHAR" sqlType="enum('Cargador','Bodega')" required="true" defaultValue="Cargador"/>
     <foreign-key foreignTable="sucursal" name="cargadores_idsucursal" onDelete="CASCADE" onUpdate="CASCADE">
       <reference local="idsucursal" foreign="idsucursal"/>
     </foreign-key>
@@ -67,11 +68,11 @@
     <column name="idcargadores_baterias" phpName="IdcargadoresBaterias" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="idcargadores" phpName="Idcargadores" type="INTEGER" required="true"/>
     <column name="idbaterias" phpName="Idbaterias" type="INTEGER" required="true"/>
-    <foreign-key foreignTable="cargadores" name="cargadores_baterias_idcargadores" onDelete="RESTRICT" onUpdate="RESTRICT">
-      <reference local="idcargadores" foreign="idcargadores"/>
-    </foreign-key>
     <foreign-key foreignTable="baterias" name="cargadores_baterias_idbaterias" onDelete="RESTRICT" onUpdate="RESTRICT">
       <reference local="idbaterias" foreign="idbaterias"/>
+    </foreign-key>
+    <foreign-key foreignTable="cargadores" name="cargadores_baterias_idcargadores" onDelete="RESTRICT" onUpdate="RESTRICT">
+      <reference local="idcargadores" foreign="idcargadores"/>
     </foreign-key>
     <index name="idcargadores">
       <index-column name="idcargadores"/>
@@ -215,11 +216,11 @@
     <column name="idmontacargas_baterias" phpName="IdmontacargasBaterias" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="idmontacargas" phpName="Idmontacargas" type="INTEGER" required="true"/>
     <column name="idbaterias" phpName="Idbaterias" type="INTEGER" required="true"/>
-    <foreign-key foreignTable="montacargas" name="cargadores_baterias_idcargadores0" onDelete="RESTRICT" onUpdate="RESTRICT">
-      <reference local="idmontacargas" foreign="idmontacargas"/>
-    </foreign-key>
     <foreign-key foreignTable="baterias" name="cargadores_baterias_idbaterias0" onDelete="RESTRICT" onUpdate="RESTRICT">
       <reference local="idbaterias" foreign="idbaterias"/>
+    </foreign-key>
+    <foreign-key foreignTable="montacargas" name="cargadores_baterias_idcargadores0" onDelete="RESTRICT" onUpdate="RESTRICT">
+      <reference local="idmontacargas" foreign="idmontacargas"/>
     </foreign-key>
     <index name="idmontacargas">
       <index-column name="idmontacargas"/>
@@ -255,6 +256,7 @@
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
+
   <table name="uc_permission_page_matches" phpName="UcPermissionPageMatches" idMethod="native">
     <column name="id" phpName="Id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="permission_id" phpName="PermissionId" type="INTEGER" required="true"/>
@@ -347,7 +349,7 @@
     <column name="mc" phpName="Mc" type="INTEGER" required="true"/>
     <column name="bt" phpName="Bt" type="INTEGER" required="true"/>
     <column name="fecha_entrada" phpName="FechaEntrada" type="TIMESTAMP" required="true"/>
-    <column name="fecha_salida" phpName="FechaSalida" type="TIMESTAMP" required="true"/>
+    <column name="fecha_salida" phpName="FechaSalida" type="TIMESTAMP" required="false"/>
     <column name="usuario_entrada" phpName="UsuarioEntrada" type="INTEGER" required="false"/>
     <column name="usuario_salida" phpName="UsuarioSalida" type="INTEGER" required="false"/>
     <foreign-key foreignTable="baterias" name="uso_baterias_montacargas_bt" onDelete="CASCADE" onUpdate="CASCADE">

@@ -48,6 +48,11 @@ class CargadoresTableMap extends TableMap
         $this->addColumn('cargadores_comprador', 'CargadoresComprador', 'VARCHAR', false, 255, null);
         $this->addColumn('cargadores_nombre', 'CargadoresNombre', 'VARCHAR', false, 255, null);
         $this->addColumn('cargadores_numserie', 'CargadoresNumserie', 'VARCHAR', false, 45, null);
+        $this->addColumn('cargadores_tipo', 'CargadoresTipo', 'CHAR', true, null, 'Cargador');
+        $this->getColumn('cargadores_tipo', false)->setValueSet(array (
+  0 => 'Cargador',
+  1 => 'Bodega',
+));
         // validators
     } // initialize()
 

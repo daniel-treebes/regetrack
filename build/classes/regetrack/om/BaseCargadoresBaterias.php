@@ -48,14 +48,14 @@ abstract class BaseCargadoresBaterias extends BaseObject implements Persistent
     protected $idbaterias;
 
     /**
-     * @var        Cargadores
-     */
-    protected $aCargadores;
-
-    /**
      * @var        Baterias
      */
     protected $aBaterias;
+
+    /**
+     * @var        Cargadores
+     */
+    protected $aCargadores;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -293,8 +293,8 @@ abstract class BaseCargadoresBaterias extends BaseObject implements Persistent
 
         if ($deep) {  // also de-associate any related objects?
 
-            $this->aCargadores = null;
             $this->aBaterias = null;
+            $this->aCargadores = null;
         } // if (deep)
     }
 
@@ -413,18 +413,18 @@ abstract class BaseCargadoresBaterias extends BaseObject implements Persistent
             // method.  This object relates to these object(s) by a
             // foreign key reference.
 
-            if ($this->aCargadores !== null) {
-                if ($this->aCargadores->isModified() || $this->aCargadores->isNew()) {
-                    $affectedRows += $this->aCargadores->save($con);
-                }
-                $this->setCargadores($this->aCargadores);
-            }
-
             if ($this->aBaterias !== null) {
                 if ($this->aBaterias->isModified() || $this->aBaterias->isNew()) {
                     $affectedRows += $this->aBaterias->save($con);
                 }
                 $this->setBaterias($this->aBaterias);
+            }
+
+            if ($this->aCargadores !== null) {
+                if ($this->aCargadores->isModified() || $this->aCargadores->isNew()) {
+                    $affectedRows += $this->aCargadores->save($con);
+                }
+                $this->setCargadores($this->aCargadores);
             }
 
             if ($this->isNew() || $this->isModified()) {
@@ -592,15 +592,15 @@ abstract class BaseCargadoresBaterias extends BaseObject implements Persistent
             // method.  This object relates to these object(s) by a
             // foreign key reference.
 
-            if ($this->aCargadores !== null) {
-                if (!$this->aCargadores->validate($columns)) {
-                    $failureMap = array_merge($failureMap, $this->aCargadores->getValidationFailures());
-                }
-            }
-
             if ($this->aBaterias !== null) {
                 if (!$this->aBaterias->validate($columns)) {
                     $failureMap = array_merge($failureMap, $this->aBaterias->getValidationFailures());
+                }
+            }
+
+            if ($this->aCargadores !== null) {
+                if (!$this->aCargadores->validate($columns)) {
+                    $failureMap = array_merge($failureMap, $this->aCargadores->getValidationFailures());
                 }
             }
 
@@ -693,11 +693,11 @@ abstract class BaseCargadoresBaterias extends BaseObject implements Persistent
         }
 
         if ($includeForeignObjects) {
-            if (null !== $this->aCargadores) {
-                $result['Cargadores'] = $this->aCargadores->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
-            }
             if (null !== $this->aBaterias) {
                 $result['Baterias'] = $this->aBaterias->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->aCargadores) {
+                $result['Cargadores'] = $this->aCargadores->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
         }
 
@@ -907,58 +907,6 @@ abstract class BaseCargadoresBaterias extends BaseObject implements Persistent
     }
 
     /**
-     * Declares an association between this object and a Cargadores object.
-     *
-     * @param                  Cargadores $v
-     * @return CargadoresBaterias The current object (for fluent API support)
-     * @throws PropelException
-     */
-    public function setCargadores(Cargadores $v = null)
-    {
-        if ($v === null) {
-            $this->setIdcargadores(NULL);
-        } else {
-            $this->setIdcargadores($v->getIdcargadores());
-        }
-
-        $this->aCargadores = $v;
-
-        // Add binding for other direction of this n:n relationship.
-        // If this object has already been added to the Cargadores object, it will not be re-added.
-        if ($v !== null) {
-            $v->addCargadoresBaterias($this);
-        }
-
-
-        return $this;
-    }
-
-
-    /**
-     * Get the associated Cargadores object
-     *
-     * @param PropelPDO $con Optional Connection object.
-     * @param $doQuery Executes a query to get the object if required
-     * @return Cargadores The associated Cargadores object.
-     * @throws PropelException
-     */
-    public function getCargadores(PropelPDO $con = null, $doQuery = true)
-    {
-        if ($this->aCargadores === null && ($this->idcargadores !== null) && $doQuery) {
-            $this->aCargadores = CargadoresQuery::create()->findPk($this->idcargadores, $con);
-            /* The following can be used additionally to
-                guarantee the related object contains a reference
-                to this object.  This level of coupling may, however, be
-                undesirable since it could result in an only partially populated collection
-                in the referenced object.
-                $this->aCargadores->addCargadoresBateriass($this);
-             */
-        }
-
-        return $this->aCargadores;
-    }
-
-    /**
      * Declares an association between this object and a Baterias object.
      *
      * @param                  Baterias $v
@@ -1011,6 +959,58 @@ abstract class BaseCargadoresBaterias extends BaseObject implements Persistent
     }
 
     /**
+     * Declares an association between this object and a Cargadores object.
+     *
+     * @param                  Cargadores $v
+     * @return CargadoresBaterias The current object (for fluent API support)
+     * @throws PropelException
+     */
+    public function setCargadores(Cargadores $v = null)
+    {
+        if ($v === null) {
+            $this->setIdcargadores(NULL);
+        } else {
+            $this->setIdcargadores($v->getIdcargadores());
+        }
+
+        $this->aCargadores = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the Cargadores object, it will not be re-added.
+        if ($v !== null) {
+            $v->addCargadoresBaterias($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated Cargadores object
+     *
+     * @param PropelPDO $con Optional Connection object.
+     * @param $doQuery Executes a query to get the object if required
+     * @return Cargadores The associated Cargadores object.
+     * @throws PropelException
+     */
+    public function getCargadores(PropelPDO $con = null, $doQuery = true)
+    {
+        if ($this->aCargadores === null && ($this->idcargadores !== null) && $doQuery) {
+            $this->aCargadores = CargadoresQuery::create()->findPk($this->idcargadores, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aCargadores->addCargadoresBateriass($this);
+             */
+        }
+
+        return $this->aCargadores;
+    }
+
+    /**
      * Clears the current object and sets all attributes to their default values
      */
     public function clear()
@@ -1040,18 +1040,18 @@ abstract class BaseCargadoresBaterias extends BaseObject implements Persistent
     {
         if ($deep && !$this->alreadyInClearAllReferencesDeep) {
             $this->alreadyInClearAllReferencesDeep = true;
-            if ($this->aCargadores instanceof Persistent) {
-              $this->aCargadores->clearAllReferences($deep);
-            }
             if ($this->aBaterias instanceof Persistent) {
               $this->aBaterias->clearAllReferences($deep);
+            }
+            if ($this->aCargadores instanceof Persistent) {
+              $this->aCargadores->clearAllReferences($deep);
             }
 
             $this->alreadyInClearAllReferencesDeep = false;
         } // if ($deep)
 
-        $this->aCargadores = null;
         $this->aBaterias = null;
+        $this->aCargadores = null;
     }
 
     /**

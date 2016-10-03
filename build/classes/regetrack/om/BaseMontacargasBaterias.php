@@ -48,14 +48,14 @@ abstract class BaseMontacargasBaterias extends BaseObject implements Persistent
     protected $idbaterias;
 
     /**
-     * @var        Montacargas
-     */
-    protected $aMontacargas;
-
-    /**
      * @var        Baterias
      */
     protected $aBaterias;
+
+    /**
+     * @var        Montacargas
+     */
+    protected $aMontacargas;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -293,8 +293,8 @@ abstract class BaseMontacargasBaterias extends BaseObject implements Persistent
 
         if ($deep) {  // also de-associate any related objects?
 
-            $this->aMontacargas = null;
             $this->aBaterias = null;
+            $this->aMontacargas = null;
         } // if (deep)
     }
 
@@ -413,18 +413,18 @@ abstract class BaseMontacargasBaterias extends BaseObject implements Persistent
             // method.  This object relates to these object(s) by a
             // foreign key reference.
 
-            if ($this->aMontacargas !== null) {
-                if ($this->aMontacargas->isModified() || $this->aMontacargas->isNew()) {
-                    $affectedRows += $this->aMontacargas->save($con);
-                }
-                $this->setMontacargas($this->aMontacargas);
-            }
-
             if ($this->aBaterias !== null) {
                 if ($this->aBaterias->isModified() || $this->aBaterias->isNew()) {
                     $affectedRows += $this->aBaterias->save($con);
                 }
                 $this->setBaterias($this->aBaterias);
+            }
+
+            if ($this->aMontacargas !== null) {
+                if ($this->aMontacargas->isModified() || $this->aMontacargas->isNew()) {
+                    $affectedRows += $this->aMontacargas->save($con);
+                }
+                $this->setMontacargas($this->aMontacargas);
             }
 
             if ($this->isNew() || $this->isModified()) {
@@ -592,15 +592,15 @@ abstract class BaseMontacargasBaterias extends BaseObject implements Persistent
             // method.  This object relates to these object(s) by a
             // foreign key reference.
 
-            if ($this->aMontacargas !== null) {
-                if (!$this->aMontacargas->validate($columns)) {
-                    $failureMap = array_merge($failureMap, $this->aMontacargas->getValidationFailures());
-                }
-            }
-
             if ($this->aBaterias !== null) {
                 if (!$this->aBaterias->validate($columns)) {
                     $failureMap = array_merge($failureMap, $this->aBaterias->getValidationFailures());
+                }
+            }
+
+            if ($this->aMontacargas !== null) {
+                if (!$this->aMontacargas->validate($columns)) {
+                    $failureMap = array_merge($failureMap, $this->aMontacargas->getValidationFailures());
                 }
             }
 
@@ -693,11 +693,11 @@ abstract class BaseMontacargasBaterias extends BaseObject implements Persistent
         }
 
         if ($includeForeignObjects) {
-            if (null !== $this->aMontacargas) {
-                $result['Montacargas'] = $this->aMontacargas->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
-            }
             if (null !== $this->aBaterias) {
                 $result['Baterias'] = $this->aBaterias->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->aMontacargas) {
+                $result['Montacargas'] = $this->aMontacargas->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
         }
 
@@ -907,58 +907,6 @@ abstract class BaseMontacargasBaterias extends BaseObject implements Persistent
     }
 
     /**
-     * Declares an association between this object and a Montacargas object.
-     *
-     * @param                  Montacargas $v
-     * @return MontacargasBaterias The current object (for fluent API support)
-     * @throws PropelException
-     */
-    public function setMontacargas(Montacargas $v = null)
-    {
-        if ($v === null) {
-            $this->setIdmontacargas(NULL);
-        } else {
-            $this->setIdmontacargas($v->getIdmontacargas());
-        }
-
-        $this->aMontacargas = $v;
-
-        // Add binding for other direction of this n:n relationship.
-        // If this object has already been added to the Montacargas object, it will not be re-added.
-        if ($v !== null) {
-            $v->addMontacargasBaterias($this);
-        }
-
-
-        return $this;
-    }
-
-
-    /**
-     * Get the associated Montacargas object
-     *
-     * @param PropelPDO $con Optional Connection object.
-     * @param $doQuery Executes a query to get the object if required
-     * @return Montacargas The associated Montacargas object.
-     * @throws PropelException
-     */
-    public function getMontacargas(PropelPDO $con = null, $doQuery = true)
-    {
-        if ($this->aMontacargas === null && ($this->idmontacargas !== null) && $doQuery) {
-            $this->aMontacargas = MontacargasQuery::create()->findPk($this->idmontacargas, $con);
-            /* The following can be used additionally to
-                guarantee the related object contains a reference
-                to this object.  This level of coupling may, however, be
-                undesirable since it could result in an only partially populated collection
-                in the referenced object.
-                $this->aMontacargas->addMontacargasBateriass($this);
-             */
-        }
-
-        return $this->aMontacargas;
-    }
-
-    /**
      * Declares an association between this object and a Baterias object.
      *
      * @param                  Baterias $v
@@ -1011,6 +959,58 @@ abstract class BaseMontacargasBaterias extends BaseObject implements Persistent
     }
 
     /**
+     * Declares an association between this object and a Montacargas object.
+     *
+     * @param                  Montacargas $v
+     * @return MontacargasBaterias The current object (for fluent API support)
+     * @throws PropelException
+     */
+    public function setMontacargas(Montacargas $v = null)
+    {
+        if ($v === null) {
+            $this->setIdmontacargas(NULL);
+        } else {
+            $this->setIdmontacargas($v->getIdmontacargas());
+        }
+
+        $this->aMontacargas = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the Montacargas object, it will not be re-added.
+        if ($v !== null) {
+            $v->addMontacargasBaterias($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated Montacargas object
+     *
+     * @param PropelPDO $con Optional Connection object.
+     * @param $doQuery Executes a query to get the object if required
+     * @return Montacargas The associated Montacargas object.
+     * @throws PropelException
+     */
+    public function getMontacargas(PropelPDO $con = null, $doQuery = true)
+    {
+        if ($this->aMontacargas === null && ($this->idmontacargas !== null) && $doQuery) {
+            $this->aMontacargas = MontacargasQuery::create()->findPk($this->idmontacargas, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aMontacargas->addMontacargasBateriass($this);
+             */
+        }
+
+        return $this->aMontacargas;
+    }
+
+    /**
      * Clears the current object and sets all attributes to their default values
      */
     public function clear()
@@ -1040,18 +1040,18 @@ abstract class BaseMontacargasBaterias extends BaseObject implements Persistent
     {
         if ($deep && !$this->alreadyInClearAllReferencesDeep) {
             $this->alreadyInClearAllReferencesDeep = true;
-            if ($this->aMontacargas instanceof Persistent) {
-              $this->aMontacargas->clearAllReferences($deep);
-            }
             if ($this->aBaterias instanceof Persistent) {
               $this->aBaterias->clearAllReferences($deep);
+            }
+            if ($this->aMontacargas instanceof Persistent) {
+              $this->aMontacargas->clearAllReferences($deep);
             }
 
             $this->alreadyInClearAllReferencesDeep = false;
         } // if ($deep)
 
-        $this->aMontacargas = null;
         $this->aBaterias = null;
+        $this->aMontacargas = null;
     }
 
     /**

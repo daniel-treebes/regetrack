@@ -156,7 +156,7 @@ SELECT * FROM
         c.idcargadores=b.cg AND
         cbg.cg=c.idcargadores
 ) as todo
-
+GROUP BY Cargador 
 ORDER BY Cargador, Espacio
 ";
 
@@ -220,7 +220,14 @@ function deshabilita(cual) {
 }
 		
 	</script>   
-
+        <style>
+            .dataTables_filter label{
+                float: right;
+            }
+            .dataTables_paginate ul{
+                float: right;
+            }
+        </style>
 	<div class="row">
 		<div class="col-md-12">
             <?php require_once("tema/comun/topcontenedor.php");?>
@@ -228,63 +235,20 @@ function deshabilita(cual) {
 			<table id="tablacargadores" class="table table-striped table-bordered table-hover" cellspacing="0" width="100%">
 				<thead>
 					<tr>
-						<th>Cargador</th>
+                                                <th></th>
+						<th>Nombre</th>
 						<th>Tipo</th>
 		<!--				<th>Espacio</th>-->
-						<th>Batería</th>
-						<th>Estado Lugar</th>
-						<th>Tiempo</th>
-						<th>Estado Cargador</th>
-						<th></th>
+						<th>Num. Lugares</th>
+						<th>Lugares Disp.</th>
+						<th>Bat. En Espera</th>
+                                                <th>Bat. En Descanso</th>
+						<th>Tiempo En Carga</th>
+                                                <th>Estatus</th>
+						<th>Opciones</th>
 					</tr>
 				</thead>
-			   
-				<tbody>
-				<?php
-				$cg_ant='cualquiercosadiferentequenoserepita';
-				while($fila = $resultado->fetch_array()) {
-				   if (isset($cgDes[$fila['cgid']])){
-						$estado='<span style="color:red">'.$cgDes[$fila['cgid']]['motivo'].': '.$cgDes[$fila['cgid']]['tiempo'].'</span>';
-				   }else{
-						$estado='<span style="color:green">Habilitado</span>';
-				   }
-				   echo "<tr>";
-				   if ($fila['Cargador']!=$cg_ant){
-					   echo "<th rowspan='".$fila['cantbg']."'>".$fila['Cargador']."</th>";
-					   echo "<th rowspan='".$fila['cantbg']."'>".$fila['Tipo']."</th>";
-				   }
-   //				echo "<th>".$fila['Espacio']."</th>";
-				   if($fila['disponible']!=NULL || $fila['Bateria']==NULL){
-					   echo '<th style="color:green">Sin Batería</th>';
-				   }else{
-					   echo "<th>".$fila['Bateria']."</th>";
-				   }
-				   if($fila['disponible']!=NULL || $fila['Bateria']==NULL){
-					 echo '<th style="color:green">Disponible</th>';
-					 echo "<th>".$fila['disponible']."</th>";
-				   }elseif($fila['descanso']!=NULL){
-					 echo "<th>En descanso</th>";
-					 echo "<th>".$fila['descanso']."</th>";
-				   }elseif($fila['carga']!=NULL){
-					 echo "<th>En carga</th>";
-					 echo "<th>".$fila['carga']."</th>";				  
-				   }else{
-					 echo "<th>En espera</th>";
-					 echo "<th>".$fila['entrada']."</th>";				  
-				   }
-				   //echo "<th>".$fila['']."<th>";
-				   $herramientas="<button type='button' class='btn green' onclick='window.location.href=\"sistema.php?ruta=edita/cargadores&id=".$fila['cgid']."\"'><i class='fa fa-cogs'></i> </button>";
-				   $herramientas.="<button type='button' class='btn gray'  onclick='window.open(\"libs/imprimeQR.php?tipo=cargadores&id=".$fila['cgid']."\")'><i class='fa fa-qrcode'></i> </button>";
-				   
-				   if ($fila['Cargador']!=$cg_ant){
-					   echo "<th rowspan='".$fila['cantbg']."'>".$estado."</th>";
-					   echo "<th rowspan='".$fila['cantbg']."'>".$herramientas."</th>";
-				   }				
-				   $cg_ant=$fila['Cargador'];
-				   echo "</tr>";
-				}
-				?>
-				</tbody>
+                                <tbody></tbody>
 			</table>
 			<div class="row">
 				<div class="col-md-12">
@@ -329,3 +293,143 @@ function deshabilita(cual) {
 	
 require_once("tema/comun/footer.php");
 ?>
+
+<script>
+    $(document).ready( function () {
+        
+        $.ajax({
+            "dataType": 'json',
+            "contentType": "application/json; charset=utf-8",
+            "type": "GET",
+            "url":"/json/cargadores.php",
+            success: function (data, textStatus, jqXHR) {
+                var table = $('#tablacargadores').DataTable({
+                    data: data,
+                     "columns": [
+                        {
+                            "className":      'details-control',
+                            "orderable":      false,
+                            "data":           null,
+                            "defaultContent": ''
+                        },
+                        { "data": "Cargador" },
+                        { "data": "Tipo" },
+                        { "data": "Lugares" },
+                        { "data": "Disponibles" },
+                        { "data": "Espera" },
+                        { "data": "Descanso" },
+                        { "data": "Tiempo" },
+                        { "data": "Estado" },
+                        { "data": "Herramientas" },
+                     ],
+                      "order": [[1, 'asc']],
+                      "language": {
+                            "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"
+                        },
+                        rowCallback: function(row, data, index) {
+                            if(data.details.length == 0){
+                                $(row).find('td').eq(0).removeClass('details-control');
+                            }
+                           if($(row).find('td').eq(8).text() == "Habilitado"){
+                              $(row).find('td').eq(8).css('color','green').css('font-weight','bold'); 
+                           }else{
+                               $(row).find('td').eq(8).css('color','red').css('font-weight','bold'); 
+                           }
+                           if($(row).find('td').eq(7).text() == "Disponible"){
+                              $(row).find('td').eq(7).css('color','green').css('font-weight','bold'); 
+                           }else{
+                                $(row).find('td').eq(7).css('color','red').css('font-weight','bold'); 
+                           }
+                        }
+
+                });
+                
+                
+                
+                $('#tablacargadores tbody').on('click', 'td.details-control', function () {
+                    
+                    var tr = $(this).closest('tr');
+                    var row = table.row( tr );
+                  
+                    if ( row.child.isShown() ) {
+                        // This row is already open - close it
+                        row.child.hide();
+                        tr.removeClass('shown');
+                    }
+                    else {
+                        // Open this row
+                        row.child( format(row.data()) ).show();
+                        tr.addClass('shown');
+                    }
+                } );
+                
+                
+                function format ( d ) {
+                    // `d` is the original data object for the row
+                    var table_child = '';
+                    var details_count = d.details.lenght;
+                    var count = 0;
+                    $(d.details).each(function(){
+                       table_child+= '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">'+
+                        '<tr>'+
+                            '<td style="font-weight:bold">Bateria:</td>'+
+                            '<td>'+this.Bateria+'</td>'+
+                        '</tr>'+
+                        '<tr>'+
+                            '<td style="font-weight:bold">Estado:</td>'+
+                            '<td>'+this.Estado+'</td>'+
+                        '</tr>'+
+                        '<tr>'+
+                            '<td style="font-weight:bold">Tiempo:</td>'+
+                            '<td>&nbsp;'+this.Tiempo+'</td>'+
+                        '</tr>'+
+                    '</table>';
+                    count ++;
+                    if(count<details_count){
+                        table_child+="<hr>";
+                    }
+                    });
+                    return table_child;
+                }
+                
+                
+            }
+        });
+        
+        
+        /*
+        var table = $('#tablacargadores').DataTable({
+            "ajax": {
+                "dataType": 'json',
+                "contentType": "application/json; charset=utf-8",
+                "type": "GET",
+                "url":"/json/cargadores.php"
+            },
+            "columns": [
+            {
+                "className":      'details-control',
+                "orderable":      false,
+                "data":           null,
+                "defaultContent": ''
+            },
+            { "data": "Cargador" },
+            { "data": "Tipo" },
+            { "data": "Lugares" },
+            { "data": "Disponibles" },
+            { "data": "Espera" },
+            { "data": "Descanso" },
+            { "data": "Tiempo" },
+            { "data": "Herramientas" },
+            {
+                "orderable":      false,
+            },
+        ],
+        "order": [[1, 'asc']]
+        });
+        
+*/
+       
+    });
+    
+    
+</script>

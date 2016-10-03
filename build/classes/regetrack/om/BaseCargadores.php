@@ -90,6 +90,13 @@ abstract class BaseCargadores extends BaseObject implements Persistent
     protected $cargadores_numserie;
 
     /**
+     * The value for the cargadores_tipo field.
+     * Note: this column has a database default value of: 'Cargador'
+     * @var        string
+     */
+    protected $cargadores_tipo;
+
+    /**
      * @var        Sucursal
      */
     protected $aSucursal;
@@ -149,6 +156,27 @@ abstract class BaseCargadores extends BaseObject implements Persistent
      * @var		PropelObjectCollection
      */
     protected $deshabilitacgsScheduledForDeletion = null;
+
+    /**
+     * Applies default values to this object.
+     * This method should be called from the object's constructor (or
+     * equivalent initialization method).
+     * @see        __construct()
+     */
+    public function applyDefaultValues()
+    {
+        $this->cargadores_tipo = 'Cargador';
+    }
+
+    /**
+     * Initializes internal state of BaseCargadores object.
+     * @see        applyDefaults()
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        $this->applyDefaultValues();
+    }
 
     /**
      * Get the [idcargadores] column value.
@@ -258,6 +286,17 @@ abstract class BaseCargadores extends BaseObject implements Persistent
     {
 
         return $this->cargadores_numserie;
+    }
+
+    /**
+     * Get the [cargadores_tipo] column value.
+     *
+     * @return string
+     */
+    public function getCargadoresTipo()
+    {
+
+        return $this->cargadores_tipo;
     }
 
     /**
@@ -475,6 +514,27 @@ abstract class BaseCargadores extends BaseObject implements Persistent
     } // setCargadoresNumserie()
 
     /**
+     * Set the value of [cargadores_tipo] column.
+     *
+     * @param  string $v new value
+     * @return Cargadores The current object (for fluent API support)
+     */
+    public function setCargadoresTipo($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->cargadores_tipo !== $v) {
+            $this->cargadores_tipo = $v;
+            $this->modifiedColumns[] = CargadoresPeer::CARGADORES_TIPO;
+        }
+
+
+        return $this;
+    } // setCargadoresTipo()
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -484,6 +544,10 @@ abstract class BaseCargadores extends BaseObject implements Persistent
      */
     public function hasOnlyDefaultValues()
     {
+            if ($this->cargadores_tipo !== 'Cargador') {
+                return false;
+            }
+
         // otherwise, everything was equal, so return true
         return true;
     } // hasOnlyDefaultValues()
@@ -516,6 +580,7 @@ abstract class BaseCargadores extends BaseObject implements Persistent
             $this->cargadores_comprador = ($row[$startcol + 7] !== null) ? (string) $row[$startcol + 7] : null;
             $this->cargadores_nombre = ($row[$startcol + 8] !== null) ? (string) $row[$startcol + 8] : null;
             $this->cargadores_numserie = ($row[$startcol + 9] !== null) ? (string) $row[$startcol + 9] : null;
+            $this->cargadores_tipo = ($row[$startcol + 10] !== null) ? (string) $row[$startcol + 10] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -525,7 +590,7 @@ abstract class BaseCargadores extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 10; // 10 = CargadoresPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 11; // 11 = CargadoresPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Cargadores object", $e);
@@ -840,6 +905,9 @@ abstract class BaseCargadores extends BaseObject implements Persistent
         if ($this->isColumnModified(CargadoresPeer::CARGADORES_NUMSERIE)) {
             $modifiedColumns[':p' . $index++]  = '`cargadores_numserie`';
         }
+        if ($this->isColumnModified(CargadoresPeer::CARGADORES_TIPO)) {
+            $modifiedColumns[':p' . $index++]  = '`cargadores_tipo`';
+        }
 
         $sql = sprintf(
             'INSERT INTO `cargadores` (%s) VALUES (%s)',
@@ -880,6 +948,9 @@ abstract class BaseCargadores extends BaseObject implements Persistent
                         break;
                     case '`cargadores_numserie`':
                         $stmt->bindValue($identifier, $this->cargadores_numserie, PDO::PARAM_STR);
+                        break;
+                    case '`cargadores_tipo`':
+                        $stmt->bindValue($identifier, $this->cargadores_tipo, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -1081,6 +1152,9 @@ abstract class BaseCargadores extends BaseObject implements Persistent
             case 9:
                 return $this->getCargadoresNumserie();
                 break;
+            case 10:
+                return $this->getCargadoresTipo();
+                break;
             default:
                 return null;
                 break;
@@ -1120,6 +1194,7 @@ abstract class BaseCargadores extends BaseObject implements Persistent
             $keys[7] => $this->getCargadoresComprador(),
             $keys[8] => $this->getCargadoresNombre(),
             $keys[9] => $this->getCargadoresNumserie(),
+            $keys[10] => $this->getCargadoresTipo(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1203,6 +1278,9 @@ abstract class BaseCargadores extends BaseObject implements Persistent
             case 9:
                 $this->setCargadoresNumserie($value);
                 break;
+            case 10:
+                $this->setCargadoresTipo($value);
+                break;
         } // switch()
     }
 
@@ -1237,6 +1315,7 @@ abstract class BaseCargadores extends BaseObject implements Persistent
         if (array_key_exists($keys[7], $arr)) $this->setCargadoresComprador($arr[$keys[7]]);
         if (array_key_exists($keys[8], $arr)) $this->setCargadoresNombre($arr[$keys[8]]);
         if (array_key_exists($keys[9], $arr)) $this->setCargadoresNumserie($arr[$keys[9]]);
+        if (array_key_exists($keys[10], $arr)) $this->setCargadoresTipo($arr[$keys[10]]);
     }
 
     /**
@@ -1258,6 +1337,7 @@ abstract class BaseCargadores extends BaseObject implements Persistent
         if ($this->isColumnModified(CargadoresPeer::CARGADORES_COMPRADOR)) $criteria->add(CargadoresPeer::CARGADORES_COMPRADOR, $this->cargadores_comprador);
         if ($this->isColumnModified(CargadoresPeer::CARGADORES_NOMBRE)) $criteria->add(CargadoresPeer::CARGADORES_NOMBRE, $this->cargadores_nombre);
         if ($this->isColumnModified(CargadoresPeer::CARGADORES_NUMSERIE)) $criteria->add(CargadoresPeer::CARGADORES_NUMSERIE, $this->cargadores_numserie);
+        if ($this->isColumnModified(CargadoresPeer::CARGADORES_TIPO)) $criteria->add(CargadoresPeer::CARGADORES_TIPO, $this->cargadores_tipo);
 
         return $criteria;
     }
@@ -1330,6 +1410,7 @@ abstract class BaseCargadores extends BaseObject implements Persistent
         $copyObj->setCargadoresComprador($this->getCargadoresComprador());
         $copyObj->setCargadoresNombre($this->getCargadoresNombre());
         $copyObj->setCargadoresNumserie($this->getCargadoresNumserie());
+        $copyObj->setCargadoresTipo($this->getCargadoresTipo());
 
         if ($deepCopy && !$this->startCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -2195,10 +2276,12 @@ abstract class BaseCargadores extends BaseObject implements Persistent
         $this->cargadores_comprador = null;
         $this->cargadores_nombre = null;
         $this->cargadores_numserie = null;
+        $this->cargadores_tipo = null;
         $this->alreadyInSave = false;
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;
         $this->clearAllReferences();
+        $this->applyDefaultValues();
         $this->resetModified();
         $this->setNew(true);
         $this->setDeleted(false);

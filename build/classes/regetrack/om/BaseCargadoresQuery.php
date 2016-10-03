@@ -16,6 +16,7 @@
  * @method CargadoresQuery orderByCargadoresComprador($order = Criteria::ASC) Order by the cargadores_comprador column
  * @method CargadoresQuery orderByCargadoresNombre($order = Criteria::ASC) Order by the cargadores_nombre column
  * @method CargadoresQuery orderByCargadoresNumserie($order = Criteria::ASC) Order by the cargadores_numserie column
+ * @method CargadoresQuery orderByCargadoresTipo($order = Criteria::ASC) Order by the cargadores_tipo column
  *
  * @method CargadoresQuery groupByIdcargadores() Group by the idcargadores column
  * @method CargadoresQuery groupByIdsucursal() Group by the idsucursal column
@@ -27,6 +28,7 @@
  * @method CargadoresQuery groupByCargadoresComprador() Group by the cargadores_comprador column
  * @method CargadoresQuery groupByCargadoresNombre() Group by the cargadores_nombre column
  * @method CargadoresQuery groupByCargadoresNumserie() Group by the cargadores_numserie column
+ * @method CargadoresQuery groupByCargadoresTipo() Group by the cargadores_tipo column
  *
  * @method CargadoresQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method CargadoresQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -60,6 +62,7 @@
  * @method Cargadores findOneByCargadoresComprador(string $cargadores_comprador) Return the first Cargadores filtered by the cargadores_comprador column
  * @method Cargadores findOneByCargadoresNombre(string $cargadores_nombre) Return the first Cargadores filtered by the cargadores_nombre column
  * @method Cargadores findOneByCargadoresNumserie(string $cargadores_numserie) Return the first Cargadores filtered by the cargadores_numserie column
+ * @method Cargadores findOneByCargadoresTipo(string $cargadores_tipo) Return the first Cargadores filtered by the cargadores_tipo column
  *
  * @method array findByIdcargadores(int $idcargadores) Return Cargadores objects filtered by the idcargadores column
  * @method array findByIdsucursal(int $idsucursal) Return Cargadores objects filtered by the idsucursal column
@@ -71,6 +74,7 @@
  * @method array findByCargadoresComprador(string $cargadores_comprador) Return Cargadores objects filtered by the cargadores_comprador column
  * @method array findByCargadoresNombre(string $cargadores_nombre) Return Cargadores objects filtered by the cargadores_nombre column
  * @method array findByCargadoresNumserie(string $cargadores_numserie) Return Cargadores objects filtered by the cargadores_numserie column
+ * @method array findByCargadoresTipo(string $cargadores_tipo) Return Cargadores objects filtered by the cargadores_tipo column
  *
  * @package    propel.generator.regetrack.om
  */
@@ -178,7 +182,7 @@ abstract class BaseCargadoresQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `idcargadores`, `idsucursal`, `cargadores_modelo`, `cargadores_marca`, `cargadores_e`, `cargadores_volts`, `cargadores_amperaje`, `cargadores_comprador`, `cargadores_nombre`, `cargadores_numserie` FROM `cargadores` WHERE `idcargadores` = :p0';
+        $sql = 'SELECT `idcargadores`, `idsucursal`, `cargadores_modelo`, `cargadores_marca`, `cargadores_e`, `cargadores_volts`, `cargadores_amperaje`, `cargadores_comprador`, `cargadores_nombre`, `cargadores_numserie`, `cargadores_tipo` FROM `cargadores` WHERE `idcargadores` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -609,6 +613,35 @@ abstract class BaseCargadoresQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(CargadoresPeer::CARGADORES_NUMSERIE, $cargadoresNumserie, $comparison);
+    }
+
+    /**
+     * Filter the query on the cargadores_tipo column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByCargadoresTipo('fooValue');   // WHERE cargadores_tipo = 'fooValue'
+     * $query->filterByCargadoresTipo('%fooValue%'); // WHERE cargadores_tipo LIKE '%fooValue%'
+     * </code>
+     *
+     * @param     string $cargadoresTipo The value to use as filter.
+     *              Accepts wildcards (* and % trigger a LIKE)
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return CargadoresQuery The current query, for fluid interface
+     */
+    public function filterByCargadoresTipo($cargadoresTipo = null, $comparison = null)
+    {
+        if (null === $comparison) {
+            if (is_array($cargadoresTipo)) {
+                $comparison = Criteria::IN;
+            } elseif (preg_match('/[\%\*]/', $cargadoresTipo)) {
+                $cargadoresTipo = str_replace('*', '%', $cargadoresTipo);
+                $comparison = Criteria::LIKE;
+            }
+        }
+
+        return $this->addUsingAlias(CargadoresPeer::CARGADORES_TIPO, $cargadoresTipo, $comparison);
     }
 
     /**
