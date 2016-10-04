@@ -179,14 +179,30 @@ $json_array = array();
     $tmp['details'] = array();
     $num_lugares = BodegasQuery::create()->filterByCg($fila['cgid'])->count();
     $bodegas = BodegasQuery::create()->select('Id')->filterByCg($fila['cgid'])->find()->toArray();
-    $lugares_ocupados = UsoBateriasBodegaQuery::create()->filterByBg($bodegas)->filterByFechaSalida(NULL)->count();
-    $baterias_espera = UsoBateriasBodegaQuery::create()->filterByBg($bodegas)->filterByFechaEntrada(NULL,  Criteria::NOT_EQUAL)->filterByFechaSalida(NULL)->filterByFechaCarga(NULL)->filterByFechaDescanso(NULL)->count();
-    $baterias_descanso = UsoBateriasBodegaQuery::create()->filterByBg($bodegas)->filterByFechaEntrada(NULL,  Criteria::NOT_EQUAL)->filterByFechaSalida(NULL)->filterByFechaCarga(NULL,  Criteria::NOT_EQUAL)->filterByFechaDescanso(NULL,  Criteria::NOT_EQUAL)->count();
-    $baterias_carga = UsoBateriasBodegaQuery::create()->filterByBg($bodegas)->filterByFechaEntrada(NULL,  Criteria::NOT_EQUAL)->filterByFechaSalida(NULL)->filterByFechaCarga(NULL,  Criteria::NOT_EQUAL)->filterByFechaDescanso(NULL)->count();
+    
+    $query = "SELECT  * FROM uso_baterias_bodega WHERE uso_baterias_bodega.bg IN (".  implode(',', $bodegas).") AND uso_baterias_bodega.fecha_salida='0000-00-00 00:00:00'";
+    $lugares_ocupados = $mysqli->query($query);
+    $lugares_ocupados = $lugares_ocupados->num_rows; 
+
+    $query = "SELECT  * FROM uso_baterias_bodega WHERE uso_baterias_bodega.bg IN (".  implode(',', $bodegas).") AND uso_baterias_bodega.fecha_entrada <>  '0000-00-00 00:00:00' AND uso_baterias_bodega.fecha_salida = '0000-00-00 00:00:00'  AND uso_baterias_bodega.fecha_carga = '0000-00-00 00:00:00'  AND uso_baterias_bodega.fecha_descanso = '0000-00-00 00:00:00'";
+    $baterias_espera = $mysqli->query($query);
+    $baterias_espera = $baterias_espera->num_rows; 
+    
+    $query = "SELECT  * FROM uso_baterias_bodega WHERE uso_baterias_bodega.bg IN (".  implode(',', $bodegas).") AND uso_baterias_bodega.fecha_entrada <>  '0000-00-00 00:00:00' AND uso_baterias_bodega.fecha_salida = '0000-00-00 00:00:00'  AND uso_baterias_bodega.fecha_carga <> '0000-00-00 00:00:00'  AND uso_baterias_bodega.fecha_descanso <> '0000-00-00 00:00:00'";
+    $baterias_descanso = $mysqli->query($query);
+    $baterias_descanso = $baterias_descanso->num_rows; 
+    
+    $query = "SELECT  * FROM uso_baterias_bodega WHERE uso_baterias_bodega.bg IN (".  implode(',', $bodegas).") AND uso_baterias_bodega.fecha_entrada <>  '0000-00-00 00:00:00' AND uso_baterias_bodega.fecha_salida = '0000-00-00 00:00:00'  AND uso_baterias_bodega.fecha_carga <> '0000-00-00 00:00:00'  AND uso_baterias_bodega.fecha_descanso = '0000-00-00 00:00:00'";
+    $baterias_carga = $mysqli->query($query);
+    $baterias_carga = $baterias_carga->num_rows; 
+
     if($baterias_carga == 0){
          $tmp['Tiempo'] = 'Disponible';
     }else{
-        $baterias_carga = UsoBateriasBodegaQuery::create()->filterByBg($bodegas)->filterByFechaEntrada(NULL,  Criteria::NOT_EQUAL)->filterByFechaSalida(NULL)->filterByFechaCarga(NULL,  Criteria::NOT_EQUAL)->filterByFechaDescanso(NULL)->findOne();
+        $query = "SELECT  * FROM uso_baterias_bodega WHERE uso_baterias_bodega.bg IN (".  implode(',', $bodegas).") AND uso_baterias_bodega.fecha_entrada <>  '0000-00-00 00:00:00' AND uso_baterias_bodega.fecha_salida = '0000-00-00 00:00:00'  AND uso_baterias_bodega.fecha_carga <> '0000-00-00 00:00:00'  AND uso_baterias_bodega.fecha_descanso = '0000-00-00 00:00:00' LIMIT 1";
+        $baterias_carga = $mysqli->query($query);
+        $baterias_carga = $baterias_carga->fetch_array();
+        $baterias_carga = UsoBateriasBodegaQuery::create()->findPk($baterias_carga['id']);
         $today = new DateTime();
         $tiempo_carga = new DateTime($baterias_carga->getFechaCarga());
         $tiempo_carga =$tiempo_carga->diff($today);
@@ -217,13 +233,20 @@ $json_array = array();
         $tmp['Estado']= 'Habilitado';                                      
     }
     $tmp['Herramientas'] ="<td>".$herramientas."</td>";
+    
 
          if($details_control_flag){
-
-             $uso_baterias = UsoBateriasBodegaQuery::create()->filterByBg($bodegas)->filterByFechaSalida(NULL)->find();
-
-
-             $ubb = new UsoBateriasBodega();
+             
+             $query = "SELECT  id FROM uso_baterias_bodega WHERE uso_baterias_bodega.bg IN (".  implode(',', $bodegas).") AND uso_baterias_bodega.fecha_salida = '0000-00-00 00:00:00'";
+             $uso_baterias_array = array();
+             $uso_baterias = $mysqli->query($query);
+            
+             while($fila = $uso_baterias->fetch_array()) {
+		$uso_baterias_array[]=$fila['id'];
+            }
+            
+            $uso_baterias = UsoBateriasBodegaQuery::create()->filterById($uso_baterias_array)->find();
+            
              $count = 0;
              $uso_baterias_count = $uso_baterias->count();
              foreach($uso_baterias as $ubb){

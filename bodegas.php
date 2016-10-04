@@ -317,6 +317,29 @@ require_once("tema/comun/footer.php");
 <script>
     $(document).ready( function () {
         
+        var tipo = "<?php echo $tipo?>";
+        var columns = [
+            {
+                "className":      'details-control',
+                "orderable":      false,
+                "data":           null,
+                "defaultContent": ''
+            },
+            { "data": "Cargador" },
+            { "data": "Tipo" },
+            { "data": "Lugares" },
+            { "data": "Disponibles" },
+            { "data": "Espera" },
+            { "data": "Descanso" },
+            { "data": "Tiempo" },
+            { "data": "Estado" },
+            { "data": "Herramientas" },
+        ];
+        if(tipo == 'Bodega'){
+             columns.splice(2, 1);
+             columns.splice(6, 1);
+        }
+
         $.ajax({
             "dataType": 'json',
             "contentType": "application/json; charset=utf-8",
@@ -326,23 +349,7 @@ require_once("tema/comun/footer.php");
             success: function (data, textStatus, jqXHR) {
                 var table = $('#tablacargadores').DataTable({
                     data: data,
-                     "columns": [
-                        {
-                            "className":      'details-control',
-                            "orderable":      false,
-                            "data":           null,
-                            "defaultContent": ''
-                        },
-                        { "data": "Cargador" },
-                        { "data": "Tipo" },
-                        { "data": "Lugares" },
-                        { "data": "Disponibles" },
-                        { "data": "Espera" },
-                        { "data": "Descanso" },
-                        { "data": "Tiempo" },
-                        { "data": "Estado" },
-                        { "data": "Herramientas" },
-                     ],
+                     "columns": columns,
                       "order": [[1, 'asc']],
                       "language": {
                             "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"
@@ -351,16 +358,27 @@ require_once("tema/comun/footer.php");
                             if(data.details.length == 0){
                                 $(row).find('td').eq(0).removeClass('details-control');
                             }
-                           if($(row).find('td').eq(8).text() == "Habilitado"){
-                              $(row).find('td').eq(8).css('color','green').css('font-weight','bold'); 
-                           }else{
-                               $(row).find('td').eq(8).css('color','red').css('font-weight','bold'); 
-                           }
-                           if($(row).find('td').eq(7).text() == "Disponible"){
-                              $(row).find('td').eq(7).css('color','green').css('font-weight','bold'); 
-                           }else{
-                                $(row).find('td').eq(7).css('color','red').css('font-weight','bold'); 
-                           }
+                            
+                            if(tipo == 'Cargador'){
+                                if($(row).find('td').eq(8).text() == "Habilitado"){
+                                    $(row).find('td').eq(8).css('color','green').css('font-weight','bold'); 
+                                 }else{
+                                     $(row).find('td').eq(8).css('color','red').css('font-weight','bold'); 
+                                 }
+                                 if($(row).find('td').eq(7).text() == "Disponible"){
+                                    $(row).find('td').eq(7).css('color','green').css('font-weight','bold'); 
+                                 }else{
+                                      $(row).find('td').eq(7).css('color','red').css('font-weight','bold'); 
+                                }
+                            }else{
+                                if($(row).find('td').eq(6).text() == "Habilitado"){
+                                    $(row).find('td').eq(6).css('color','green').css('font-weight','bold'); 
+                                 }else{
+                                     $(row).find('td').eq(6).css('color','red').css('font-weight','bold'); 
+                                 }
+                            }
+                            
+                           
                         }
 
                 });
@@ -391,7 +409,7 @@ require_once("tema/comun/footer.php");
                     var details_count = d.details.lenght;
                     var count = 0;
                     $(d.details).each(function(){
-                       table_child+= '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">'+
+                       table_child+= '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px; margin-bottom: 15px;">'+
                         '<tr>'+
                             '<td style="font-weight:bold">Bateria:</td>'+
                             '<td>'+this.Bateria+'</td>'+
