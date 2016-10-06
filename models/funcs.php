@@ -1240,17 +1240,16 @@ function pinta_grafica($modulo,$divapintar,$estatus,$idapintar='todo',$sucursal_
 		}
 	}
 	
-	
-        if($modulo=="bt"){
-            $id = 'idbaterias';
-            $nombre = 'baterias_nombre';
-        }else if($modulo=="cg" || $modulo=="li"){
-            $id = 'idcargadores';
-            $nombre = 'cargadores_nombre';
-        }else{
-            $id = 'idmontacargas';
-            $nombre = 'montacargas_nombre';
-        }
+	if($modulo=="bt"){
+		$id = 'idbaterias';
+		$nombre = 'baterias_nombre';
+	}else if($modulo=="cg" || $modulo=="li"){
+		$id = 'idcargadores';
+		$nombre = 'cargadores_nombre';
+	}else{
+		$id = 'idmontacargas';
+		$nombre = 'montacargas_nombre';
+	}
      
 	$query="
 		SELECT

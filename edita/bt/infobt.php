@@ -1,42 +1,5 @@
 <?php
-$query="
-    SELECT
-        b.idbaterias as Id,
-        b.baterias_nombre as Nombre,
-        b.baterias_modelo as Modelo,
-        b.baterias_marca as Marca,
-        b.baterias_comprador as Comprador,
-        b.baterias_numserie as Serie,
-        CONCAT(b.baterias_c,'-',b.baterias_k,'-',b.baterias_p,'-',b.baterias_t,'-',b.baterias_e,' (',b.baterias_volts,'V ',b.baterias_amperaje,'Ah)') as Tipo
-    FROM
-        baterias as b
-    WHERE
-        b.idbaterias= ".$_GET['id']."
-    limit 1
-";
 
-$resultado = $mysqli->query($query);
-
-while($fila = $resultado->fetch_array()) {
-    $datosBateria=$fila;
-}
-
-$querydeshabilitado="
-    SELECT *
-    FROM deshabilitabt
-    WHERE bt= ".$_GET['id']." and fecha_salida='0000-00-00 00:00:00'
-";
-$resultado = $mysqli->query($querydeshabilitado);
-$habilitaid=0;
-$habilitabt=$_GET['id'];
-$habilitamotivo='';
-$habilitafecha='';
-while($fila = $resultado->fetch_array()) {
-    $habilitaid= $fila['id'];
-    $habilitabt= $fila['bt'];
-    $habilitamotivo= $fila['motivo'];
-    $habilitafecha= $fila['fecha_entrada'];
-}
 include("infobd.php");
 
 //DATOS DE BATERÍA
@@ -45,7 +8,7 @@ include("infobd.php");
     <div class="portlet box  blue-sharp">
         <div class="portlet-title">
             <div class="caption">
-                <i class="fa fa-battery-full"></i>Batería <?php echo $id.'-'.$datosBateria['Nombre']; ?>
+                <i class="fa fa-battery-full"></i>Batería <?php echo $datosBateria['Nombre']; ?>
             </div>
             <div class="tools">
                 <a href="" class="collapse" data-original-title="" title=""> </a>
@@ -235,13 +198,13 @@ if($loggedInUser->checkPermission(array(1,2))){
 	</div>
 
 	<?php
-	$grafica=pinta_grafica('bt','reporteBTC','carga',$id);
+	$grafica=pinta_grafica('bt','reporteBTC','carga',$id,$sucursal_activa);
 	echo $grafica;
-	$grafica=pinta_grafica('bt','reporteBTD','descanso',$id);
+	$grafica=pinta_grafica('bt','reporteBTD','descanso',$id,$sucursal_activa);
 	echo $grafica;
-	$grafica=pinta_grafica('bt','reporteBTU','uso',$id);
+	$grafica=pinta_grafica('bt','reporteBTU','uso',$id,$sucursal_activa);
 	echo $grafica;
-	$grafica=pinta_grafica('bt','reporteBTE','espera',$id);
+	$grafica=pinta_grafica('bt','reporteBTE','espera',$id,$sucursal_activa);
 	echo $grafica;
 
 }

@@ -51,7 +51,7 @@ if($tipo=="baterias"){
 if($tipo=="cargadores"){
     $stingurl=urlencode("https://regetrack.com/sistema.php?ruta=edita/cargadores&id=".$id);
     $query="
-        SELECT
+        SELECT c.cargadores_tipo as ctipo,
             c.cargadores_nombre as nombre,
             CONCAT(c.cargadores_volts,'V ',c.cargadores_amperaje,'Ah (',c.cargadores_e,')') as tipo
         FROM cargadores as c
@@ -59,9 +59,11 @@ if($tipo=="cargadores"){
     
     $res = $mysqli->query($query);
     $datos = $res->fetch_array();
+    if ($datos['ctipo']=="Cargador") $titulo="CARGADOR";
+    else $titulo="BODEGA";
     ?>
     <center>
-    <h1 style="font-size:2em;">CARGADOR</h1><br><h1 style="font-size:3em;"><?php echo $datos['nombre'] ?></h1>
+    <h1 style="font-size:2em;"><?php echo $titulo;?></h1><br><h1 style="font-size:3em;"><?php echo $datos['nombre'] ?></h1>
     <?php
     echo "<img src='https://chart.googleapis.com/chart?chs=500x500&cht=qr&chl=".$stingurl."'/>";
     echo '<h1>'.$datos['tipo'].'</h1>';

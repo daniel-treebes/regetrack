@@ -7,7 +7,8 @@ $query="
         c.cargadores_marca as Marca,
         c.cargadores_comprador as Comprador,
         c.cargadores_numserie as Serie,
-        CONCAT(c.cargadores_volts,'V ',c.cargadores_amperaje,'Ah (',c.cargadores_e,')') as Tipo
+        CONCAT(c.cargadores_volts,'V ',c.cargadores_amperaje,'Ah (',c.cargadores_e,')') as Tipo,
+		c.cargadores_tipo as ctipo
     FROM
         cargadores as c
     WHERE
@@ -287,11 +288,13 @@ $bodegas=array();
 $cantlugares=0;
 while($fila = $resultado->fetch_array()) {
 	$cantlugares=$fila['cantbg'];
-	$bodegas[$fila['Espacio']]['bt']=$fila['Bateria'];
-	$bodegas[$fila['Espacio']]['estado']='<span style="color:red;">ERROR</span>';
-	$bodegas[$fila['Espacio']]['tiempo']=0;
-	$bodegas[$fila['Espacio']]['horas']=0;
-	if ($fila['disponible']!=NULL){
+	if ($datosCargador['ctipo']=='Cargador'){
+		$bodegas[$fila['Espacio']]['bt']=$fila['Bateria'];
+		$bodegas[$fila['Espacio']]['estado']='<span style="color:red;">ERROR</span>';
+		$bodegas[$fila['Espacio']]['tiempo']=0;
+		$bodegas[$fila['Espacio']]['horas']=0;
+	}
+	if ($fila['disponible']!=NULL && $datosCargador['ctipo']=='Cargador'){
 		$bodegas[$fila['Espacio']]['bt']='<span style="color:green">Sin Batería</span>';
 		$bodegas[$fila['Espacio']]['estado']='<span style="color:green">Disponible</span>';
 		$bodegas[$fila['Espacio']]['tiempo']=$fila['disponible'];
@@ -300,7 +303,7 @@ while($fila = $resultado->fetch_array()) {
 		$bodegas[$fila['Espacio']]['estado']='<span style="color:green">Descanso</span>';
 		$bodegas[$fila['Espacio']]['tiempo']=$fila['descanso'];
 		$bodegas[$fila['Espacio']]['horas']=$fila['descansot'];
-	}elseif ($fila['carga']!=NULL){
+	}elseif ($fila['carga']!=NULL && $datosCargador['ctipo']=='Cargador'){
 		$bodegas[$fila['Espacio']]['estado']='<span style="color:#c49f47">Carga</span>';
 		$bodegas[$fila['Espacio']]['tiempo']=$fila['carga'];
 		$bodegas[$fila['Espacio']]['horas']=$fila['cargat'];
@@ -308,7 +311,7 @@ while($fila = $resultado->fetch_array()) {
 		$bodegas[$fila['Espacio']]['estado']='<span style="color:red">Espera</span>';
 		$bodegas[$fila['Espacio']]['tiempo']=$fila['entrada'];
 		$bodegas[$fila['Espacio']]['horas']=$fila['entradat'];
-	}elseif ($fila['disponible']==NULL && $fila['Bateria']==NULL){
+	}elseif ($fila['disponible']==NULL && $fila['Bateria']==NULL && $datosCargador['ctipo']=='Cargador'){
 		$bodegas[$fila['Espacio']]['bt']='<span style="color:green">Sin Batería</span>';
 		$bodegas[$fila['Espacio']]['estado']='<span style="color:green">Disponible</span>';
 		$bodegas[$fila['Espacio']]['tiempo']=0;

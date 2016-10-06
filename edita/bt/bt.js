@@ -14,7 +14,7 @@ function cancelacambios() {
 function cambiaestado(nuevoestado) {
     $("#pasosI").attr('nuevoestado',nuevoestado);
     $('#contenedorScaner').show(1000);
-    muestraPasosI(3)
+    muestraPasosI(3);
     setwebcam();
 }
 
@@ -24,7 +24,7 @@ $(document).ready(function(){
                 updated with old and new value.*/
       callback: function (event) {
       if (event.attributeName=="val") {
-         muestraPasos(2)
+         muestraPasos(2);
       }
       //event               - event object
       //event.attributeName - Name of the attribute modified
@@ -33,16 +33,16 @@ $(document).ready(function(){
       //Triggered when the selected elements attribute is added/updated/removed
     }        
    });
-
-   //Paso 3 si quitar batería						
+   
+   // Paso 3 si quitar bateria
    $("#paso2").attrchange({
       trackValues: true, /* Default to false, if set to true the event object is 
                 updated with old and new value.*/
       callback: function (event) {
          if (event.attributeName=="val") {
-            ocultaPasos()
+            ocultaPasos();
             $('#scaneo').hide(1000);
-            ponBateriaEnCarga()
+            ponBateriaEnCarga();
          }
       }        
    });
@@ -56,9 +56,9 @@ $(document).ready(function(){
             if (modulonuevo=="cargadores") {
                $('#contenedorScaner').hide(1000);
                stype=0;
-               muestraPasosI(2)
+               muestraPasosI(2);
             }else if (modulonuevo=="montacargas") {
-               muestraPasosI(3)
+               muestraPasosI(3);
             }else{
                alert("Ha seleccionado un código tipo: "+modulonuevo+". Solo debe seleccinar Montacargas o Cargadores. Se cancelará la operación.");
                cancelacambios();
@@ -81,40 +81,44 @@ $(document).ready(function(){
 });
 
 function ocultaPasos() {
-	$("#paso1").hide()
-	$("#paso2").hide()
+	$("#paso1").hide();
+	$("#paso2").hide();
 }
 
 function ocultaPasosI() {
-	$("#paso1I").hide()
-	$("#paso2I").hide()
-	$("#paso3I").hide()
+	$("#paso1I").hide();
+	$("#paso2I").hide();
+	$("#paso3I").hide();
 }
 
 function muestraPasos(cual) {
-	ocultaPasos()
-	$("#paso"+cual).show()
+	ocultaPasos();
+	$("#paso"+cual).show();
     ciclo=cual;
 
 }
 
 function muestraPasosI(cual) {
-	ocultaPasosI()
-	$("#paso"+cual+"I").show()
+	ocultaPasosI();
+	$("#paso"+cual+"I").show();
     ciclo=cual;
 }
 
-ocultaPasos()
-ocultaPasosI()
+ocultaPasos();
+ocultaPasosI();
 
 function ponBateriaEnCarga(){
    movimiento=$("#pasos").attr('movimiento');
    bateria=$("#pasos").attr('bateria');
+   espacio=$("#pasos").attr('espacio');
+   tipomovimiento=$("#pasos").attr('tipomovimiento');
 
    $.ajax({
       data: {
           "movimiento" : movimiento,
-          "bateria" : bateria
+          "bateria" : bateria,
+          "espacio" : espacio,
+          "tipomovimiento" : tipomovimiento
       },
       type: "POST",
       dataType: "html",
@@ -125,6 +129,10 @@ function ponBateriaEnCarga(){
       window.location.replace("https://regetrack.com/sistema.php?ruta=edita/baterias&id="+data);
    })
    .fail(function( jqXHR, textStatus, errorThrown ) {
+   alert(movimiento);
+   alert(bateria);
+   alert(espacio);
+   alert(tipomovimiento);
       alert( "El registro a fallado: " +  textStatus + " Inicie nuevamente. ");
       window.location.replace("/escanear.php");
    });
@@ -183,14 +191,14 @@ function cargaBateria() {
    $('#divInventario').hide(1000);
    $('#divCargar').show(1000);
 
-   muestraPasos(1)
+   muestraPasos(1);
    $.ajax({
 	  url : "edita/cambio2.php",
 	  type: "POST",
 	  data : {},
 	  success: function(data, textStatus, jqXHR)
 	  {
-		  jQuery("#contenedorScaner").html(data)
+		  jQuery("#contenedorScaner").html(data);
 	  },
 	  error: function (jqXHR, textStatus, errorThrown)
 	  {
@@ -209,14 +217,14 @@ function inventario() {
    $('#divInventario').show(1000);
    $('#divCargar').hide(1000);
 
-   muestraPasosI(1)
+   muestraPasosI(1);
    $.ajax({
 	  url : "edita/cambio2.php",
 	  type: "POST",
 	  data : {},
 	  success: function(data, textStatus, jqXHR)
 	  {
-		  jQuery("#contenedorScaner").html(data)
+		  jQuery("#contenedorScaner").html(data);
 	  },
 	  error: function (jqXHR, textStatus, errorThrown)
 	  {
@@ -261,7 +269,7 @@ function habilitaEnvia(idbt) {
 	  },
 	  error: function (jqXHR, textStatus, errorThrown)
 	  {
-         alert(textStatus)
+         alert(textStatus);
 	  }
    });
 }
@@ -269,10 +277,10 @@ function habilitaEnvia(idbt) {
 $('#formaDeshabilita').change(function() {
    if ($('#formaDeshabilita').val()=="Otro") {
       $('#formaEnviaDeshabilitaContenedor').show();
-      $('#formaEnviaDeshabilita').val("")
+      $('#formaEnviaDeshabilita').val("");
    }else{
       $('#formaEnviaDeshabilitaContenedor').hide();
-      $('#formaEnviaDeshabilita').val($('#formaDeshabilita').val())
+      $('#formaEnviaDeshabilita').val($('#formaDeshabilita').val());
    }
 });
 $('#formaEnviaDeshabilitaContenedor').hide();
@@ -292,11 +300,11 @@ https://github.com/meetselva/attrchange/blob/master/MIT-License.txt
 
 		if (p.addEventListener) {
 			p.addEventListener('DOMAttrModified', function() {
-				flag = true
+				flag = true;
 			}, false);
 		} else if (p.attachEvent) {
 			p.attachEvent('onDOMAttrModified', function() {
-				flag = true
+				flag = true;
 			});
 		} else { return false; }
 		p.setAttribute('id', 'target');
@@ -328,7 +336,7 @@ https://github.com/meetselva/attrchange/blob/master/MIT-License.txt
 
 	//initialize Mutation Observer
 	var MutationObserver = window.MutationObserver
-			|| window.WebKitMutationObserver;
+         || window.WebKitMutationObserver;
 
 	$.fn.attrchange = function(a, b) {
 		if (typeof a == 'object') {//core

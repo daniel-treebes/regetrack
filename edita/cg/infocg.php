@@ -1,12 +1,17 @@
 <?php
 include('infobd.php');
-//DATOS DEL MONTACARGAS
+//DATOS DEL CARGADOR
+if ($datosCargador['ctipo']=='Cargador') {
+	$titulocg="Cargador";
+}else{
+	$titulocg="Bodega";
+}
 ?>
 <div class="col-md-6" id="indicadores1">
     <div class="portlet box  blue-sharp">
         <div class="portlet-title">
             <div class="caption">
-                <i class="fa icon-cargador"></i>Cargador <?php echo $datosCargador['Nombre']; ?>
+                <i class="fa icon-cargador"></i><?php echo $titulocg.' '.$datosCargador['Nombre']; ?>
             </div>
             <div class="tools">
                 <a href="" class="collapse" data-original-title="" title=""> </a>
@@ -21,36 +26,38 @@ include('infobd.php');
                             <input type="text" class="form-control datos-cosa" placeholder="Default Input" value="<?php  echo $datosCargador['Nombre'] ?> "> 
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label class="col-md-3 control-label">Tipo</label>
-                        <div class="col-md-9">
-                            <input type="text" class="form-control datos-cosa" placeholder="Default Input" value="<?php  echo $datosCargador['Tipo'] ?> "> 
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-md-3 control-label">Modelo</label>
-                        <div class="col-md-9">
-                            <input type="text" class="form-control datos-cosa" placeholder="Default Input" value="<?php  echo $datosCargador['Modelo'] ?> "> 
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-md-3 control-label">Marca</label>
-                        <div class="col-md-9">
-                            <input type="text" class="form-control datos-cosa" placeholder="Default Input" value="<?php  echo $datosCargador['Marca'] ?> "> 
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-md-3 control-label">Comprador</label>
-                        <div class="col-md-9">
-                            <input type="text" class="form-control datos-cosa" placeholder="Default Input" value="<?php  echo $datosCargador['Comprador'] ?> "> 
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-md-3 control-label">Serie</label>
-                        <div class="col-md-9">
-                            <input type="text" class="form-control datos-cosa" placeholder="Default Input" value="<?php  echo $datosCargador['Serie'] ?> "> 
-                        </div>
-                    </div>
+					<?php if ($datosCargador['ctipo']=='Cargador') {?>
+						<div class="form-group">
+							<label class="col-md-3 control-label">Tipo</label>
+							<div class="col-md-9">
+								<input type="text" class="form-control datos-cosa" placeholder="Default Input" value="<?php  echo $datosCargador['Tipo'] ?> "> 
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-md-3 control-label">Modelo</label>
+							<div class="col-md-9">
+								<input type="text" class="form-control datos-cosa" placeholder="Default Input" value="<?php  echo $datosCargador['Modelo'] ?> "> 
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-md-3 control-label">Marca</label>
+							<div class="col-md-9">
+								<input type="text" class="form-control datos-cosa" placeholder="Default Input" value="<?php  echo $datosCargador['Marca'] ?> "> 
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-md-3 control-label">Comprador</label>
+							<div class="col-md-9">
+								<input type="text" class="form-control datos-cosa" placeholder="Default Input" value="<?php  echo $datosCargador['Comprador'] ?> "> 
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-md-3 control-label">Serie</label>
+							<div class="col-md-9">
+								<input type="text" class="form-control datos-cosa" placeholder="Default Input" value="<?php  echo $datosCargador['Serie'] ?> "> 
+							</div>
+						</div>
+					<?php } ?>
                     <div class="form-group">
                         <label class="col-md-3 control-label">Espacios</label>
                         <div class="col-md-9">
@@ -80,6 +87,7 @@ if($habilitaid>0){
 }
 ?>
 <!--DATOS ESTADÍSTICOS Cargador-->
+<?php if ($datosCargador['ctipo']=='Cargador') {?>
 <div class="col-md-6" id="indicadores2">
     <div class="portlet box  blue-sharp">
         <div class="portlet-title">
@@ -140,7 +148,7 @@ if($habilitaid>0){
         </div>
     </div>
 </div>            
-
+<?php } ?>
 <!--DATOS ESTADÍSTICOS Baterias-->
 <div class="col-md-6" id="indicadores6">
     <div class="portlet box  blue-sharp">
@@ -155,7 +163,9 @@ if($habilitaid>0){
         <div class="portlet-body form">	   
             <div class="form-actions right1 gray" >
                 <div class="">
-					<?php foreach ($bodegas as $espacio => $datosbt){ ?>
+					<?php
+					if (count($bodegas)==0) echo '<center>VACÍO</center>';
+					foreach ($bodegas as $espacio => $datosbt){ ?>
 						<div class="col-md-4">
 						   <div class="easy-pie-chart">
 							  <center><?php echo $espacio.'<br>'.$datosbt['bt'];?></center>
@@ -204,11 +214,11 @@ if($loggedInUser->checkPermission(array(1,2))){
 	</div>
 
 	<?php
-	$grafica=pinta_grafica('cg','reporteCGC','carga',$id);
+	$grafica=pinta_grafica('cg','reporteCGC','carga',$id, $datosCargador['ctipo']);
 	echo $grafica;
-	$grafica=pinta_grafica('cg','reporteCGD','descanso',$id);
+	$grafica=pinta_grafica('cg','reporteCGD','descanso',$id, $datosCargador['ctipo']);
 	echo $grafica;
-	$grafica=pinta_grafica('cg','reporteCGE','espera',$id);
+	$grafica=pinta_grafica('cg','reporteCGE','espera',$id, $datosCargador['ctipo']);
 	echo $grafica;
 
 }

@@ -1,7 +1,33 @@
 <div class="col-md-12 " id="scaneo" style="display: none">
     <?php
-    if($estado=="ESPERA"){
-        $titulo="Cargar Batería <strong>".$nombreBateria."</strong> en cargador <strong>".$ubicacion."</strong>";
+    if(($estado=="ESPERA" && $ctipo=='Cargador')
+       ||($estado=="ESPERA" && $ctipo=='Bodega' && isset($cargadorSiguiente['cg_id']))
+       ||($estado=="DESCANSO" && $ctipo=='Cargador' && isset($cargadorSiguiente['cg_id']))){
+        if($estado=="ESPERA" && $ctipo=='Cargador'){
+            $titulo="Cargar Batería <strong>".$nombreBateria."</strong> en cargador <strong>".$ubicacion."</strong>";
+            $paso1="Escanea el cargador <strong>".$ubicacion."</strong> y conectalo a la batería <strong>".$nombreBateria."</strong>";
+            $paso2="Escanea de nuevo la bateria <strong>".$nombreBateria."</strong> para confirmar que está conectada e iniciar el tiempo de carga.";
+            $lugarsiguiente=$ubicacion;
+            $idsiguiente=$cargadorid;
+            $tipomovimiento="carga";
+            $classicono="fa icon-cargador";
+        }elseif($estado=="ESPERA" && $ctipo=='Bodega' && isset($cargadorSiguiente['cg_id'])){
+            $titulo="Mover Batería <strong>".$nombreBateria."</strong> al cargador <strong>".$cargadorSiguiente['cg_nombre']."</strong>";
+            $paso1="Lleva la batería <strong>".$nombreBateria."</strong> al cargador <strong>".$cargadorSiguiente['cg_nombre']."</strong> y escanea el QR del cargador.";
+            $paso2="Escanea de nuevo la bateria <strong>".$nombreBateria."</strong> para confirmar que está ya en el cargador.";
+            $lugarsiguiente=$cargadorSiguiente['cg_nombre'];
+            $idsiguiente=$cargadorSiguiente['cg_id'];
+            $tipomovimiento="espcargador";
+            $classicono="fa icon-cargador";
+        }elseif($estado=="DESCANSO" && $ctipo=='Cargador' && isset($cargadorSiguiente['cg_id'])){
+            $titulo="Mover Batería <strong>".$nombreBateria."</strong> a la bodega <strong>".$cargadorSiguiente['cg_nombre']."</strong>";
+            $paso1="Lleva la batería <strong>".$nombreBateria."</strong> a la bodega <strong>".$cargadorSiguiente['cg_nombre']."</strong> y escanea el QR de la bodega.";
+            $paso2="Escanea de nuevo la bateria <strong>".$nombreBateria."</strong> para confirmar que está ya en la bodega.";
+            $lugarsiguiente=$cargadorSiguiente['cg_nombre'];
+            $idsiguiente=$cargadorSiguiente['cg_id'];
+            $tipomovimiento="descbodega";
+            $classicono="fa fa-th";
+        }
     ?>
         <div id="divCargar" class="portlet box blue-sharp" style="display:none;">
             <div class="portlet-title">
@@ -12,13 +38,14 @@
             <div class="col-xs-12 ">
                 <div id="pasos" movimiento="<?php echo $idMovimientoBtaCarga;?>"
                                 bateria="<?php echo $_GET['id'];?>"
-                                tipomovimiento="carga">
-                    <div id="paso1" tipodemodulo="cargadores" proximo="<?php echo $cargadorid;?>" val="0">
+                                espacio="<?php echo $cargadorSiguiente['bg_id'];?>"
+                                tipomovimiento="<?php echo $tipomovimiento;?>">
+                    <div id="paso1" tipodemodulo="cargadores" proximo="<?php echo $idsiguiente;?>" val="0">
                         <center><h3>PASO 1</h3>
                             <br>
-                            <i class="fa icon-cargador iconscannext"><span class="textoiconnext"><?php  echo $ubicacion; ?></span></i><br>
+                            <i class="<?php echo $classicono;?> iconscannext"><span class="textoiconnext"><?php  echo $lugarsiguiente; ?></span></i><br>
                             <br>
-                            Escanea el cargador <?php  echo $ubicacion ?> y conectalo a la batería <?php  echo $nombreBateria ?>
+                            <?php  echo $paso1; ?>
                         </center>
                         <span></span>
                     </div>
@@ -27,7 +54,7 @@
                             <br>
                             <i class="fa fa-battery-full iconscannext"><span class="textoiconnext"><?php  echo $nombreBateria;?></span></i><br>
                             <br>
-                            Escanea de nuevo la bateria <?php  echo $nombreBateria ?> para confirmar que está conectada e iniciar el tiempo decarga.
+                            <?php  echo $paso2; ?>
                         </center>
                         <span></span>
                     </div>

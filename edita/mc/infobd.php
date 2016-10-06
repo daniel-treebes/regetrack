@@ -79,8 +79,10 @@ $queryEspacioDisponible="
 				)
 				AND tbg.id=tubb.bg
 				AND tbg.cg=tcg.idcargadores
-				AND tcg.idcargadores=tcb.idcargadores
-				AND tmc.idmontacargas=tmb.idmontacargas
+				AND ((tcg.idcargadores=tcb.idcargadores
+						AND tmb.idbaterias=tcb.idbaterias
+						AND tmc.idmontacargas=tmb.idmontacargas)
+					OR tcg.cargadores_tipo='Bodega')
 				AND tmc.idmontacargas=".$_GET['id']."
 				AND tcg.idsucursal IN (".$loggedInUser->sucursales.")
 				AND tmc.idsucursal IN (".$loggedInUser->sucursales.")
@@ -88,13 +90,15 @@ $queryEspacioDisponible="
 			ORDER BY tubb.id
 		)
 		AND tbg.cg=tcg.idcargadores
-		AND tcg.idcargadores=tcb.idcargadores
-		AND tmc.idmontacargas=tmb.idmontacargas
+		AND ((tcg.idcargadores=tcb.idcargadores
+				AND tmb.idbaterias=tcb.idbaterias
+				AND tmc.idmontacargas=tmb.idmontacargas)
+			OR tcg.cargadores_tipo='Bodega')
 		AND tmc.idmontacargas=".$_GET['id']."
 		AND tcg.idsucursal IN (".$loggedInUser->sucursales.")
 		AND tmc.idsucursal IN (".$loggedInUser->sucursales.")
 	GROUP BY cg_id
-	ORDER BY tcg.cargadores_tipo DESC
+	ORDER BY tcg.cargadores_tipo
 ";
 //echo '<pre>';var_dump($queryEspacioDisponible);echo  '</pre>';exit();
 //Los ocupados serviran para saber si está vacío!
@@ -102,8 +106,7 @@ $queryCargadorOcupado="
 	SELECT
 		tbg.cg as cg,
 		MAX(tubb.fecha_carga) as maxfc,
-		MIN(tubb.fecha_descanso) as minfd,
-		tcg.cargadores_tipo as tipo
+		MIN(tubb.fecha_descanso) as minfd
 	FROM uso_baterias_bodega as tubb, bodegas as tbg, cargadores as tcg, montacargas as tmc,
 		montacargas_baterias as tmb, cargadores_baterias as tcb
 	WHERE
@@ -114,13 +117,15 @@ $queryCargadorOcupado="
 		)
 		AND tbg.id=tubb.bg
 		AND tbg.cg=tcg.idcargadores
-		AND tcg.idcargadores=tcb.idcargadores
-		AND tmc.idmontacargas=tmb.idmontacargas
+		AND ((tcg.idcargadores=tcb.idcargadores
+				AND tmb.idbaterias=tcb.idbaterias
+				AND tmc.idmontacargas=tmb.idmontacargas)
+			OR tcg.cargadores_tipo='Bodega')
 		AND tmc.idmontacargas=".$_GET['id']."
 		AND tcg.idsucursal IN (".$loggedInUser->sucursales.")
 		AND tmc.idsucursal IN (".$loggedInUser->sucursales.")
 	GROUP BY cg
-	ORDER BY minfd, maxfc, tcg.cargadores_tipo DESC
+	ORDER BY minfd, maxfc
 ";
 
 //los cargadores deshabilitados... pueden usar los espacios pero no cargar!
@@ -176,7 +181,7 @@ foreach ($espaciosDisponibles as $cg_id => $datos){
 		$cargadorSiguiente['maxfc']='0000-00-00 00:00:00';
 		$termina=1;
 	}else{
-		if ($cargadoresOcupados[$cg_id]['minfd']!='0000-00-00 00:00:00'){
+		if ($cargadoresOcupados[$cg_id]['minfd']!='0000-00-00 00:00:00' && $cargadorSiguiente['tipo']=="Cargador"){
 			//Si el cargador está sin cargar lo escoje y ya
 			$cargadorSiguiente=$datos;
 			$cargadorSiguiente['minfd']=$cargadoresOcupados[$cg_id]['minfd'];

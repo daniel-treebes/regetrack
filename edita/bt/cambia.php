@@ -1,5 +1,3 @@
-<?php
-?>
 <div class="col-md-6" id="indicadores4">
     <div class="portlet box  blue-sharp">
         <div class="portlet-title">
@@ -14,7 +12,7 @@
             <div class="btn-group btn-group btn-group-justified">
                 <div class="col-s-4 ">
                     <?php
-                    if($estado=="ESPERA"){
+                    if($estado=="ESPERA" && $ctipo=='Cargador'){
                         if ($tiempoParaCarga==0){
                             //Aquí no se genera excepción
                             ?>
@@ -27,6 +25,16 @@
                             </span>
                             <?php
                         }
+                    }
+                    if($estado=="ESPERA" && $ctipo=='Bodega' && isset($cargadorSiguiente['cg_id'])){
+                        ?>
+                        <a href="javascript:cargaBateria()" class="btn green-jungle btn-block" style="height: 110px;"><h2><i class="fa icon-cargador"></i></h2><h5>Mover a Cargador</h5></a>
+                        <?php
+                    }
+                    if($estado=="DESCANSO" && $ctipo=='Cargador' && isset($cargadorSiguiente['cg_id'])){
+                        ?>
+                        <a href="javascript:cargaBateria()" class="btn green-jungle btn-block" style="height: 110px;"><h2><i class="fa fa-th"></i></h2><h5>Mover a Bodega</h5></a>
+                        <?php
                     }
                     ?>
                 </div>

@@ -1,6 +1,14 @@
 <?php
     if($siHay>0) $titulo="Desmontar batería <strong>".$nombreBateria."</strong> del montacargas <strong>".$nombreMontacargas."</strong>";
-    else $titulo="Montar Batería al montacargas <strong>".$nombreMontacargas."</strong>"
+    else $titulo="Montar Batería al montacargas <strong>".$nombreMontacargas."</strong>";
+    
+    if ($cargadorSiguiente['tipo']=="Bodega"){
+        $letrerocargador="a la bodega";
+        $letrerosincargar="No olvides mover posteriormente la batería a un cargador.";
+    }else{
+        $letrerocargador="al cargador";
+        $letrerosincargar="El cargador no está disponible para carga.";
+    }
 ?>
 <div class="col-md-12 " id="scaneo" style="display: none">
     <div class="portlet box  blue-sharp">
@@ -35,12 +43,14 @@
                             <br>
                             <i class="my_icons icon-cargador iconscannext"><span class="textoiconnext"><?php  echo $cargadorSiguiente['cg_nombre']; ?></span></i><br>
                             <br>
-                            Toma la bateria <?php  echo $nombreBateria ?> y dirijete al cargador <?php  echo $cargadorSiguiente['cg_nombre']; ?> y escanealo.
+                            Toma la bateria <?php  echo $nombreBateria ?>, dirijete <?php  echo $letrerocargador.' '.$cargadorSiguiente['cg_nombre']; ?> y escanea el QR.
                         </center>
                         <span></span>
                     </div>
                     <?php
-                    if ($cargadorSiguiente['minfd']!='0000-00-00 00:00:00'){
+                    if (($cargadorSiguiente['minfd']!='0000-00-00 00:00:00'
+                         || $cargadorSiguiente['maxfc']=='0000-00-00 00:00:00')
+                         && $cargadorSiguiente['tipo']=='Cargador'){
                         ?>
                         <div id="paso3" tipodemodulo="baterias" proximo="<?php  echo $idBateria;?>" val="0">
                             <center><h3>PASO 3</h3>
@@ -55,7 +65,7 @@
                     }else{
                         ?>
                         <div id="paso3" tipodemodulo="baterias" proximo="0" val="0">
-                            <center><h3>PASO 3</h3>El cargador no está disponible para carga.</center><span></span>
+                            <center><h3>PASO 3</h3><?php echo $letrerosincargar;?></center><span></span>
                             <br>
                             <div class="col-s-12 ">
                                 <a onclick="desmontasincarga();" class="btn default btn-block" style="height: 110px;"><h2> <i class="fa fa-arrow-left"></i></h2><h5>CONFIRMAR FIN DE DESMONTADO</h5></a>
@@ -83,7 +93,7 @@
                             <br>
                             <i class="my_icons icon-cargador iconscannext"><span class="textoiconnext"><?php  echo $bateriaSiguiente['cg_nombre'] ?></span></i><br>
                             <br>
-                            Dirígete al cargador <strong><?php  echo $bateriaSiguiente['cg_nombre']?></strong> y escanéalo.
+                            Dirígete <?php echo $letrerocargador;?> <strong><?php  echo $bateriaSiguiente['cg_nombre']?></strong> y escanéa el QR.
                         </center>
                         <span></span>
                     </div>
@@ -101,7 +111,7 @@
                             <br>
                             <i class="my_icons icon-montacarga iconscannext"><span class="textoiconnext"><?php  echo $nombreMontacargas; ?></span></i><br>
                             <br>
-                            Escanea de nuevo el montacargas <?php  echo $nombreMontacargas ?> una vez montada la batería.
+                            Monta la Batería <strong><?php echo $bateriaSiguiente['bt_nombre']; ?></strong> y escanea de nuevo el montacargas <?php  echo $nombreMontacargas ?>.
                         </center>
                         <span></span>
                     </div>
