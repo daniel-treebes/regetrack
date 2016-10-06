@@ -85,12 +85,49 @@ function deshabilita(cual) {
 	<script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.js"></script>
 	<script type="text/javascript">
     $(document).ready(function() {
-        $('#tablamontacargas').dataTable( {
-			  "language": {
-                "url": "//cdn.datatables.net/plug-ins/1.10.12/i18n/Spanish.json"
-           }
+        var oTable =$('#tablamontacargas').dataTable( {
+            "bStateSave": false,
+            "sScrollY": "510px",
+            "iDisplayLength": 25,
+            "bJQueryUI": true,
+            "bPaginate": false,
+            "aaSorting": [[0, 'asc']],
+             responsive: true,
+             "oLanguage": {
+                        "sProcessing":     "Procesando...",
+                        "sLengthMenu":     "Mostrar _MENU_ registros",
+                        "sZeroRecords":    "No se encontraron resultados",
+                        "sEmptyTable":     "NingÃºn dato disponible en esta tabla",
+                        "sInfo":           "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                        "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
+                        "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
+                        "sLengthMenu":     "Mostrar _MENU_ registros",
+                        "sZeroRecords":    "No se encontraron resultados",
+                        "sEmptyTable":     "NingÃºn dato disponible en esta tabla",
+                        "sInfo":           "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                        "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
+                        "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
+                        "sInfoPostFix":    "",
+                        "sSearch":         "Buscar:",
+                        "sUrl":            "",
+                        "sInfoThousands":  ",",
+                        "sLoadingRecords": "Cargando...","sInfoPostFix":    "",
+                        "sSearch":         "Buscar:",
+                        "sUrl":            "",
+                        "sInfoThousands":  ",",
+                        "sLoadingRecords": "Cargando...",
+                    },
         } );
+        oTable.yadcf([
+            {column_number : 1,filter_type: "multi_select",select_type: 'chosen'},
+            {column_number : 2,filter_type: "multi_select",select_type: 'chosen'},
+            {column_number : 7,filter_type: "multi_select",select_type: 'chosen'},
+            {column_number : 3,filter_type: "multi_select",select_type: 'chosen'},
+            {column_number : 4,filter_type: "multi_select",select_type: 'chosen'},
+            {column_number : 5,filter_type: "multi_select",select_type: 'chosen'},
+        ]);
     } );
+
 	</script>
 	<style>
 		div.container {

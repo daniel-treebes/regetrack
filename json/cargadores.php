@@ -227,7 +227,7 @@ $json_array = array();
     $tmp['Descanso'] = $baterias_descanso;
 
     if (isset($cgDes[$fila['cgid']])){
-        $tmp['Estado'] = $cgDes[$fila['cgid']]['motivo'].': '.$cgDes[$fila['cgid']]['tiempo'];
+        $tmp['Estado'] = 'Deshabilitado';
         $tmp['Tiempo'] = 'N/D';
     }else{
         $tmp['Estado']= 'Habilitado';                                      

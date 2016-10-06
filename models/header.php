@@ -44,13 +44,16 @@ echo "
         <link href="assets/layouts/layout/css/layout.min.css" rel="stylesheet" type="text/css" />
         <link href="assets/layouts/layout/css/themes/darkblue.min.css" rel="stylesheet" type="text/css" id="style_color" />
         <link href="assets/layouts/layout/css/custom.min.css" rel="stylesheet" type="text/css" />
+         <link href="css/jquery.dataTables.yadcf.css" rel="stylesheet" type="text/css" />
+         <link href="node_modules/chosen-js/chosen.css" rel="stylesheet" type="text/css" />
         <!-- END THEME LAYOUT STYLES -->
         <link rel="shortcut icon" href="favicon.ico" /> </head>
  <link href="assets/layouts/layout/css/themes/darkblue.css" rel="stylesheet" type="text/css" id="style_color"/>
  <script src="assets/global/plugins/jquery-1.11.0.min.js" type="text/javascript"></script>
 <script src="assets/global/plugins/jquery-migrate.min.js" type="text/javascript"></script>
-
 <script src="js/i18n/grid.locale-es.js" type="text/javascript"></script>
+<script src="js/jquery.dataTables.yadcf.js" type="text/javascript"></script>
+<script src="node_modules/chosen-js/chosen.jquery.js" type="text/javascript"></script>
 
 <style>
 	html {

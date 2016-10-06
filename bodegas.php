@@ -230,12 +230,15 @@ function deshabilita(cual) {
             .dataTables_paginate ul{
                 float: right;
             }
+
+
+
         </style>
 	<div class="row">
 		<div class="col-md-12">
             <?php require_once("tema/comun/topcontenedor.php");?>
 
-			<table id="tablacargadores" class="table table-striped table-bordered table-hover" cellspacing="0" width="100%">
+			<table id="tablacargadores" class="table table-striped table-bordered table-hover table-fixed" cellspacing="0" width="100%">
 				<thead>
 					<tr>
                                                 <th></th>
@@ -259,6 +262,7 @@ function deshabilita(cual) {
 						<th>Opciones</th>
 					</tr>
 				</thead>
+                               
                                 <tbody></tbody>
 			</table>
 			<div class="row">
@@ -316,24 +320,24 @@ require_once("tema/comun/footer.php");
 
 <script>
     $(document).ready( function () {
-        
+        'use strict';
         var tipo = "<?php echo $tipo?>";
         var columns = [
             {
-                "className":      'details-control',
-                "orderable":      false,
-                "data":           null,
-                "defaultContent": ''
+                "sClass":      'details-control',
+                "bSortable":      false,
+                "mData":           null,
+                "sDefaultContent": ''
             },
-            { "data": "Cargador" },
-            { "data": "Tipo" },
-            { "data": "Lugares" },
-            { "data": "Disponibles" },
-            { "data": "Espera" },
-            { "data": "Descanso" },
-            { "data": "Tiempo" },
-            { "data": "Estado" },
-            { "data": "Herramientas" },
+            { "mData": "Cargador" },
+            { "mData": "Tipo" },
+            { "mData": "Lugares" },
+            { "mData": "Disponibles" },
+            { "mData": "Espera" },
+            { "mData": "Descanso" },
+            { "mData": "Tiempo" },
+            { "mData": "Estado" },
+            { "mData": "Herramientas" },
         ];
         if(tipo == 'Bodega'){
              columns.splice(2, 1);
@@ -347,68 +351,99 @@ require_once("tema/comun/footer.php");
             "url":"/json/cargadores.php",
             data:{tipo:"<?php echo $tipo?>"},
             success: function (data, textStatus, jqXHR) {
-                var table = $('#tablacargadores').DataTable({
-                    data: data,
-                     "columns": columns,
-                      "order": [[1, 'asc']],
-                      "language": {
-                            "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"
-                        },
-                        rowCallback: function(row, data, index) {
-                            if(data.details.length == 0){
-                                $(row).find('td').eq(0).removeClass('details-control');
-                            }
-                            
-                            if(tipo == 'Cargador'){
-                                if($(row).find('td').eq(8).text() == "Habilitado"){
-                                    $(row).find('td').eq(8).css('color','green').css('font-weight','bold'); 
-                                 }else{
-                                     $(row).find('td').eq(8).css('color','red').css('font-weight','bold'); 
-                                 }
-                                 if($(row).find('td').eq(7).text() == "Disponible"){
-                                    $(row).find('td').eq(7).css('color','green').css('font-weight','bold'); 
-                                 }else{
-                                      $(row).find('td').eq(7).css('color','red').css('font-weight','bold'); 
-                                }
-                            }else{
-                                if($(row).find('td').eq(6).text() == "Habilitado"){
-                                    $(row).find('td').eq(6).css('color','green').css('font-weight','bold'); 
-                                 }else{
-                                     $(row).find('td').eq(6).css('color','red').css('font-weight','bold'); 
-                                 }
-                            }
-                            
-                           
+
+                var oTable = $('#tablacargadores').dataTable({
+                    "bStateSave": false,
+                    "sScrollY": "510px",
+                    "sScrollX": "100%",
+                    "iDisplayLength": 25,
+                    "bJQueryUI": true,
+                    "bPaginate": false,
+                    responsive: true,
+                    "aaData": data, 
+                    "aaSorting": [[1, 'asc']],
+                    "aoColumns": columns,
+                    "oLanguage": {
+                        "sProcessing":     "Procesando...",
+                        "sLengthMenu":     "Mostrar _MENU_ registros",
+                        "sZeroRecords":    "No se encontraron resultados",
+                        "sEmptyTable":     "NingÃºn dato disponible en esta tabla",
+                        "sInfo":           "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                        "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
+                        "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
+                        "sLengthMenu":     "Mostrar _MENU_ registros",
+                        "sZeroRecords":    "No se encontraron resultados",
+                        "sEmptyTable":     "NingÃºn dato disponible en esta tabla",
+                        "sInfo":           "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                        "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
+                        "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
+                        "sInfoPostFix":    "",
+                        "sSearch":         "Buscar:",
+                        "sUrl":            "",
+                        "sInfoThousands":  ",",
+                        "sLoadingRecords": "Cargando...","sInfoPostFix":    "",
+                        "sSearch":         "Buscar:",
+                        "sUrl":            "",
+                        "sInfoThousands":  ",",
+                        "sLoadingRecords": "Cargando...",
+                    },
+                    rowCallback: function(row, data, index) {
+                        if(data.details.length == 0){
+                            $(row).find('td').eq(0).removeClass('details-control');
                         }
 
-                });
-                
-                
-                
-                $('#tablacargadores tbody').on('click', 'td.details-control', function () {
+                        if(tipo == 'Cargador'){
+                            if($(row).find('td').eq(8).text() == "Habilitado"){
+                                $(row).find('td').eq(8).css('color','green').css('font-weight','bold'); 
+                             }else{
+                                 $(row).find('td').eq(8).css('color','red').css('font-weight','bold'); 
+                             }
+                             if($(row).find('td').eq(7).text() == "Disponible"){
+                                $(row).find('td').eq(7).css('color','green').css('font-weight','bold'); 
+                             }else{
+                                  $(row).find('td').eq(7).css('color','red').css('font-weight','bold'); 
+                            }
+                        }else{
+                            if($(row).find('td').eq(6).text() == "Habilitado"){
+                                $(row).find('td').eq(6).css('color','green').css('font-weight','bold'); 
+                             }else{
+                                 $(row).find('td').eq(6).css('color','red').css('font-weight','bold'); 
+                             }
+                        }
+
+
+                    }
                     
-                    var tr = $(this).closest('tr');
-                    var row = table.row( tr );
-                  
-                    if ( row.child.isShown() ) {
-                        // This row is already open - close it
-                        row.child.hide();
-                        tr.removeClass('shown');
+                    
+                });
+
+                $('#tablacargadores tbody').on('click', 'td.details-control', function () {
+                   
+                    var nTr = $(this).parents('tr')[0];
+                    console.log(nTr);
+                    if ( oTable.fnIsOpen(nTr) )
+                    {
+                        /* This row is already open - close it */
+                        $(nTr).removeClass('shown');
+                        oTable.fnClose( nTr );
                     }
-                    else {
-                        // Open this row
-                        row.child( format(row.data()) ).show();
-                        tr.addClass('shown');
+                    else
+                    {
+                        /* Open this row */
+                        $(nTr).addClass('shown');
+                        oTable.fnOpen( nTr, format(nTr), 'details' );
                     }
+                    
                 } );
                 
-                
                 function format ( d ) {
+                    var aData = oTable.fnGetData( d );
+                    console.log(aData);
                     // `d` is the original data object for the row
                     var table_child = '';
-                    var details_count = d.details.lenght;
+                    var details_count = aData.details.lenght;
                     var count = 0;
-                    $(d.details).each(function(){
+                    $(aData.details).each(function(){
                        table_child+= '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px; margin-bottom: 15px;">'+
                         '<tr>'+
                             '<td style="font-weight:bold">Bateria:</td>'+
@@ -430,6 +465,49 @@ require_once("tema/comun/footer.php");
                     });
                     return table_child;
                 }
+                
+                function myCustomFilterFunction(filterVal, columnVal) {
+                    console.log(filterVal);
+                    console.log(columnVal);
+                    var found;
+                    if (columnVal === '') {
+                        return true;
+                    }
+                    switch (filterVal) {
+                    case 'happy':
+                        found = columnVal.search(/:-\]|:\)|Happy|JOY|:D/g);
+                        break;
+                    case 'sad':
+                        found = columnVal.search(/:\(|Sad|:'\(/g);
+                        break;
+                    case 'angry':
+                        found = columnVal.search(/!!!|Arr\.\.\./g);
+                        break;
+                    case 'lucky':
+                        found = columnVal.search(/777|Bingo/g);
+                        break;
+                    case 'january':
+                        found = columnVal.search(/01|Jan/g);
+                        break;
+                    default:
+                        found = 1;
+                        break;
+                    }
+
+                    if (found !== -1) {
+                        return true;
+                    }
+                    return false;
+                }
+                
+                
+                oTable.yadcf([
+                    {column_number : 1,filter_type: "multi_select",select_type: 'chosen'},
+                    {column_number : 2,filter_type: "multi_select",select_type: 'chosen'},
+                    {column_number : 7,filter_type: "multi_select",select_type: 'chosen'},
+                    {column_number : 8,filter_type: "multi_select",select_type: 'chosen'},         
+                ]);
+		
                 
                 
             }
