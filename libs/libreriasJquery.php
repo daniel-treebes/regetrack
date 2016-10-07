@@ -1,5 +1,5 @@
 <!-- BEGIN RESPONSIVE MENU TOGGLER -->
-<a href="javascript:;" class="menu-toggler responsive-toggler" data-toggle="collapse" data-target=".navbar-collapse"> </a>
+
 <!-- END RESPONSIVE MENU TOGGLER -->
 <!-- BEGIN GLOBAL MANDATORY STYLES -->
 <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css" />

@@ -80,52 +80,31 @@ function deshabilita(cual) {
 }
 		
 	</script>   
-
-	<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.css">
-	<script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.js"></script>
+        <script src="assets/global/scripts/app.min.js"></script>
 	<script type="text/javascript">
     $(document).ready(function() {
+        'use strict';
         var oTable =$('#tablamontacargas').dataTable( {
             "bStateSave": false,
             "sScrollY": "510px",
             "iDisplayLength": 25,
-            "bJQueryUI": true,
             "bPaginate": false,
             "aaSorting": [[0, 'asc']],
-             responsive: true,
-             "oLanguage": {
-                        "sProcessing":     "Procesando...",
-                        "sLengthMenu":     "Mostrar _MENU_ registros",
-                        "sZeroRecords":    "No se encontraron resultados",
-                        "sEmptyTable":     "NingÃºn dato disponible en esta tabla",
-                        "sInfo":           "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
-                        "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
-                        "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
-                        "sLengthMenu":     "Mostrar _MENU_ registros",
-                        "sZeroRecords":    "No se encontraron resultados",
-                        "sEmptyTable":     "NingÃºn dato disponible en esta tabla",
-                        "sInfo":           "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
-                        "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
-                        "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
-                        "sInfoPostFix":    "",
-                        "sSearch":         "Buscar:",
-                        "sUrl":            "",
-                        "sInfoThousands":  ",",
-                        "sLoadingRecords": "Cargando...","sInfoPostFix":    "",
-                        "sSearch":         "Buscar:",
-                        "sUrl":            "",
-                        "sInfoThousands":  ",",
-                        "sLoadingRecords": "Cargando...",
-                    },
+            "oLanguage": {
+                "sUrl": "//cdn.datatables.net/plug-ins/1.10.12/i18n/Spanish.json",
+            },
         } );
-        oTable.yadcf([
-            {column_number : 1,filter_type: "multi_select",select_type: 'chosen'},
-            {column_number : 2,filter_type: "multi_select",select_type: 'chosen'},
-            {column_number : 7,filter_type: "multi_select",select_type: 'chosen'},
-            {column_number : 3,filter_type: "multi_select",select_type: 'chosen'},
-            {column_number : 4,filter_type: "multi_select",select_type: 'chosen'},
-            {column_number : 5,filter_type: "multi_select",select_type: 'chosen'},
+       oTable.yadcf([
+            {column_number : 0,filter_type: "multi_select",select_type: 'chosen',filter_container_id: 'filter_0'},
+            {column_number : 1,filter_type: "multi_select",select_type: 'chosen',filter_container_id: 'filter_1'},
+            {column_number : 2,filter_type: "multi_select",select_type: 'chosen',filter_container_id: 'filter_2'},
+            {column_number : 3,filter_type: "multi_select",select_type: 'chosen',filter_container_id: 'filter_3'},
+            {column_number : 4,filter_type: "multi_select",select_type: 'chosen',filter_container_id: 'filter_4'},
+            {column_number : 9,filter_type: "multi_select",select_type: 'chosen',filter_container_id: 'filter_9'},
+            
         ]);
+        
+        $('a.collapse').trigger('click');
     } );
 
 	</script>
@@ -138,7 +117,42 @@ function deshabilita(cual) {
             <div class="col-md-12">
               <?php require_once("tema/comun/topcontenedor.php");?>
 
-
+        <div class="row">
+            <div class="col-md-12">
+                <div class="portlet box  blue-sharp">
+                    <div class="portlet-title">
+                        <div class="caption">
+                            <i class="fa fa-filter"></i>Filtros
+                         </div>
+                        <div class="tools">
+                            <a href="javascript:;" class="collapse" data-original-title="" title=""> </a>
+                        </div>
+                    </div>
+                    <div class="portlet-body ">
+                        <div class="row">
+                            <div class="col-sm-3" id="filter_0" style="margin-left: 15px;">
+                                <label>Nombre</label>
+                            </div>
+                            <div class="col-sm-3" id="filter_1"  style="margin-left: 15px;">
+                                <label>Modelo</label>
+                            </div>
+                            <div class="col-sm-3" id="filter_2" style="margin-left: 15px;">
+                                <label>Marca</label>
+                            </div>
+                            <div class="col-sm-3" id="filter_3" style="margin-left: 15px;">
+                                <label>Empresa</label>
+                            </div>
+                            <div class="col-sm-3" id="filter_4" style="margin-left:15px;">
+                                <label>Tipo</label>
+                            </div>
+                            <div class="col-sm-3" id="filter_9" style="margin-left: 15px;">
+                                <label>Status</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>        
 	<table id="tablamontacargas" class="display table table-striped table-bordered table-hover" cellspacing="0" width="50%">
         <thead>
             <tr>

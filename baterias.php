@@ -74,8 +74,10 @@ function deshabilita(cual) {
 }
 		
 	</script>   
-	<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.css">
-	<script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.js"></script>
+        <style>
+            
+        </style>
+        <script src="assets/global/scripts/app.min.js"></script>
 	<script type="text/javascript">
     $(document).ready(function() {
         'use strict';
@@ -83,50 +85,68 @@ function deshabilita(cual) {
             "bStateSave": false,
             "sScrollY": "510px",
             "iDisplayLength": 25,
-            "bJQueryUI": true,
             "bPaginate": false,
             "aaSorting": [[0, 'asc']],
-             responsive: true,
-             "oLanguage": {
-                        "sProcessing":     "Procesando...",
-                        "sLengthMenu":     "Mostrar _MENU_ registros",
-                        "sZeroRecords":    "No se encontraron resultados",
-                        "sEmptyTable":     "NingÃºn dato disponible en esta tabla",
-                        "sInfo":           "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
-                        "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
-                        "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
-                        "sLengthMenu":     "Mostrar _MENU_ registros",
-                        "sZeroRecords":    "No se encontraron resultados",
-                        "sEmptyTable":     "NingÃºn dato disponible en esta tabla",
-                        "sInfo":           "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
-                        "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
-                        "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
-                        "sInfoPostFix":    "",
-                        "sSearch":         "Buscar:",
-                        "sUrl":            "",
-                        "sInfoThousands":  ",",
-                        "sLoadingRecords": "Cargando...","sInfoPostFix":    "",
-                        "sSearch":         "Buscar:",
-                        "sUrl":            "",
-                        "sInfoThousands":  ",",
-                        "sLoadingRecords": "Cargando...",
-                    },
+            "oLanguage": {
+                "sUrl": "//cdn.datatables.net/plug-ins/1.10.12/i18n/Spanish.json",
+            },
         } );
+        
         oTable.yadcf([
-            {column_number : 1,filter_type: "multi_select",select_type: 'chosen'},
-            {column_number : 2,filter_type: "multi_select",select_type: 'chosen'},
-            {column_number : 7,filter_type: "multi_select",select_type: 'chosen'},
-            {column_number : 3,filter_type: "multi_select",select_type: 'chosen'},
-            {column_number : 4,filter_type: "multi_select",select_type: 'chosen'},
-            {column_number : 5,filter_type: "multi_select",select_type: 'chosen'},
+            {column_number : 0,filter_type: "multi_select",select_type: 'chosen',filter_container_id: 'filter_0'},
+            {column_number : 1,filter_type: "multi_select",select_type: 'chosen',filter_container_id: 'filter_1'},
+            {column_number : 2,filter_type: "multi_select",select_type: 'chosen',filter_container_id: 'filter_2'},
+            {column_number : 3,filter_type: "multi_select",select_type: 'chosen',filter_container_id: 'filter_3'},
+            {column_number : 5,filter_type: "multi_select",select_type: 'chosen',filter_container_id: 'filter_5'},
+            {column_number : 7,filter_type: "multi_select",select_type: 'chosen',filter_container_id: 'filter_7'},
+            
         ]);
+        
+        $('a.collapse').trigger('click');
+        
     } );
 	</script>
-
+        
         <div class="row">
             <div class="col-md-12">
               <?php require_once("tema/comun/topcontenedor.php");?>
-
+         
+        <div class="row">
+            <div class="col-md-12">
+                <div class="portlet box  blue-sharp">
+                    <div class="portlet-title">
+                        <div class="caption">
+                            <i class="fa fa-filter"></i>Filtros
+                         </div>
+                        <div class="tools">
+                            <a href="javascript:;" class="collapse" data-original-title="" title=""> </a>
+                        </div>
+                    </div>
+                    <div class="portlet-body ">
+                        <div class="row">
+                            <div class="col-sm-3" id="filter_0" style="margin-left: 15px;">
+                                <label>Nombre</label>
+                            </div>
+                            <div class="col-sm-3" id="filter_1"  style="margin-left: 15px;">
+                                <label>Modelo</label>
+                            </div>
+                            <div class="col-sm-3" id="filter_2" style="margin-left: 15px;">
+                                <label>Marca</label>
+                            </div>
+                            <div class="col-sm-3" id="filter_3" style="margin-left:15px;">
+                                <label>Tipo</label>
+                            </div>
+                            <div class="col-sm-3" id="filter_5" style="margin-left: 15px;">
+                                <label>Estado</label>
+                            </div>
+                            <div class="col-sm-3" id="filter_7" style="margin-left: 15px;">
+                                <label>Estatus</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>        
 	<table id="tablabaterias" class="display table table-striped table-bordered table-hover" cellspacing="0" width="100%">
         <thead>
             <tr>
@@ -138,7 +158,7 @@ function deshabilita(cual) {
 					<th>Estado</th>
 					<th>Tiempo</th>
 					<th>Estatus</th>
-					<th></th>
+					<th>Opciones</th>
             </tr>
         </thead>
        
@@ -146,11 +166,11 @@ function deshabilita(cual) {
 			 <?php 
 	  while($fila = $resultado->fetch_array()) {
 		 echo "<tr>";
-		 echo "<th>".$fila['Nombre']."</th>";
-                  echo "<th>".$fila['Modelo']."</th>";
-                   echo "<th>".$fila['Marca']."</th>";
-		 echo "<th>".$fila['Tipo']."</th>";
-
+		 echo "<td>".$fila['Nombre']."</td>";
+                  echo "<td>".$fila['Modelo']."</td>";
+                   echo "<td>".$fila['Marca']."</td>";
+		 echo "<td>".$fila['Tipo']."</tdDA>";
+                    
 		 $querydonde="
 			SELECT  u.id, u.bg, u.bt, CONCAT(c.cargadores_nombre,'-',b.nombre) as bg_nombre,
 			   CONCAT(
@@ -267,26 +287,26 @@ function deshabilita(cual) {
                            }else{
                               $filamc['nombre']="<i class='fa icon-montacarga'></i> ".$filamc['nombre'];
                            }
-                           echo "<th>".$filamc['nombre']."</th>";
-                           echo "<th>$estadomc</th>";
-                           echo "<th>".$filamc['entrada']."</th>";
+                           echo "<td>".$filamc['nombre']."</td>";
+                           echo "<td>$estadomc</td>";
+                           echo "<td>".$filamc['entrada']."</td>";
                      }elseif(isset($filadonde['descanso']) && $filadonde['descanso']!=NULL){
-                           echo "<th><i class='fa icon-cargador'></i> ".$filadonde['bg_nombre']."</th>";
-                           echo "<th>En descanso</th>";
-                           echo "<th>".$filadonde['descanso']."</th>";
+                           echo "<td><i class='fa icon-cargador'></i> ".$filadonde['bg_nombre']."</td>";
+                           echo "<td>En descanso</td>";
+                           echo "<td>".$filadonde['descanso']."</td>";
                      }elseif(isset($filadonde['carga']) && $filadonde['carga'] !=NULL){
-                           echo "<th><i class='fa icon-cargador'></i> ".$filadonde['bg_nombre']."</th>";
-                           echo "<th>En carga</th>";
-                           echo "<th>".$filadonde['carga']."</th>";				  
+                           echo "<td><i class='fa icon-cargador'></i> ".$filadonde['bg_nombre']."</td>";
+                           echo "<td>En carga</th>";
+                           echo "<td>".$filadonde['carga']."</td>";				  
                      }elseif(isset($filadonde['entrada']) && $filadonde['entrada'] !=NULL){
-                           echo "<th><i class='fa icon-cargador'></i> ".$filadonde['bg_nombr]."e']."</th>";
-                           echo "<th>En espera</th>";
-                           echo "<th>".$filadonde['entrada']."</th>";				  
+                           echo "<td><i class='fa icon-cargador'></i> ".$filadonde['bg_nombr]."e']."</td>";
+                           echo "<td>En espera</td>";
+                           echo "<td>".$filadonde['entrada']."</td>";				  
                      }else{
                            //echo "<th></th>";
-                           echo "<th style='color:red'>Sin asignar</th>";
-                           echo "<th style='color:red'>N/A</th>";
-                           echo "<th style='color:red'>N/A</th>";
+                           echo "<td style='color:red'>Sin asignar</td>";
+                           echo "<td style='color:red'>N/A</td>";
+                           echo "<td style='color:red'>N/A</td>";
                      }
                 }else{ //SI NO EXISTE REGISTRO DE LA BATERIA EN LAS BODEGAS (BUSCAMOS EN MONTACARGAS)
                     $querymc="SELECT m.idmontacargas as mc, m.montacargas_nombre as nombre,
@@ -348,9 +368,9 @@ function deshabilita(cual) {
                            }else{
                               $filamc['nombre']="<i class='fa icon-montacarga'></i> ".$filamc['nombre'];
                            }
-                           echo "<th>".$filamc['nombre']."</th>";
-                           echo "<th>$estadomc</th>";
-                           echo "<th>".$filamc['entrada']."</th>";
+                           echo "<td>".$filamc['nombre']."</td>";
+                           echo "<td>$estadomc</td>";
+                           echo "<td>".$filamc['entrada']."</td>";
                 }
 
 		 $querystatus="SELECT motivo,
@@ -366,12 +386,12 @@ function deshabilita(cual) {
 			$filastatus = $resultadostatus->fetch_array();
 				   
 			if (isset($filastatus['motivo']) ){
-				 echo '<th style="color:red">Deshabilitado</th>';
+				 echo '<td style="color:red">Deshabilitado</td>';
 			}else{
-				 echo '<th style="color:green">Habilitado</th>';
+				 echo '<td style="color:green">Habilitado</td>';
 			}
 		 }else{
-			 echo '<th style="color:green">Habilitado</th>';
+			 echo '<td style="color:green">Habilitado</td>';
 		 }
 
 				
@@ -379,7 +399,7 @@ function deshabilita(cual) {
 				$herramientas.="<button type='button' class='btn gray'  onclick='window.open(\"libs/imprimeQR.php?tipo=baterias&id=".$fila['Id']."\")'><i class='fa fa-qrcode'></i> </button>";
 				
 				
-				echo "<th>".$herramientas."</th>";
+				echo "<td>".$herramientas."</td>";
 				
 				echo "</tr>";
    	  }
