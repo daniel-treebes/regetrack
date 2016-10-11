@@ -534,31 +534,31 @@ $bodegas_uso_total = $bodegas_uso->count();
 </script>
 <?php
 
-    $grafica=pinta_grafica('mc','reporteMC','uso','todo',$loggedInUser->sucursal_activa);
+    $grafica=pinta_grafica('mc','reporteMC','uso','todo');
     echo $grafica;
 
 
-    $grafica=pinta_grafica('cg','reporteCE','espera','todo',$loggedInUser->sucursal_activa);
+    $grafica=pinta_grafica('cg','reporteCE','espera','todo');
     echo $grafica;
-    $grafica=pinta_grafica('cg','reporteCC','carga','todo',$loggedInUser->sucursal_activa);
+    $grafica=pinta_grafica('cg','reporteCC','carga','todo');
     echo $grafica;
-    $grafica=pinta_grafica('cg','reporteCD','descanso','todo',$loggedInUser->sucursal_activa);
-    echo $grafica;
-    
-    $grafica=pinta_grafica('bt','reporteBU','uso','todo',$loggedInUser->sucursal_activa);
-    echo $grafica;
-    $grafica=pinta_grafica('bt','reporteBE','espera','todo',$loggedInUser->sucursal_activa);
-    echo $grafica;
-    $grafica=pinta_grafica('bt','reporteBC','carga','todo',$loggedInUser->sucursal_activa);
-    echo $grafica;
-    $grafica=pinta_grafica('bt','reporteBD','descanso','todo',$loggedInUser->sucursal_activa);
+    $grafica=pinta_grafica('cg','reporteCD','descanso','todo');
     echo $grafica;
     
-    $efidato=eficiencia('bt','uso','eficienciaBTU',$loggedInUser->sucursal_activa);
+    $grafica=pinta_grafica('bt','reporteBU','uso','todo');
+    echo $grafica;
+    $grafica=pinta_grafica('bt','reporteBE','espera','todo');
+    echo $grafica;
+    $grafica=pinta_grafica('bt','reporteBC','carga','todo');
+    echo $grafica;
+    $grafica=pinta_grafica('bt','reporteBD','descanso','todo');
+    echo $grafica;
+    
+    $efidato=eficiencia('bt','uso','eficienciaBTU');
     echo $efidato['script'];
-    $efidato=eficiencia('bt','carga','eficienciaBTC',$loggedInUser->sucursal_activa);
+    $efidato=eficiencia('bt','carga','eficienciaBTC');
     echo $efidato['script'];
-    $efidato=eficiencia('bt','descanso','eficienciaBTD',$loggedInUser->sucursal_activa);
+    $efidato=eficiencia('bt','descanso','eficienciaBTD');
     echo $efidato['script'];
 
 ?>

@@ -265,7 +265,7 @@ function deshabilita(cual) {
 <script src="assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js" type="text/javascript"></script>
 
 <?php
-$grafica=pinta_grafica('mc','reporteMC','uso','todo',$loggedInUser->sucursal_activa);
+$grafica=pinta_grafica('mc','reporteMC','uso','todo');
 echo $grafica;
 
 require_once("tema/comun/footer.php");

@@ -447,13 +447,13 @@ function deshabilita(cual) {
         <!-- END PAGE LEVEL PLUGINS -->
 <?php
 
-	$grafica=pinta_grafica('bt','reporteBTC','carga','todo',$loggedInUser->sucursal_activa);
+	$grafica=pinta_grafica('bt','reporteBTC','carga','todo');
 	echo $grafica;
-	$grafica=pinta_grafica('bt','reporteBTD','descanso','todo',$loggedInUser->sucursal_activa);
+	$grafica=pinta_grafica('bt','reporteBTD','descanso','todo');
 	echo $grafica;
-	$grafica=pinta_grafica('bt','reporteBTU','uso','todo',$loggedInUser->sucursal_activa);
+	$grafica=pinta_grafica('bt','reporteBTU','uso','todo');
 	echo $grafica;
-	$grafica=pinta_grafica('bt','reporteBTE','espera','todo',$loggedInUser->sucursal_activa);
+	$grafica=pinta_grafica('bt','reporteBTE','espera','todo');
 	echo $grafica;
 
 require_once("tema/comun/footer.php");

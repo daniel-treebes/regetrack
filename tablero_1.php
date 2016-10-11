@@ -346,7 +346,7 @@ require_once("libs/libreriasJquery.php");
 
 				<?php
                                
-				$grafica=pinta_grafica('mc','reporteMC','uso','todo',$loggedInUser->sucursal_activa);
+				$grafica=pinta_grafica('mc','reporteMC','uso','todo');
 				echo $grafica;
 				?>
 
@@ -377,29 +377,29 @@ require_once("libs/libreriasJquery.php");
 
 				<?php
                               
-				$efidato=eficiencia('mc','uso','eficienciaMC',$loggedInUser->sucursal_activa);
+				$efidato=eficiencia('mc','uso','eficienciaMC');
 				echo $efidato['script'];
-				$efidato=eficiencia('cg','espera','eficienciaCGE',$loggedInUser->sucursal_activa);
+				$efidato=eficiencia('cg','espera','eficienciaCGE');
 				echo $efidato['script'];
-				$efidato=eficiencia('cg','carga','eficienciaCGC',$loggedInUser->sucursal_activa);
+				$efidato=eficiencia('cg','carga','eficienciaCGC');
 				echo $efidato['script'];
-				$efidato=eficiencia('cg','descanso','eficienciaCGD',$loggedInUser->sucursal_activa);
+				$efidato=eficiencia('cg','descanso','eficienciaCGD');
 				echo $efidato['script'];
-				$efidato=eficiencia('bt','uso','eficienciaBTU',$loggedInUser->sucursal_activa);
+				$efidato=eficiencia('bt','uso','eficienciaBTU');
 				echo $efidato['script'];
-				$efidato=eficiencia('bt','carga','eficienciaBTC',$loggedInUser->sucursal_activa);
+				$efidato=eficiencia('bt','carga','eficienciaBTC');
 				echo $efidato['script'];
-				$efidato=eficiencia('bt','descanso','eficienciaBTD',$loggedInUser->sucursal_activa);
+				$efidato=eficiencia('bt','descanso','eficienciaBTD');
 				echo $efidato['script'];
 
 
-				$grafica=pinta_grafica('bt','reporteBU','uso','todo',$loggedInUser->sucursal_activa);
+				$grafica=pinta_grafica('bt','reporteBU','uso','todo');
 				echo $grafica;
-				$grafica=pinta_grafica('bt','reporteBE','espera','todo',$loggedInUser->sucursal_activa);
+				$grafica=pinta_grafica('bt','reporteBE','espera','todo');
 				echo $grafica;
-				$grafica=pinta_grafica('bt','reporteBC','carga','todo',$loggedInUser->sucursal_activa);
+				$grafica=pinta_grafica('bt','reporteBC','carga','todo');
 				echo $grafica;
-				$grafica=pinta_grafica('bt','reporteBD','descanso','todo',$loggedInUser->sucursal_activa);
+				$grafica=pinta_grafica('bt','reporteBD','descanso','todo');
 				echo $grafica;
 				?>
 
@@ -425,11 +425,11 @@ require_once("libs/libreriasJquery.php");
 					</div>
 				</div>
 				<?php
-                                    $grafica=pinta_grafica('cg','reporteCE','espera','todo',$loggedInUser->sucursal_activa);
+                                    $grafica=pinta_grafica('cg','reporteCE','espera','todo');
                                     echo $grafica;
-                                    $grafica=pinta_grafica('cg','reporteCC','carga','todo',$loggedInUser->sucursal_activa);
+                                    $grafica=pinta_grafica('cg','reporteCC','carga','todo');
                                     echo $grafica;
-                                    $grafica=pinta_grafica('cg','reporteCD','descanso','todo',$loggedInUser->sucursal_activa);
+                                    $grafica=pinta_grafica('cg','reporteCD','descanso','todo');
                                     echo $grafica;
                                 ?>
 

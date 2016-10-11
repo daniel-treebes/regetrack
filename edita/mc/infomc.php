@@ -238,7 +238,7 @@ if($loggedInUser->checkPermission(array(1,2))){
 	</div>
 
 	<?php
-	$grafica=pinta_grafica('mc','reporteMC','uso',$id,$loggedInUser->sucursal_activa);
+	$grafica=pinta_grafica('mc','reporteMC','uso',$id);
 	echo $grafica;
 
 }

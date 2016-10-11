@@ -337,14 +337,14 @@ function deshabilita(cual) {
 <?php
         
         if($tipo == 'Cargador'){
-            $grafica=pinta_grafica('cg','reporteCC','carga','todo',$loggedInUser->sucursal_activa);
+            $grafica=pinta_grafica('cg','reporteCC','carga','todo');
             echo $grafica;
-            $grafica=pinta_grafica('cg','reporteCD','descanso','todo',$loggedInUser->sucursal_activa);
+            $grafica=pinta_grafica('cg','reporteCD','descanso','todo');
             echo $grafica;
-            $grafica=pinta_grafica('cg','reporteCE','espera','todo',$loggedInUser->sucursal_activa);
+            $grafica=pinta_grafica('cg','reporteCE','espera','todo');
             echo $grafica;
         }else{
-            $grafica=pinta_grafica('li','reporteCE','espera','todo',$loggedInUser->sucursal_activa,'Bodega');
+            $grafica=pinta_grafica('li','reporteCE','espera','todo','Bodega');
             echo $grafica;
         }
 	
