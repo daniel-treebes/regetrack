@@ -425,14 +425,11 @@ require_once("libs/libreriasJquery.php");
 					</div>
 				</div>
 				<?php
-				$grafica=pinta_grafica('cg','reporteCE','espera','todo',$loggedInUser->sucursal_activa);
-				echo $grafica;
-				$grafica=pinta_grafica('cg','reporteCC','carga','todo',$loggedInUser->sucursal_activa);
-				echo $grafica;
-				$grafica=pinta_grafica('cg','reporteCD','descanso','todo',$loggedInUser->sucursal_activa);
-				echo $grafica;
-
-				
-
-			 ?>
+                                    $grafica=pinta_grafica('cg','reporteCE','espera','todo',$loggedInUser->sucursal_activa);
+                                    echo $grafica;
+                                    $grafica=pinta_grafica('cg','reporteCC','carga','todo',$loggedInUser->sucursal_activa);
+                                    echo $grafica;
+                                    $grafica=pinta_grafica('cg','reporteCD','descanso','todo',$loggedInUser->sucursal_activa);
+                                    echo $grafica;
+                                ?>
 

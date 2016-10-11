@@ -1372,7 +1372,7 @@ function pinta_grafica($modulo,$divapintar,$estatus,$idapintar='todo',$sucursal_
 				$alineas=substr($alineas,0,-1);
 			}
 			
-		
+                        
 			$aregresar.="
 				$('#$divapintar').highcharts('StockChart', {
 	
