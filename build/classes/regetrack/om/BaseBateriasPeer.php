@@ -433,9 +433,6 @@ abstract class BaseBateriasPeer
         // Invalidate objects in DeshabilitabtPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         DeshabilitabtPeer::clearInstancePool();
-        // Invalidate objects in LimboPeer instance pool,
-        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
-        LimboPeer::clearInstancePool();
         // Invalidate objects in UsoBateriasBodegaPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         UsoBateriasBodegaPeer::clearInstancePool();
@@ -1019,12 +1016,6 @@ abstract class BaseBateriasPeer
 
             $criteria->add(DeshabilitabtPeer::BT, $obj->getIdbaterias());
             $affectedRows += DeshabilitabtPeer::doDelete($criteria, $con);
-
-            // delete related Limbo objects
-            $criteria = new Criteria(LimboPeer::DATABASE_NAME);
-
-            $criteria->add(LimboPeer::BT, $obj->getIdbaterias());
-            $affectedRows += LimboPeer::doDelete($criteria, $con);
 
             // delete related UsoBateriasBodega objects
             $criteria = new Criteria(UsoBateriasBodegaPeer::DATABASE_NAME);

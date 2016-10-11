@@ -42,7 +42,7 @@ class UsoBateriasMontacargasTableMap extends TableMap
         $this->addForeignKey('mc', 'Mc', 'INTEGER', 'montacargas', 'idmontacargas', true, null, null);
         $this->addForeignKey('bt', 'Bt', 'INTEGER', 'baterias', 'idbaterias', true, null, null);
         $this->addColumn('fecha_entrada', 'FechaEntrada', 'TIMESTAMP', true, null, null);
-        $this->addColumn('fecha_salida', 'FechaSalida', 'TIMESTAMP', false, null, null);
+        $this->addColumn('fecha_salida', 'FechaSalida', 'TIMESTAMP', true, null, null);
         $this->addForeignKey('usuario_entrada', 'UsuarioEntrada', 'INTEGER', 'uc_users', 'id', false, null, null);
         $this->addForeignKey('usuario_salida', 'UsuarioSalida', 'INTEGER', 'uc_users', 'id', false, null, null);
         // validators

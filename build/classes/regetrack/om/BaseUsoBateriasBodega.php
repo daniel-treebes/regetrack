@@ -49,24 +49,28 @@ abstract class BaseUsoBateriasBodega extends BaseObject implements Persistent
 
     /**
      * The value for the fecha_entrada field.
+     * Note: this column has a database default value of: NULL
      * @var        string
      */
     protected $fecha_entrada;
 
     /**
      * The value for the fecha_carga field.
+     * Note: this column has a database default value of: NULL
      * @var        string
      */
     protected $fecha_carga;
 
     /**
      * The value for the fecha_descanso field.
+     * Note: this column has a database default value of: NULL
      * @var        string
      */
     protected $fecha_descanso;
 
     /**
      * The value for the fecha_salida field.
+     * Note: this column has a database default value of: NULL
      * @var        string
      */
     protected $fecha_salida;
@@ -94,6 +98,13 @@ abstract class BaseUsoBateriasBodega extends BaseObject implements Persistent
      * @var        int
      */
     protected $usuario_salida;
+
+    /**
+     * The value for the fecha_original field.
+     * Note: this column has a database default value of: NULL
+     * @var        string
+     */
+    protected $fecha_original;
 
     /**
      * @var        Bodegas
@@ -124,6 +135,31 @@ abstract class BaseUsoBateriasBodega extends BaseObject implements Persistent
      * @var        boolean
      */
     protected $alreadyInClearAllReferencesDeep = false;
+
+    /**
+     * Applies default values to this object.
+     * This method should be called from the object's constructor (or
+     * equivalent initialization method).
+     * @see        __construct()
+     */
+    public function applyDefaultValues()
+    {
+        $this->fecha_entrada = NULL;
+        $this->fecha_carga = NULL;
+        $this->fecha_descanso = NULL;
+        $this->fecha_salida = NULL;
+        $this->fecha_original = NULL;
+    }
+
+    /**
+     * Initializes internal state of BaseUsoBateriasBodega object.
+     * @see        applyDefaults()
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        $this->applyDefaultValues();
+    }
 
     /**
      * Get the [id] column value.
@@ -363,6 +399,46 @@ abstract class BaseUsoBateriasBodega extends BaseObject implements Persistent
     }
 
     /**
+     * Get the [optionally formatted] temporal [fecha_original] column value.
+     *
+     *
+     * @param string $format The date/time format string (either date()-style or strftime()-style).
+     *				 If format is null, then the raw DateTime object will be returned.
+     * @return mixed Formatted date/time value as string or DateTime object (if format is null), null if column is null, and 0 if column value is 0000-00-00 00:00:00
+     * @throws PropelException - if unable to parse/validate the date/time value.
+     */
+    public function getFechaOriginal($format = 'Y-m-d H:i:s')
+    {
+        if ($this->fecha_original === null) {
+            return null;
+        }
+
+        if ($this->fecha_original === '0000-00-00 00:00:00') {
+            // while technically this is not a default value of null,
+            // this seems to be closest in meaning.
+            return null;
+        }
+
+        try {
+            $dt = new DateTime($this->fecha_original);
+        } catch (Exception $x) {
+            throw new PropelException("Internally stored date/time/timestamp value could not be converted to DateTime: " . var_export($this->fecha_original, true), $x);
+        }
+
+        if ($format === null) {
+            // Because propel.useDateTimeClass is true, we return a DateTime object.
+            return $dt;
+        }
+
+        if (strpos($format, '%') !== false) {
+            return strftime($format, $dt->format('U'));
+        }
+
+        return $dt->format($format);
+
+    }
+
+    /**
      * Set the value of [id] column.
      *
      * @param  int $v new value
@@ -446,7 +522,9 @@ abstract class BaseUsoBateriasBodega extends BaseObject implements Persistent
         if ($this->fecha_entrada !== null || $dt !== null) {
             $currentDateAsString = ($this->fecha_entrada !== null && $tmpDt = new DateTime($this->fecha_entrada)) ? $tmpDt->format('Y-m-d H:i:s') : null;
             $newDateAsString = $dt ? $dt->format('Y-m-d H:i:s') : null;
-            if ($currentDateAsString !== $newDateAsString) {
+            if ( ($currentDateAsString !== $newDateAsString) // normalized values don't match
+                || ($dt->format('Y-m-d H:i:s') === NULL) // or the entered value matches the default
+                 ) {
                 $this->fecha_entrada = $newDateAsString;
                 $this->modifiedColumns[] = UsoBateriasBodegaPeer::FECHA_ENTRADA;
             }
@@ -469,7 +547,9 @@ abstract class BaseUsoBateriasBodega extends BaseObject implements Persistent
         if ($this->fecha_carga !== null || $dt !== null) {
             $currentDateAsString = ($this->fecha_carga !== null && $tmpDt = new DateTime($this->fecha_carga)) ? $tmpDt->format('Y-m-d H:i:s') : null;
             $newDateAsString = $dt ? $dt->format('Y-m-d H:i:s') : null;
-            if ($currentDateAsString !== $newDateAsString) {
+            if ( ($currentDateAsString !== $newDateAsString) // normalized values don't match
+                || ($dt->format('Y-m-d H:i:s') === NULL) // or the entered value matches the default
+                 ) {
                 $this->fecha_carga = $newDateAsString;
                 $this->modifiedColumns[] = UsoBateriasBodegaPeer::FECHA_CARGA;
             }
@@ -492,7 +572,9 @@ abstract class BaseUsoBateriasBodega extends BaseObject implements Persistent
         if ($this->fecha_descanso !== null || $dt !== null) {
             $currentDateAsString = ($this->fecha_descanso !== null && $tmpDt = new DateTime($this->fecha_descanso)) ? $tmpDt->format('Y-m-d H:i:s') : null;
             $newDateAsString = $dt ? $dt->format('Y-m-d H:i:s') : null;
-            if ($currentDateAsString !== $newDateAsString) {
+            if ( ($currentDateAsString !== $newDateAsString) // normalized values don't match
+                || ($dt->format('Y-m-d H:i:s') === NULL) // or the entered value matches the default
+                 ) {
                 $this->fecha_descanso = $newDateAsString;
                 $this->modifiedColumns[] = UsoBateriasBodegaPeer::FECHA_DESCANSO;
             }
@@ -515,7 +597,9 @@ abstract class BaseUsoBateriasBodega extends BaseObject implements Persistent
         if ($this->fecha_salida !== null || $dt !== null) {
             $currentDateAsString = ($this->fecha_salida !== null && $tmpDt = new DateTime($this->fecha_salida)) ? $tmpDt->format('Y-m-d H:i:s') : null;
             $newDateAsString = $dt ? $dt->format('Y-m-d H:i:s') : null;
-            if ($currentDateAsString !== $newDateAsString) {
+            if ( ($currentDateAsString !== $newDateAsString) // normalized values don't match
+                || ($dt->format('Y-m-d H:i:s') === NULL) // or the entered value matches the default
+                 ) {
                 $this->fecha_salida = $newDateAsString;
                 $this->modifiedColumns[] = UsoBateriasBodegaPeer::FECHA_SALIDA;
             }
@@ -610,6 +694,31 @@ abstract class BaseUsoBateriasBodega extends BaseObject implements Persistent
     } // setUsuarioSalida()
 
     /**
+     * Sets the value of [fecha_original] column to a normalized version of the date/time value specified.
+     *
+     * @param mixed $v string, integer (timestamp), or DateTime value.
+     *               Empty strings are treated as null.
+     * @return UsoBateriasBodega The current object (for fluent API support)
+     */
+    public function setFechaOriginal($v)
+    {
+        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
+        if ($this->fecha_original !== null || $dt !== null) {
+            $currentDateAsString = ($this->fecha_original !== null && $tmpDt = new DateTime($this->fecha_original)) ? $tmpDt->format('Y-m-d H:i:s') : null;
+            $newDateAsString = $dt ? $dt->format('Y-m-d H:i:s') : null;
+            if ( ($currentDateAsString !== $newDateAsString) // normalized values don't match
+                || ($dt->format('Y-m-d H:i:s') === NULL) // or the entered value matches the default
+                 ) {
+                $this->fecha_original = $newDateAsString;
+                $this->modifiedColumns[] = UsoBateriasBodegaPeer::FECHA_ORIGINAL;
+            }
+        } // if either are not null
+
+
+        return $this;
+    } // setFechaOriginal()
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -619,6 +728,26 @@ abstract class BaseUsoBateriasBodega extends BaseObject implements Persistent
      */
     public function hasOnlyDefaultValues()
     {
+            if ($this->fecha_entrada !== NULL) {
+                return false;
+            }
+
+            if ($this->fecha_carga !== NULL) {
+                return false;
+            }
+
+            if ($this->fecha_descanso !== NULL) {
+                return false;
+            }
+
+            if ($this->fecha_salida !== NULL) {
+                return false;
+            }
+
+            if ($this->fecha_original !== NULL) {
+                return false;
+            }
+
         // otherwise, everything was equal, so return true
         return true;
     } // hasOnlyDefaultValues()
@@ -652,6 +781,7 @@ abstract class BaseUsoBateriasBodega extends BaseObject implements Persistent
             $this->usuario_carga = ($row[$startcol + 8] !== null) ? (int) $row[$startcol + 8] : null;
             $this->usuario_descanso = ($row[$startcol + 9] !== null) ? (int) $row[$startcol + 9] : null;
             $this->usuario_salida = ($row[$startcol + 10] !== null) ? (int) $row[$startcol + 10] : null;
+            $this->fecha_original = ($row[$startcol + 11] !== null) ? (string) $row[$startcol + 11] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -661,7 +791,7 @@ abstract class BaseUsoBateriasBodega extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 11; // 11 = UsoBateriasBodegaPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 12; // 12 = UsoBateriasBodegaPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating UsoBateriasBodega object", $e);
@@ -933,6 +1063,9 @@ abstract class BaseUsoBateriasBodega extends BaseObject implements Persistent
         if ($this->isColumnModified(UsoBateriasBodegaPeer::USUARIO_SALIDA)) {
             $modifiedColumns[':p' . $index++]  = '`usuario_salida`';
         }
+        if ($this->isColumnModified(UsoBateriasBodegaPeer::FECHA_ORIGINAL)) {
+            $modifiedColumns[':p' . $index++]  = '`fecha_original`';
+        }
 
         $sql = sprintf(
             'INSERT INTO `uso_baterias_bodega` (%s) VALUES (%s)',
@@ -976,6 +1109,9 @@ abstract class BaseUsoBateriasBodega extends BaseObject implements Persistent
                         break;
                     case '`usuario_salida`':
                         $stmt->bindValue($identifier, $this->usuario_salida, PDO::PARAM_INT);
+                        break;
+                    case '`fecha_original`':
+                        $stmt->bindValue($identifier, $this->fecha_original, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -1162,6 +1298,9 @@ abstract class BaseUsoBateriasBodega extends BaseObject implements Persistent
             case 10:
                 return $this->getUsuarioSalida();
                 break;
+            case 11:
+                return $this->getFechaOriginal();
+                break;
             default:
                 return null;
                 break;
@@ -1202,6 +1341,7 @@ abstract class BaseUsoBateriasBodega extends BaseObject implements Persistent
             $keys[8] => $this->getUsuarioCarga(),
             $keys[9] => $this->getUsuarioDescanso(),
             $keys[10] => $this->getUsuarioSalida(),
+            $keys[11] => $this->getFechaOriginal(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1282,6 +1422,9 @@ abstract class BaseUsoBateriasBodega extends BaseObject implements Persistent
             case 10:
                 $this->setUsuarioSalida($value);
                 break;
+            case 11:
+                $this->setFechaOriginal($value);
+                break;
         } // switch()
     }
 
@@ -1317,6 +1460,7 @@ abstract class BaseUsoBateriasBodega extends BaseObject implements Persistent
         if (array_key_exists($keys[8], $arr)) $this->setUsuarioCarga($arr[$keys[8]]);
         if (array_key_exists($keys[9], $arr)) $this->setUsuarioDescanso($arr[$keys[9]]);
         if (array_key_exists($keys[10], $arr)) $this->setUsuarioSalida($arr[$keys[10]]);
+        if (array_key_exists($keys[11], $arr)) $this->setFechaOriginal($arr[$keys[11]]);
     }
 
     /**
@@ -1339,6 +1483,7 @@ abstract class BaseUsoBateriasBodega extends BaseObject implements Persistent
         if ($this->isColumnModified(UsoBateriasBodegaPeer::USUARIO_CARGA)) $criteria->add(UsoBateriasBodegaPeer::USUARIO_CARGA, $this->usuario_carga);
         if ($this->isColumnModified(UsoBateriasBodegaPeer::USUARIO_DESCANSO)) $criteria->add(UsoBateriasBodegaPeer::USUARIO_DESCANSO, $this->usuario_descanso);
         if ($this->isColumnModified(UsoBateriasBodegaPeer::USUARIO_SALIDA)) $criteria->add(UsoBateriasBodegaPeer::USUARIO_SALIDA, $this->usuario_salida);
+        if ($this->isColumnModified(UsoBateriasBodegaPeer::FECHA_ORIGINAL)) $criteria->add(UsoBateriasBodegaPeer::FECHA_ORIGINAL, $this->fecha_original);
 
         return $criteria;
     }
@@ -1412,6 +1557,7 @@ abstract class BaseUsoBateriasBodega extends BaseObject implements Persistent
         $copyObj->setUsuarioCarga($this->getUsuarioCarga());
         $copyObj->setUsuarioDescanso($this->getUsuarioDescanso());
         $copyObj->setUsuarioSalida($this->getUsuarioSalida());
+        $copyObj->setFechaOriginal($this->getFechaOriginal());
 
         if ($deepCopy && !$this->startCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -1590,10 +1736,12 @@ abstract class BaseUsoBateriasBodega extends BaseObject implements Persistent
         $this->usuario_carga = null;
         $this->usuario_descanso = null;
         $this->usuario_salida = null;
+        $this->fecha_original = null;
         $this->alreadyInSave = false;
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;
         $this->clearAllReferences();
+        $this->applyDefaultValues();
         $this->resetModified();
         $this->setNew(true);
         $this->setDeleted(false);

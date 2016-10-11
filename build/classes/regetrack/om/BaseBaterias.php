@@ -143,12 +143,6 @@ abstract class BaseBaterias extends BaseObject implements Persistent
     protected $collDeshabilitabtsPartial;
 
     /**
-     * @var        PropelObjectCollection|Limbo[] Collection to store aggregation of Limbo objects.
-     */
-    protected $collLimbos;
-    protected $collLimbosPartial;
-
-    /**
      * @var        PropelObjectCollection|MontacargasBaterias[] Collection to store aggregation of MontacargasBaterias objects.
      */
     protected $collMontacargasBateriass;
@@ -197,12 +191,6 @@ abstract class BaseBaterias extends BaseObject implements Persistent
      * @var		PropelObjectCollection
      */
     protected $deshabilitabtsScheduledForDeletion = null;
-
-    /**
-     * An array of objects scheduled for deletion.
-     * @var		PropelObjectCollection
-     */
-    protected $limbosScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -865,8 +853,6 @@ abstract class BaseBaterias extends BaseObject implements Persistent
 
             $this->collDeshabilitabts = null;
 
-            $this->collLimbos = null;
-
             $this->collMontacargasBateriass = null;
 
             $this->collUsoBateriasBodegas = null;
@@ -1037,23 +1023,6 @@ abstract class BaseBaterias extends BaseObject implements Persistent
 
             if ($this->collDeshabilitabts !== null) {
                 foreach ($this->collDeshabilitabts as $referrerFK) {
-                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
-                        $affectedRows += $referrerFK->save($con);
-                    }
-                }
-            }
-
-            if ($this->limbosScheduledForDeletion !== null) {
-                if (!$this->limbosScheduledForDeletion->isEmpty()) {
-                    LimboQuery::create()
-                        ->filterByPrimaryKeys($this->limbosScheduledForDeletion->getPrimaryKeys(false))
-                        ->delete($con);
-                    $this->limbosScheduledForDeletion = null;
-                }
-            }
-
-            if ($this->collLimbos !== null) {
-                foreach ($this->collLimbos as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -1371,14 +1340,6 @@ abstract class BaseBaterias extends BaseObject implements Persistent
                     }
                 }
 
-                if ($this->collLimbos !== null) {
-                    foreach ($this->collLimbos as $referrerFK) {
-                        if (!$referrerFK->validate($columns)) {
-                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
-                        }
-                    }
-                }
-
                 if ($this->collMontacargasBateriass !== null) {
                     foreach ($this->collMontacargasBateriass as $referrerFK) {
                         if (!$referrerFK->validate($columns)) {
@@ -1546,9 +1507,6 @@ abstract class BaseBaterias extends BaseObject implements Persistent
             }
             if (null !== $this->collDeshabilitabts) {
                 $result['Deshabilitabts'] = $this->collDeshabilitabts->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
-            }
-            if (null !== $this->collLimbos) {
-                $result['Limbos'] = $this->collLimbos->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collMontacargasBateriass) {
                 $result['MontacargasBateriass'] = $this->collMontacargasBateriass->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
@@ -1806,12 +1764,6 @@ abstract class BaseBaterias extends BaseObject implements Persistent
                 }
             }
 
-            foreach ($this->getLimbos() as $relObj) {
-                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-                    $copyObj->addLimbo($relObj->copy($deepCopy));
-                }
-            }
-
             foreach ($this->getMontacargasBateriass() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addMontacargasBaterias($relObj->copy($deepCopy));
@@ -1948,9 +1900,6 @@ abstract class BaseBaterias extends BaseObject implements Persistent
         }
         if ('Deshabilitabt' == $relationName) {
             $this->initDeshabilitabts();
-        }
-        if ('Limbo' == $relationName) {
-            $this->initLimbos();
         }
         if ('MontacargasBaterias' == $relationName) {
             $this->initMontacargasBateriass();
@@ -2433,231 +2382,6 @@ abstract class BaseBaterias extends BaseObject implements Persistent
             }
             $this->deshabilitabtsScheduledForDeletion[]= clone $deshabilitabt;
             $deshabilitabt->setBaterias(null);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Clears out the collLimbos collection
-     *
-     * This does not modify the database; however, it will remove any associated objects, causing
-     * them to be refetched by subsequent calls to accessor method.
-     *
-     * @return Baterias The current object (for fluent API support)
-     * @see        addLimbos()
-     */
-    public function clearLimbos()
-    {
-        $this->collLimbos = null; // important to set this to null since that means it is uninitialized
-        $this->collLimbosPartial = null;
-
-        return $this;
-    }
-
-    /**
-     * reset is the collLimbos collection loaded partially
-     *
-     * @return void
-     */
-    public function resetPartialLimbos($v = true)
-    {
-        $this->collLimbosPartial = $v;
-    }
-
-    /**
-     * Initializes the collLimbos collection.
-     *
-     * By default this just sets the collLimbos collection to an empty array (like clearcollLimbos());
-     * however, you may wish to override this method in your stub class to provide setting appropriate
-     * to your application -- for example, setting the initial array to the values stored in database.
-     *
-     * @param boolean $overrideExisting If set to true, the method call initializes
-     *                                        the collection even if it is not empty
-     *
-     * @return void
-     */
-    public function initLimbos($overrideExisting = true)
-    {
-        if (null !== $this->collLimbos && !$overrideExisting) {
-            return;
-        }
-        $this->collLimbos = new PropelObjectCollection();
-        $this->collLimbos->setModel('Limbo');
-    }
-
-    /**
-     * Gets an array of Limbo objects which contain a foreign key that references this object.
-     *
-     * If the $criteria is not null, it is used to always fetch the results from the database.
-     * Otherwise the results are fetched from the database the first time, then cached.
-     * Next time the same method is called without $criteria, the cached collection is returned.
-     * If this Baterias is new, it will return
-     * an empty collection or the current collection; the criteria is ignored on a new object.
-     *
-     * @param Criteria $criteria optional Criteria object to narrow the query
-     * @param PropelPDO $con optional connection object
-     * @return PropelObjectCollection|Limbo[] List of Limbo objects
-     * @throws PropelException
-     */
-    public function getLimbos($criteria = null, PropelPDO $con = null)
-    {
-        $partial = $this->collLimbosPartial && !$this->isNew();
-        if (null === $this->collLimbos || null !== $criteria  || $partial) {
-            if ($this->isNew() && null === $this->collLimbos) {
-                // return empty collection
-                $this->initLimbos();
-            } else {
-                $collLimbos = LimboQuery::create(null, $criteria)
-                    ->filterByBaterias($this)
-                    ->find($con);
-                if (null !== $criteria) {
-                    if (false !== $this->collLimbosPartial && count($collLimbos)) {
-                      $this->initLimbos(false);
-
-                      foreach ($collLimbos as $obj) {
-                        if (false == $this->collLimbos->contains($obj)) {
-                          $this->collLimbos->append($obj);
-                        }
-                      }
-
-                      $this->collLimbosPartial = true;
-                    }
-
-                    $collLimbos->getInternalIterator()->rewind();
-
-                    return $collLimbos;
-                }
-
-                if ($partial && $this->collLimbos) {
-                    foreach ($this->collLimbos as $obj) {
-                        if ($obj->isNew()) {
-                            $collLimbos[] = $obj;
-                        }
-                    }
-                }
-
-                $this->collLimbos = $collLimbos;
-                $this->collLimbosPartial = false;
-            }
-        }
-
-        return $this->collLimbos;
-    }
-
-    /**
-     * Sets a collection of Limbo objects related by a one-to-many relationship
-     * to the current object.
-     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
-     * and new objects from the given Propel collection.
-     *
-     * @param PropelCollection $limbos A Propel collection.
-     * @param PropelPDO $con Optional connection object
-     * @return Baterias The current object (for fluent API support)
-     */
-    public function setLimbos(PropelCollection $limbos, PropelPDO $con = null)
-    {
-        $limbosToDelete = $this->getLimbos(new Criteria(), $con)->diff($limbos);
-
-
-        $this->limbosScheduledForDeletion = $limbosToDelete;
-
-        foreach ($limbosToDelete as $limboRemoved) {
-            $limboRemoved->setBaterias(null);
-        }
-
-        $this->collLimbos = null;
-        foreach ($limbos as $limbo) {
-            $this->addLimbo($limbo);
-        }
-
-        $this->collLimbos = $limbos;
-        $this->collLimbosPartial = false;
-
-        return $this;
-    }
-
-    /**
-     * Returns the number of related Limbo objects.
-     *
-     * @param Criteria $criteria
-     * @param boolean $distinct
-     * @param PropelPDO $con
-     * @return int             Count of related Limbo objects.
-     * @throws PropelException
-     */
-    public function countLimbos(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
-    {
-        $partial = $this->collLimbosPartial && !$this->isNew();
-        if (null === $this->collLimbos || null !== $criteria || $partial) {
-            if ($this->isNew() && null === $this->collLimbos) {
-                return 0;
-            }
-
-            if ($partial && !$criteria) {
-                return count($this->getLimbos());
-            }
-            $query = LimboQuery::create(null, $criteria);
-            if ($distinct) {
-                $query->distinct();
-            }
-
-            return $query
-                ->filterByBaterias($this)
-                ->count($con);
-        }
-
-        return count($this->collLimbos);
-    }
-
-    /**
-     * Method called to associate a Limbo object to this object
-     * through the Limbo foreign key attribute.
-     *
-     * @param    Limbo $l Limbo
-     * @return Baterias The current object (for fluent API support)
-     */
-    public function addLimbo(Limbo $l)
-    {
-        if ($this->collLimbos === null) {
-            $this->initLimbos();
-            $this->collLimbosPartial = true;
-        }
-
-        if (!in_array($l, $this->collLimbos->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
-            $this->doAddLimbo($l);
-
-            if ($this->limbosScheduledForDeletion and $this->limbosScheduledForDeletion->contains($l)) {
-                $this->limbosScheduledForDeletion->remove($this->limbosScheduledForDeletion->search($l));
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param	Limbo $limbo The limbo object to add.
-     */
-    protected function doAddLimbo($limbo)
-    {
-        $this->collLimbos[]= $limbo;
-        $limbo->setBaterias($this);
-    }
-
-    /**
-     * @param	Limbo $limbo The limbo object to remove.
-     * @return Baterias The current object (for fluent API support)
-     */
-    public function removeLimbo($limbo)
-    {
-        if ($this->getLimbos()->contains($limbo)) {
-            $this->collLimbos->remove($this->collLimbos->search($limbo));
-            if (null === $this->limbosScheduledForDeletion) {
-                $this->limbosScheduledForDeletion = clone $this->collLimbos;
-                $this->limbosScheduledForDeletion->clear();
-            }
-            $this->limbosScheduledForDeletion[]= clone $limbo;
-            $limbo->setBaterias(null);
         }
 
         return $this;
@@ -3516,11 +3240,6 @@ abstract class BaseBaterias extends BaseObject implements Persistent
                     $o->clearAllReferences($deep);
                 }
             }
-            if ($this->collLimbos) {
-                foreach ($this->collLimbos as $o) {
-                    $o->clearAllReferences($deep);
-                }
-            }
             if ($this->collMontacargasBateriass) {
                 foreach ($this->collMontacargasBateriass as $o) {
                     $o->clearAllReferences($deep);
@@ -3551,10 +3270,6 @@ abstract class BaseBaterias extends BaseObject implements Persistent
             $this->collDeshabilitabts->clearIterator();
         }
         $this->collDeshabilitabts = null;
-        if ($this->collLimbos instanceof PropelCollection) {
-            $this->collLimbos->clearIterator();
-        }
-        $this->collLimbos = null;
         if ($this->collMontacargasBateriass instanceof PropelCollection) {
             $this->collMontacargasBateriass->clearIterator();
         }

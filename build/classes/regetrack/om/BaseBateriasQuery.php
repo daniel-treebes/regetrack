@@ -56,10 +56,6 @@
  * @method BateriasQuery rightJoinDeshabilitabt($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Deshabilitabt relation
  * @method BateriasQuery innerJoinDeshabilitabt($relationAlias = null) Adds a INNER JOIN clause to the query using the Deshabilitabt relation
  *
- * @method BateriasQuery leftJoinLimbo($relationAlias = null) Adds a LEFT JOIN clause to the query using the Limbo relation
- * @method BateriasQuery rightJoinLimbo($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Limbo relation
- * @method BateriasQuery innerJoinLimbo($relationAlias = null) Adds a INNER JOIN clause to the query using the Limbo relation
- *
  * @method BateriasQuery leftJoinMontacargasBaterias($relationAlias = null) Adds a LEFT JOIN clause to the query using the MontacargasBaterias relation
  * @method BateriasQuery rightJoinMontacargasBaterias($relationAlias = null) Adds a RIGHT JOIN clause to the query using the MontacargasBaterias relation
  * @method BateriasQuery innerJoinMontacargasBaterias($relationAlias = null) Adds a INNER JOIN clause to the query using the MontacargasBaterias relation
@@ -1069,80 +1065,6 @@ abstract class BaseBateriasQuery extends ModelCriteria
         return $this
             ->joinDeshabilitabt($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'Deshabilitabt', 'DeshabilitabtQuery');
-    }
-
-    /**
-     * Filter the query by a related Limbo object
-     *
-     * @param   Limbo|PropelObjectCollection $limbo  the related object to use as filter
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return                 BateriasQuery The current query, for fluid interface
-     * @throws PropelException - if the provided filter is invalid.
-     */
-    public function filterByLimbo($limbo, $comparison = null)
-    {
-        if ($limbo instanceof Limbo) {
-            return $this
-                ->addUsingAlias(BateriasPeer::IDBATERIAS, $limbo->getBt(), $comparison);
-        } elseif ($limbo instanceof PropelObjectCollection) {
-            return $this
-                ->useLimboQuery()
-                ->filterByPrimaryKeys($limbo->getPrimaryKeys())
-                ->endUse();
-        } else {
-            throw new PropelException('filterByLimbo() only accepts arguments of type Limbo or PropelCollection');
-        }
-    }
-
-    /**
-     * Adds a JOIN clause to the query using the Limbo relation
-     *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return BateriasQuery The current query, for fluid interface
-     */
-    public function joinLimbo($relationAlias = null, $joinType = Criteria::INNER_JOIN)
-    {
-        $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('Limbo');
-
-        // create a ModelJoin object for this join
-        $join = new ModelJoin();
-        $join->setJoinType($joinType);
-        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
-        if ($previousJoin = $this->getPreviousJoin()) {
-            $join->setPreviousJoin($previousJoin);
-        }
-
-        // add the ModelJoin to the current object
-        if ($relationAlias) {
-            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
-            $this->addJoinObject($join, $relationAlias);
-        } else {
-            $this->addJoinObject($join, 'Limbo');
-        }
-
-        return $this;
-    }
-
-    /**
-     * Use the Limbo relation Limbo object
-     *
-     * @see       useQuery()
-     *
-     * @param     string $relationAlias optional alias for the relation,
-     *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return   LimboQuery A secondary query class using the current class as primary query
-     */
-    public function useLimboQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
-    {
-        return $this
-            ->joinLimbo($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'Limbo', 'LimboQuery');
     }
 
     /**

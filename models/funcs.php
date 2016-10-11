@@ -1464,6 +1464,7 @@ function eficiencia($modulo,$estatus,$divapintar,$sucursal_activa,$idapintar='to
 		$fini='fecha_descanso';
 		$ffin='fecha_salida';
 	}
+        
 	
         if($modulo == 'cg'){
             $qwhere='m.idcargadores=u.'.$modulo.' AND m.idsucursal ='.$sucursal_activa;
@@ -1504,9 +1505,7 @@ function eficiencia($modulo,$estatus,$divapintar,$sucursal_activa,$idapintar='to
         
     $respuesta = $mysqli->query($query);
 
-    if(!$respuesta){
-        echo '<pre>';var_dump($qwhere);echo  '</pre>';
-    }
+ 
 	$query7d="
 		select
 			$notodas
@@ -1540,7 +1539,7 @@ function eficiencia($modulo,$estatus,$divapintar,$sucursal_activa,$idapintar='to
 		
 		$promedio=round($regresa['promedio'],2);
 
-		$titulo='HORAS PROMEDIO EN '.strtoupper($estatus).' DE';
+		$titulo='HRS PROMEDIO EN '.strtoupper($estatus).' DE';
 		if ($modulo=='bt'){
 			if ($idapintar=='todo') $titulo.=' BATERIAS';
 			else $titulo.=' LA BATERIA '.$nombreid;

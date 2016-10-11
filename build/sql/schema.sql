@@ -210,30 +210,6 @@ CREATE TABLE `empresa`
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
--- limbo
--- ---------------------------------------------------------------------
-
-DROP TABLE IF EXISTS `limbo`;
-
-CREATE TABLE `limbo`
-(
-    `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `bt` INTEGER NOT NULL,
-    `motivo` TEXT NOT NULL,
-    `fecha_entrada` DATETIME NOT NULL,
-    `fecha_salida` DATETIME NOT NULL,
-    `usuario_entrada` INTEGER,
-    `usuario_salida` INTEGER,
-    PRIMARY KEY (`id`),
-    INDEX `index2` (`bt`),
-    CONSTRAINT `deshabilitabt_bt0`
-        FOREIGN KEY (`bt`)
-        REFERENCES `baterias` (`idbaterias`)
-        ON UPDATE CASCADE
-        ON DELETE CASCADE
-) ENGINE=InnoDB;
-
--- ---------------------------------------------------------------------
 -- montacargas
 -- ---------------------------------------------------------------------
 
@@ -406,14 +382,15 @@ CREATE TABLE `uso_baterias_bodega`
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `bg` INTEGER NOT NULL,
     `bt` INTEGER NOT NULL,
-    `fecha_entrada` DATETIME,
-    `fecha_carga` DATETIME NOT NULL,
-    `fecha_descanso` DATETIME NOT NULL,
-    `fecha_salida` DATETIME,
+    `fecha_entrada` DATETIME DEFAULT '0000-00-00 00:00:00' NOT NULL,
+    `fecha_carga` DATETIME DEFAULT '0000-00-00 00:00:00' NOT NULL,
+    `fecha_descanso` DATETIME DEFAULT '0000-00-00 00:00:00' NOT NULL,
+    `fecha_salida` DATETIME DEFAULT '0000-00-00 00:00:00' NOT NULL,
     `usuario_entrada` INTEGER,
     `usuario_carga` INTEGER,
     `usuario_descanso` INTEGER,
     `usuario_salida` INTEGER,
+    `fecha_original` DATETIME DEFAULT '0000-00-00 00:00:00' NOT NULL,
     PRIMARY KEY (`id`),
     INDEX `bg` (`bg`),
     INDEX `bt` (`bt`),
@@ -443,7 +420,7 @@ CREATE TABLE `uso_baterias_montacargas`
     `mc` INTEGER NOT NULL,
     `bt` INTEGER NOT NULL,
     `fecha_entrada` DATETIME NOT NULL,
-    `fecha_salida` DATETIME,
+    `fecha_salida` DATETIME NOT NULL,
     `usuario_entrada` INTEGER,
     `usuario_salida` INTEGER,
     PRIMARY KEY (`id`),

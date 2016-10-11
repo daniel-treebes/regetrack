@@ -24,13 +24,13 @@ abstract class BaseUsoBateriasBodegaPeer
     const TM_CLASS = 'UsoBateriasBodegaTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 11;
+    const NUM_COLUMNS = 12;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 11;
+    const NUM_HYDRATE_COLUMNS = 12;
 
     /** the column name for the id field */
     const ID = 'uso_baterias_bodega.id';
@@ -65,6 +65,9 @@ abstract class BaseUsoBateriasBodegaPeer
     /** the column name for the usuario_salida field */
     const USUARIO_SALIDA = 'uso_baterias_bodega.usuario_salida';
 
+    /** the column name for the fecha_original field */
+    const FECHA_ORIGINAL = 'uso_baterias_bodega.fecha_original';
+
     /** The default string format for model objects of the related table **/
     const DEFAULT_STRING_FORMAT = 'YAML';
 
@@ -84,12 +87,12 @@ abstract class BaseUsoBateriasBodegaPeer
      * e.g. UsoBateriasBodegaPeer::$fieldNames[UsoBateriasBodegaPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Id', 'Bg', 'Bt', 'FechaEntrada', 'FechaCarga', 'FechaDescanso', 'FechaSalida', 'UsuarioEntrada', 'UsuarioCarga', 'UsuarioDescanso', 'UsuarioSalida', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'bg', 'bt', 'fechaEntrada', 'fechaCarga', 'fechaDescanso', 'fechaSalida', 'usuarioEntrada', 'usuarioCarga', 'usuarioDescanso', 'usuarioSalida', ),
-        BasePeer::TYPE_COLNAME => array (UsoBateriasBodegaPeer::ID, UsoBateriasBodegaPeer::BG, UsoBateriasBodegaPeer::BT, UsoBateriasBodegaPeer::FECHA_ENTRADA, UsoBateriasBodegaPeer::FECHA_CARGA, UsoBateriasBodegaPeer::FECHA_DESCANSO, UsoBateriasBodegaPeer::FECHA_SALIDA, UsoBateriasBodegaPeer::USUARIO_ENTRADA, UsoBateriasBodegaPeer::USUARIO_CARGA, UsoBateriasBodegaPeer::USUARIO_DESCANSO, UsoBateriasBodegaPeer::USUARIO_SALIDA, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'BG', 'BT', 'FECHA_ENTRADA', 'FECHA_CARGA', 'FECHA_DESCANSO', 'FECHA_SALIDA', 'USUARIO_ENTRADA', 'USUARIO_CARGA', 'USUARIO_DESCANSO', 'USUARIO_SALIDA', ),
-        BasePeer::TYPE_FIELDNAME => array ('id', 'bg', 'bt', 'fecha_entrada', 'fecha_carga', 'fecha_descanso', 'fecha_salida', 'usuario_entrada', 'usuario_carga', 'usuario_descanso', 'usuario_salida', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, )
+        BasePeer::TYPE_PHPNAME => array ('Id', 'Bg', 'Bt', 'FechaEntrada', 'FechaCarga', 'FechaDescanso', 'FechaSalida', 'UsuarioEntrada', 'UsuarioCarga', 'UsuarioDescanso', 'UsuarioSalida', 'FechaOriginal', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'bg', 'bt', 'fechaEntrada', 'fechaCarga', 'fechaDescanso', 'fechaSalida', 'usuarioEntrada', 'usuarioCarga', 'usuarioDescanso', 'usuarioSalida', 'fechaOriginal', ),
+        BasePeer::TYPE_COLNAME => array (UsoBateriasBodegaPeer::ID, UsoBateriasBodegaPeer::BG, UsoBateriasBodegaPeer::BT, UsoBateriasBodegaPeer::FECHA_ENTRADA, UsoBateriasBodegaPeer::FECHA_CARGA, UsoBateriasBodegaPeer::FECHA_DESCANSO, UsoBateriasBodegaPeer::FECHA_SALIDA, UsoBateriasBodegaPeer::USUARIO_ENTRADA, UsoBateriasBodegaPeer::USUARIO_CARGA, UsoBateriasBodegaPeer::USUARIO_DESCANSO, UsoBateriasBodegaPeer::USUARIO_SALIDA, UsoBateriasBodegaPeer::FECHA_ORIGINAL, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'BG', 'BT', 'FECHA_ENTRADA', 'FECHA_CARGA', 'FECHA_DESCANSO', 'FECHA_SALIDA', 'USUARIO_ENTRADA', 'USUARIO_CARGA', 'USUARIO_DESCANSO', 'USUARIO_SALIDA', 'FECHA_ORIGINAL', ),
+        BasePeer::TYPE_FIELDNAME => array ('id', 'bg', 'bt', 'fecha_entrada', 'fecha_carga', 'fecha_descanso', 'fecha_salida', 'usuario_entrada', 'usuario_carga', 'usuario_descanso', 'usuario_salida', 'fecha_original', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, )
     );
 
     /**
@@ -99,12 +102,12 @@ abstract class BaseUsoBateriasBodegaPeer
      * e.g. UsoBateriasBodegaPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Bg' => 1, 'Bt' => 2, 'FechaEntrada' => 3, 'FechaCarga' => 4, 'FechaDescanso' => 5, 'FechaSalida' => 6, 'UsuarioEntrada' => 7, 'UsuarioCarga' => 8, 'UsuarioDescanso' => 9, 'UsuarioSalida' => 10, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'bg' => 1, 'bt' => 2, 'fechaEntrada' => 3, 'fechaCarga' => 4, 'fechaDescanso' => 5, 'fechaSalida' => 6, 'usuarioEntrada' => 7, 'usuarioCarga' => 8, 'usuarioDescanso' => 9, 'usuarioSalida' => 10, ),
-        BasePeer::TYPE_COLNAME => array (UsoBateriasBodegaPeer::ID => 0, UsoBateriasBodegaPeer::BG => 1, UsoBateriasBodegaPeer::BT => 2, UsoBateriasBodegaPeer::FECHA_ENTRADA => 3, UsoBateriasBodegaPeer::FECHA_CARGA => 4, UsoBateriasBodegaPeer::FECHA_DESCANSO => 5, UsoBateriasBodegaPeer::FECHA_SALIDA => 6, UsoBateriasBodegaPeer::USUARIO_ENTRADA => 7, UsoBateriasBodegaPeer::USUARIO_CARGA => 8, UsoBateriasBodegaPeer::USUARIO_DESCANSO => 9, UsoBateriasBodegaPeer::USUARIO_SALIDA => 10, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'BG' => 1, 'BT' => 2, 'FECHA_ENTRADA' => 3, 'FECHA_CARGA' => 4, 'FECHA_DESCANSO' => 5, 'FECHA_SALIDA' => 6, 'USUARIO_ENTRADA' => 7, 'USUARIO_CARGA' => 8, 'USUARIO_DESCANSO' => 9, 'USUARIO_SALIDA' => 10, ),
-        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'bg' => 1, 'bt' => 2, 'fecha_entrada' => 3, 'fecha_carga' => 4, 'fecha_descanso' => 5, 'fecha_salida' => 6, 'usuario_entrada' => 7, 'usuario_carga' => 8, 'usuario_descanso' => 9, 'usuario_salida' => 10, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, )
+        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Bg' => 1, 'Bt' => 2, 'FechaEntrada' => 3, 'FechaCarga' => 4, 'FechaDescanso' => 5, 'FechaSalida' => 6, 'UsuarioEntrada' => 7, 'UsuarioCarga' => 8, 'UsuarioDescanso' => 9, 'UsuarioSalida' => 10, 'FechaOriginal' => 11, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'bg' => 1, 'bt' => 2, 'fechaEntrada' => 3, 'fechaCarga' => 4, 'fechaDescanso' => 5, 'fechaSalida' => 6, 'usuarioEntrada' => 7, 'usuarioCarga' => 8, 'usuarioDescanso' => 9, 'usuarioSalida' => 10, 'fechaOriginal' => 11, ),
+        BasePeer::TYPE_COLNAME => array (UsoBateriasBodegaPeer::ID => 0, UsoBateriasBodegaPeer::BG => 1, UsoBateriasBodegaPeer::BT => 2, UsoBateriasBodegaPeer::FECHA_ENTRADA => 3, UsoBateriasBodegaPeer::FECHA_CARGA => 4, UsoBateriasBodegaPeer::FECHA_DESCANSO => 5, UsoBateriasBodegaPeer::FECHA_SALIDA => 6, UsoBateriasBodegaPeer::USUARIO_ENTRADA => 7, UsoBateriasBodegaPeer::USUARIO_CARGA => 8, UsoBateriasBodegaPeer::USUARIO_DESCANSO => 9, UsoBateriasBodegaPeer::USUARIO_SALIDA => 10, UsoBateriasBodegaPeer::FECHA_ORIGINAL => 11, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'BG' => 1, 'BT' => 2, 'FECHA_ENTRADA' => 3, 'FECHA_CARGA' => 4, 'FECHA_DESCANSO' => 5, 'FECHA_SALIDA' => 6, 'USUARIO_ENTRADA' => 7, 'USUARIO_CARGA' => 8, 'USUARIO_DESCANSO' => 9, 'USUARIO_SALIDA' => 10, 'FECHA_ORIGINAL' => 11, ),
+        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'bg' => 1, 'bt' => 2, 'fecha_entrada' => 3, 'fecha_carga' => 4, 'fecha_descanso' => 5, 'fecha_salida' => 6, 'usuario_entrada' => 7, 'usuario_carga' => 8, 'usuario_descanso' => 9, 'usuario_salida' => 10, 'fecha_original' => 11, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, )
     );
 
     /**
@@ -189,6 +192,7 @@ abstract class BaseUsoBateriasBodegaPeer
             $criteria->addSelectColumn(UsoBateriasBodegaPeer::USUARIO_CARGA);
             $criteria->addSelectColumn(UsoBateriasBodegaPeer::USUARIO_DESCANSO);
             $criteria->addSelectColumn(UsoBateriasBodegaPeer::USUARIO_SALIDA);
+            $criteria->addSelectColumn(UsoBateriasBodegaPeer::FECHA_ORIGINAL);
         } else {
             $criteria->addSelectColumn($alias . '.id');
             $criteria->addSelectColumn($alias . '.bg');
@@ -201,6 +205,7 @@ abstract class BaseUsoBateriasBodegaPeer
             $criteria->addSelectColumn($alias . '.usuario_carga');
             $criteria->addSelectColumn($alias . '.usuario_descanso');
             $criteria->addSelectColumn($alias . '.usuario_salida');
+            $criteria->addSelectColumn($alias . '.fecha_original');
         }
     }
 

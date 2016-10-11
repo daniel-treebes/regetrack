@@ -41,14 +41,15 @@ class UsoBateriasBodegaTableMap extends TableMap
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
         $this->addForeignKey('bg', 'Bg', 'INTEGER', 'bodegas', 'id', true, null, null);
         $this->addForeignKey('bt', 'Bt', 'INTEGER', 'baterias', 'idbaterias', true, null, null);
-        $this->addColumn('fecha_entrada', 'FechaEntrada', 'TIMESTAMP', false, null, null);
-        $this->addColumn('fecha_carga', 'FechaCarga', 'TIMESTAMP', true, null, null);
-        $this->addColumn('fecha_descanso', 'FechaDescanso', 'TIMESTAMP', true, null, null);
-        $this->addColumn('fecha_salida', 'FechaSalida', 'TIMESTAMP', false, null, null);
+        $this->addColumn('fecha_entrada', 'FechaEntrada', 'TIMESTAMP', true, null, '0000-00-00 00:00:00');
+        $this->addColumn('fecha_carga', 'FechaCarga', 'TIMESTAMP', true, null, '0000-00-00 00:00:00');
+        $this->addColumn('fecha_descanso', 'FechaDescanso', 'TIMESTAMP', true, null, '0000-00-00 00:00:00');
+        $this->addColumn('fecha_salida', 'FechaSalida', 'TIMESTAMP', true, null, '0000-00-00 00:00:00');
         $this->addColumn('usuario_entrada', 'UsuarioEntrada', 'INTEGER', false, null, null);
         $this->addColumn('usuario_carga', 'UsuarioCarga', 'INTEGER', false, null, null);
         $this->addColumn('usuario_descanso', 'UsuarioDescanso', 'INTEGER', false, null, null);
         $this->addColumn('usuario_salida', 'UsuarioSalida', 'INTEGER', false, null, null);
+        $this->addColumn('fecha_original', 'FechaOriginal', 'TIMESTAMP', true, null, '0000-00-00 00:00:00');
         // validators
     } // initialize()
 

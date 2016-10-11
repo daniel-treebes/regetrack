@@ -72,28 +72,23 @@ $cargadores_desh = DeshabilitacgQuery::create()->filterById($cargadores_desh_arr
 $cargadores_desh_total = $cargadores_desh->count();
 
 //--BODEGAS---
-$bodega = CargadoresQuery::create()->filterByCargadoresTipo('Bodega')->filterByIdsucursal($loggedInUser->sucursales)->findOne();
-$bodegas= BodegasQuery::create()->filterByCg($bodega->getIdcargadores())->find();
-
-$bodegas_total = $bodegas->count();
-
-
-$cargadores_desh_query = "
-    SELECT id 
-    FROM regetrac_sistemav2.deshabilitacg 
-    JOIN cargadores ON deshabilitacg.cg = cargadores.idcargadores
-    WHERE fecha_salida = '0000-00-00 00:00:00'  AND cargadores.idsucursal IN (".$loggedInUser->sucursales.") ;
+$bodegas_query = "
+    SELECT * FROM uso_baterias_bodega 
+    JOIN bodegas ON uso_baterias_bodega.bg = bodegas.id
+    JOIN cargadores ON cargadores.idcargadores = bodegas.cg
+    WHERE cargadores.cargadores_tipo = 'Bodega' AND uso_baterias_bodega.fecha_salida = '0000-00-00 00:00:00' AND cargadores.idsucursal IN (".$loggedInUser->sucursales.") ;
 ";
-
-$resultado = $mysqli->query($cargadores_desh_query);
-
-$cargadores_desh_arr = array();
+$resultado = $mysqli->query($bodegas_query);
+$bodegas_arr = array();
 while( $fila = $resultado->fetch_array()){
-    $cargadores_desh_arr[] = $fila['id']; // Inside while loop
+    $bodegas_arr[] = $fila['id']; // Inside while loop
 }
- 
-$cargadores_desh = DeshabilitacgQuery::create()->filterById($cargadores_desh_arr)->find();
-$cargadores_desh_total = $cargadores_desh->count();
+
+
+$bodegas_uso = CargadoresQuery::create()->filterByIdcargadores($bodegas_arr)->find();
+$bodegas_uso_total = $bodegas_uso->count();
+
+
 
 
 ?>
@@ -150,6 +145,7 @@ $cargadores_desh_total = $cargadores_desh->count();
     #tablero .number{
         font-size: 50px;
         text-align: center;
+        font-weight: bold;
         
     }
     #tablero .number span{
@@ -170,6 +166,10 @@ $cargadores_desh_total = $cargadores_desh->count();
             display: block !important;
         }
     }
+    .highcharts-axis-title{
+        font-size: 9px !important;
+        font-weight: bold;
+    }
 </style>
 <script src="rgraph/RGraph.common.core.js" ></script>
 <script src="rgraph/RGraph.meter.js" ></script>
@@ -184,6 +184,28 @@ $cargadores_desh_total = $cargadores_desh->count();
 <div class="row">
     <div class="col-md-12">
         <?php  require_once("tema/comun/topcontenedor.php");?>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-3">
+        <!--div id="container-speed" class="visores" style=" height: 180px; float: left"></div-->
+        <div id="eficienciaBTU" class="visores" style="height: 180px;"> </div>
+       
+    </div>
+    <div class="col-sm-3">
+        <!--div id="container-speed" class="visores" style=" height: 180px; float: left"></div-->
+        <div id="eficienciaBTC" class="visores" style="height: 180px;"> </div>
+       
+    </div>
+    <div class="col-sm-3">
+        <!--div id="container-speed" class="visores" style=" height: 180px; float: left"></div-->
+        <div id="eficienciaBTD" class="visores" style="height: 180px;"> </div>
+       
+    </div>
+    <div class="col-sm-3">
+        <!--div id="container-speed" class="visores" style=" height: 180px; float: left"></div-->
+        <div id="" class="visores" style="height: 180px;"> </div>
+       
     </div>
 </div>
 <div id="tablero">
@@ -209,15 +231,15 @@ $cargadores_desh_total = $cargadores_desh->count();
         </div>
         <div class="col-sm-2 number">
             <h3 class="tablero_head_movil" style="display:none">Total</h3>
-            <h1 style="color:green"><?php echo $montacargas_total?></h1>
+            <h1 style="color:green;font-weight: bold"><?php echo $montacargas_total?></h1>
         </div>
         <div class="col-sm-3 number">
             <h3 class="tablero_head_movil" style="display:none">Deshabilitados</h3>
-            <h1 style="color:red"><?php echo $montacargas_desh_toal?></h1>
+            <h1 style="color:red;font-weight: bold"><?php echo $montacargas_desh_toal?></h1>
         </div>
         <div class="col-sm-2 number">
             <h3 class="tablero_head_movil" style="display:none">%</</h3>
-            <h1><?php echo round((($montacargas_total-$montacargas_desh_toal) * 100) / $montacargas_total)?> %</h1>
+            <h1 style="font-weight: bold"><?php echo round((($montacargas_total-$montacargas_desh_toal) * 100) / $montacargas_total)?> %</h1>
         </div>
     </div>
     <div class="row">
@@ -228,15 +250,15 @@ $cargadores_desh_total = $cargadores_desh->count();
         </div>
         <div class="col-sm-2 number">
             <h3 class="tablero_head_movil" style="display:none">Total</h3>
-            <h1 style="color:green"><?php echo $baterias_total?></h1>
+            <h1 style="color:green;font-weight: bold"><?php echo $baterias_total?></h1>
         </div>
         <div class="col-sm-3 number">
             <h3 class="tablero_head_movil" style="display:none">Deshabilitados</h3>
-            <h1 style="color:red"><?php echo $baterias_desh_total?></h1>
+            <h1 style="color:red;font-weight: bold"><?php echo $baterias_desh_total?></h1>
         </div>
         <div class="col-sm-2 number">
             <h3 class="tablero_head_movil" style="display:none">%</h3>
-            <h1><?php echo round((($baterias_total-$baterias_desh_total) * 100) / $baterias_total)?> %</h1>
+            <h1 style="font-weight: bold"><?php echo round((($baterias_total-$baterias_desh_total) * 100) / $baterias_total)?> %</h1>
         </div>
     </div>
     <div class="row">
@@ -247,19 +269,38 @@ $cargadores_desh_total = $cargadores_desh->count();
         </div>
         <div class="col-sm-2 number">
             <h3 class="tablero_head_movil" style="display:none">Total</h3>
-            <h1 style="color:green"><?php echo $cargadores_total?></h1>
+            <h1 style="color:green;font-weight: bold"><?php echo $cargadores_total?></h1>
         </div>
         <div class="col-sm-3 number">
             <h3 class="tablero_head_movil" style="display:none">Deshabilitados</h3>
-            <h1 style="color:red"><?php echo $cargadores_desh_total?></h1>
+            <h1 style="color:red;font-weight: bold"><?php echo $cargadores_desh_total?></h1>
         </div>
         <div class="col-sm-2 number">
             <h3 class="tablero_head_movil" style="display:none">%</h3>
-            <h1><?php echo round((($cargadores_total-$baterias_desh_total) * 100) / $cargadores_total)?> %</h1>
+            <h1 style="font-weight: bold"><?php echo round((($cargadores_total-$baterias_desh_total) * 100) / $cargadores_total)?> %</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-3 ">
+             <center>
+                 <i class="my_icons fa fa-th" style="font-size: 55px; margin-left: 25px; margin-top: 25px;"></i>
+             </center>
+        </div>
+        <div class="col-sm-2 number">
+            <h3 class="tablero_head_movil" style="display:none">Total</h3>
+            <h1 style="color:green;font-weight: bold"><?php echo $bodegas_uso_total?></h1>
+        </div>
+        <div class="col-sm-3 number">
+            <h3 class="tablero_head_movil" style="display:none">Deshabilitados</h3>
+            <h1 style="color:red;font-weight: bold">N/A</h1>
+        </div>
+        <div class="col-sm-2 number">
+            <h3 class="tablero_head_movil" style="display:none">%</h3>
+            <h1 style="font-weight: bold"><?php echo round(($bodegas_uso_total * 100) / $baterias_total)?> %</h1>
         </div>
     </div>
 </div>
-<div class="row">
+<div class="row" style="margin-top: 30px">
     <div class="col-md-12">
         <div class="portlet light portlet-fit bordered">
             <div class="portlet-title">
@@ -319,27 +360,59 @@ $cargadores_desh_total = $cargadores_desh->count();
         </div>
     </div>
 </div>
+<script>
+                    var gaugeOptions = {
+                        chart: {
+                            type: 'solidgauge'
+                        },
 
-<?php
-    $grafica=pinta_grafica('cg','reporteCE','espera','todo',$loggedInUser->sucursal_activa);
-    echo $grafica;
-    $grafica=pinta_grafica('cg','reporteCC','carga','todo',$loggedInUser->sucursal_activa);
-    echo $grafica;
-    $grafica=pinta_grafica('cg','reporteCD','descanso','todo',$loggedInUser->sucursal_activa);
-    echo $grafica;
-    
-    $grafica=pinta_grafica('bt','reporteBU','uso','todo',$loggedInUser->sucursal_activa);
-    echo $grafica;
-    $grafica=pinta_grafica('bt','reporteBE','espera','todo',$loggedInUser->sucursal_activa);
-    echo $grafica;
-    $grafica=pinta_grafica('bt','reporteBC','carga','todo',$loggedInUser->sucursal_activa);
-    echo $grafica;
-    $grafica=pinta_grafica('bt','reporteBD','descanso','todo',$loggedInUser->sucursal_activa);
-    echo $grafica;
-    
-    $grafica=pinta_grafica('mc','reporteMC','uso','todo',$loggedInUser->sucursal_activa);
-    echo $grafica;
-?>
+                        title: null,
+                        pane: {
+                            center: ['50%', '85%'],
+                            size: '140%',
+                            startAngle: -90,
+                            endAngle: 90,
+                            background: {
+                                backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || '#EEE',
+                                innerRadius: '60%',
+                                outerRadius: '100%',
+                                shape: 'arc'
+                            }
+                        },
+                        tooltip: {
+                            enabled: false
+                        },
+
+                        // the value axis
+                        yAxis: {
+                            stops: [
+                                [0.5, '#DF5353'],
+                                [0.8, '#DDDF0D'],
+                                [0.9, '#55BF3B']
+                            ],
+                            lineWidth: 0,
+                            minorTickInterval: null,
+                            tickPixelInterval: 400,
+                            tickWidth: 0,
+                            title: {
+                                y: -70
+                            },
+                            labels: {
+                                y: 16
+                            }
+                        },
+
+                        plotOptions: {
+                            solidgauge: {
+                                dataLabels: {
+                                    y: -45,
+                                    borderWidth: 0,
+                                    useHTML: true
+                                }
+                            }
+                        }
+                    };
+                </script>
 <script>
     $(function () {
     var seriesOptions = [],
@@ -351,7 +424,6 @@ $cargadores_desh_total = $cargadores_desh->count();
      * @returns {undefined}
      */
     function createChart() {
-        console.log(seriesOptions);
         $('#container').highcharts('StockChart', {
             lang: {
                 loading: 'Cargando...',
@@ -460,3 +532,34 @@ $cargadores_desh_total = $cargadores_desh->count();
     });
 });
 </script>
+<?php
+
+    $grafica=pinta_grafica('mc','reporteMC','uso','todo',$loggedInUser->sucursal_activa);
+    echo $grafica;
+
+
+    $grafica=pinta_grafica('cg','reporteCE','espera','todo',$loggedInUser->sucursal_activa);
+    echo $grafica;
+    $grafica=pinta_grafica('cg','reporteCC','carga','todo',$loggedInUser->sucursal_activa);
+    echo $grafica;
+    $grafica=pinta_grafica('cg','reporteCD','descanso','todo',$loggedInUser->sucursal_activa);
+    echo $grafica;
+    
+    $grafica=pinta_grafica('bt','reporteBU','uso','todo',$loggedInUser->sucursal_activa);
+    echo $grafica;
+    $grafica=pinta_grafica('bt','reporteBE','espera','todo',$loggedInUser->sucursal_activa);
+    echo $grafica;
+    $grafica=pinta_grafica('bt','reporteBC','carga','todo',$loggedInUser->sucursal_activa);
+    echo $grafica;
+    $grafica=pinta_grafica('bt','reporteBD','descanso','todo',$loggedInUser->sucursal_activa);
+    echo $grafica;
+    
+    $efidato=eficiencia('bt','uso','eficienciaBTU',$loggedInUser->sucursal_activa);
+    echo $efidato['script'];
+    $efidato=eficiencia('bt','carga','eficienciaBTC',$loggedInUser->sucursal_activa);
+    echo $efidato['script'];
+    $efidato=eficiencia('bt','descanso','eficienciaBTD',$loggedInUser->sucursal_activa);
+    echo $efidato['script'];
+
+?>
+

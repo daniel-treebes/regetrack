@@ -17,6 +17,7 @@
  * @method UsoBateriasBodegaQuery orderByUsuarioCarga($order = Criteria::ASC) Order by the usuario_carga column
  * @method UsoBateriasBodegaQuery orderByUsuarioDescanso($order = Criteria::ASC) Order by the usuario_descanso column
  * @method UsoBateriasBodegaQuery orderByUsuarioSalida($order = Criteria::ASC) Order by the usuario_salida column
+ * @method UsoBateriasBodegaQuery orderByFechaOriginal($order = Criteria::ASC) Order by the fecha_original column
  *
  * @method UsoBateriasBodegaQuery groupById() Group by the id column
  * @method UsoBateriasBodegaQuery groupByBg() Group by the bg column
@@ -29,6 +30,7 @@
  * @method UsoBateriasBodegaQuery groupByUsuarioCarga() Group by the usuario_carga column
  * @method UsoBateriasBodegaQuery groupByUsuarioDescanso() Group by the usuario_descanso column
  * @method UsoBateriasBodegaQuery groupByUsuarioSalida() Group by the usuario_salida column
+ * @method UsoBateriasBodegaQuery groupByFechaOriginal() Group by the fecha_original column
  *
  * @method UsoBateriasBodegaQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method UsoBateriasBodegaQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -55,6 +57,7 @@
  * @method UsoBateriasBodega findOneByUsuarioCarga(int $usuario_carga) Return the first UsoBateriasBodega filtered by the usuario_carga column
  * @method UsoBateriasBodega findOneByUsuarioDescanso(int $usuario_descanso) Return the first UsoBateriasBodega filtered by the usuario_descanso column
  * @method UsoBateriasBodega findOneByUsuarioSalida(int $usuario_salida) Return the first UsoBateriasBodega filtered by the usuario_salida column
+ * @method UsoBateriasBodega findOneByFechaOriginal(string $fecha_original) Return the first UsoBateriasBodega filtered by the fecha_original column
  *
  * @method array findById(int $id) Return UsoBateriasBodega objects filtered by the id column
  * @method array findByBg(int $bg) Return UsoBateriasBodega objects filtered by the bg column
@@ -67,6 +70,7 @@
  * @method array findByUsuarioCarga(int $usuario_carga) Return UsoBateriasBodega objects filtered by the usuario_carga column
  * @method array findByUsuarioDescanso(int $usuario_descanso) Return UsoBateriasBodega objects filtered by the usuario_descanso column
  * @method array findByUsuarioSalida(int $usuario_salida) Return UsoBateriasBodega objects filtered by the usuario_salida column
+ * @method array findByFechaOriginal(string $fecha_original) Return UsoBateriasBodega objects filtered by the fecha_original column
  *
  * @package    propel.generator.regetrack.om
  */
@@ -174,7 +178,7 @@ abstract class BaseUsoBateriasBodegaQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `id`, `bg`, `bt`, `fecha_entrada`, `fecha_carga`, `fecha_descanso`, `fecha_salida`, `usuario_entrada`, `usuario_carga`, `usuario_descanso`, `usuario_salida` FROM `uso_baterias_bodega` WHERE `id` = :p0';
+        $sql = 'SELECT `id`, `bg`, `bt`, `fecha_entrada`, `fecha_carga`, `fecha_descanso`, `fecha_salida`, `usuario_entrada`, `usuario_carga`, `usuario_descanso`, `usuario_salida`, `fecha_original` FROM `uso_baterias_bodega` WHERE `id` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -731,6 +735,49 @@ abstract class BaseUsoBateriasBodegaQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(UsoBateriasBodegaPeer::USUARIO_SALIDA, $usuarioSalida, $comparison);
+    }
+
+    /**
+     * Filter the query on the fecha_original column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByFechaOriginal('2011-03-14'); // WHERE fecha_original = '2011-03-14'
+     * $query->filterByFechaOriginal('now'); // WHERE fecha_original = '2011-03-14'
+     * $query->filterByFechaOriginal(array('max' => 'yesterday')); // WHERE fecha_original < '2011-03-13'
+     * </code>
+     *
+     * @param     mixed $fechaOriginal The value to use as filter.
+     *              Values can be integers (unix timestamps), DateTime objects, or strings.
+     *              Empty strings are treated as NULL.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return UsoBateriasBodegaQuery The current query, for fluid interface
+     */
+    public function filterByFechaOriginal($fechaOriginal = null, $comparison = null)
+    {
+        if (is_array($fechaOriginal)) {
+            $useMinMax = false;
+            if (isset($fechaOriginal['min'])) {
+                $this->addUsingAlias(UsoBateriasBodegaPeer::FECHA_ORIGINAL, $fechaOriginal['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($fechaOriginal['max'])) {
+                $this->addUsingAlias(UsoBateriasBodegaPeer::FECHA_ORIGINAL, $fechaOriginal['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(UsoBateriasBodegaPeer::FECHA_ORIGINAL, $fechaOriginal, $comparison);
     }
 
     /**
