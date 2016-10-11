@@ -72,21 +72,28 @@ $cargadores_desh = DeshabilitacgQuery::create()->filterById($cargadores_desh_arr
 $cargadores_desh_total = $cargadores_desh->count();
 
 //--BODEGAS---
-$bodegas_query = "
+$bodegas_espera = "
     SELECT * FROM uso_baterias_bodega 
     JOIN bodegas ON uso_baterias_bodega.bg = bodegas.id
     JOIN cargadores ON cargadores.idcargadores = bodegas.cg
-    WHERE cargadores.cargadores_tipo = 'Bodega' AND uso_baterias_bodega.fecha_salida = '0000-00-00 00:00:00' AND cargadores.idsucursal IN (".$loggedInUser->sucursales.") ;
+    WHERE cargadores.cargadores_tipo = 'Bodega' AND uso_baterias_bodega.fecha_carga='0000-00-00 00:00:00' AND uso_baterias_bodega.fecha_descanso='0000-00-00 00:00:00' AND uso_baterias_bodega.fecha_salida= '0000-00-00 00:00:00' AND cargadores.idsucursal IN (".$loggedInUser->sucursales.") ;
 ";
-$resultado = $mysqli->query($bodegas_query);
-$bodegas_arr = array();
-while( $fila = $resultado->fetch_array()){
-    $bodegas_arr[] = $fila['id']; // Inside while loop
-}
+
+$resultado = $mysqli->query($bodegas_espera);
+$bodegas_espera = $resultado->num_rows;
+
+$bodegas_descanso = "
+    SELECT * FROM uso_baterias_bodega 
+    JOIN bodegas ON uso_baterias_bodega.bg = bodegas.id
+    JOIN cargadores ON cargadores.idcargadores = bodegas.cg
+    WHERE cargadores.cargadores_tipo = 'Bodega' AND uso_baterias_bodega.fecha_salida= '0000-00-00 00:00:00' AND cargadores.idsucursal IN (".$loggedInUser->sucursales.") ;
+";
+$resultado = $mysqli->query($bodegas_descanso);
+$bodegas_descanso = $resultado->num_rows;
 
 
-$bodegas_uso = CargadoresQuery::create()->filterByIdcargadores($bodegas_arr)->find();
-$bodegas_uso_total = $bodegas_uso->count();
+//PENDIENTE
+$bodegas_listo = 0;
 
 
 
@@ -280,6 +287,19 @@ $bodegas_uso_total = $bodegas_uso->count();
             <h1 style="font-weight: bold"><?php echo round((($cargadores_total-$baterias_desh_total) * 100) / $cargadores_total)?> %</h1>
         </div>
     </div>
+    <div class="row" id="tablero_head">
+        <div class="col-sm-3 ">
+        </div>
+        <div class="col-sm-2">
+            <h3>Bat. Espera</h3>
+        </div>
+        <div class="col-sm-3">
+             <h3>Bat. Descanso</h3>
+        </div>
+        <div class="col-sm-2">
+            <h3>Bat. Listo</h3>
+        </div>
+    </div>
     <div class="row">
         <div class="col-sm-3 ">
              <center>
@@ -287,18 +307,19 @@ $bodegas_uso_total = $bodegas_uso->count();
              </center>
         </div>
         <div class="col-sm-2 number">
-            <h3 class="tablero_head_movil" style="display:none">Total</h3>
-            <h1 style="color:green;font-weight: bold"><?php echo $bodegas_uso_total?></h1>
+            <h3 class="tablero_head_movil" style="display:none">Bat. Espera</h3>
+            <h1 style="color:red;font-weight: bold"><?php echo $bodegas_espera?></h1>
         </div>
         <div class="col-sm-3 number">
-            <h3 class="tablero_head_movil" style="display:none">Deshabilitados</h3>
-            <h1 style="color:red;font-weight: bold">N/A</h1>
+            <h3 class="tablero_head_movil" style="display:none">Bat. Descanso</h3>
+            <h1 style="color:blue;font-weight: bold"><?php echo $bodegas_descanso?></h1>
         </div>
         <div class="col-sm-2 number">
-            <h3 class="tablero_head_movil" style="display:none">%</h3>
-            <h1 style="font-weight: bold"><?php echo round(($bodegas_uso_total * 100) / $baterias_total)?> %</h1>
+            <h3 class="tablero_head_movil" style="display:none">Bat. Listo</h3>
+            <h1 style="font-weight: bold;color:green"><?php echo $bodegas_listo?></h1>
         </div>
     </div>
+    
 </div>
 <div class="row" style="margin-top: 30px">
     <div class="col-md-12">
@@ -315,6 +336,7 @@ $bodegas_uso_total = $bodegas_uso->count();
         </div>
     </div>
 </div>
+
 <div class="row">
     <div class="col-md-12">
         <div class="portlet light portlet-fit bordered">
