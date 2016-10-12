@@ -2,7 +2,7 @@
     <?php
     if(($estado=="ESPERA" && $ctipo=='Cargador')
        ||($estado=="ESPERA" && $ctipo=='Bodega' && isset($cargadorSiguiente['cg_id']))
-       ||($estado=="DESCANSO" && $ctipo=='Cargador' && isset($cargadorSiguiente['cg_id']))){
+       ||(($estado=="DESCANSO"||$estado=="LISTO") && $ctipo=='Cargador' && isset($cargadorSiguiente['cg_id']))){
         if($estado=="ESPERA" && $ctipo=='Cargador'){
             $titulo="Cargar Batería <strong>".$nombreBateria."</strong> en cargador <strong>".$ubicacion."</strong>";
             $paso1="Escanea el cargador <strong>".$ubicacion."</strong> y conectalo a la batería <strong>".$nombreBateria."</strong>";
@@ -19,7 +19,7 @@
             $idsiguiente=$cargadorSiguiente['cg_id'];
             $tipomovimiento="espcargador";
             $classicono="fa icon-cargador";
-        }elseif($estado=="DESCANSO" && $ctipo=='Cargador' && isset($cargadorSiguiente['cg_id'])){
+        }elseif(($estado=="DESCANSO"||$estado=="LISTO") && $ctipo=='Cargador' && isset($cargadorSiguiente['cg_id'])){
             $titulo="Mover Batería <strong>".$nombreBateria."</strong> a la bodega <strong>".$cargadorSiguiente['cg_nombre']."</strong>";
             $paso1="Lleva la batería <strong>".$nombreBateria."</strong> a la bodega <strong>".$cargadorSiguiente['cg_nombre']."</strong> y escanea el QR de la bodega.";
             $paso2="Escanea de nuevo la bateria <strong>".$nombreBateria."</strong> para confirmar que está ya en la bodega.";
@@ -90,16 +90,19 @@
                         <br>
                         Elige el estatus de la Batería <?php  echo $datosBateria['Nombre'] ?>
                         <br><br>
-                        <div class="col-xs-6" >
-                            <span onclick="cambiaestado('ESPERA');" class="btn default btn-block" style="height:100px;"><h2>ESPERA</h2></span>
+                        <div class="col-md-4" >
+                            <span onclick="cambiaestado('ESPERA');" class="btn default btn-block" style="height:100px;background-color:red;color:white;"><h2>ESPERA</h2></span>
                         </div>
 <!--
                         <div class="col-xs-4" >
-                            <span onclick="cambiaestado('CARGA');" class="btn default btn-block" style="height:100px;"><h2>CARGA</h2></span>
+                            <span onclick="cambiaestado('CARGA');" class="btn default btn-block" style="height:100px;backgroud-color:orange;"><h2>CARGA</h2></span>
                         </div>
 -->
-                        <div class="col-xs-6" >
-                            <span onclick="cambiaestado('DESCANSO');" class="btn default btn-block" style="height:100px;"><h2>DESCANSO</h2></span>
+                        <div class="col-md-4" >
+                            <span onclick="cambiaestado('DESCANSO');" class="btn default btn-block" style="height:100px;background-color:blue;color:white;"><h2>DESCANSO</h2></span>
+                        </div>
+                        <div class="col-md-4" >
+                            <span onclick="cambiaestado('LISTO');" class="btn default btn-block" style="height:100px;background-color:green;color:white;"><h2>LISTO</h2></span>
                         </div>
                     </center>
                     <span></span>

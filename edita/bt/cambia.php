@@ -31,7 +31,7 @@
                         <a href="javascript:cargaBateria()" class="btn green-jungle btn-block" style="height: 110px;"><h2><i class="fa icon-cargador"></i></h2><h5>Mover a Cargador</h5></a>
                         <?php
                     }
-                    if($estado=="DESCANSO" && $ctipo=='Cargador' && isset($cargadorSiguiente['cg_id'])){
+                    if(($estado=="DESCANSO"||$estado=="LISTO") && $ctipo=='Cargador' && isset($cargadorSiguiente['cg_id'])){
                         ?>
                         <a href="javascript:cargaBateria()" class="btn green-jungle btn-block" style="height: 110px;"><h2><i class="fa fa-th"></i></h2><h5>Mover a Bodega</h5></a>
                         <?php

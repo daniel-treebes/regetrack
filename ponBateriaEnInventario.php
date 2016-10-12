@@ -146,21 +146,23 @@ if ($modulo=="cargadores"){
 //echo $query.'<br>';	
             $mysqli->query($query);
         }
-        if ($estado=="DESCANSO"){
-            if ($fe!='0000-00-00 00:00:00'){
-                $nfe="'".$fe."'";
-                $nue="";
-            }else{
-                $nfe='now()';
-                $nue="usuario_entrada=".$loggedInUser->user_id.",";
-            }
-            if ($fc!='0000-00-00 00:00:00'){
-                $nfc="'".$fc."'";
-                $nuc="";
-            }else{
-                $nfc='now()';
-                $nuc="usuario_carga=".$loggedInUser->user_id.",";
-            }
+        if ($estado=="DESCANSO" || $estado=="LISTO"){
+			if ($fe!='0000-00-00 00:00:00'){
+				$nfe="'".$fe."'";
+				$nue="";
+			}else{
+				if ($estado!="LISTO") $nfe='now()';
+				else $nfe='DATE_SUB(now(), INTERVAL 8 HOUR)';
+				$nue="usuario_entrada=".$loggedInUser->user_id.",";
+			}
+			if ($fc!='0000-00-00 00:00:00'){
+				$nfc="'".$fc."'";
+				$nuc="";
+			}else{
+				if ($estado!="LISTO") $nfc='now()';
+				else $nfc='DATE_SUB(now(), INTERVAL 8 HOUR)';
+				$nuc="usuario_carga=".$loggedInUser->user_id.",";
+			}
             $query="
                 UPDATE uso_baterias_bodega
                 SET fecha_entrada=".$nfe.",
@@ -363,6 +365,18 @@ if ($modulo=="cargadores"){
             $nfs="'0000-00-00 00:00:00'";
             $nus="";
         }
+
+        if ($estado=="LIBRE"){
+            $nfe='DATE_SUB(now(), INTERVAL 8 HOUR)';
+            $nue="usuario_entrada=".$loggedInUser->user_id.",";
+            $nfc='DATE_SUB(now(), INTERVAL 8 HOUR)';
+            $nuc="usuario_carga=".$loggedInUser->user_id.",";
+            $nfd='DATE_SUB(now(), INTERVAL 8 HOUR)';
+            $nud="usuario_descanso=".$loggedInUser->user_id.",";
+            $nfs="'0000-00-00 00:00:00'";
+            $nus="";
+        }
+		
         
         $query="
          INSERT INTO uso_baterias_bodega

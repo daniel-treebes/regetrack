@@ -96,15 +96,6 @@ if($habilitaid>0){
         <div class="portlet-body form">	   
             <div class="form-actions right1 gray" >
                 <div class="form-body">
-                <?php
-                    if($porcentaje>100){
-                            $colorbtestado="red";
-                    }elseif($porcentaje>70){
-                            $colorbtestado="yellow";
-                    }else{
-                            $colorbtestado="green";
-                    }
-                    ?>
                     <div class="col-md-4">
                         <div class="easy-pie-chart">
                            <center>Estado Actual<br><strong><?php echo $estadoAct;?></strong></center>
@@ -118,15 +109,6 @@ if($habilitaid>0){
                     </div>
                     <div class="margin-bottom-10 visible-sm"></div>
                     <div class="col-md-4">
-                        <?php
-                        if($ppromedioAnt>100){
-                                $colorbtant="red";
-                        }else if($ppromedioAnt>70){
-                                $colorbtant="yellow";
-                        }else{
-                                $colorbtant="green";
-                        }
-                        ?>
                         <div class="easy-pie-chart">
                            <center>Promedio de uso<br>mes pasado</center>
                            <div class="number btant" data-percent="<?php echo $ppromedioAnt;?>">
@@ -139,15 +121,6 @@ if($habilitaid>0){
                     </div>
                     <div class="margin-bottom-10 visible-sm"> </div>
                     <div class="col-md-4">
-                        <?php
-                        if($ppromedioAct>100){
-                                $colorbtact="red";
-                        }else if($ppromedioAct>70){
-                                $colorbtact="yellow";
-                        }else{
-                                $colorbtact="green";
-                        }
-                        ?>
                         <div class="easy-pie-chart">
                            <center>Promedio de uso<br>mes actual</center>
                            <div class="number btact" data-percent="<?php  echo $ppromedioAct; ?>">

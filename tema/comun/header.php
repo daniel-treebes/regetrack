@@ -10,7 +10,7 @@ if(isUserLoggedIn()) {
     <div class="page-header-inner">
         <!-- BEGIN LOGO -->
         <div class="page-logo">
-            <a href="account.php">
+            <a href="escanear.php">
             <img src="imagenes/reggae-track.png" alt="logo" class="logo-default"/>
             </a>
             <div class="menu-toggler sidebar-toggler hide">

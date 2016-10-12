@@ -1192,15 +1192,26 @@ function securePage($uri){
 }
 
 //Treebes JLFV a partir de aqui
-function pinta_grafica($modulo,$divapintar,$estatus,$idapintar='todo',$sucursal_activa, $cargador_tipo= 'Cargador'){
+function pinta_grafica($modulo,$divapintar,$estatus,$idapintar='todo',$cargador_tipo= 'Cargador'){
         
-	global $mysqli;
+	global $mysqli,$loggedInUser;
 
 	date_default_timezone_set('UTC');
 	date_default_timezone_set("America/Mexico_City");
 
+	if($modulo=="bt"){
+		$id = 'idbaterias';
+		$nombre = 'baterias_nombre';
+	}else if($modulo=="cg" || $modulo=="li"){
+		$id = 'idcargadores';
+		$nombre = 'cargadores_nombre';
+	}else{
+		$id = 'idmontacargas';
+		$nombre = 'montacargas_nombre';
+	}
+	
 	$filtro="";
-	if ($idapintar!='todo') $filtro='AND m.id='.$idapintar;
+	if ($idapintar!='todo') $filtro='AND m.'.$id.'='.$idapintar;
 	if ($estatus=='uso'){
 		$fini='fecha_entrada';
 		$ffin='fecha_salida';
@@ -1210,18 +1221,11 @@ function pinta_grafica($modulo,$divapintar,$estatus,$idapintar='todo',$sucursal_
 	}elseif ($estatus=='carga'){
 		$fini='fecha_carga';
 		$ffin='fecha_descanso';
-	}elseif ($estatus=='descanso'){
+	}elseif ($estatus=='descanso' || $estatus=='listo'){
 		$fini='fecha_descanso';
 		$ffin='fecha_salida';
 	}
-	
-	if($modulo == 'cg' || $modulo=="li"){
-            $qwhere='m.idcargadores=u.'.$modulo.' AND m.idsucursal ='.$sucursal_activa;
-        }elseif($modulo == 'mc'){
-            $qwhere='m.idmontacargas=u.'.$modulo.' AND m.idsucursal ='.$sucursal_activa;
-        }elseif($modulo == 'bt'){
-            $qwhere='m.idbaterias=u.'.$modulo.' AND m.idsucursal ='.$sucursal_activa;
-        }
+
 	if ($estatus=="uso"){
 		$tuso='uso_baterias_montacargas as u';
 		if ($modulo=="bt"){
@@ -1234,23 +1238,16 @@ function pinta_grafica($modulo,$divapintar,$estatus,$idapintar='todo',$sucursal_
 		if ($modulo=="bt"){
 			$tuso.=' JOIN baterias as m ON u.bt = m.idbaterias';
 		}else{
-                    $tuso.=' JOIN bodegas as b ON u.bg = b.id JOIN cargadores as m ON b.cg = m.idcargadores';
-                    $qwhere='m.idcargadores=b.cg AND b.id=u.bg AND cg.cargadores_tipo = "'.$cargador_tipo.'"';
-                    
+			$tuso.=' JOIN bodegas as b ON u.bg = b.id JOIN cargadores as m ON b.cg = m.idcargadores';
 		}
 	}
-	
-	if($modulo=="bt"){
-		$id = 'idbaterias';
-		$nombre = 'baterias_nombre';
-	}else if($modulo=="cg" || $modulo=="li"){
-		$id = 'idcargadores';
-		$nombre = 'cargadores_nombre';
-	}else{
-		$id = 'idmontacargas';
-		$nombre = 'montacargas_nombre';
+
+	$qwhere='m.'.$id.'=u.'.$modulo;
+	if($modulo == 'cg'){
+		$qwhere='m.'.$id.'=b.cg AND b.id=u.bg AND cg.cargadores_tipo = "'.$cargador_tipo.'"';
 	}
-     
+	$qwhere.=' AND m.idsucursal IN ('.$loggedInUser->sucursales.') ';
+	
 	$query="
 		SELECT
 			m.".$id." as id,
@@ -1261,12 +1258,68 @@ function pinta_grafica($modulo,$divapintar,$estatus,$idapintar='todo',$sucursal_
 			TIMESTAMPDIFF(minute, u.$fini, u.$ffin)-(TIMESTAMPDIFF(hour, u.$fini, u.$ffin))*60 as min
 		from $tuso
 		where $qwhere
-			AND u.$ffin!='0000-00-00 00:00:00' AND m.idsucursal = ".$sucursal_activa."
+			AND u.$ffin!='0000-00-00 00:00:00' 
 			$filtro
 		order by
 			nombre, u.$fini asc
 	";
 
+	if ($estatus=='descanso'){
+		$query="
+			SELECT
+				m.".$id." as id,
+				m.$nombre as nombre,
+				u.$fini as fecha_entrada,
+				IF(TIMESTAMPDIFF(hour, u.$fini, u.$ffin)<8,
+					u.$ffin,
+					DATE_ADD(u.$fini, INTERVAL 8 HOUR)
+				) as fecha_salida,
+				IF(TIMESTAMPDIFF(hour, u.$fini, u.$ffin)<8,
+					TIMESTAMPDIFF(hour, u.$fini, u.$ffin),
+					8
+				) as hrs,
+				IF(TIMESTAMPDIFF(hour, u.$fini, u.$ffin)<8,
+					TIMESTAMPDIFF(minute, u.$fini, u.$ffin)-(TIMESTAMPDIFF(hour, u.$fini, u.$ffin))*60,
+					0
+				) as min
+			from $tuso
+			where $qwhere
+				AND (u.$ffin!='0000-00-00 00:00:00'
+					OR TIMESTAMPDIFF(hour, u.$fini, now())>=8
+				) 
+				$filtro
+			order by
+				nombre, u.$fini asc
+		";
+	}
+
+	if ($estatus=='listo'){
+		$query="
+			SELECT
+				m.".$id." as id,
+				m.$nombre as nombre,
+				IF(TIMESTAMPDIFF(hour, u.$fini, u.$ffin)<8,
+					u.$ffin,
+					DATE_ADD(u.$fini, INTERVAL 8 HOUR)
+				) as fecha_entrada,
+				u.$ffin as fecha_salida,
+				IF(TIMESTAMPDIFF(hour, u.$fini, u.$ffin)<8,
+					0,
+					TIMESTAMPDIFF(hour, DATE_ADD(u.$fini, INTERVAL 8 HOUR), u.$ffin)
+				) as hrs,
+				IF(TIMESTAMPDIFF(hour, u.$fini, u.$ffin)<8,
+					0,
+					TIMESTAMPDIFF(minute, DATE_ADD(u.$fini, INTERVAL 8 HOUR), u.$ffin)-(TIMESTAMPDIFF(hour, DATE_ADD(u.$fini, INTERVAL 8 HOUR), u.$ffin))*60
+				) as min
+			from $tuso
+			where $qwhere
+				AND u.$ffin!='0000-00-00 00:00:00' 
+				$filtro
+			order by
+				nombre, u.$fini asc
+		";
+	}
+	
     $respuesta = $mysqli->query($query);
        
 	$data=array();
@@ -1294,13 +1347,13 @@ function pinta_grafica($modulo,$divapintar,$estatus,$idapintar='todo',$sucursal_
 	}
 	if ($modulo=='cg'){
 		$tabladeh.=' JOIN cargadores as m ON d.cg = m.idcargadores';
-		if ($idapintar=='todo') $titulo.=' CARGADORES';
-		else $titulo.='L CARGADOR '.$nombreid;
-	}
-        if ($modulo=='li'){
-		$tabladeh.=' JOIN cargadores as m ON d.cg = m.idcargadores WHERE m.cargadores_tipo = "'.$cargador_tipo.'"';
-		if ($idapintar=='todo') $titulo.=' BODEGAS';
-		else $titulo.='L BODEGA '.$nombreid;
+		if ($cargador_tipo=='Cargador'){
+			if ($idapintar=='todo') $titulo.=' CARGADORES';
+			else $titulo.='L CARGADOR '.$nombreid;
+		}else{
+			if ($idapintar=='todo') $titulo.=' BODEGAS';
+			else $titulo.=' LA BODEGA '.$nombreid;
+		}
 	}
 	if ($modulo=='mc'){
 		$tabladeh.=' JOIN montacargas as m ON d.idmontacargas = m.idmontacargas';
@@ -1313,7 +1366,7 @@ function pinta_grafica($modulo,$divapintar,$estatus,$idapintar='todo',$sucursal_
 			d.*,
 			m.$nombre as nombre
 		FROM  $tabladeh
-		WHERE m.idsucursal = ".$sucursal_activa."
+		WHERE m.idsucursal IN (".$loggedInUser->sucursales.") 
 			$filtro
 		ORDER BY nombre, d.fecha_entrada
 	";
@@ -1438,17 +1491,24 @@ function pinta_grafica($modulo,$divapintar,$estatus,$idapintar='todo',$sucursal_
 		return $aregresar;
 }
 
-function eficiencia($modulo,$estatus,$divapintar,$sucursal_activa,$idapintar='todo'){
-            
-    
-	global $mysqli;
+function eficiencia($modulo,$estatus,$divapintar,$idapintar='todo',$cargador_tipo= 'Cargador'){
+	global $mysqli,$loggedInUser;
+	
+	if($modulo=="bt"){
+		$id = 'idbaterias';
+		$nombre = 'baterias_nombre';
+	}elseif($modulo=="cg"){
+		$id = 'idcargadores';
+		$nombre = 'cargadores_nombre';
+	}else{
+		$id = 'idmontacargas';
+		$nombre = 'montacargas_nombre';
+	}
 	
 	$filtro="";
-	$notodas='';
-	$nombre='nombre';
-	//if ($modulo=="bt") $nombre='num_serie';
+	$notodas="";
 	if ($idapintar!='todo'){
-		$filtro='AND m.id='.$idapintar;
+		$filtro='AND m.'.$id.'='.$idapintar;
 		$notodas='m.'.$nombre.' as nombre,';
 	}
 	if ($estatus=='uso'){
@@ -1460,20 +1520,11 @@ function eficiencia($modulo,$estatus,$divapintar,$sucursal_activa,$idapintar='to
 	}elseif ($estatus=='carga'){
 		$fini='fecha_carga';
 		$ffin='fecha_descanso';
-	}elseif ($estatus=='descanso'){
+	}elseif ($estatus=='descanso' || $estatus=='listo'){
 		$fini='fecha_descanso';
 		$ffin='fecha_salida';
 	}
-        
-	
-        if($modulo == 'cg'){
-            $qwhere='m.idcargadores=u.'.$modulo.' AND m.idsucursal ='.$sucursal_activa;
-        }elseif($modulo == 'mc'){
-            $qwhere='m.idmontacargas=u.'.$modulo.' AND m.idsucursal ='.$sucursal_activa;
-        }elseif($modulo == 'bt'){
-            $qwhere='m.idbaterias=u.'.$modulo.' AND m.idsucursal ='.$sucursal_activa;
-        }
-	
+
 	if ($estatus=="uso"){
 		$tuso='uso_baterias_montacargas as u';
 		if ($modulo=="bt"){
@@ -1487,9 +1538,15 @@ function eficiencia($modulo,$estatus,$divapintar,$sucursal_activa,$idapintar='to
 			$tuso.=' JOIN baterias as m ON u.bt = m.idbaterias';
 		}else{
 			$tuso.=' JOIN bodegas as b ON u.bg = b.id JOIN cargadores as m ON b.cg = m.idcargadores';
-			$qwhere='m.idcargadores=b.cg AND b.id=u.bg';
 		}
 	}
+
+	$qwhere='m.'.$id.'=u.'.$modulo;
+	if($modulo == 'cg'){
+		$qwhere='m.'.$id.'=b.cg AND b.id=u.bg AND cg.cargadores_tipo = "'.$cargador_tipo.'"';
+	}
+	$qwhere.=' AND m.idsucursal IN ('.$loggedInUser->sucursales.') ';
+
 	$query="
 		select
 			$notodas
@@ -1502,10 +1559,81 @@ function eficiencia($modulo,$estatus,$divapintar,$sucursal_activa,$idapintar='to
 			$filtro
 		order by u.$fini asc
 	";
-        
+
+	if ($estatus=='descanso'){
+		$query="
+			select
+				$notodas
+				COUNT(u.id) as datos,
+				SUM(IF (IF(fecha_original='0000-00-00 00:00:00',
+							IF(TIMESTAMPDIFF(hour, fecha_descanso, fecha_salida)<8,true,false),
+							IF(TIMESTAMPDIFF(hour, fecha_original, fecha_salida)<8,true,false)),
+						TIMESTAMPDIFF(hour, fecha_descanso, fecha_salida),
+						IF (fecha_original='0000-00-00 00:00:00',
+							8,
+							(8-TIMESTAMPDIFF(hour, fecha_original, fecha_descanso))
+						)
+					)
+				) as horas,
+				AVG(IF (IF(fecha_original='0000-00-00 00:00:00',
+							IF(TIMESTAMPDIFF(hour, fecha_descanso, fecha_salida)<8,true,false),
+							IF(TIMESTAMPDIFF(hour, fecha_original, fecha_salida)<8,true,false)),
+						TIMESTAMPDIFF(hour, fecha_descanso, fecha_salida),
+						IF (fecha_original='0000-00-00 00:00:00',
+							8,
+							(8-TIMESTAMPDIFF(hour, fecha_original, fecha_descanso))
+						)
+					)
+				) as promedio
+			from $tuso
+			where $qwhere
+				AND (u.$ffin!='0000-00-00 00:00:00'
+					OR TIMESTAMPDIFF(hour, u.$fini, now())>=8
+				)
+				$filtro
+			order by u.$fini asc
+		";
+	}
+	
+	if ($estatus=='listo'){
+		$query="
+			select
+				$notodas
+				COUNT(u.id) as datos,
+				SUM(IF (IF(fecha_original='0000-00-00 00:00:00',
+							IF(TIMESTAMPDIFF(hour, fecha_descanso, fecha_salida)<8,true,false),
+							IF(TIMESTAMPDIFF(hour, fecha_original, fecha_salida)<8,true,false)),
+						0,
+						IF (fecha_original='0000-00-00 00:00:00',
+							(8-TIMESTAMPDIFF(hour, fecha_descanso, fecha_salida)),
+							(8-TIMESTAMPDIFF(hour, fecha_original, fecha_salida))
+						)
+					)
+				) as horas,
+				AVG(IF (IF(fecha_original='0000-00-00 00:00:00',
+							IF(TIMESTAMPDIFF(hour, fecha_descanso, fecha_salida)<8,true,false),
+							IF(TIMESTAMPDIFF(hour, fecha_original, fecha_salida)<8,true,false)),
+						0,
+						IF (fecha_original='0000-00-00 00:00:00',
+							(8-TIMESTAMPDIFF(hour, fecha_descanso, fecha_salida)),
+							(8-TIMESTAMPDIFF(hour, fecha_original, fecha_salida))
+						)
+					)
+				) as promedio
+			from $tuso
+			where $qwhere
+				AND u.$ffin!='0000-00-00 00:00:00'
+				$filtro
+			order by u.$fini asc
+		";
+	}
+	
     $respuesta = $mysqli->query($query);
 
- 
+    if(!$respuesta){
+        echo '<pre>';var_dump($qwhere);echo  '</pre>';
+    }
+	
 	$query7d="
 		select
 			$notodas
@@ -1514,19 +1642,91 @@ function eficiencia($modulo,$estatus,$divapintar,$sucursal_activa,$idapintar='to
 			AVG(TIMESTAMPDIFF(hour, u.$fini, u.$ffin)) as promedio
 		from $tuso
 		where $qwhere
-                       
 			AND u.$ffin!='0000-00-00 00:00:00'
 			AND u.$fini>=DATE_SUB(now(), INTERVAL 7 DAY)
 			$filtro
 		order by u.$fini asc
 	";
 
+	if ($estatus=='descanso'){
+		$query7d="
+			select
+				$notodas
+				COUNT(u.id) as datos,
+				SUM(IF (IF(fecha_original='0000-00-00 00:00:00',
+							IF(TIMESTAMPDIFF(hour, fecha_descanso, fecha_salida)<8,true,false),
+							IF(TIMESTAMPDIFF(hour, fecha_original, fecha_salida)<8,true,false)),
+						TIMESTAMPDIFF(hour, fecha_descanso, fecha_salida),
+						IF (fecha_original='0000-00-00 00:00:00',
+							8,
+							(8-TIMESTAMPDIFF(hour, fecha_original, fecha_descanso))
+						)
+					)
+				) as horas,
+				AVG(IF (IF(fecha_original='0000-00-00 00:00:00',
+							IF(TIMESTAMPDIFF(hour, fecha_descanso, fecha_salida)<8,true,false),
+							IF(TIMESTAMPDIFF(hour, fecha_original, fecha_salida)<8,true,false)),
+						TIMESTAMPDIFF(hour, fecha_descanso, fecha_salida),
+						IF (fecha_original='0000-00-00 00:00:00',
+							8,
+							(8-TIMESTAMPDIFF(hour, fecha_original, fecha_descanso))
+						)
+					)
+				) as promedio
+			from $tuso
+			where $qwhere
+				AND (u.$ffin!='0000-00-00 00:00:00'
+					OR TIMESTAMPDIFF(hour, u.$fini, now())>=8
+				)
+				AND u.$fini>=DATE_SUB(now(), INTERVAL 7 DAY)
+				$filtro
+			order by u.$fini asc
+		";
+	}
+
+	if ($estatus=='listo'){
+		$query7d="
+			select
+				$notodas
+				COUNT(u.id) as datos,
+				SUM(IF (IF(fecha_original='0000-00-00 00:00:00',
+							IF(TIMESTAMPDIFF(hour, fecha_descanso, fecha_salida)<8,true,false),
+							IF(TIMESTAMPDIFF(hour, fecha_original, fecha_salida)<8,true,false)),
+						0,
+						IF (fecha_original='0000-00-00 00:00:00',
+							(8-TIMESTAMPDIFF(hour, fecha_descanso, fecha_salida)),
+							(8-TIMESTAMPDIFF(hour, fecha_original, fecha_salida))
+						)
+					)
+				) as horas,
+				AVG(IF (IF(fecha_original='0000-00-00 00:00:00',
+							IF(TIMESTAMPDIFF(hour, fecha_descanso, fecha_salida)<8,true,false),
+							IF(TIMESTAMPDIFF(hour, fecha_original, fecha_salida)<8,true,false)),
+						0,
+						IF (fecha_original='0000-00-00 00:00:00',
+							(8-TIMESTAMPDIFF(hour, fecha_descanso, fecha_salida)),
+							(8-TIMESTAMPDIFF(hour, fecha_original, fecha_salida))
+						)
+					)
+				) as promedio
+			from $tuso
+			where $qwhere
+				AND (u.$ffin!='0000-00-00 00:00:00'
+					OR TIMESTAMPDIFF(hour, u.$fini, now())>=8
+				)
+				AND u.$fini>=DATE_SUB(now(), INTERVAL 7 DAY)
+				$filtro
+			order by u.$fini asc
+		";
+	}
+	
     $respuesta7d = $mysqli->query($query7d);
 
 	$regresa['nombreid']='';
 	$regresa['datos']=0;
 	$regresa['horas']=0;
 	$regresa['promedio']=0;
+
 	if ($respuesta) {
 		$renglon = $respuesta->fetch_array();
 		if ($notodas!=''){
@@ -1539,7 +1739,7 @@ function eficiencia($modulo,$estatus,$divapintar,$sucursal_activa,$idapintar='to
 		
 		$promedio=round($regresa['promedio'],2);
 
-		$titulo='HRS PROMEDIO EN '.strtoupper($estatus).' DE';
+		$titulo='HORAS PROMEDIO EN '.strtoupper($estatus).' DE';
 		if ($modulo=='bt'){
 			if ($idapintar=='todo') $titulo.=' BATERIAS';
 			else $titulo.=' LA BATERIA '.$nombreid;
@@ -1589,7 +1789,7 @@ function eficiencia($modulo,$estatus,$divapintar,$sucursal_activa,$idapintar='to
 		</script>
 		";
 	}
-         
+/*         
 	$query7d="
 		select
 			$notodas
@@ -1598,12 +1798,13 @@ function eficiencia($modulo,$estatus,$divapintar,$sucursal_activa,$idapintar='to
 			AVG(TIMESTAMPDIFF(hour, IF(u.$fini>=DATE_SUB(now(), INTERVAL 7 DAY),u.$fini,DATE_SUB(now(), INTERVAL 7 DAY)), IF(u.$ffin!='0000-00-00 00:00:00',u.$ffin,now()))) as promedio
 		from $tuso
 		where $qwhere
-                       
 			AND (u.$fini>=DATE_SUB(now(), INTERVAL 7 DAY) || u.$ffin='0000-00-00 00:00:00')
 			AND u.$fini!='0000-00-00 00:00:00'
 			$filtro
 		order by u.$fini asc
 	";
+*/	
+	
     $respuesta7d = $mysqli->query($query7d);
 	
 	$regresa['7d']['nombreid']='';

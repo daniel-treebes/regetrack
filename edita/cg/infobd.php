@@ -123,6 +123,8 @@ $querybodegas="
 			usos.cargat,
 			usos.descanso,
 			usos.descansot,
+			usos.listo,
+			usos.listot,
 			NULL as disponible,
 			NULL as disponiblet
 		FROM
@@ -145,12 +147,52 @@ $querybodegas="
 					   TIMESTAMPDIFF(minute, fecha_carga, now())-(TIMESTAMPDIFF(hour, fecha_carga, now()))*60,'M') 
 					as 'carga',
 					TIMESTAMPDIFF(hour, fecha_carga, now()) as 'cargat',
-					CONCAT(
-					   TIMESTAMPDIFF(day, fecha_descanso, now()),'D ',    
-					   TIMESTAMPDIFF(hour, fecha_descanso, now())-TIMESTAMPDIFF(day, fecha_descanso, now())*24,'H  ',
-					   TIMESTAMPDIFF(minute, fecha_descanso, now())-(TIMESTAMPDIFF(hour, fecha_descanso, now()))*60,'M')
-					as 'descanso',
-					TIMESTAMPDIFF(hour, fecha_descanso, now()) as 'descansot'
+
+					IF (IF(fecha_original='0000-00-00 00:00:00',
+							IF(TIMESTAMPDIFF(hour, fecha_descanso, now())<8,true,false),
+							IF(TIMESTAMPDIFF(hour, fecha_original, now())<8,true,false)),
+						CONCAT(
+						   TIMESTAMPDIFF(day, fecha_descanso, now()),'D ',    
+						   TIMESTAMPDIFF(hour, fecha_descanso, now())-TIMESTAMPDIFF(day, fecha_descanso, now())*24,'H  ',
+						   TIMESTAMPDIFF(minute, fecha_descanso, now())-(TIMESTAMPDIFF(hour, fecha_descanso, now()))*60,'M'),
+						IF (fecha_descanso='0000-00-00 00:00:00',
+							NULL,
+							'0D 8H 0M'
+						)
+					) as 'descanso',
+					IF (IF(fecha_original='0000-00-00 00:00:00',
+							IF(TIMESTAMPDIFF(hour, fecha_descanso, now())<8,true,false),
+							IF(TIMESTAMPDIFF(hour, fecha_original, now())<8,true,false)),
+						TIMESTAMPDIFF(hour, fecha_descanso, now()),
+						IF (fecha_descanso='0000-00-00 00:00:00',
+							NULL,
+							8
+						)
+					) as 'descansot',
+					IF (IF(fecha_original='0000-00-00 00:00:00',
+							IF(TIMESTAMPDIFF(hour, fecha_descanso, now())<8,true,false),
+							IF(TIMESTAMPDIFF(hour, fecha_original, now())<8,true,false)),
+						'0D 0H 0M',
+						IF (fecha_original='0000-00-00 00:00:00',
+							CONCAT(
+							   TIMESTAMPDIFF(day, DATE_ADD(fecha_descanso, INTERVAL 8 HOUR), now()),'D ',    
+							   TIMESTAMPDIFF(hour, DATE_ADD(fecha_descanso, INTERVAL 8 HOUR), now())-TIMESTAMPDIFF(day, DATE_ADD(fecha_descanso, INTERVAL 8 HOUR), now())*24,'H  ',
+							   TIMESTAMPDIFF(minute, DATE_ADD(fecha_descanso, INTERVAL 8 HOUR), now())-(TIMESTAMPDIFF(hour, DATE_ADD(fecha_descanso, INTERVAL 8 HOUR), now()))*60,'M'),
+							CONCAT(
+							   TIMESTAMPDIFF(day, DATE_ADD(fecha_original, INTERVAL 8 HOUR), now()),'D ',    
+							   TIMESTAMPDIFF(hour, DATE_ADD(fecha_original, INTERVAL 8 HOUR), now())-TIMESTAMPDIFF(day, DATE_ADD(fecha_original, INTERVAL 8 HOUR), now())*24,'H  ',
+							   TIMESTAMPDIFF(minute, DATE_ADD(fecha_original, INTERVAL 8 HOUR), now())-(TIMESTAMPDIFF(hour, DATE_ADD(fecha_original, INTERVAL 8 HOUR), now()))*60,'M')
+						)
+					) as 'listo',
+					IF (IF(fecha_original='0000-00-00 00:00:00',
+							IF(TIMESTAMPDIFF(hour, fecha_descanso, now())<8,true,false),
+							IF(TIMESTAMPDIFF(hour, fecha_original, now())<8,true,false)),
+						0,
+						IF (fecha_original='0000-00-00 00:00:00',
+							TIMESTAMPDIFF(hour, DATE_ADD(fecha_descanso, INTERVAL 8 HOUR), now()),
+							TIMESTAMPDIFF(hour, DATE_ADD(fecha_original, INTERVAL 8 HOUR), now())
+						)
+					) as 'listot'
 				FROM 
 					uso_baterias_bodega,
 					(SELECT id as bdcid
@@ -170,10 +212,12 @@ $querybodegas="
 		WHERE
 			usos.bg=b.id AND
 			usos.bt=bat.idbaterias AND
-			bat.idbaterias IN (
+			(bat.idbaterias IN (
 				SELECT idbaterias
 				FROM cargadores_baterias
 				WHERE idcargadores =$id
+				)
+				OR c.cargadores_tipo='Bodega'
 			) AND 
 			c.idcargadores=b.cg AND
 			cbg.cg=c.idcargadores
@@ -189,33 +233,36 @@ $querybodegas="
 			CONCAT(c.cargadores_volts,'V ',c.cargadores_amperaje,'Ah (',c.cargadores_e,')') as Tipo,
 			NULL as Bateria,
 			NULL as entrada,
-			NULL as entradah,
+			NULL as entradat,
 			NULL as carga,
-			NULL as cargah,
+			NULL as cargat,
 			NULL as descanso,
-			NULL as descansoh,
+			NULL as descansot,
+			NULL as listo,
+			NULL as listot,
 			CONCAT(
 				TIMESTAMPDIFF(day, libres.fecha_salida, now()),'D ',    
 				TIMESTAMPDIFF(hour, libres.fecha_salida, now())-TIMESTAMPDIFF(day, libres.fecha_salida, now())*24,'H  ',
 				TIMESTAMPDIFF(minute, libres.fecha_salida, now())-(TIMESTAMPDIFF(hour, libres.fecha_salida, now()))*60,'M')
 			as disponible,
-			TIMESTAMPDIFF(hour, libres.fecha_salida, now())	as disponibleh
+			TIMESTAMPDIFF(hour, libres.fecha_salida, now())	as disponiblet
 		FROM
 			bodegas as b,
 			cargadores as c,
 			(
-			  SELECT  
-				bg,
-				MAX(fecha_salida) as fecha_salida
-			  FROM 
-				uso_baterias_bodega,
-				(SELECT id as bdcid
-					 FROM bodegas
-					 WHERE cg=$id) as bdc
-			  WHERE 
-				fecha_salida !='0000-00-00 00:00:00'
-				AND bg=bdc.bdcid
-			  GROUP BY bg
+				SELECT  
+					bg,
+					MAX(fecha_salida) as fecha_salida
+				FROM 
+					uso_baterias_bodega,
+					(SELECT id as bdcid
+						FROM bodegas
+						WHERE cg=$id
+					) as bdc
+				WHERE 
+					fecha_salida !='0000-00-00 00:00:00'
+					AND bg=bdc.bdcid
+				GROUP BY bg
 			) as libres,
 			(
 				SELECT cg,
@@ -253,13 +300,15 @@ $querybodegas="
 			CONCAT(c.cargadores_volts,'V ',c.cargadores_amperaje,'Ah (',c.cargadores_e,')') as Tipo,
 			NULL as Bateria,
 			NULL as entrada,
-			NULL as entradah,
+			NULL as entradat,
 			NULL as carga,
-			NULL as cargah,
+			NULL as cargat,
 			NULL as descanso,
-			NULL as descansoh,
+			NULL as descansot,
+			NULL as listo,
+			NULL as listot,
 			NULL as disponible,
-			NULL as disponibleh
+			NULL as disponiblet
 		FROM
 			bodegas as b,
 			cargadores as c,
@@ -286,10 +335,10 @@ $querybodegas="
 $resultado = $mysqli->query($querybodegas);
 $bodegas=array();
 $cantlugares=0;
+//echo $querybodegas;
 while($fila = $resultado->fetch_array()) {
 	$cantlugares=$fila['cantbg'];
 	if ($datosCargador['ctipo']=='Cargador'){
-		$bodegas[$fila['Espacio']]['bt']=$fila['Bateria'];
 		$bodegas[$fila['Espacio']]['estado']='<span style="color:red;">ERROR</span>';
 		$bodegas[$fila['Espacio']]['tiempo']=0;
 		$bodegas[$fila['Espacio']]['horas']=0;
@@ -299,15 +348,23 @@ while($fila = $resultado->fetch_array()) {
 		$bodegas[$fila['Espacio']]['estado']='<span style="color:green">Disponible</span>';
 		$bodegas[$fila['Espacio']]['tiempo']=$fila['disponible'];
 		$bodegas[$fila['Espacio']]['horas']=$fila['disponiblet'];
+	}elseif ($fila['listo']!=NULL){
+		$bodegas[$fila['Espacio']]['bt']=$fila['Bateria'];
+		$bodegas[$fila['Espacio']]['estado']='<span style="color:green">Listo</span>';
+		$bodegas[$fila['Espacio']]['tiempo']=$fila['libre'];
+		$bodegas[$fila['Espacio']]['horas']=$fila['libret'];
 	}elseif ($fila['descanso']!=NULL){
-		$bodegas[$fila['Espacio']]['estado']='<span style="color:green">Descanso</span>';
+		$bodegas[$fila['Espacio']]['bt']=$fila['Bateria'];
+		$bodegas[$fila['Espacio']]['estado']='<span style="color:blue">Descanso</span>';
 		$bodegas[$fila['Espacio']]['tiempo']=$fila['descanso'];
 		$bodegas[$fila['Espacio']]['horas']=$fila['descansot'];
 	}elseif ($fila['carga']!=NULL && $datosCargador['ctipo']=='Cargador'){
-		$bodegas[$fila['Espacio']]['estado']='<span style="color:#c49f47">Carga</span>';
+		$bodegas[$fila['Espacio']]['bt']=$fila['Bateria'];
+		$bodegas[$fila['Espacio']]['estado']='<span style="color:orange">Carga</span>';
 		$bodegas[$fila['Espacio']]['tiempo']=$fila['carga'];
 		$bodegas[$fila['Espacio']]['horas']=$fila['cargat'];
 	}elseif ($fila['entrada']!=NULL){
+		$bodegas[$fila['Espacio']]['bt']=$fila['Bateria'];
 		$bodegas[$fila['Espacio']]['estado']='<span style="color:red">Espera</span>';
 		$bodegas[$fila['Espacio']]['tiempo']=$fila['entrada'];
 		$bodegas[$fila['Espacio']]['horas']=$fila['entradat'];
@@ -317,8 +374,10 @@ while($fila = $resultado->fetch_array()) {
 		$bodegas[$fila['Espacio']]['tiempo']=0;
 		$bodegas[$fila['Espacio']]['horas']=0;
 	}
-}
+	
+	//pinta_array($fila);
 
+}
 
 
 ?>

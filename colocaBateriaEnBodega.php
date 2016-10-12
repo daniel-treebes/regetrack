@@ -20,7 +20,7 @@ if ($_POST['cargando']==1){
 	$cargando='now()';
 	$usuario_carga=$loggedInUser->user_id;
 }else{
-	$cargando='0000-00-00 00:00:00';
+	$cargando="'0000-00-00 00:00:00'";
 	$usuario_carga='NULL';
 }
 $query="
@@ -39,7 +39,7 @@ $query="
 		$_POST['bodega'].",".
 		$_POST['bateria'].",
 		now(),
-		'".$cargando."',
+		".$cargando.",
 		'0000-00-00 00:00:00',
 		'0000-00-00 00:00:00',".
 		"'".$loggedInUser->user_id."',".

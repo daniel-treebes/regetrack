@@ -52,7 +52,7 @@
             </li>
             <li id="mbodegas">
             <a href="bodegas.php?tipo=Bodega">
-                <i class="fa icon-cargador"></i>
+                <i class="fa fa-th"></i>
                 <span class="title">Bodegas</span>
                 <span class="selected"></span>
                 </a>

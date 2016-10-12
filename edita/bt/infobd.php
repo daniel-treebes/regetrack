@@ -43,7 +43,24 @@ $querydondecg="
 	SELECT u.id, c.cargadores_nombre as nombre, c.idcargadores as cgid,
 	   TIMESTAMPDIFF(hour, fecha_entrada, now()) as espera,
 	   TIMESTAMPDIFF(hour, fecha_carga, now()) as carga,
-	   TIMESTAMPDIFF(hour, fecha_descanso, now()) as descanso,
+		IF (IF(fecha_original='0000-00-00 00:00:00',
+				IF(TIMESTAMPDIFF(hour, fecha_descanso, now())<8,true,false),
+				IF(TIMESTAMPDIFF(hour, fecha_original, now())<8,true,false)),
+			TIMESTAMPDIFF(hour, fecha_descanso, now()),
+			IF (fecha_original='0000-00-00 00:00:00',
+				8,
+				(8-TIMESTAMPDIFF(hour, fecha_original, fecha_descanso))
+			)
+		) as descanso,
+		IF (IF(fecha_original='0000-00-00 00:00:00',
+				IF(TIMESTAMPDIFF(hour, fecha_descanso, now())<8,true,false),
+				IF(TIMESTAMPDIFF(hour, fecha_original, now())<8,true,false)),
+			0,
+			IF (fecha_original='0000-00-00 00:00:00',
+				TIMESTAMPDIFF(hour, DATE_ADD(fecha_descanso, INTERVAL 8 HOUR), now()),
+				TIMESTAMPDIFF(hour, DATE_ADD(fecha_original, INTERVAL 8 HOUR), now())
+			)
+		) as listo,
 	   c.cargadores_tipo as ctipo
 	FROM uso_baterias_bodega as u, bodegas as b, cargadores as c
 	WHERE u.bt =".$_GET['id']." AND 
@@ -54,7 +71,7 @@ $querydondecg="
 	ORDER BY u.id desc 
 	LIMIT 1
 ";
-
+//echo $querydondecg;
 $querydondemc="
 	SELECT m.montacargas_nombre as nombre,
 		TIMESTAMPDIFF(hour, fecha_entrada, now()) as uso
@@ -86,14 +103,19 @@ if (count($filadondecg)==0 && count($filadondemc)==0){
 	$cargadorid=$filadondecg['cgid'];
 	$ctipo=$filadondecg['ctipo'];
 	$ubicacion=$filadondecg['nombre'];
-	if ($filadondecg['descanso']!=NULL){
+	if ($filadondecg['listo']!=NULL){
+		$estado="LISTO";
+		$estadoAct='<span style="color:green;">LISTO</span>';
+		$porcentaje=$filadondecg['listo']*100/8;
+		$tiempoDeUso=$filadondecg['listo'];
+	}elseif ($filadondecg['descanso']!=NULL){
 		$estado="DESCANSO";
-		$estadoAct='<span class="green-jungle">DESCANSO</span>';
+		$estadoAct='<span style="color:blue;">DESCANSO</span>';
 		$porcentaje=$filadondecg['descanso']*100/8;
 		$tiempoDeUso=$filadondecg['descanso'];
 	}elseif ($filadondecg['carga']!=NULL){
 		$estado="CARGA";
-		$estadoAct='<span class="yellow">CARGA</span>';
+		$estadoAct='<span style="color:orange;">CARGA</span>';
 		$porcentaje=$filadondecg['carga']*100/8;
 		$tiempoDeUso=$filadondecg['carga'];
 	}elseif ($filadondecg['espera']!=NULL){
@@ -106,12 +128,12 @@ if (count($filadondecg)==0 && count($filadondemc)==0){
 	$ctipo='Montacargas';
 	$estado="USO";
 	$ubicacion=$filadondemc['nombre'];
-	$estadoAct='<span style="color:green;">EN USO</span>';
+	$estadoAct='<span style="color:black;">EN USO</span>';
 	$porcentaje=$filadondemc['uso']*100/8;
 	$tiempoDeUso=$filadondemc['uso'];
 }elseif (count($filadondecg)>=0 && count($filadondemc)>=0){
 	$ubicacion='ERROR! (2 locaciones):'.$filadondecg['nombre'].' y '.$filadondemc['nombre'];
-	$estadoAct='<span style="color:red;">ERROR!!</span>';
+	$estadoAct='<span style="color:white;background-color:red;">ERROR!!</span>';
 	$porcentaje=0;
 	$tiempoDeUso='??';
 }
@@ -283,6 +305,7 @@ $cargadorSiguiente['tipo']='Montacargas';
 $cargadorSiguiente['minfd']='0000-00-00 00:00:00';
 $cargadorSiguiente['maxfc']='0000-00-00 00:00:00';
 //Selecciona el cargador más adecuado
+//print_r($espaciosDisponibles);
 foreach ($espaciosDisponibles as $cg_id => $datos){
 	$termina=0;
 	if (!array_key_exists ($cg_id,$cargadoresOcupados)){
@@ -315,9 +338,10 @@ foreach ($espaciosDisponibles as $cg_id => $datos){
 		}
 	}
 	
-	$cargadorSiguiente['tipo']=$espaciosDisponibles[$cg_id]['tipo'];
+	$cargadorSiguiente['tipo']=$datos['tipo'];
 	
 	if ($cargadorSiguiente['tipo']=="Bodega"){
+		$cargadorSiguiente=$datos;
 		$cargadorSiguiente['minfd']='0000-00-00 00:00:00';
 		$cargadorSiguiente['maxfc']='0000-00-00 00:00:00';
 	}
@@ -331,5 +355,26 @@ foreach ($espaciosDisponibles as $cg_id => $datos){
 }
 //print_r($cargadorSiguiente);
 
+//Obtiene los Montacargas y Cargadores posibles para colocar en inventario según la relación
+$queryMCpermitidos="SELECT rel.idmontacargas as mc, m.montacargas_nombre as nombre
+			FROM montacargas_baterias as rel, montacargas as m
+			WHERE rel.idmontacargas=m.idmontacargas
+				AND idbaterias=".$_GET['id'];
+$mcPermitidos=array();
+$res = $mysqli->query($queryMCpermitidos);
+while($fila = $res->fetch_array()) {
+    $mcPermitidos[$fila['mc']]=$fila['nombre'];
+}
+
+$queryCGpermitidos="SELECT rel.idcargadores as cg, c.cargadores_nombre as nombre
+			FROM cargadores_baterias as rel, cargadores as c
+			WHERE rel.idcargadores=c.idcargadores
+				AND idbaterias=".$_GET['id'];
+$cgPermitidos=array();
+$res = $mysqli->query($queryCGpermitidos);
+while($fila = $res->fetch_array()) {
+    $cgPermitidos[$fila['cg']]=$fila['nombre'];
+}			
+			
 ?>
 

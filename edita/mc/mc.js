@@ -37,7 +37,7 @@ $(document).ready(function(){
                 updated with old and new value.*/
       callback: function (event) {
       if (event.attributeName=="val") {
-         muestraPasos(3)
+         muestraPasos(3);
       }
     }        
    });
@@ -48,12 +48,12 @@ $(document).ready(function(){
                 updated with old and new value.*/
       callback: function (event) {
          if (event.attributeName=="val") {
-            ocultaPasos()
+            ocultaPasos();
             $('#scaneo').hide(1000);
             if ($("#pasos").attr('tipomovimiento')=='monta'){
-               ponBateriaEnMC()
+               ponBateriaEnMC();
             }else{
-               colocaBateriaEnBodega()
+               colocaBateriaEnBodega();
             }
          }
       }        
@@ -61,18 +61,18 @@ $(document).ready(function(){
 });
 
 function ocultaPasos() {
-	$("#paso1").hide()
-	$("#paso2").hide()
-	$("#paso3").hide()
+	$("#paso1").hide();
+	$("#paso2").hide();
+	$("#paso3").hide();
 }
 
 function muestraPasos(cual) {
-	ocultaPasos()
-	$("#paso"+cual).show()
+	ocultaPasos();
+	$("#paso"+cual).show();
     //para que webcam cheque el siguiente
 //    ciclo=cual;
 }
-ocultaPasos()
+ocultaPasos();
 
 function colocaBateriaEnBodega(){
    montacargas=$("#pasos").attr('montacargas');

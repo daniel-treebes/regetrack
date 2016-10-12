@@ -144,7 +144,6 @@ th{
     background-color: #2b3643;
 }
 .page-header.navbar .page-logo .logo-default {
-
     position: absolute;
 }
 
@@ -160,4 +159,17 @@ td.details-control{
 
 tr.shown td.details-control {
     background: url('images/details_close.png') no-repeat center center;
+}
+.page-sidebar-menu li a,
+.page-sidebar-menu i{
+	font-size: 19px!important;
+	text-transform: uppercase;
+}
+.page-logo{
+	padding-left: 3px!important;
+	margin: 0px!important;
+}
+.logo-default{
+	height:80%;
+	margin-top: 3px!important;
 }
