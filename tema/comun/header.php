@@ -5,6 +5,7 @@ if(isUserLoggedIn()) {
 	
 ?>
  <!-- BEGIN HEADER -->
+ <body ng-app="regetrack">
 <div class="page-header navbar navbar-fixed-top">
     <!-- BEGIN HEADER INNER -->
     <div class="page-header-inner">
