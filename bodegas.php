@@ -1,19 +1,24 @@
 <?php
-
-$nombrePagina="Cargadores";
-$acciones=[];
-$acciones[0][0]="Exportar";
-$acciones[0][1]="javascript:exporta();";
-$acciones[1][0]="Importar";
-$acciones[1][1]='javascript:importa();';
-
 require_once("models/config.php");
+require_once("models/header.php");
+
+
+
+
 if (!securePage($_SERVER['PHP_SELF'])){die();}
 $tipo = $_GET['tipo'];
 if($tipo == 'Bodega'){
     $nombrePagina="Bodegas";
 }
-require_once("models/header.php");
+
+$nombrePagina="Cargadores";
+$acciones=[];
+$acciones[0][0]="Exportar";
+$acciones[0][1]="javascript:exporta();";
+if($loggedInUser->checkPermission(array(2)) && $tipo == 'Cargador'){
+   $acciones[1][0]="Alta";
+   $acciones[1][1]='/sistema.php?ruta=alta/cargadores'; 
+}
 $query="
 SELECT * FROM
 (
@@ -194,7 +199,7 @@ function importa(){
 
 function exporta(){
 		   url=location.href.substring(0, location.href.lastIndexOf("/")+1)
-		   window.open(url+'exportaciones/ebodegas.php','_blank');
+		   window.open(url+'exportaciones/ecargadores.php?tipo=<?php echo $tipo?>','_blank');
 }
 	
 function importa2(){
@@ -353,9 +358,12 @@ require_once("tema/comun/footer.php");
 <script src="assets/global/scripts/app.min.js"></script>
 <script>
     $(document).ready( function () {
+        
         'use strict';
         var tipo = "<?php echo $tipo?>";
-
+        if(tipo == 'Bodega'){
+            $('.page-bar .dropdown').remove();
+        }
             var columns = [
                 {
                     "sClass":      'details-control',

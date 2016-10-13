@@ -22,23 +22,42 @@ $uploadfile = $uploaddir."/".$filename.'.cvs';
     while (($data = fgetcsv($handle, 100000, ",")) !== FALSE) {
       
       if($count != 0){
-          
-        $exist = MontacargasQuery::create()->filterById($data[0])->useBateriastiposQuery()->filterByIdsucursal($loggedInUser->sucursal_activa)->endUse()->exists();
+        $sucursales = explode(',', $loggedInUser->sucursales); 
+        $exist = MontacargasQuery::create()->filterByIdmontacargas($data[0])->filterByIdsucursal($sucursales)->exists();
         if($exist){
             $montacargas = MontacargasQuery::create()->findPk($data[0]);
            
         }else{
             $montacargas = new Montacargas(); 
         }  
+
+        $montacargas->setMontacargasModelo($data[1])
+                    ->setMontacargasMarca($data[2])
+                    ->setMontacargasComprador($data[3])
+                    ->setMontacargasC($data[4])
+                    ->setMontacargasK($data[5])
+                    ->setMontacargasP($data[6])
+                    ->setMontacargasT($data[7])
+                    ->setMontacargasE($data[8])
+                    ->setMontacargasVolts($data[9])
+                    ->setMontacargasAmperaje($data[10]);
         
-        $montacargas->setNombre($data[1])
-                    ->setModelo($data[2])
-                    ->setTipo($data[3])
-                    ->setCiclosMant($data[4])
-                    ->setCiclosMant($data[5])
-                    ->save();
+       
+        
+        $baterias_modelos = BateriasQuery::create()->select(array('baterias_modelo'))->filterByBateriasVolts($data[9])->filterByBateriasAmperaje($data[10])->filterByBateriasT($data[7])->filterByBateriasE($data[8])->groupByBateriasModelo()->find();
+        //ASOCIACION DE BATERIAS
+        $sucursales = explode(',', $loggedInUser->sucursales);
+        $baterias = BateriasQuery::create()->filterByIdsucursal($sucursales)->filterByBateriasModelo($baterias_modelos)->find();
+        $bateria = new Baterias();
+        foreach ($baterias as $bateria){
+            $montacargas_baterias = new MontacargasBaterias();
+            $montacargas_baterias->setIdbaterias($bateria->getIdbaterias())
+                                 ->setIdmontacargas($montacargas->getIdmontacargas())
+                                 ->save();
+        }
         
       }
+
       $count ++ ;
       
      

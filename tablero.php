@@ -211,9 +211,10 @@ $bodegas_listo = 0;
     </div>
     <div class="col-sm-3">
         <!--div id="container-speed" class="visores" style=" height: 180px; float: left"></div-->
-        <div id="" class="visores" style="height: 180px;"> </div>
+        <div id="eficienciaBG" class="visores" style="height: 180px;"> </div>
        
     </div>
+    
 </div>
 <div id="tablero">
     <div class="row" id="tablero_head">
@@ -284,7 +285,7 @@ $bodegas_listo = 0;
         </div>
         <div class="col-sm-2 number">
             <h3 class="tablero_head_movil" style="display:none">%</h3>
-            <h1 style="font-weight: bold"><?php echo round((($cargadores_total-$baterias_desh_total) * 100) / $cargadores_total)?> %</h1>
+            <h1 style="font-weight: bold"><?php echo round((($cargadores_total-$cargadores_desh_total) * 100) / $cargadores_total)?> %</h1>
         </div>
     </div>
     <div class="row" id="tablero_head">
@@ -582,6 +583,9 @@ $bodegas_listo = 0;
     echo $efidato['script'];
     $efidato=eficiencia('bt','descanso','eficienciaBTD');
     echo $efidato['script'];
+    $efidato=eficiencia('cg','uso','eficienciaBG','Bodega');
+    echo $efidato['script'];
+    
 
 ?>
 

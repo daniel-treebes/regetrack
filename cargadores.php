@@ -1,5 +1,8 @@
 <?php
 
+require_once("models/config.php");
+require_once("models/header.php");
+
 $nombrePagina="Control Cargadores";
 $acciones=[];
 $acciones[0][0]="Exportar";
@@ -8,10 +11,10 @@ $acciones[1][0]="Importar";
 $acciones[1][1]='javascript:importa();';
 
 
-require_once("models/config.php");
+
 if (!securePage($_SERVER['PHP_SELF'])){die();}
 
-require_once("models/header.php");
+
 $query="
 SELECT
 	id as 'Id',
