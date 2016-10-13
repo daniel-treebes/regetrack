@@ -2,6 +2,7 @@
 require_once("models/config.php");
 require_once("models/header.php");
 
+
 $nombrePagina="Baterias";
 $acciones=[];
 $acciones[0][0]="Exportar";
