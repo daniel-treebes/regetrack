@@ -1,7 +1,8 @@
 <?php
+require_once("models/config.php");
+if (!securePage($_SERVER['PHP_SELF'])){die();}
 
-
-
+require_once("models/header.php");
 $nombrePagina="Baterias";
 $acciones=[];
 $acciones[0][0]="Exportar";
@@ -11,10 +12,9 @@ if($loggedInUser->checkPermission(array(2))){
    $acciones[1][1]='/sistema.php?ruta=alta/montacargas'; 
 }
 
-require_once("models/config.php");
+
 if (!securePage($_SERVER['PHP_SELF'])){die();}
 
-require_once("models/header.php");
 
 $query="
 SELECT
