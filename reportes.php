@@ -71,7 +71,7 @@
 </script>
 
       <?php
-
+//CARGADORES
       $query="SELECT b.id,
                   cg.cargadores_nombre as 'CARGADOR',
                   bt.baterias_nombre as 'BATERIA',
@@ -91,12 +91,43 @@
                      IF((TIMESTAMPDIFF(MINUTE, fecha_carga, fecha_descanso)-(TIMESTAMPDIFF(HOUR, fecha_carga, fecha_descanso)*60))<10,'0',''),
                      TIMESTAMPDIFF(MINUTE, fecha_carga, fecha_descanso)-(TIMESTAMPDIFF(HOUR, fecha_carga, fecha_descanso)*60))
                   as 'CARGA',
-                  CONCAT(TIMESTAMPDIFF(DAY, fecha_descanso, fecha_salida),':',
-                     IF((TIMESTAMPDIFF(HOUR, fecha_descanso, fecha_salida)-(TIMESTAMPDIFF(DAY, fecha_descanso, fecha_salida)*24))<10,'0',''),
-                     TIMESTAMPDIFF(HOUR, fecha_descanso, fecha_salida)-(TIMESTAMPDIFF(DAY, fecha_descanso, fecha_salida)*24),':',
-                     IF((TIMESTAMPDIFF(MINUTE, fecha_descanso, fecha_salida)-(TIMESTAMPDIFF(HOUR, fecha_descanso, fecha_salida)*60))<10,'0',''),
-                     TIMESTAMPDIFF(MINUTE, fecha_descanso, fecha_salida)-(TIMESTAMPDIFF(HOUR, fecha_descanso, fecha_salida)*60))
-                  as 'DESCANSO',
+                  IF (IF(fecha_original='0000-00-00 00:00:00',
+                        IF(TIMESTAMPDIFF(hour, fecha_descanso, fecha_salida)<8,true,false),
+                        IF(TIMESTAMPDIFF(hour, fecha_original, fecha_salida)<8,true,false)),
+                        CONCAT(TIMESTAMPDIFF(DAY, fecha_descanso, fecha_salida),':',
+                           IF((TIMESTAMPDIFF(HOUR, fecha_descanso, fecha_salida)-(TIMESTAMPDIFF(DAY, fecha_descanso, fecha_salida)*24))<10,'0',''),
+                           TIMESTAMPDIFF(HOUR, fecha_descanso, fecha_salida)-(TIMESTAMPDIFF(DAY, fecha_descanso, fecha_salida)*24),':',
+                           IF((TIMESTAMPDIFF(MINUTE, fecha_descanso, fecha_salida)-(TIMESTAMPDIFF(HOUR, fecha_descanso, fecha_salida)*60))<10,'0',''),
+                           TIMESTAMPDIFF(MINUTE, fecha_descanso, fecha_salida)-(TIMESTAMPDIFF(HOUR, fecha_descanso, fecha_salida)*60)),
+                        IF (fecha_original='0000-00-00 00:00:00',
+                           '0:08:00',
+                           IF(TIMESTAMPDIFF(hour, fecha_descanso, DATE_ADD(fecha_original, INTERVAL 8 HOUR))<8,
+                              '0:08:00',
+                              CONCAT(TIMESTAMPDIFF(DAY, fecha_descanso, DATE_ADD(fecha_original, INTERVAL 8 HOUR)),':',
+                                 IF((TIMESTAMPDIFF(HOUR, fecha_descanso, DATE_ADD(fecha_original, INTERVAL 8 HOUR))-(TIMESTAMPDIFF(DAY, fecha_descanso, DATE_ADD(fecha_original, INTERVAL 8 HOUR))*24))<10,'0',''),
+                                 TIMESTAMPDIFF(HOUR, fecha_descanso, DATE_ADD(fecha_original, INTERVAL 8 HOUR))-(TIMESTAMPDIFF(DAY, fecha_descanso, DATE_ADD(fecha_original, INTERVAL 8 HOUR))*24),':',
+                                 IF((TIMESTAMPDIFF(MINUTE, fecha_descanso, DATE_ADD(fecha_original, INTERVAL 8 HOUR))-(TIMESTAMPDIFF(HOUR, fecha_descanso, DATE_ADD(fecha_original, INTERVAL 8 HOUR))*60))<10,'0',''),
+                                 TIMESTAMPDIFF(MINUTE, fecha_descanso, DATE_ADD(fecha_original, INTERVAL 8 HOUR))-(TIMESTAMPDIFF(HOUR, fecha_descanso, DATE_ADD(fecha_original, INTERVAL 8 HOUR))*60))
+                           )
+                        )
+                  ) as 'DESCANSO',
+                  IF (IF(fecha_original='0000-00-00 00:00:00',
+                        IF(TIMESTAMPDIFF(hour, fecha_descanso, fecha_salida)<8,true,false),
+                        IF(TIMESTAMPDIFF(hour, fecha_original, fecha_salida)<8,true,false)),
+                     '0:00:00',
+                     IF (fecha_original='0000-00-00 00:00:00',
+                        CONCAT(TIMESTAMPDIFF(DAY, DATE_ADD(fecha_descanso, INTERVAL 8 HOUR), fecha_salida),':',
+                           IF((TIMESTAMPDIFF(HOUR, DATE_ADD(fecha_descanso, INTERVAL 8 HOUR), fecha_salida)-(TIMESTAMPDIFF(DAY, DATE_ADD(fecha_descanso, INTERVAL 8 HOUR), fecha_salida)*24))<10,'0',''),
+                           TIMESTAMPDIFF(HOUR, DATE_ADD(fecha_descanso, INTERVAL 8 HOUR), fecha_salida)-(TIMESTAMPDIFF(DAY, DATE_ADD(fecha_descanso, INTERVAL 8 HOUR), fecha_salida)*24),':',
+                           IF((TIMESTAMPDIFF(MINUTE, DATE_ADD(fecha_descanso, INTERVAL 8 HOUR), fecha_salida)-(TIMESTAMPDIFF(HOUR, DATE_ADD(fecha_descanso, INTERVAL 8 HOUR), fecha_salida)*60))<10,'0',''),
+                           TIMESTAMPDIFF(MINUTE, DATE_ADD(fecha_descanso, INTERVAL 8 HOUR), fecha_salida)-(TIMESTAMPDIFF(HOUR, DATE_ADD(fecha_descanso, INTERVAL 8 HOUR), fecha_salida)*60)),
+                        CONCAT(TIMESTAMPDIFF(DAY, DATE_ADD(fecha_original, INTERVAL 8 HOUR), fecha_salida),':',
+                           IF((TIMESTAMPDIFF(HOUR, DATE_ADD(fecha_original, INTERVAL 8 HOUR), fecha_salida)-(TIMESTAMPDIFF(DAY, DATE_ADD(fecha_original, INTERVAL 8 HOUR), fecha_salida)*24))<10,'0',''),
+                           TIMESTAMPDIFF(HOUR, DATE_ADD(fecha_original, INTERVAL 8 HOUR), fecha_salida)-(TIMESTAMPDIFF(DAY, DATE_ADD(fecha_original, INTERVAL 8 HOUR), fecha_salida)*24),':',
+                           IF((TIMESTAMPDIFF(MINUTE, DATE_ADD(fecha_original, INTERVAL 8 HOUR), fecha_salida)-(TIMESTAMPDIFF(HOUR, DATE_ADD(fecha_original, INTERVAL 8 HOUR), fecha_salida)*60))<10,'0',''),
+                           TIMESTAMPDIFF(MINUTE, DATE_ADD(fecha_original, INTERVAL 8 HOUR), fecha_salida)-(TIMESTAMPDIFF(HOUR, DATE_ADD(fecha_original, INTERVAL 8 HOUR), fecha_salida)*60))
+                     )
+                  ) as 'LISTO',
                   ue.user_name as UE,
                   uc.user_name as UC,
                   ud.user_name as UD,
@@ -111,7 +142,7 @@
       $dg = new C_DataGrid($query, "id", "USO_DE_BATERIAS_Y_CARGADORES");
       
       $dg -> set_caption("USO DE BATER&Iacute;AS Y CARGADORES");
-      $dg -> set_query_filter("bg.id=b.bg AND bg.cg=cg.idcargadores AND bt.idbaterias=b.bt ".$rangoferchasBAT." AND cg.idsucursal = ".$loggedInUser->sucursal_activa);
+      $dg -> set_query_filter("bg.id=b.bg AND bg.cg=cg.idcargadores AND bt.idbaterias=b.bt ".$rangoferchasBAT." AND cg.idsucursal IN (".$loggedInUser->sucursales.") AND cg.cargadores_tipo='Cargador'");
       $dg -> set_col_hidden("id");
       $dg -> set_col_align('CARGADOR', 'center');
       $dg -> set_col_align('BATERIA', 'center');
@@ -121,38 +152,32 @@
       $dg -> set_col_align('Fecha_Carga', 'center');
       $dg -> set_col_title('Fecha_Descanso','Fecha Descanso');
       $dg -> set_col_align('Fecha_Descanso', 'center');
+      $dg -> set_col_title('F_Desc_Cargador','F. Descanso Cargador');
+      $dg -> set_col_align('F_Desc_Cargador', 'center');
       $dg -> set_col_title('Fecha_Salida','Fecha Salida');
       $dg -> set_col_align('Fecha_Salida', 'center');
-      $dg -> set_col_align('ESPERA', 'right');
-      $dg -> set_col_align('CARGA', 'right');
-      $dg -> set_col_align('DESCANSO', 'right');
+      $dg -> set_col_align('ESPERA', 'center');
+      $dg -> set_col_align('CARGA', 'center');
+      $dg -> set_col_align('DESCANSO', 'center');
+      $dg -> set_col_align('LISTO', 'center');
       $dg -> set_col_width('CARGADOR', 100);
       $dg -> set_col_width('BATERIA', 100);
-      $dg -> set_col_width('ESPERA', 80);
-      $dg -> set_col_width('CARGA', 80);
+      $dg -> set_col_width('ESPERA', 70);
+      $dg -> set_col_width('CARGA', 70);
       $dg -> set_col_width('DESCANSO', 80);
-      $dg -> set_col_width('UE', 50);
-      $dg -> set_col_width('UC', 50);
-      $dg -> set_col_width('UD', 50);
-      $dg -> set_col_width('US', 50);
+      $dg -> set_col_width('LISTO', 70);
+      $dg -> set_col_width('UE', 40);
+      $dg -> set_col_width('UC', 40);
+      $dg -> set_col_width('UD', 40);
+      $dg -> set_col_width('US', 40);
      
-
-/*      
-      $dg -> set_col_edittype("UE", "select", "Select user_name,user_name from uc_users",false);
-      $dg -> set_col_edittype("UC", "select", "Select user_name,user_name from uc_users",false);
-      $dg -> set_col_edittype("UD", "select", "Select user_name,user_name from uc_users",false);
-      $dg -> set_col_edittype("US", "select", "Select user_name,user_name from uc_users",false);
-      $dg -> set_col_edittype("BATERIA", "select", "Select num_serie,num_serie from baterias",false);
-      $dg -> set_col_edittype("CARGADOR", "select", "Select nombre,nombre from cargadores",false);
-
-      $dg -> set_col_date("Fecha_Carga", "Y-m-d H:i:s", "Y-m-d H:i:s", "Y-m-d H:i:s");
-
-      $dg->enable_search(true);
-*/
       $dg -> enable_export('EXCEL');
       $dg -> display();
       
       echo '<br><br>';
+
+
+//MONTACARGAS
       
       $query="SELECT b.id,
                   mc.montacargas_nombre as 'MONTACARGAS',
@@ -192,6 +217,104 @@
       $dg -> display();
     
       echo '<br><br>';
+
+//BODEGAS
+      $query="SELECT b.id,
+                  cg.cargadores_nombre as 'BODEGA',
+                  bt.baterias_nombre as 'BATERIA',
+                  b.fecha_entrada as 'Fecha_Espera',
+                  b.fecha_original as 'F_Desc_Cargador',
+                  b.fecha_descanso as 'Fecha_Descanso',
+                  b.fecha_salida as 'Fecha_Salida',
+                  CONCAT(TIMESTAMPDIFF(DAY, fecha_entrada, fecha_carga),':',
+                     IF((TIMESTAMPDIFF(HOUR, fecha_entrada, fecha_carga)-(TIMESTAMPDIFF(DAY, fecha_entrada, fecha_carga)*24))<10,'0',''),
+                     TIMESTAMPDIFF(HOUR, fecha_entrada, fecha_carga)-(TIMESTAMPDIFF(DAY, fecha_entrada, fecha_carga)*24),':',
+                     IF((TIMESTAMPDIFF(MINUTE, fecha_entrada, fecha_carga)-(TIMESTAMPDIFF(HOUR, fecha_entrada, fecha_carga)*60))<10,'0',''),
+                     TIMESTAMPDIFF(MINUTE, fecha_entrada, fecha_carga)-(TIMESTAMPDIFF(HOUR, fecha_entrada, fecha_carga)*60))
+                  as 'ESPERA',
+                  IF (IF(fecha_original='0000-00-00 00:00:00',
+                        IF(TIMESTAMPDIFF(hour, fecha_descanso, fecha_salida)<8,true,false),
+                        IF(TIMESTAMPDIFF(hour, fecha_original, fecha_salida)<8,true,false)),
+                        CONCAT(TIMESTAMPDIFF(DAY, fecha_descanso, fecha_salida),':',
+                           IF((TIMESTAMPDIFF(HOUR, fecha_descanso, fecha_salida)-(TIMESTAMPDIFF(DAY, fecha_descanso, fecha_salida)*24))<10,'0',''),
+                           TIMESTAMPDIFF(HOUR, fecha_descanso, fecha_salida)-(TIMESTAMPDIFF(DAY, fecha_descanso, fecha_salida)*24),':',
+                           IF((TIMESTAMPDIFF(MINUTE, fecha_descanso, fecha_salida)-(TIMESTAMPDIFF(HOUR, fecha_descanso, fecha_salida)*60))<10,'0',''),
+                           TIMESTAMPDIFF(MINUTE, fecha_descanso, fecha_salida)-(TIMESTAMPDIFF(HOUR, fecha_descanso, fecha_salida)*60)),
+                        IF (fecha_original='0000-00-00 00:00:00',
+                           '0:08:00',
+                           IF(TIMESTAMPDIFF(hour, fecha_descanso, DATE_ADD(fecha_original, INTERVAL 8 HOUR))<8,
+                              '0:08:00',
+                              CONCAT(TIMESTAMPDIFF(DAY, fecha_descanso, DATE_ADD(fecha_original, INTERVAL 8 HOUR)),':',
+                                 IF((TIMESTAMPDIFF(HOUR, fecha_descanso, DATE_ADD(fecha_original, INTERVAL 8 HOUR))-(TIMESTAMPDIFF(DAY, fecha_descanso, DATE_ADD(fecha_original, INTERVAL 8 HOUR))*24))<10,'0',''),
+                                 TIMESTAMPDIFF(HOUR, fecha_descanso, DATE_ADD(fecha_original, INTERVAL 8 HOUR))-(TIMESTAMPDIFF(DAY, fecha_descanso, DATE_ADD(fecha_original, INTERVAL 8 HOUR))*24),':',
+                                 IF((TIMESTAMPDIFF(MINUTE, fecha_descanso, DATE_ADD(fecha_original, INTERVAL 8 HOUR))-(TIMESTAMPDIFF(HOUR, fecha_descanso, DATE_ADD(fecha_original, INTERVAL 8 HOUR))*60))<10,'0',''),
+                                 TIMESTAMPDIFF(MINUTE, fecha_descanso, DATE_ADD(fecha_original, INTERVAL 8 HOUR))-(TIMESTAMPDIFF(HOUR, fecha_descanso, DATE_ADD(fecha_original, INTERVAL 8 HOUR))*60))
+                           )
+                        )
+                  ) as 'DESCANSO',
+                  IF (IF(fecha_original='0000-00-00 00:00:00',
+                        IF(TIMESTAMPDIFF(hour, fecha_descanso, fecha_salida)<8,true,false),
+                        IF(TIMESTAMPDIFF(hour, fecha_original, fecha_salida)<8,true,false)),
+                     '0:00:00',
+                     IF (fecha_original='0000-00-00 00:00:00',
+                        CONCAT(TIMESTAMPDIFF(DAY, DATE_ADD(fecha_descanso, INTERVAL 8 HOUR), fecha_salida),':',
+                           IF((TIMESTAMPDIFF(HOUR, DATE_ADD(fecha_descanso, INTERVAL 8 HOUR), fecha_salida)-(TIMESTAMPDIFF(DAY, DATE_ADD(fecha_descanso, INTERVAL 8 HOUR), fecha_salida)*24))<10,'0',''),
+                           TIMESTAMPDIFF(HOUR, DATE_ADD(fecha_descanso, INTERVAL 8 HOUR), fecha_salida)-(TIMESTAMPDIFF(DAY, DATE_ADD(fecha_descanso, INTERVAL 8 HOUR), fecha_salida)*24),':',
+                           IF((TIMESTAMPDIFF(MINUTE, DATE_ADD(fecha_descanso, INTERVAL 8 HOUR), fecha_salida)-(TIMESTAMPDIFF(HOUR, DATE_ADD(fecha_descanso, INTERVAL 8 HOUR), fecha_salida)*60))<10,'0',''),
+                           TIMESTAMPDIFF(MINUTE, DATE_ADD(fecha_descanso, INTERVAL 8 HOUR), fecha_salida)-(TIMESTAMPDIFF(HOUR, DATE_ADD(fecha_descanso, INTERVAL 8 HOUR), fecha_salida)*60)),
+                        CONCAT(TIMESTAMPDIFF(DAY, DATE_ADD(fecha_original, INTERVAL 8 HOUR), fecha_salida),':',
+                           IF((TIMESTAMPDIFF(HOUR, DATE_ADD(fecha_original, INTERVAL 8 HOUR), fecha_salida)-(TIMESTAMPDIFF(DAY, DATE_ADD(fecha_original, INTERVAL 8 HOUR), fecha_salida)*24))<10,'0',''),
+                           TIMESTAMPDIFF(HOUR, DATE_ADD(fecha_original, INTERVAL 8 HOUR), fecha_salida)-(TIMESTAMPDIFF(DAY, DATE_ADD(fecha_original, INTERVAL 8 HOUR), fecha_salida)*24),':',
+                           IF((TIMESTAMPDIFF(MINUTE, DATE_ADD(fecha_original, INTERVAL 8 HOUR), fecha_salida)-(TIMESTAMPDIFF(HOUR, DATE_ADD(fecha_original, INTERVAL 8 HOUR), fecha_salida)*60))<10,'0',''),
+                           TIMESTAMPDIFF(MINUTE, DATE_ADD(fecha_original, INTERVAL 8 HOUR), fecha_salida)-(TIMESTAMPDIFF(HOUR, DATE_ADD(fecha_original, INTERVAL 8 HOUR), fecha_salida)*60))
+                     )
+                  ) as 'LISTO',
+                  ue.user_name as UE,
+                  ud.user_name as UD,
+                  us.user_name as US
+              FROM bodegas as bg, cargadores as cg, baterias as bt,
+                   uso_baterias_bodega as b
+                     LEFT JOIN uc_users as ue ON b.usuario_entrada=ue.id
+                     LEFT JOIN uc_users as uc ON b.usuario_carga=uc.id
+                     LEFT JOIN uc_users as ud ON b.usuario_descanso=ud.id
+                     LEFT JOIN uc_users as us ON b.usuario_salida=us.id";
+     
+      $dg = new C_DataGrid($query, "id", "USO_DE_BATERIAS_EN_BODEGAS");
+      
+      $dg -> set_caption("USO DE BATER&Iacute;AS EN BODEGAS");
+      $dg -> set_query_filter("bg.id=b.bg AND bg.cg=cg.idcargadores AND bt.idbaterias=b.bt ".$rangoferchasBAT." AND cg.idsucursal IN (".$loggedInUser->sucursales.") AND cg.cargadores_tipo='Bodega' ");
+      $dg -> set_col_hidden("id");
+      $dg -> set_col_align('BODEGA', 'center');
+      $dg -> set_col_align('BATERIA', 'center');
+      $dg -> set_col_title('Fecha_Espera','Fecha Entrada');
+      $dg -> set_col_align('Fecha_Espera', 'center');
+      $dg -> set_col_title('F_Desc_Cargador','F.Des. Cargador');
+      $dg -> set_col_align('F_Desc_Cargador', 'center');
+      $dg -> set_col_title('Fecha_Descanso','Fecha Descanso');
+      $dg -> set_col_align('Fecha_Descanso', 'center');
+      $dg -> set_col_title('Fecha_Salida','Fecha Salida');
+      $dg -> set_col_align('Fecha_Salida', 'center');
+      $dg -> set_col_align('ESPERA', 'center');
+      $dg -> set_col_align('DESCANSO', 'center');
+      $dg -> set_col_align('LISTO', 'center');
+      $dg -> set_col_width('BODEGA', 100);
+      $dg -> set_col_width('BATERIA', 100);
+      $dg -> set_col_width('ESPERA', 80);
+      $dg -> set_col_width('DESCANSO', 80);
+      $dg -> set_col_width('LISTO', 80);
+      $dg -> set_col_width('UE', 40);
+      $dg -> set_col_width('UD', 40);
+      $dg -> set_col_width('US', 40);
+     
+      $dg -> enable_export('EXCEL');
+      $dg -> display();
+      
+      echo '<br><br>';
+
+
+
+//ALERTAS MONTACARGAS
+
       $query="SELECT b.id,
                   mc.montacargas_nombre as 'MONTACARGAS',
                   b.fecha_entrada as 'Fecha_Inicio',

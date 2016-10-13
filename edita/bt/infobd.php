@@ -49,7 +49,10 @@ $querydondecg="
 			TIMESTAMPDIFF(hour, fecha_descanso, now()),
 			IF (fecha_original='0000-00-00 00:00:00',
 				8,
-				(8-TIMESTAMPDIFF(hour, fecha_original, fecha_descanso))
+				IF(TIMESTAMPDIFF(hour, fecha_descanso, DATE_ADD(fecha_original, INTERVAL 8 HOUR))<8,
+					8,
+					TIMESTAMPDIFF(hour, fecha_descanso, DATE_ADD(fecha_original, INTERVAL 8 HOUR))
+				)
 			)
 		) as descanso,
 		IF (IF(fecha_original='0000-00-00 00:00:00',
@@ -193,6 +196,7 @@ if ($ctipo=="Cargador"){
 }else{
 	$buscalugar="AND tcg.cargadores_tipo='Cargador' ";	
 }
+
 $queryEspacioDisponible="
 	SELECT
 		tcg.idcargadores as cg_id,
@@ -306,6 +310,7 @@ $cargadorSiguiente['minfd']='0000-00-00 00:00:00';
 $cargadorSiguiente['maxfc']='0000-00-00 00:00:00';
 //Selecciona el cargador más adecuado
 //print_r($espaciosDisponibles);
+
 foreach ($espaciosDisponibles as $cg_id => $datos){
 	$termina=0;
 	if (!array_key_exists ($cg_id,$cargadoresOcupados)){
@@ -359,22 +364,60 @@ foreach ($espaciosDisponibles as $cg_id => $datos){
 $queryMCpermitidos="SELECT rel.idmontacargas as mc, m.montacargas_nombre as nombre
 			FROM montacargas_baterias as rel, montacargas as m
 			WHERE rel.idmontacargas=m.idmontacargas
-				AND idbaterias=".$_GET['id'];
+				AND m.idmontacargas NOT IN (
+					SELECT idmontacargas FROM deshabilitamc
+					WHERE fecha_salida!='0000-00-00 00:00:00'
+				)
+				AND m.idsucursal IN (".$loggedInUser->sucursales.")
+				AND rel.idbaterias=".$_GET['id'];
+//echo $queryMCpermitidos;
 $mcPermitidos=array();
 $res = $mysqli->query($queryMCpermitidos);
+$mcpid='[';
 while($fila = $res->fetch_array()) {
     $mcPermitidos[$fila['mc']]=$fila['nombre'];
+	$mcpid.=$fila['mc'].',';
 }
+$mcpid=substr($mcpid,0,-1).']';
 
 $queryCGpermitidos="SELECT rel.idcargadores as cg, c.cargadores_nombre as nombre
 			FROM cargadores_baterias as rel, cargadores as c
 			WHERE rel.idcargadores=c.idcargadores
-				AND idbaterias=".$_GET['id'];
+				AND c.idcargadores NOT IN (
+					SELECT cg FROM deshabilitacg
+					WHERE fecha_salida!='0000-00-00 00:00:00'
+				)
+				AND c.idsucursal IN (".$loggedInUser->sucursales.")
+				AND c.cargadores_tipo='Cargador'
+				AND rel.idbaterias=".$_GET['id'];
 $cgPermitidos=array();
 $res = $mysqli->query($queryCGpermitidos);
+$cgpid='[';
 while($fila = $res->fetch_array()) {
     $cgPermitidos[$fila['cg']]=$fila['nombre'];
-}			
-			
+	$cgpid.=$fila['cg'].',';
+}
+
+$queryCGpermitidos="SELECT c.idcargadores as cg, c.cargadores_nombre as nombre
+			FROM cargadores as c, baterias as b
+			WHERE c.idcargadores NOT IN (
+					SELECT cg FROM deshabilitacg
+					WHERE fecha_salida!='0000-00-00 00:00:00'
+				)
+				AND c.idsucursal IN (".$loggedInUser->sucursales.")
+				AND b.idsucursal=c.idsucursal
+				AND c.cargadores_tipo='Bodega'
+				AND b.idbaterias=".$_GET['id'];
+$boPermitidos=array();
+$res = $mysqli->query($queryCGpermitidos);
+while($fila = $res->fetch_array()) {
+    $boPermitidos[$fila['cg']]=$fila['nombre'];
+	$cgpid.=$fila['cg'].',';
+}
+$cgpid=substr($cgpid,0,-1).']';
+
+//echo '<pre>';print_r($mcPermitidos);echo '</pre>';
+//echo '<pre>';print_r($cgPermitidos);echo '</pre>';
+//echo '<pre>';print_r($boPermitidos);echo '</pre>';
 ?>
 

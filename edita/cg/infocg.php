@@ -3,15 +3,17 @@ include('infobd.php');
 //DATOS DEL CARGADOR
 if ($datosCargador['ctipo']=='Cargador') {
 	$titulocg="Cargador";
+	$iconocb='icon-cargador';
 }else{
 	$titulocg="Bodega";
+	$iconocb='fa-th';
 }
 ?>
 <div class="col-md-6" id="indicadores1">
     <div class="portlet box  blue-sharp">
         <div class="portlet-title">
             <div class="caption">
-                <i class="fa icon-cargador"></i><?php echo $titulocg.' '.$datosCargador['Nombre']; ?>
+                <i class="fa <?php echo $iconocb;?>"></i><?php echo $titulocg.' '.$datosCargador['Nombre']; ?>
             </div>
             <div class="tools">
                 <a href="" class="collapse" data-original-title="" title=""> </a>
@@ -170,7 +172,7 @@ if($habilitaid>0){
 						   <div class="easy-pie-chart">
 							  <center><?php echo $espacio.'<br>'.$datosbt['bt'];?></center>
 							  <strong><?php echo $datosbt['estado']; ?></strong><br>
-							  <strong><?php echo $datosbt['horas']; ?></strong><br>
+							  <strong><?php echo $datosbt['horas']; ?>hrs</strong><br>
 							  <strong><?php echo $datosbt['tiempo']; ?></strong><br>
 							  <div style="height: 20px;"> </div>
 						   </div>

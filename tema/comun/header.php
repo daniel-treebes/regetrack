@@ -12,7 +12,8 @@ if(isUserLoggedIn()) {
         <!-- BEGIN LOGO -->
         <div class="page-logo">
             <a href="escanear.php">
-            <img src="imagenes/reggae-track.png" alt="logo" class="logo-default"/>
+            <img src="imagenes/reggae-track.png" alt="logo" class="logo-default hidden-xs"/>
+            <img src="imagenes/reggae-track_2.png" alt="logo" class="logo-default hidden-sm hidden-md hidden-lg"/>
             </a>
             <div class="menu-toggler sidebar-toggler hide">
                 <!-- DOC: Remove the above "hide" to enable the sidebar toggler button on header -->

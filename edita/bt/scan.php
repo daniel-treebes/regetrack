@@ -75,12 +75,37 @@
             <div id="pasosI" bateria="<?php echo $_GET['id'];?>"
                             nuevoestado=" "
                             tipomovimiento="Inventario">
-                <div id="paso1I" tipodemodulo="cualquiera" proximo="0" val="0" modulonombre="" moduloid="">
+                <div id="paso1I" tipodemodulo="cualquiera" proximo="0" val="0" modulonombre="" moduloid=""
+                     cargadores="<?php echo $cgpid?>" montacargas="<?php echo $mcpid?>">
                     <center><h3>PASO 1</h3>
                         <br>
-                        <i class="fa fa-question-circle iconscannext"></i><i class="fa icon-cargador iconscannext"></i><i class="fa icon-montacarga iconscannext"></i><br>
+                        <i class="fa icon-montacarga iconscannext"></i> <i class="fa icon-cargador iconscannext"></i> <i class="fa fa-th iconscannext"></i><br>
                         <br>
-                        Escanea el cargador o montacargas donde se encuentra la batería <?php  echo $datosBateria['Nombre'] ?>
+                        Escanea, de las siguientes ubicaciones, dónde se encuentra la batería <?php  echo $datosBateria['Nombre']; ?>
+                        <?php
+                        if (count($mcPermitidos)>0){
+                            echo '<br><i class="fa icon-montacarga"></i> - ';
+                            foreach ($mcPermitidos as $nombre){
+                                echo $nombre.' ';
+                            }
+                        }
+                        if (count($cgPermitidos)>0){
+                            echo '<br><i class="fa icon-cargador"></i> - ';
+                            foreach ($cgPermitidos as $nombre){
+                                echo $nombre.' ';
+                            }
+                        }
+                        if (count($boPermitidos)>0){
+                            echo '<br><i class="fa fa-th"></i> - ';
+                            foreach ($boPermitidos as $nombre){
+                                echo $nombre.' ';
+                            }
+                        }
+                        if (count($boPermitidos)==0 && count($cgPermitidos)==0 && count($mcPermitidos)==0){
+                            echo 'SIN LUGARES DEL MISMO TIPO O COMPATIBILIDAD HABILITADOS';
+                        }
+                        
+                        ?>
                     </center>
                     <span></span>
                 </div>

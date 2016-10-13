@@ -6,7 +6,7 @@ date_default_timezone_set('UTC');
 date_default_timezone_set("America/Mexico_City");
 //Database Information
 $db_host = "localhost"; //Host address (most likely localhost)
-$db_name = "regetrac_sistema"; //Name of Database
+$db_name = "regetrac_sistemav2"; //Name of Database
 $db_user = "regetrac_sistema"; //Name of database user
 $db_pass = "Hola.1234"; //Password for database user
 
@@ -27,14 +27,13 @@ $ciclos=120;
 
 $queryMC="
 SELECT
-	id as Id
+	idmontacargas as Id
 FROM
 	montacargas
 ";
 $losMC = $mysqli->query($queryMC);
 while($losMCa2 = $losMC->fetch_array())
 {
-	
 $losMCa[] = $losMCa2;
 }
 
@@ -42,7 +41,7 @@ $losMCa[] = $losMCa2;
 
 $queryBT="
 SELECT
-	id as Id
+	idbaterias as Id
 FROM
 	baterias
 ";
@@ -59,8 +58,12 @@ SELECT
 FROM
 	bodegas
 ";
-$lasBG = $mysqli->query($queryBG);	
-$lasBGa=$lasBG->fetch_array();
+$lasBG = $mysqli->query($queryBG);
+while($lasBGa2 = $lasBG->fetch_array())
+{
+$lasBGa[] = $lasBGa2;
+}
+ 
 
 echo "MC: ". mysqli_num_rows($losMC)."<br>";
 echo "BT: ".mysqli_num_rows($lasBT)."<br>";
@@ -101,6 +104,7 @@ function inicializa(){
 	
 	for($i=0;$i<count($lasBTa);$i++){
 		$random=randWithout(1,count($lasBTa),$bateriasAcomodadas);
+		$randomb=randWithout(1,count($lasBTa),$bateriasAcomodadas);
 		
 		$bateriasAcomodadas[$i]=$random;
 		if($i==0){
@@ -386,15 +390,26 @@ function desplazaSacaMC(){
 function dameBodegasDisponibles(){
 	global $mysqli;
 	$query="
-		SELECT bg
-		FROM
-			uso_baterias_bodega
-		WHERE 
-			fecha_salida != '0000-00-00 00:00:00' and
-			fecha_carga != '0000-00-00 00:00:00' and
-			id not in (
-				select bg from uso_baterias_bodega where fecha_salida = '0000-00-00 00:00:00'
-			)	";
+	SELECT bg FROM (
+			SELECT bg
+			FROM
+				uso_baterias_bodega
+			WHERE 
+				fecha_salida != '0000-00-00 00:00:00' and
+				fecha_carga != '0000-00-00 00:00:00' and
+				id not in (
+					select bg from uso_baterias_bodega where fecha_salida = '0000-00-00 00:00:00'
+				)
+				
+			UNION ALL
+			
+			SELECT id as bg FROM bodegas WHERE id not in (
+					select bg from uso_baterias_bodega where fecha_salida = '0000-00-00 00:00:00'
+				)
+		) as resulta
+		GROUP BY bg
+		
+		";
 	$respuesta = $mysqli->query($query);
 	$arregloRespuesta=[];
 	while($lasBTa2 = $respuesta->fetch_array())
@@ -407,9 +422,9 @@ function dameBodegasDisponibles(){
 function dameMCDisponibles(){
 		global $mysqli;
 	$query="
-	select id as mc
+	select idmontacargas as mc
 	from montacargas
-	where id not in(
+	where idmontacargas not in(
     	select
 			mc
 		from
@@ -458,7 +473,7 @@ function dameMC(){
 function acomodaMC($mc,$bt,$fechaEntra,$fechaSale){
 	global $mysqli;
 	$query="
-	INSERT INTO  regetrac_sistema.uso_baterias_montacargas (
+	INSERT INTO  uso_baterias_montacargas (
 		mc ,
 		bt ,
 		fecha_entrada ,
@@ -557,12 +572,12 @@ function reseteaTodo(){
 	$resultado = $mysqli->query($qvacia);
 	$qvacia="TRUNCATE uso_baterias_montacargas";
 	$resultado = $mysqli->query($qvacia);
-	$qvacia="TRUNCATE deshabilitamc";
-	$resultado = $mysqli->query($qvacia);
-	$qvacia="TRUNCATE deshabilitacg";
-	$resultado = $mysqli->query($qvacia);
-	$qvacia="TRUNCATE deshabilitabt";
-	$resultado = $mysqli->query($qvacia);
+//	$qvacia="TRUNCATE deshabilitamc";
+//	$resultado = $mysqli->query($qvacia);
+//	$qvacia="TRUNCATE deshabilitacg";
+//	$resultado = $mysqli->query($qvacia);
+//	$qvacia="TRUNCATE deshabilitabt";
+//	$resultado = $mysqli->query($qvacia);
 	
 }
 

@@ -115,9 +115,9 @@ function read(a)
 //	if (ultimo==data) {
 
 //	}else{
-	  elemento ="#paso"+ciclo
-      if (jQuery(elemento).attr("tipodemodulo")===undefined) {
-		elemento=elemento+"I";
+	  elemento ="#paso"+ciclo;
+    if (jQuery(elemento).attr("tipodemodulo")===undefined) {
+			elemento=elemento+"I";
 	  }
 
 	  if(verificaPasoModulo(elemento,data)==true){
@@ -148,29 +148,34 @@ function verificaPasoModulo(elemento, valor) {
   if (idleidoanterior==idrecibe && moduloleidoanterior==modulorecibe) {
 	return false;
   }else if (modulo==modulorecibe) {
-	idleidoanterior=idrecibe
-	moduloleidoanterior=modulorecibe
+		idleidoanterior=idrecibe;
+		moduloleidoanterior=modulorecibe;
 	if (idrecibe==idproximo) {
 		//ejecutaCambios();
-		jQuery(elemento).attr("val",idrecibe)
-	return true;
+		jQuery(elemento).attr("val",idrecibe);
+		return true;
 	}else{
 	  alert(modulo+" no corresponde al que deberia ingresar, porfavor verifique");
-	  return false
+	  return false;
 	}
   }else if(modulo=="cualquiera"){
-	idleidoanterior=idrecibe
-	moduloleidoanterior=modulorecibe
-	jQuery(elemento).attr("modulonombre",modulorecibe);
-	jQuery(elemento).attr("moduloid",idrecibe);
-	return true;
+		idleidoanterior=idrecibe;
+		moduloleidoanterior=modulorecibe;
+		listado=jQuery(elemento).attr(modulorecibe);
+		if (listado.indexOf(idrecibe)<0){
+			alert("El lugar escaneado no es parte de la lista de compatibles. Mueva la bateria a un lugar compatible e inicie de nuevo.");
+			return false;
+		}
+		jQuery(elemento).attr("modulonombre",modulorecibe);
+		jQuery(elemento).attr("moduloid",idrecibe);
+		return true;
   }else if(modulo=="espera"){
-	return true;
+		return true;
   }else{
-	idleidoanterior=idrecibe
-	moduloleidoanterior=modulorecibe
-	alert("El objeto recibido no fue un "+ modulo + ", fue un "+dameModulo(valor));
-	return false;
+		idleidoanterior=idrecibe;
+		moduloleidoanterior=modulorecibe;
+		alert("El objeto recibido no fue un "+ modulo + ", fue un "+dameModulo(valor));
+		return false;
   }
   
 }

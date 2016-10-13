@@ -156,8 +156,14 @@ $querybodegas="
 						   TIMESTAMPDIFF(hour, fecha_descanso, now())-TIMESTAMPDIFF(day, fecha_descanso, now())*24,'H  ',
 						   TIMESTAMPDIFF(minute, fecha_descanso, now())-(TIMESTAMPDIFF(hour, fecha_descanso, now()))*60,'M'),
 						IF (fecha_descanso='0000-00-00 00:00:00',
-							NULL,
-							'0D 8H 0M'
+							'0D 8H 0M',
+							IF(TIMESTAMPDIFF(hour, fecha_descanso, DATE_ADD(fecha_original, INTERVAL 8 HOUR))<8,
+								'0D 8H 0M',
+								CONCAT(
+									TIMESTAMPDIFF(day, fecha_descanso, DATE_ADD(fecha_original, INTERVAL 8 HOUR)),'D ',    
+									TIMESTAMPDIFF(hour, fecha_descanso, DATE_ADD(fecha_original, INTERVAL 8 HOUR))-TIMESTAMPDIFF(day, fecha_descanso, DATE_ADD(fecha_original, INTERVAL 8 HOUR))*24,'H  ',
+									TIMESTAMPDIFF(minute, fecha_descanso, DATE_ADD(fecha_original, INTERVAL 8 HOUR))-(TIMESTAMPDIFF(hour, fecha_descanso, DATE_ADD(fecha_original, INTERVAL 8 HOUR)))*60,'M')
+							)
 						)
 					) as 'descanso',
 					IF (IF(fecha_original='0000-00-00 00:00:00',
@@ -165,8 +171,11 @@ $querybodegas="
 							IF(TIMESTAMPDIFF(hour, fecha_original, now())<8,true,false)),
 						TIMESTAMPDIFF(hour, fecha_descanso, now()),
 						IF (fecha_descanso='0000-00-00 00:00:00',
-							NULL,
-							8
+							8,
+							IF(TIMESTAMPDIFF(hour, fecha_descanso, DATE_ADD(fecha_original, INTERVAL 8 HOUR))<8,
+								8,
+								TIMESTAMPDIFF(hour, fecha_descanso, DATE_ADD(fecha_original, INTERVAL 8 HOUR))
+							)
 						)
 					) as 'descansot',
 					IF (IF(fecha_original='0000-00-00 00:00:00',
@@ -351,8 +360,8 @@ while($fila = $resultado->fetch_array()) {
 	}elseif ($fila['listo']!=NULL){
 		$bodegas[$fila['Espacio']]['bt']=$fila['Bateria'];
 		$bodegas[$fila['Espacio']]['estado']='<span style="color:green">Listo</span>';
-		$bodegas[$fila['Espacio']]['tiempo']=$fila['libre'];
-		$bodegas[$fila['Espacio']]['horas']=$fila['libret'];
+		$bodegas[$fila['Espacio']]['tiempo']=$fila['listo'];
+		$bodegas[$fila['Espacio']]['horas']=$fila['listot'];
 	}elseif ($fila['descanso']!=NULL){
 		$bodegas[$fila['Espacio']]['bt']=$fila['Bateria'];
 		$bodegas[$fila['Espacio']]['estado']='<span style="color:blue">Descanso</span>';

@@ -126,7 +126,6 @@ $bodegas_listo = 0;
 
     .my_icons {
         margin-top: 20px;
-        /*float: left;*/
         width: 60px;
         height: 60px;
         display: inline-block;
@@ -134,8 +133,9 @@ $bodegas_listo = 0;
         line-height: 41px;
         color: #3E4F5E;
         text-align: center;
-        padding: 10px;
+        padding: 0px;
         margin-right: 15px;
+        font-size: 85px;
     }
 
     .visores {
@@ -158,9 +158,6 @@ $bodegas_listo = 0;
     #tablero .number span{
         font-weight: 100;
     }
-    .my_icons{
-        font-size: 85px;
-    }
     
     @media screen and (max-width: 768px) {
         #tablero_head {
@@ -172,11 +169,16 @@ $bodegas_listo = 0;
         .tablero_head_movil{
             display: block !important;
         }
+        .iconotitulo{
+            margin-top: 10px;
+            background-color: #f1f4f7;
+        }
     }
     .highcharts-axis-title{
         font-size: 9px !important;
         font-weight: bold;
     }
+    
 </style>
 <script src="rgraph/RGraph.common.core.js" ></script>
 <script src="rgraph/RGraph.meter.js" ></script>
@@ -194,26 +196,25 @@ $bodegas_listo = 0;
     </div>
 </div>
 <div class="row">
-    <div class="col-sm-3">
-        <!--div id="container-speed" class="visores" style=" height: 180px; float: left"></div-->
+    <div class="hidden-lg hidden-md col-sm-3"></div>
+    <div class="col-md-4 col-sm-6" style="padding-top:5px;">
         <div id="eficienciaBTU" class="visores" style="height: 180px;"> </div>
-       
     </div>
-    <div class="col-sm-3">
-        <!--div id="container-speed" class="visores" style=" height: 180px; float: left"></div-->
+    <div class="hidden-lg hidden-md col-sm-3"></div>
+    <div class="col-md-4 col-sm-6" style="padding-top:5px;">
+        <div id="eficienciaBTE" class="visores" style="height: 180px;"> </div>
+    </div>
+    <div class="col-md-4 col-sm-6" style="padding-top:5px;">
         <div id="eficienciaBTC" class="visores" style="height: 180px;"> </div>
-       
     </div>
-    <div class="col-sm-3">
-        <!--div id="container-speed" class="visores" style=" height: 180px; float: left"></div-->
+    <div class="col-md-2 hidden-sm" style="padding-top:5px;"></div>
+    <div class="col-md-4 col-sm-6">
         <div id="eficienciaBTD" class="visores" style="height: 180px;"> </div>
-       
     </div>
-    <div class="col-sm-3">
-        <!--div id="container-speed" class="visores" style=" height: 180px; float: left"></div-->
-        <div id="" class="visores" style="height: 180px;"> </div>
-       
+    <div class="col-md-4 col-sm-6" style="padding-top:5px;">
+        <div id="eficienciaBTL" class="visores" style="height: 180px;"> </div>
     </div>
+    <div class="col-md-2 hidden-sm"></div>
 </div>
 <div id="tablero">
     <div class="row" id="tablero_head">
@@ -229,8 +230,8 @@ $bodegas_listo = 0;
             <h3>%</h3>
         </div>
     </div>
-    <div class="row">
-        <div class="col-sm-3 ">
+    <div class="row" >
+        <div class="col-sm-3 iconotitulo">
             <center>
                 <i class="my_icons fa icon-montacarga"></i>
             </center>
@@ -250,9 +251,9 @@ $bodegas_listo = 0;
         </div>
     </div>
     <div class="row">
-        <div class="col-sm-3 ">
+        <div class="col-sm-3 iconotitulo">
              <center>
-                <i class="my_icons fa icon-bateria" ></i>
+                <i class="my_icons fa icon-bateria" style="margin-left:-8px;" ></i>
              </center>
         </div>
         <div class="col-sm-2 number">
@@ -269,9 +270,9 @@ $bodegas_listo = 0;
         </div>
     </div>
     <div class="row">
-        <div class="col-sm-3 ">
+        <div class="col-sm-3 iconotitulo">
              <center>
-                 <i class="my_icons fa icon-cargador"></i>
+                 <i class="my_icons fa icon-cargador" style="margin-left:-8px;" ></i>
              </center>
         </div>
         <div class="col-sm-2 number">
@@ -301,9 +302,9 @@ $bodegas_listo = 0;
         </div>
     </div>
     <div class="row">
-        <div class="col-sm-3 ">
+        <div class="col-sm-3 iconotitulo">
              <center>
-                 <i class="my_icons fa fa-th" style="font-size: 55px; margin-left: 25px; margin-top: 25px;"></i>
+                 <i class="my_icons fa fa-th" class="iconotitulo" style="font-size: 55px; margin-left: 15px; padding-top: 15px;"></i>
              </center>
         </div>
         <div class="col-sm-2 number">
@@ -578,9 +579,13 @@ $bodegas_listo = 0;
     
     $efidato=eficiencia('bt','uso','eficienciaBTU');
     echo $efidato['script'];
+    $efidato=eficiencia('bt','espera','eficienciaBTE');
+    echo $efidato['script'];
     $efidato=eficiencia('bt','carga','eficienciaBTC');
     echo $efidato['script'];
     $efidato=eficiencia('bt','descanso','eficienciaBTD');
+    echo $efidato['script'];
+    $efidato=eficiencia('bt','listo','eficienciaBTL');
     echo $efidato['script'];
 
 ?>

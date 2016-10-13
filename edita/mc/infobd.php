@@ -181,7 +181,7 @@ foreach ($espaciosDisponibles as $cg_id => $datos){
 		$cargadorSiguiente['maxfc']='0000-00-00 00:00:00';
 		$termina=1;
 	}else{
-		if ($cargadoresOcupados[$cg_id]['minfd']!='0000-00-00 00:00:00' && $cargadorSiguiente['tipo']=="Cargador"){
+		if ($cargadoresOcupados[$cg_id]['minfd']!='0000-00-00 00:00:00' && $datos['tipo']=="Cargador"){
 			//Si el cargador está sin cargar lo escoje y ya
 			$cargadorSiguiente=$datos;
 			$cargadorSiguiente['minfd']=$cargadoresOcupados[$cg_id]['minfd'];
@@ -204,7 +204,7 @@ foreach ($espaciosDisponibles as $cg_id => $datos){
 		}
 	}
 	
-	$cargadorSiguiente['tipo']=$espaciosDisponibles[$cg_id]['tipo'];
+	$cargadorSiguiente['tipo']=$datos['tipo'];
 	
 	if ($cargadorSiguiente['tipo']=="Bodega"){
 		$cargadorSiguiente['minfd']='0000-00-00 00:00:00';
