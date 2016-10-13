@@ -285,7 +285,7 @@ $bodegas_listo = 0;
         </div>
         <div class="col-sm-2 number">
             <h3 class="tablero_head_movil" style="display:none">%</h3>
-            <h1 style="font-weight: bold"><?php echo round((($cargadores_total-$baterias_desh_total) * 100) / $cargadores_total)?> %</h1>
+            <h1 style="font-weight: bold"><?php echo round((($cargadores_total-$cargadores_desh_total) * 100) / $cargadores_total)?> %</h1>
         </div>
     </div>
     <div class="row" id="tablero_head">

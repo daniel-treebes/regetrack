@@ -1,47 +1,40 @@
 <?php
 
 require_once("../models/db-settings.php");
+require_once("../models/config.php");
+$tipo = $_GET['tipo'];
+if($tipo == 'Cargador'){
+    $file_name = 'cargadores';
+}else{
+    $file_name = 'bodegas';
+}
 
 $uploaddir = getcwd()."/archivos";
-$filename = "baterias-".date('Y-m-d-H:i:s');
+$filename = strtolower($tipo). "-".date('Y-m-d-H:i:s');
 $uploadfile = $uploaddir."/".$filename.'.cvs';
+$sucursales = explode(',', $loggedInUser->sucursales);
+$result = CargadoresQuery::create()->filterByCargadoresTipo($tipo)->select(array('idcargadores','cargadores_modelo','cargadores_marca','cargadores_comprador','cargadores_e','cargadores_volts','cargadores_amperaje'))->filterByIdsucursal($sucursales)->find()->toArray();
 
-/*$result = $mysqli->query("SELECT cargadores.id, cargadores.nombre as 'nombre de cargador', bateriastipos.nombre as 'nombre de bateria', bateriastipos.marca, bateriastipos.celdas, bateriastipos.factor_k as 'factor k', bateriastipos.placas, bateriastipos.volts, bateriastipos.ah, bateriastipos.vida_util as 'vida util', bateriastipos.regeneracion_preventiva as 'regeneracion preventiva', bateriastipos.regeneracion_correctiva as 'regeneracion correctiva'
-from cargadores
-left join bateriastipos
-ON cargadores.tipo = bateriastipos.id");*/
-$result= $mysqli->query("SELECT * FROM cargadores");
+//$result = $mysqli->query('SELECT montacargas.* FROM montacargas JOIN cargadorestipos ON montacargas.tipo = cargadorestipos.id WHERE cargadorestipos.idsucursal = '.$loggedInUser->sucursal_activa);
 if (!$result) die('Couldn\'t fetch records');
-$num_fields = mysqli_num_fields($result);
-$headers = array();
-while ($property = mysqli_fetch_field($result)) {
-    $headers[] = $property->name;
-}
 
 $fp = fopen('php://output', 'w');
 if ($fp && $result) {
     header('Content-Type: text/csv');
-    header('Content-Disposition: attachment; filename="cargadores-'.date('Y-m-d-H:i:s').'.csv"');
+    header('Content-Disposition: attachment; filename="'.$file_name."-".date('Y-m-d-H:i:s').'.csv"');
     header('Pragma: no-cache');
-    header('Expires: 0');
-    fputcsv($fp, $headers);
+    header('Expires: 0'); 
     $encavezado=[];
-    $encavezado[0]="id";
-    $encavezado[1]="nombre";
-    $encavezado[2]="tipo";
-/*    $encavezado[2]="nombre de batería";
-    $encavezado[3]="marca";
-    $encavezado[4]="celdas";
-    $encavezado[5]="factor k";
-    $encavezado[6]="placas";
-    $encavezado[7]="volts";
-    $encavezado[8]="ah";
-    $encavezado[9]="vida útil";
-    $encavezado[10]="regeneración preventiva";
-    $encavezado[11]="regeneración correctiva";*/
-	 
-    
-    while ($row = $result->fetch_array(MYSQLI_NUM)) {
+    $encavezado[0]="ID";
+    $encavezado[1]="MODELO";
+    $encavezado[2]="MARCA";
+     $encavezado[3]="COMPRADOR";
+    $encavezado[4]="C";
+    $encavezado[8]="E";
+    $encavezado[9]="VOLTS";
+    $encavezado[10]="AMPERES";
+    fputcsv($fp, $encavezado);
+    foreach($result as $row) {
         fputcsv($fp, array_values($row));
     }
     

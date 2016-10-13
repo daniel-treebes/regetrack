@@ -4,14 +4,14 @@
 $message = false;
 if($_POST){
     $post_data = $_POST;
-    
-    $entity = new Montacargas();
+ 
+    $entity = new Cargadores();
     foreach ($post_data as $key => $value){
-        if(MontacargasPeer::getTableMap()->hasColumn($key)){
+        if(CargadoresPeer::getTableMap()->hasColumn($key)){
            $entity->setByName($key, strtoupper($value), BasePeer::TYPE_FIELDNAME);
         }
     }
-
+    
     $entity->save();
     
     //ASOCIACION DE BATERIAS
@@ -19,22 +19,23 @@ if($_POST){
     $baterias = BateriasQuery::create()->filterByIdsucursal($sucursales)->filterByBateriasModelo($post_data['baterias'])->find();
     $bateria = new Baterias();
     foreach ($baterias as $bateria){
-        $montacargas_baterias = new MontacargasBaterias();
-        $montacargas_baterias->setIdbaterias($bateria->getIdbaterias())
-                             ->setIdmontacargas($entity->getIdmontacargas())
+        $cargadores_baterias = new CargadoresBaterias();
+        $cargadores_baterias->setIdbaterias($bateria->getIdbaterias())
+                             ->setIdcargadores($entity->getIdcargadores())
                              ->save();
     }
     
     $message = 'El Registro se ha guardado satisfactoriamente!';
   
+    
 }
 
 $nombrePagina="Alta Montacargas";
 $acciones=[];
 $sucursales = explode(',', $loggedInUser->sucursales);
 $sucursales_array = SucursalQuery::create()->filterByIdempresa($loggedInUser->idempresa)->find();
-$montacargas_nombre = (int)MontacargasQuery::create()->filterByIdsucursal($sucursales)->select(array('idmontacargas'))->orderByIdmontacargas(Criteria::DESC)->findOne();
-$montacargas_nombre = sprintf("M%03d", $montacargas_nombre+1);
+$cargadores_nombre = (int)  CargadoresQuery::create()->filterByIdsucursal($sucursales)->select(array('idcargadores'))->orderByIdcargadores(Criteria::DESC)->findOne();
+$cargadores_nombre = sprintf("C%03d", $cargadores_nombre+1);
 
 $baterias_modelos = BateriasQuery::create()->select(array('baterias_modelo'))->filterByIdsucursal($sucursales)->groupByBateriasModelo()->find();
 
@@ -49,14 +50,14 @@ $baterias_modelos = BateriasQuery::create()->select(array('baterias_modelo'))->f
         </div>
     </div>
 <?php endif;?>
-<div ng-controller="MontacargasController">
-    <form method="POST" action="/sistema.php?ruta=alta/montacargas" name="MontacargasForm">
+<div ng-controller="CargadoresController">
+    <form method="POST" action="/sistema.php?ruta=alta/cargadores" name="CargadoresForm">
     <div class="row">
         <div class="col-sm-6">
             <div class="portlet light bordered">
                 <div class="portlet-title">
                     <div class="caption font-red-sunglo">
-                       <i class="icon-montacarga" style="font-size: 25px; color: rgb(226, 106, 106); margin-top: -3px;"></i>
+                       <i class="icon-cargador" style="font-size: 25px; color: rgb(226, 106, 106); margin-top: -3px;"></i>
                         <span class="caption-subject bold uppercase"> Información general</span>
                     </div>
                 </div>
@@ -65,7 +66,7 @@ $baterias_modelos = BateriasQuery::create()->select(array('baterias_modelo'))->f
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label>Nombre</label>
-                                <input  class="form-control" readonly type="text" value="<?php echo $montacargas_nombre?>" name="montacargas_nombre">
+                                <input  class="form-control" readonly type="text" value="<?php echo $cargadores_nombre?>" name="cargadores_nombre">
                             </div>
                         </div>
                         <div class="col-sm-6">
@@ -84,19 +85,19 @@ $baterias_modelos = BateriasQuery::create()->select(array('baterias_modelo'))->f
                             <div class="col-sm-12">
                             <div class="form-group">
                                 <label>Comprador</label>
-                                <input required class="form-control"  type="text" name="montacargas_comprador">
+                                <input required class="form-control"  type="text" name="cargadores_comprador">
                             </div>
                             </div>
                             <div class="col-sm-12">
                             <div class="form-group">
                                 <label>Modelo</label>
-                                <input required class="form-control" type="text" name="montacargas_modelo">
+                                <input required class="form-control" type="text" name="cargadores_modelo">
                             </div>
                             </div>
                              <div class="col-sm-12">
                             <div class="form-group">
                                 <label>Marca</label>
-                                <input required class="form-control" type="text" name="montacargas_marca">
+                                <input required class="form-control" type="text" name="cargadores_marca">
                             </div>
                              </div>
                         </div>
@@ -105,31 +106,31 @@ $baterias_modelos = BateriasQuery::create()->select(array('baterias_modelo'))->f
                         <div class="col-sm-2">
                             <div class="form-group">
                                 <label>C</label>
-                                <input required class="form-control" type="text" ng-model="montacargas_c" name="montacargas_c" number-mask>
+                                <input required class="form-control" type="text" ng-model="cargadores_c" name="cargadores_c" number-mask>
                             </div>
                         </div>
                         <div class="col-sm-2">
                             <div class="form-group">
                                 <label>K</label>
-                                <input required class="form-control" type="text" name="montacargas_k"  ng-model="montacargas_k" number-mask >
+                                <input required class="form-control" type="text" name="cargadores_k"  ng-model="cargadores_k" number-mask >
                             </div>
                          </div>
                         <div class="col-sm-2">
                             <div class="form-group">
                                 <label>P</label>
-                                <input required class="form-control" type="text" name="montacargas_p" ng-model="montacargas_p" number-mask>
+                                <input required class="form-control" type="text" name="cargadores_p" ng-model="cargadores_p" number-mask>
                             </div>
                         </div>
                         <div class="col-sm-2">
                             <div class="form-group">
                                 <label>T</label>
-                                <input required class="form-control" type="text" name="montacargas_t" ng-model="montacargas_t">
+                                <input required class="form-control" type="text" name="cargadores_t" ng-model="cargadores_t">
                             </div>
                         </div>
                         <div class="col-sm-2">
                             <div class="form-group">
                                 <label>E</label>
-                                <input required class="form-control" type="text" name="montacargas_e" ng-model="montacargas_e">
+                                <input required class="form-control" type="text" name="cargadores_e" ng-model="cargadores_e">
                             </div>
                         </div>
                         <div class="col-sm-2">
@@ -154,13 +155,13 @@ $baterias_modelos = BateriasQuery::create()->select(array('baterias_modelo'))->f
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label>Volts</label>
-                                    <input class="form-control" readonly type="text" ng-model="montacargas_volts" name="montacargas_volts">
+                                    <input class="form-control" readonly type="text" ng-model="cargadores_volts" name="cargadores_volts">
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label>Ampere</label>
-                                    <input class="form-control" readonly type="text" name="montacargas_amperaje" ng-model="montacargas_amperaje" >
+                                    <input class="form-control" readonly type="text" name="cargadores_amperaje" ng-model="cargadores_amperaje" >
                                 </div>
                             </div>
                         </div>

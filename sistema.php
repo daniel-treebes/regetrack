@@ -13,6 +13,20 @@ if($module == 'montacargas'){
         die();
     }  
 }
+elseif($module == 'baterias'){
+  $exist = BateriasQuery::create()->filterByIdbaterias($_GET['id'])->filterByIdsucursal($loggedInUser->sucursal_activa)->exists();
+    if(!$exist){
+        header("Location: /baterias.php");
+        die();
+    }  
+}
+elseif($module == 'cargadores'){
+  $exist = CargadoresQuery::create()->filterByIdbaterias($_GET['id'])->filterByIdsucursal($loggedInUser->sucursal_activa)->exists();
+    if(!$exist){
+        header("Location: /baterias.php");
+        die();
+    }  
+}
 require_once("models/header.php");
 require_once( $_GET['ruta'].".php");
 
