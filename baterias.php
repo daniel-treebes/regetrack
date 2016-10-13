@@ -1,20 +1,17 @@
 <?php
-require_once("models/config.php");
-require_once("models/header.php");
+
 
 $nombrePagina="Baterias";
 $acciones=[];
 $acciones[0][0]="Exportar";
 $acciones[0][1]="javascript:exporta();";
-if($loggedInUser->checkPermission(array(2))){
-   $acciones[1][0]="Alta";
-   $acciones[1][1]='/sistema.php?ruta=alta/baterias'; 
-}
+$acciones[1][0]="Importar";
+$acciones[1][1]='javascript:importa();';
 
-
+require_once("models/config.php");
 if (!securePage($_SERVER['PHP_SELF'])){die();}
 
-
+require_once("models/header.php");
 
 $query="
 SELECT
@@ -491,7 +488,7 @@ function importa2(){
         <!-- END PAGE LEVEL PLUGINS -->
 <?php
 
-echo '<pre>';print_r($tiposbateria);echo  '</pre>';
+//echo '<pre>';print_r($tiposbateria);echo  '</pre>';
 
 	foreach ($tiposbateria as $tipobn => $tipob){
 		$grafica=pinta_grafica('bt','reporteBTU_'.$tipobn,'uso','todo',$tipob);
