@@ -1,6 +1,7 @@
 <?php
 
 
+
 $nombrePagina="Baterias";
 $acciones=[];
 $acciones[0][0]="Exportar";
