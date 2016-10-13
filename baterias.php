@@ -6,8 +6,10 @@ $nombrePagina="Baterias";
 $acciones=[];
 $acciones[0][0]="Exportar";
 $acciones[0][1]="javascript:exporta();";
-$acciones[1][0]="Importar";
-$acciones[1][1]='javascript:importa();';
+if($loggedInUser->checkPermission(array(2))){
+   $acciones[1][0]="Alta";
+   $acciones[1][1]='/sistema.php?ruta=alta/montacargas'; 
+}
 
 require_once("models/config.php");
 if (!securePage($_SERVER['PHP_SELF'])){die();}
