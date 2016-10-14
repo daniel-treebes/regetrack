@@ -9,7 +9,7 @@ $acciones[0][0]="Exportar";
 $acciones[0][1]="javascript:exporta();";
 if($loggedInUser->checkPermission(array(2))){
    $acciones[1][0]="Alta";
-   $acciones[1][1]='/sistema.php?ruta=alta/montacargas'; 
+   $acciones[1][1]='/sistema.php?ruta=alta/baterias'; 
 }
 
 
@@ -73,7 +73,7 @@ function importa2(){
 }		
 	</script>   
         <style>
-            
+
         </style>
         <script src="assets/global/scripts/app.min.js"></script>
 	<script type="text/javascript">
@@ -82,12 +82,14 @@ function importa2(){
         var oTable =$('#tablabaterias').dataTable( {
             "bStateSave": false,
             "sScrollY": "510px",
+            "sScrollX": "100%",
             "iDisplayLength": 25,
             "bPaginate": false,
             "aaSorting": [[0, 'asc']],
             "oLanguage": {
                 "sUrl": "//cdn.datatables.net/plug-ins/1.10.12/i18n/Spanish.json",
             },
+
         } );
         
         oTable.yadcf([

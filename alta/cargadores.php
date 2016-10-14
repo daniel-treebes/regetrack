@@ -4,29 +4,39 @@
 $message = false;
 if($_POST){
     $post_data = $_POST;
- 
+    
     $entity = new Cargadores();
     foreach ($post_data as $key => $value){
         if(CargadoresPeer::getTableMap()->hasColumn($key)){
            $entity->setByName($key, strtoupper($value), BasePeer::TYPE_FIELDNAME);
         }
     }
+   
+    // echo '<pre>';var_dump(preg_match("/^\d*[-]\d*[-]\d*[-]\w[-]\w\s[(]\d*V\s[-]\s\d*Ah[)]/", "TROJAN 4"));echo  '</pre>';exit();
     
     $entity->save();
     
     //ASOCIACION DE BATERIAS
     $sucursales = explode(',', $loggedInUser->sucursales);
-    $baterias = BateriasQuery::create()->filterByIdsucursal($sucursales)->filterByBateriasModelo($post_data['baterias'])->find();
-    $bateria = new Baterias();
-    foreach ($baterias as $bateria){
-        $cargadores_baterias = new CargadoresBaterias();
-        $cargadores_baterias->setIdbaterias($bateria->getIdbaterias())
+    $baterias = BateriasQuery::create()->filterByIdsucursal($sucursales)->withColumn("CONCAT(baterias_c,'-',baterias_k,'-',baterias_p,'-',baterias_t,'-',baterias_e,' (',baterias_volts,'V - ',baterias_amperaje,'Ah)')","baterias_tipo")->find()->toArray(null,false,BasePeer::TYPE_FIELDNAME);
+    foreach ($post_data['baterias'] as $bateria){
+         $filter_column = 'baterias_modelo';
+        if(preg_match("/^\d*[-]\d*[-]\d*[-]\w[-]\w\s[(]\d*V\s[-]\s\d*Ah[)]/", $bateria)){
+            $filter_column = 'baterias_tipo';
+        }
+        foreach ($baterias as $value){
+            
+            if($value[$filter_column] == $bateria){
+                $cargadores_baterias = new CargadoresBaterias();
+                $cargadores_baterias->setIdbaterias($value['idbaterias'])
                              ->setIdcargadores($entity->getIdcargadores())
                              ->save();
+               
+            }
+        }
     }
-    
-    $message = 'El Registro se ha guardado satisfactoriamente!';
-  
+
+    $message = 'El Registro se ha guardado satisfactoriamente!';  
     
 }
 
@@ -37,9 +47,7 @@ $sucursales_array = SucursalQuery::create()->filterByIdempresa($loggedInUser->id
 $cargadores_nombre = (int)  CargadoresQuery::create()->filterByIdsucursal($sucursales)->select(array('idcargadores'))->orderByIdcargadores(Criteria::DESC)->findOne();
 $cargadores_nombre = sprintf("C%03d", $cargadores_nombre+1);
 
-$baterias_modelos = BateriasQuery::create()->select(array('baterias_modelo'))->filterByIdsucursal($sucursales)->groupByBateriasModelo()->find();
-
-
+$baterias_modelos = BateriasQuery::create()->withColumn('baterias_modelo')->withColumn("CONCAT(baterias_c,'-',baterias_k,'-',baterias_p,'-',baterias_t,'-',baterias_e,' (',baterias_volts,'V - ',baterias_amperaje,'Ah)')","tipo")->select(array('tipo'))->filterByIdsucursal($sucursales)->groupBy('tipo')->find();
 
 ?>
 <?php if($message) :?>
@@ -64,9 +72,11 @@ $baterias_modelos = BateriasQuery::create()->select(array('baterias_modelo'))->f
                 <div class="portlet-body form">
                     <div class="row">
                         <div class="col-sm-6">
-                            <div class="form-group">
+                            <div class="input-icon right">
                                 <label>Nombre</label>
-                                <input  class="form-control" readonly type="text" value="<?php echo $cargadores_nombre?>" name="cargadores_nombre">
+                                <i class="fa fa-check " style="top: 0px; margin-top: 35px; color: green"></i>
+                                <i class="fa fa-close " style="top: 0px; margin-top: 35px; color: red; display: none"></i>
+                                <input ng-blur="verificaNombre()"  class="form-control" type="text" value="<?php echo $cargadores_nombre?>" name="cargadores_nombre">
                             </div>
                         </div>
                         <div class="col-sm-6">
@@ -105,28 +115,16 @@ $baterias_modelos = BateriasQuery::create()->select(array('baterias_modelo'))->f
                     <div class="row">
                         <div class="col-sm-2">
                             <div class="form-group">
-                                <label>C</label>
-                                <input required class="form-control" type="text" ng-model="cargadores_c" name="cargadores_c" number-mask>
+                                <label>Volts</label>
+                                <input required class="form-control" type="text" ng-model="cargadores_volts" name="cargadores_volts" number-mask>
                             </div>
                         </div>
                         <div class="col-sm-2">
                             <div class="form-group">
-                                <label>K</label>
-                                <input required class="form-control" type="text" name="cargadores_k"  ng-model="cargadores_k" number-mask >
+                                <label>Ampere</label>
+                                <input required class="form-control" type="text" name="cargadores_amperaje"  ng-model="cargadores_amperaje" number-mask >
                             </div>
                          </div>
-                        <div class="col-sm-2">
-                            <div class="form-group">
-                                <label>P</label>
-                                <input required class="form-control" type="text" name="cargadores_p" ng-model="cargadores_p" number-mask>
-                            </div>
-                        </div>
-                        <div class="col-sm-2">
-                            <div class="form-group">
-                                <label>T</label>
-                                <input required class="form-control" type="text" name="cargadores_t" ng-model="cargadores_t">
-                            </div>
-                        </div>
                         <div class="col-sm-2">
                             <div class="form-group">
                                 <label>E</label>
@@ -150,33 +148,27 @@ $baterias_modelos = BateriasQuery::create()->select(array('baterias_modelo'))->f
                     </div>
                 </div>
                 <div class="portlet-body form">
-                    <form role="form">
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label>Volts</label>
-                                    <input class="form-control" readonly type="text" ng-model="cargadores_volts" name="cargadores_volts">
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label>Ampere</label>
-                                    <input class="form-control" readonly type="text" name="cargadores_amperaje" ng-model="cargadores_amperaje" >
-                                </div>
-                            </div>
-                        </div>
                         <div class="row">
                             <?php foreach ($baterias_modelos as $modelo) :?>
+                             
                                 <div class="col-sm-6">
                                     <div class="form-group">
                                         <div class="mt-checkbox-list">
-                                            <label style="display: block" class="mt-checkbox mt-checkbox-outline"> <?php echo $modelo?>
-                                                <input value="<?php echo $modelo?>" name="baterias[]" type="checkbox">
+                                            <?php if(!is_null($modelo['tipo'])) :?>
+                                            <label style="display: block" class="mt-checkbox mt-checkbox-outline"> <?php echo $modelo['tipo']?>
+                                                <input value="<?php echo $modelo['tipo']?>" name="baterias[]" type="checkbox">
                                                 <span></span>
                                             </label>
+                                            <?php else:?>
+                                                <label style="display: block" class="mt-checkbox mt-checkbox-outline"> <?php echo $modelo['baterias_modelo']?>
+                                                    <input value="<?php echo $modelo['baterias_modelo']?>" name="baterias[]" type="checkbox">
+                                                    <span></span>
+                                                </label>
+                                            <?php endif;?>
                                         </div>
                                     </div>
                                 </div>
+
                             <?php endforeach;?>
                         </div>
                 </div>

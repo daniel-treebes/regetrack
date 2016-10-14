@@ -43,7 +43,7 @@ $baterias_modelos = BateriasQuery::create()->select(array('baterias_modelo'))->f
         </div>
     </div>
 <?php endif;?>
-<div>
+<div ng-controller="BateriasController">
     <form method="POST" action="/sistema.php?ruta=alta/baterias" name="MontacargasForm">
     <div class="row">
         <div class="col-sm-6">
@@ -57,9 +57,11 @@ $baterias_modelos = BateriasQuery::create()->select(array('baterias_modelo'))->f
                 <div class="portlet-body form">
                     <div class="row">
                         <div class="col-sm-6">
-                            <div class="form-group">
+                            <div class="input-icon right">
                                 <label>Nombre</label>
-                                <input  class="form-control" readonly type="text" value="<?php echo $baterias_nombre?>" name="baterias_nombre">
+                                <i class="fa fa-check " style="top: 0px; margin-top: 35px; color: green"></i>
+                                <i class="fa fa-close " style="top: 0px; margin-top: 35px; color: red; display: none"></i>
+                                <input ng-blur="verificaNombre()"  class="form-control" type="text" value="<?php echo $baterias_nombre?>" name="baterias_nombre">
                             </div>
                         </div>
                         <div class="col-sm-6">
@@ -96,7 +98,7 @@ $baterias_modelos = BateriasQuery::create()->select(array('baterias_modelo'))->f
                         </div>
                     
                     <div class="row">
-                        <div class="col-sm-2 col-sm-offset-1">
+                        <div class="col-sm-2">
                             <div class="form-group">
                                 <label>C</label>
                                 <input required class="form-control" type="text" ng-model="baterias_c" name="baterias_c" number-mask>
