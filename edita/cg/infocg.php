@@ -1,11 +1,10 @@
 <?php
 include('infobd.php');
 //DATOS DEL CARGADOR
+$titulocg=$datosCargador['ctipo'];
 if ($datosCargador['ctipo']=='Cargador') {
-	$titulocg="Cargador";
 	$iconocb='icon-cargador';
 }else{
-	$titulocg="Bodega";
 	$iconocb='fa-th';
 }
 ?>
@@ -69,7 +68,7 @@ if ($datosCargador['ctipo']=='Cargador') {
                     <div class="form-group">
                         <label class="col-md-3 control-label">Total de Horas</label>
                         <div class="col-md-9">
-                            <input type="text" class="form-control datos-cosa" placeholder="Default Input" value="<?php  echo round($horas['h']['total'],0) ?> "> 
+                            <input type="text" class="form-control datos-cosa" placeholder="Default Input" value="<?php  echo round($horas['espera']['h']['total'],0) ?> "> 
                         </div>
                     </div>
                 </div>
@@ -87,68 +86,8 @@ if($habilitaid>0){
     //PROCEDIMIENTO DE DESHABILITADO
     include("deshabilita.php");
 }
+
 ?>
-<!--DATOS ESTADÍSTICOS Cargador-->
-<div class="col-md-6" id="indicadores2">
-    <div class="portlet box  blue-sharp">
-        <div class="portlet-title">
-            <div class="caption">
-                <i class="fa fa-bar-chart "></i>Estadísticas CARGA / IDLE
-            </div>
-            <div class="tools">
-                <a href="" class="collapse" data-original-title="" title=""> </a>
-            </div>
-        </div>
-        <div class="portlet-body form">	   
-            <div class="form-actions right1 gray" >
-                <div class="">
-                    <div class="col-md-4">
-                       <div class="easy-pie-chart">
-                          <center>Historico<br>Horas</center>
-                          <strong><?php echo $horas['h']['carga'].'hrs / '.$horas['h']['idle']; ?>hrs</strong>
-						  <div style="height: 20px;"> </div>
-					   </div>
-                    </div>
-                    <div class="col-md-4">
-                       <div class="easy-pie-chart">
-                          <center>Historico<br>Promedio diario</center>
-                          <strong><?php echo $horas['h']['cargap'].'hrs / '.$horas['h']['idlep']; ?>hrs</strong>
-						  <div style="height: 20px;"> </div>
-                       </div>
-                    </div>
-                    <div class="col-md-4">
-                       <div class="easy-pie-chart">
-                          <center>Historico<br>Relación %</center>
-                          <strong><?php echo round($horas['h']['carga']*100/$horas['h']['total'],0).'% / '.round($horas['h']['idle']*100/$horas['h']['total'],0); ?>%</strong>
-						  <div style="height: 20px;"> </div>
-                       </div>
-                    </div>
-                    <div class="col-md-4">
-                       <div class="easy-pie-chart">
-                          <center>Útimos 7 dias<br>Horas</center>
-                          <strong><?php echo $horas['7']['carga'].'hrs / '.$horas['7']['idle']; ?>hrs</strong>
-						  <div style="height: 20px;"> </div>
-                       </div>
-                    </div>
-                    <div class="col-md-4">
-                       <div class="easy-pie-chart">
-                          <center>Útimos 7 dias<br>Promedio diario</center>
-                          <strong><?php echo $horas['7']['cargap'].'hrs / '.$horas['7']['idlep']; ?>hrs</strong>
-						  <div style="height: 20px;"> </div>
-                       </div>
-                    </div>
-                    <div class="col-md-4">
-                       <div class="easy-pie-chart">
-                          <center>Útimos 7 dias<br>Relación %</center>
-                          <strong><?php echo round($horas['7']['carga']*100/$horas['7']['total'],0).'% / '.round($horas['7']['idle']*100/$horas['7']['total'],0); ?>%</strong>
-						  <div style="height: 20px;"> </div>
-                       </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>            
 <!--DATOS ESTADÍSTICOS Baterias-->
 <div class="col-md-6" id="indicadores6">
     <div class="portlet box  blue-sharp">
@@ -186,6 +125,87 @@ if($habilitaid>0){
 //ALERTAS
 include("edita/alertas.php");
 pinta_alertas($mysqli,'cg',$id);
+
+//DATOS ESTADÍSTICOS Cargador
+for($e=1;$e<=4;$e++){
+	if ($titulocg=="Bodega" && $e==2) $e=3;
+	if ($e==1){
+		$est_estado="espera";
+		$titulo="Estadísticas ESPERA / TOTAL";
+	}elseif ($e==2){
+		$est_estado="carga";
+		$titulo="Estadísticas CARGA / TOTAL";
+	}elseif($e==3){
+		$est_estado="descanso";
+		$titulo="Estadísticas DESCANSO / TOTAL";
+	}elseif($e==4){
+		$est_estado="listo";
+		$titulo="Estadísticas LISTO / TOTAL";
+	}
+?>
+<!--DATOS ESTADÍSTICOS Cargador-->
+<div class="col-md-6" id="indicadores2">
+    <div class="portlet box  blue-sharp">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="fa fa-bar-chart "></i><?php echo $titulo;?>
+            </div>
+            <div class="tools">
+                <a href="" class="collapse" data-original-title="" title=""> </a>
+            </div>
+        </div>
+        <div class="portlet-body form">	   
+            <div class="form-actions right1 gray" >
+                <div class="">
+                    <div class="col-md-4">
+                       <div class="easy-pie-chart">
+                          <center>Historico<br>Horas</center>
+                          <strong><?php echo $horas[$est_estado]['h']['estado'].'hrs / '.$horas[$est_estado]['h']['total']; ?>hrs</strong>
+						  <div style="height: 20px;"> </div>
+					   </div>
+                    </div>
+                    <div class="col-md-4">
+                       <div class="easy-pie-chart">
+                          <center>Historico<br>Promedio diario</center>
+                          <strong><?php echo $horas[$est_estado]['h']['estadop'].'hrs / '.$horas[$est_estado]['h']['totalp']; ?>hrs</strong>
+						  <div style="height: 20px;"> </div>
+                       </div>
+                    </div>
+                    <div class="col-md-4">
+                       <div class="easy-pie-chart">
+                          <center>Historico<br>Relación %</center>
+                          <strong><?php echo round($horas[$est_estado]['h']['estado']*100/$horas[$est_estado]['h']['total'],0); ?>% / 100%</strong>
+						  <div style="height: 20px;"> </div>
+                       </div>
+                    </div>
+                    <div class="col-md-4">
+                       <div class="easy-pie-chart">
+                          <center>Útimos 7 dias<br>Horas</center>
+                          <strong><?php echo $horas[$est_estado]['7']['estado'].'hrs / '.$horas[$est_estado]['7']['total']; ?>hrs</strong>
+						  <div style="height: 20px;"> </div>
+                       </div>
+                    </div>
+                    <div class="col-md-4">
+                       <div class="easy-pie-chart">
+                          <center>Útimos 7 dias<br>Promedio diario</center>
+                          <strong><?php echo $horas[$est_estado]['7']['estadop'].'hrs / '.$horas[$est_estado]['7']['totalp']; ?>hrs</strong>
+						  <div style="height: 20px;"> </div>
+                       </div>
+                    </div>
+                    <div class="col-md-4">
+                       <div class="easy-pie-chart">
+                          <center>Útimos 7 dias<br>Relación %</center>
+                          <strong><?php echo round($horas[$est_estado]['7']['estado']*100/$horas[$est_estado]['7']['total'],0); ?>% / 100%</strong>
+						  <div style="height: 20px;"> </div>
+                       </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<?php }
 
 if($loggedInUser->checkPermission(array(1,2))){
 ?>

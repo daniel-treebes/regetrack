@@ -235,6 +235,9 @@ function deshabilita(cual) {
 		
 	</script>   
         <style>
+           	 #tablacargadores{
+                min-width: 750px;
+             }
             .dataTables_filter label{
                 float: right;
             }
@@ -409,9 +412,9 @@ require_once("tema/comun/footer.php");
                 
                 var oTable =$('#tablacargadores').dataTable( {
                     "bStateSave": false,
-                    "sScrollY": "510px",
-                    "iDisplayLength": 25,
-                    "bPaginate": false,
+//                    "sScrollY": "510px",
+                    "iDisplayLength": 10,
+                    "bPaginate": true,
                     "aaData": data, 
                     "aaSorting": [[1, 'asc']],
                     "aoColumns": columns,
