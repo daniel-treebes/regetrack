@@ -1,5 +1,43 @@
 <?php
 
+$message_baterias = false;
+if($_POST){
+    $post_data = $_POST;
+   
+    if($post_data['action'] == 'asignaBaterias'){
+        $montacargas_baterias = MontacargasBateriasQuery::create()->filterByIdmontacargas($post_data['idmontacargas'])->delete();
+        
+        //ASOCIACION DE BATERIAS
+        $sucursales = explode(',', $loggedInUser->sucursales);
+        $baterias = BateriasQuery::create()->filterByIdsucursal($sucursales)->withColumn("CONCAT(baterias_c,'-',baterias_k,'-',baterias_p,'-',baterias_t,'-',baterias_e,' (',baterias_volts,'V - ',baterias_amperaje,'Ah)')","baterias_tipo")->find()->toArray(null,false,BasePeer::TYPE_FIELDNAME);
+         if(isset($post_data['baterias'])){
+            foreach ($post_data['baterias'] as $bateria){
+                 $filter_column = 'baterias_modelo';
+                if(preg_match("/^\d*[-]\d*[-]\d*[-]\w[-]\w\s[(]\d*V\s[-]\s\d*Ah[)]/", $bateria)){
+                    $filter_column = 'baterias_tipo';
+                }
+                foreach ($baterias as $value){
+
+                    if($value[$filter_column] == $bateria){
+                        $montacargas_baterias = new MontacargasBaterias();
+                        $montacargas_baterias->setIdbaterias($value['idbaterias'])
+                                     ->setIdmontacargas($post_data['idmontacargas'])
+                                     ->save();
+
+                    }
+                }
+            }
+        }
+        $message_baterias = 'El Registro se ha guardado satisfactoriamente!';
+        
+        
+        
+    }
+   
+}
+
+
+
 $query="
     SELECT
         m.idmontacargas as Id,
@@ -57,8 +95,8 @@ while($fila = $resultado->fetch_array()) {
                 <a href="" class="collapse" data-original-title="" title=""> </a>
             </div>
         </div>
-        <div class="portlet-body form">	   
-            <div class="form-actions right1 gray" >
+        <div class="portlet-body form" > 	   
+            <div class="form-actions right1 gray">
                 <div class="form-body">
                     <div class="form-group">
                         <label class="col-md-3 control-label">Nombre</label>
@@ -218,7 +256,84 @@ pinta_alertas($mysqli,'mc',$id);
 
 
 if($loggedInUser->checkPermission(array(1,2))){
-?>
+?>      
+        <?php
+        $sucursales = explode(',', $loggedInUser->sucursales);
+        $baterias_modelos = BateriasQuery::create()->withColumn('baterias_modelo')->withColumn("CONCAT(baterias_c,'-',baterias_k,'-',baterias_p,'-',baterias_t,'-',baterias_e,' (',baterias_volts,'V - ',baterias_amperaje,'Ah)')","tipo")->select(array('tipo'))->filterByIdsucursal($sucursales)->groupBy('tipo')->find();
+        $montacargas_baterias = MontacargasBateriasQuery::create()->joinBaterias()->withColumn("CONCAT(baterias_c,'-',baterias_k,'-',baterias_p,'-',baterias_t,'-',baterias_e,' (',baterias_volts,'V - ',baterias_amperaje,'Ah)')","tipo")->select(array('tipo','Baterias.BateriasModelo'))->groupBy('tipo')->filterByIdmontacargas($_GET['id'])->find()->toArray(null,false,  BasePeer::TYPE_FIELDNAME);
+        $montacargas_baterias_array = array();
+        foreach ($montacargas_baterias as $value){
+            if(!is_null($value['tipo'])){
+                $montacargas_baterias_array[] = $value['tipo'];
+            }else{
+                $montacargas_baterias_array[] = $value['Baterias.BateriasModelo'];
+            }
+        }
+        ?>
+        <div class="col-sm-6">
+            <div class="portlet box  blue-sharp">
+                <div class="portlet-title">
+                    <div class="caption">
+                       <i class="icon-bateria" style="font-size: 25px;margin-top: 2px;"></i>
+                        <span class="caption-subject">Asociación de baterias</span>
+                    </div>
+                    <div class="tools">
+                            <a href="" class="collapse" data-original-title="" title=""> </a>
+                             
+                    </div>
+                </div>
+                <div class="portlet-body form" >
+                    <form role="form" name="MontacargasBateriasForm" method="post" action="<?php echo $_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING']?>">
+                        <?php if($message_baterias) :?>
+                            <div class="row" style="margin-left: 0px; margin-right: 0px; padding-right: 20px; padding-left: 20px; padding-top: 20px;">
+                        
+                                <div class="alert alert-success">
+                                <strong>Exito!</strong>
+                                <?php echo $message_baterias ?>
+                                </div>
+                            </div>
+                        <?php endif;?>
+                        <div class="row" style="padding: 20px">
+                            <input type="hidden" name="idmontacargas" value="<?php echo $_GET['id']?>">
+                            <input type="hidden" name="action" value="asignaBaterias">
+                            <?php foreach ($baterias_modelos as $modelo) :?>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <div class="mt-checkbox-list">
+                                            <?php if(!is_null($modelo['tipo'])) :?>
+                                            <label style="display: block" class="mt-checkbox mt-checkbox-outline"> <?php echo $modelo['tipo']?>
+                                                <?php if(in_array($modelo['tipo'], $montacargas_baterias_array)):?>
+                                                    <input  value="<?php echo $modelo['tipo']?>" name="baterias[]" type="checkbox" checked>
+                                                <?php else:?>
+                                                    <input  value="<?php echo $modelo['tipo']?>" name="baterias[]" type="checkbox">
+                                                <?php endif;?>
+                                                <span></span>
+                                            </label>
+                                            <?php else:?>
+                                                <label style="display: block" class="mt-checkbox mt-checkbox-outline"> <?php echo $modelo['baterias_modelo']?>
+                                                    <?php if(in_array($modelo['baterias_modelo'], $montacargas_baterias_array)):?>
+                                                    <input value="<?php echo $modelo['baterias_modelo']?>" name="baterias[]" type="checkbox" checked>
+                                                    <?php else:?>
+                                                          <input value="<?php echo $modelo['baterias_modelo']?>" name="baterias[]" type="checkbox">
+                                                    <?php endif;?>
+                                                  
+                                                    <span></span>
+                                                </label>
+                                            <?php endif;?>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php endforeach;?>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-2 col-sm-offset-10" style="padding-bottom: 15px;">
+                                <button type="submit" class="btn btn-success">Guardar</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
 	<div class="col-md-12" id="indicadores5">
 		<div class="portlet box  blue-sharp">
 			<div class="portlet-title">

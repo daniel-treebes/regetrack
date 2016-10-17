@@ -19,6 +19,7 @@ SELECT * FROM
 (
     SELECT
         b.id as Id,
+        c.cargadores_modelo as Modelo,
         c.cargadores_nombre as Cargador,
         c.idcargadores as cgid,
         cbg.cantbg as cantbg,
@@ -76,6 +77,7 @@ SELECT * FROM
     
     SELECT
         b.id as 'Id',
+        c.cargadores_modelo as Modelo,
         c.cargadores_nombre as Cargador,
         c.idcargadores as cgid,
         cbg.cantbg as cantbg,
@@ -131,6 +133,7 @@ SELECT * FROM
         b.id as 'Id',
         c.cargadores_nombre as Cargador,
         c.idcargadores as cgid,
+         c.cargadores_modelo as Modelo,
         cbg.cantbg as cantbg,
         b.nombre as Espacio,
         CONCAT(c.cargadores_volts,'V ',c.cargadores_amperaje,'Ah (',c.cargadores_e,')') as Tipo,
@@ -172,6 +175,7 @@ while($fila = $resultado->fetch_array()) {
     $tipobn=str_replace(' ','_',$fila['Tipo']);
     $tipobn=str_replace('(','',$tipobn);
     $tipobn=str_replace(')','',$tipobn);
+
     $tiposcg[$tipobn]=$fila['Tipo'];
 }
 
@@ -318,22 +322,45 @@ function deshabilita(cual) {
                                 <?php endif;?>
 							</div>
 						</div>
-					<?php foreach ($tiposcg as $tipobn => $tipob){?>
-						<div class="portlet-body">
-							<div id="reporteCE_<?php echo $tipobn;?>" ></div>
-						</div>
-                        <?php if($tipo == 'Cargador') {?>
-						<div class="portlet-body">
-							<div id="reporteCC_<?php echo $tipobn;?>" ></div>
-						</div>
-                        <?php } ?>
-						<div class="portlet-body">
-							<div id="reporteCD_<?php echo $tipobn;?>" ></div>
-						</div>
-						<div class="portlet-body">
-							<div id="reporteCL_<?php echo $tipobn;?>" ></div>
-						</div>
-                    <?php }?>
+                                               <?php foreach ($tiposcg as $tipobn => $tipob){?>
+                                                       
+                                                       <?php if($tipo == 'Cargador' && !is_null($tipob)) :?>
+                                                            <div class="row">
+                                                                <div class="col-md-12">
+                                                                    <div class="portlet box  blue-sharp">
+                                                                         <div class="portlet-title">
+                                                                            <div class="caption">
+                                                                                <i style="font-size: 20px"class="fa icon-bateria"></i><?php echo $tipob ?>
+                                                                             </div>
+                                                                            <div class="tools">
+                                                                                <a href="javascript:;" class="collapse" data-original-title="" title=""> </a>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="portlet-body "> 
+                                                                            <div id="reporteCE_<?php echo $tipobn;?>" ></div>
+                                                                            <?php if($tipo == 'Cargador') {?>
+                                                                                <div id="reporteCC_<?php echo $tipobn;?>" ></div>
+                                                                            <?php } ?>
+                                                                            <div id="reporteCE_<?php echo $tipobn;?>" ></div>
+                                                                            <div id="reporteCD_<?php echo $tipobn;?>" ></div>
+                                                                            <div id="reporteCL_<?php echo $tipobn;?>" ></div>
+                                                                            <div id="reporteBTL_<?php echo $tipobn;?>" ></div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        <?php else:?>
+                                                         
+                                                            <div class="portlet-body "> 
+                                                                <div id="reporteCE_<?php echo $tipobn;?>" ></div>
+                                                                <div id="reporteCE_<?php echo $tipobn;?>" ></div>
+                                                                <div id="reporteCD_<?php echo $tipobn;?>" ></div>
+                                                                <div id="reporteCL_<?php echo $tipobn;?>" ></div>
+                                                                <div id="reporteBTL_<?php echo $tipobn;?>" ></div>
+                                                            </div>
+                                                        <?php endif;?>
+                                                <?php }?>                       
+                                            
 					</div>
 				</div>
 			</div>
@@ -370,7 +397,7 @@ function deshabilita(cual) {
             echo $grafica;
         }
     }
-	
+	 
 require_once("tema/comun/footer.php");
 ?>
 <script src="assets/global/scripts/app.min.js"></script>

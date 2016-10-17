@@ -169,7 +169,10 @@ function importa2(){
 			$tipobn=str_replace(' ','_',$fila['Tipo']);
 			$tipobn=str_replace('(','',$tipobn);
 			$tipobn=str_replace(')','',$tipobn);
-			$tiposbateria[$tipobn]=$fila['Tipo'];
+                        if(!is_null($fila['Tipo'])){
+                            $tiposbateria[$tipobn]=$fila['Tipo'];
+                        }
+			
 			echo "<tr>";
 			echo "<td>".$fila['Nombre']."</td>";
 						  echo "<td>".$fila['Modelo']."</td>";
@@ -456,22 +459,30 @@ function importa2(){
 							<span class="caption-subject font-green bold uppercase">Desempeño de baterias</span>
 						</div>
 					</div>
+                                   
 					<?php foreach ($tiposbateria as $tipobn => $tipob){?>
-						<div class="portlet-body">
-							<div id="reporteBTU_<?php echo $tipobn;?>" ></div>
-						</div>
-						<div class="portlet-body">
-							<div id="reporteBTE_<?php echo $tipobn;?>" ></div>
-						</div>
-						<div class="portlet-body">
-							<div id="reporteBTC_<?php echo $tipobn;?>" ></div>
-						</div>
-						<div class="portlet-body">
-							<div id="reporteBTD_<?php echo $tipobn;?>" ></div>
-						</div>
-						<div class="portlet-body">
-							<div id="reporteBTL_<?php echo $tipobn;?>" ></div>
-						</div>
+                                      
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="portlet box  blue-sharp">
+                                                         <div class="portlet-title">
+                                                            <div class="caption">
+                                                                <i style="font-size: 20px"class="fa icon-bateria"></i><?php echo $tipob ?>
+                                                             </div>
+                                                            <div class="tools">
+                                                                <a href="javascript:;" class="collapse" data-original-title="" title=""> </a>
+                                                            </div>
+                                                        </div>
+                                                        <div class="portlet-body "> 
+                                                            <div id="reporteBTU_<?php echo $tipobn;?>" ></div>
+                                                            <div id="reporteBTE_<?php echo $tipobn;?>" ></div>
+                                                            <div id="reporteBTC_<?php echo $tipobn;?>" ></div>
+                                                            <div id="reporteBTD_<?php echo $tipobn;?>" ></div>
+                                                            <div id="reporteBTL_<?php echo $tipobn;?>" ></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
 					<?php }?>
 				</div>
 			</div>
