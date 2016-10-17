@@ -64,8 +64,7 @@ function importa2(){
 						data: form_data,                         
 						type: 'post',
 						success: function(php_script_response){
-                                                        return;
-							location.reload(); // display response from the PHP script, if any
+                     return;
 						},
 						  error: function(XMLHttpRequest, textStatus, errorThrown) {
 							alert(XMLHttpRequest);
@@ -75,19 +74,20 @@ function importa2(){
 }
 
 function deshabilita(cual) {
-	alert()
+	alert();
 }
 		
 	</script>   
-        <script src="assets/global/scripts/app.min.js"></script>
+   <script src="assets/global/scripts/app.min.js"></script>
 	<script type="text/javascript">
+
     $(document).ready(function() {
         'use strict';
         var oTable =$('#tablamontacargas').dataTable( {
             "bStateSave": false,
-            "sScrollY": "510px",
-            "iDisplayLength": 25,
-            "bPaginate": false,
+//            "sScrollY": "510px",
+            "iDisplayLength": 10,
+            "bPaginate": true,
             "aaSorting": [[0, 'asc']],
             "oLanguage": {
                 "sUrl": "//cdn.datatables.net/plug-ins/1.10.12/i18n/Spanish.json",
@@ -104,13 +104,17 @@ function deshabilita(cual) {
         ]);
         
         $('a.collapse').trigger('click');
-    } );
 
+    } );
+	  
 	</script>
 	<style>
 		div.container {
         width: 80%;
     }
+	 #tablamontacargas{
+		min-width: 750px;
+	 }
 	</style>
         <div class="row">
             <div class="col-md-12">
@@ -172,7 +176,7 @@ function deshabilita(cual) {
             </tr>
         </thead>
        
-        <tbody>
+        <tbody >
 			 <?php 
 			 while($fila = $resultado->fetch_array()) {
 				echo "<tr>";

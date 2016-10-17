@@ -36,7 +36,7 @@ while($fila = $resultado->fetch_array()) {
     $habilitamotivo= $fila['motivo'];
     $habilitafecha= $fila['fecha_entrada'];
 }
-
+/*
 $queryhoras="
 	SELECT
 		TIMESTAMPDIFF(DAY,MIN(u.fecha_entrada),NOW()) AS diastotal,
@@ -103,6 +103,107 @@ while($fila = $resultado->fetch_array()) {
     $horas['7']['idle']= round($fila['horasidle'],0);
 	$horas['7']['cargap']= round($fila['horascarga']/$fila['diastotal'],0);
 	$horas['7']['idlep']= round($fila['horasidle']/$fila['diastotal'],0);
+}
+*/
+// Estadísticas Espera/Descanso/Libre
+for($e=1;$e<=4;$e++){
+	if ($datosCargador['ctipo']=="Bodega" && $e==2) $e=3;
+	if ($e==1){
+		$est_estado="espera";
+		$fini='fecha_entrada';
+		$finiw=$fini;
+		$ffin="IF(fecha_carga!='0000-00-00 00:00:00',fecha_carga,NOW())";
+		$ffinw="fecha_carga!='0000-00-00 00:00:00'";
+	}elseif ($e==2){
+		$est_estado="carga";
+		$fini="fecha_carga";
+		$finiw=$fini;
+		$ffin="IF(fecha_descanso!='0000-00-00 00:00:00',fecha_descanso,NOW())";
+		$ffinw="fecha_descanso!='0000-00-00 00:00:00'";
+	}elseif($e==3){
+		$est_estado="descanso";
+		$fini="fecha_descanso";
+		$finiw=$fini;
+		$ffin="IF(DATE_ADD(fecha_descanso, INTERVAL 8 HOUR)>=(IF(fecha_salida!='0000-00-00 00:00:00',fecha_salida,NOW())),DATE_ADD(fecha_descanso, INTERVAL 8 HOUR),IF(fecha_salida!='0000-00-00 00:00:00',fecha_salida,NOW()))";
+		$ffinw="fecha_salida";
+	}elseif($e==4){
+		$est_estado="listo";
+		$fini="IF(DATE_ADD(fecha_descanso, INTERVAL 8 HOUR)>=(IF(fecha_salida!='0000-00-00 00:00:00',fecha_salida,NOW())),DATE_ADD(fecha_descanso, INTERVAL 8 HOUR),IF(fecha_salida!='0000-00-00 00:00:00',fecha_salida,NOW()))";
+		$finiw="fecha_descanso";
+		$ffin="IF(fecha_salida!='0000-00-00 00:00:00',fecha_salida,NOW())";
+		$ffinw="fecha_salida";
+	}
+	$queryhorasestado="
+		SELECT
+			TIMESTAMPDIFF(DAY,MIN(u.fecha_entrada),NOW()) AS diastotal,
+			TIMESTAMPDIFF(HOUR,MIN(u.fecha_entrada),NOW()) AS horastotal,
+			SUM(TIMESTAMPDIFF(HOUR,$fini,$ffin))
+				AS horasestado,
+			TIMESTAMPDIFF(HOUR,MIN(u.fecha_entrada),NOW())
+				-SUM(TIMESTAMPDIFF(HOUR,$fini,$ffin))
+				AS horasresto
+		FROM uso_baterias_bodega AS u, bodegas AS b, cargadores AS c
+		WHERE u.bg = b.id
+			AND b.cg = c.idcargadores
+			AND $finiw != '0000-00-00 00:00:00'
+			AND c.idcargadores =$id
+		";
+	$resultado = $mysqli->query($queryhorasestado);
+	$horas[$est_estado]['h']['total']=0;
+	$horas[$est_estado]['h']['estado']=0;
+	$horas[$est_estado]['h']['idle']=0;
+	$horas[$est_estado]['h']['totalp']=0;
+	$horas[$est_estado]['h']['estadop']=0;
+	$horas[$est_estado]['h']['idlep']=0;
+	while($fila = $resultado->fetch_array()) {
+		if ($fila['diastotal']==0) $fila['diastotal']=1;
+		if ($fila['horastotal']==0) $fila['horastotal']=1;
+		$horas[$est_estado]['h']['total']= round($fila['horastotal'],0);
+		$horas[$est_estado]['h']['estado']=round($fila['horasestado'],0);
+		$horas[$est_estado]['h']['rest']= round($fila['horasresto'],0);
+		$horas[$est_estado]['h']['totalp']= round($fila['horastotal']/$fila['diastotal'],0);
+		$horas[$est_estado]['h']['estadop']= round($fila['horasestado']/$fila['diastotal'],0);
+		$horas[$est_estado]['h']['restop']= round($fila['horasresto']/$fila['diastotal'],0);
+	}
+	
+	$queryhoras7destado="
+		SELECT
+			7 AS diastotal,
+			(24*7) AS horastotal,
+			SUM(
+				TIMESTAMPDIFF(HOUR,
+					IF($fini>=DATE_SUB(now(), INTERVAL 7 DAY),$fini,DATE_SUB(now(), INTERVAL 7 DAY)),
+					$ffin
+				)
+			)AS horasestado,
+			(24*7)-SUM(
+				TIMESTAMPDIFF(HOUR,
+					IF($fini>=DATE_SUB(now(), INTERVAL 7 DAY),$fini,DATE_SUB(now(), INTERVAL 7 DAY)),
+					$ffin
+				)
+			)AS horasidle
+		FROM uso_baterias_bodega AS u, bodegas AS b, cargadores AS c
+		WHERE u.bg = b.id
+			AND b.cg = c.idcargadores
+			AND ($fini>=DATE_SUB(now(), INTERVAL 7 DAY) || $ffinw='0000-00-00 00:00:00')
+			AND $finiw != '0000-00-00 00:00:00'
+			AND c.idcargadores =$id
+		";
+	$resultado = $mysqli->query($queryhoras7destado);
+	$horas[$est_estado]['7']['total']=0;
+	$horas[$est_estado]['7']['estado']=0;
+	$horas[$est_estado]['7']['idle']=0;
+	$horas[$est_estado]['7']['totalp']=0;
+	$horas[$est_estado]['7']['estadop']=0;
+	$horas[$est_estado]['7']['idlep']=0;
+	while($fila = $resultado->fetch_array()) {
+		$horas[$est_estado]['7']['total']= round($fila['horastotal'],0);
+		$horas[$est_estado]['7']['estado']= round($fila['horasestado'],0);
+		$horas[$est_estado]['7']['idle']= round($fila['horasidle'],0);
+		$horas[$est_estado]['7']['totalp']= round($fila['horastotal']/$fila['diastotal'],0);
+		$horas[$est_estado]['7']['estadop']= round($fila['horasestado']/$fila['diastotal'],0);
+		$horas[$est_estado]['7']['idlep']= round($fila['horasidle']/$fila['diastotal'],0);
+	}
 }
 
 //Estado de lugares
