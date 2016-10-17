@@ -214,20 +214,36 @@ function load()
 	}
 }
 
+var maxcam=0;
+gotDevices();
+function gotDevices(deviceInfos) {
+	var j;
+  for (var i = 0; i !== deviceInfos.length; ++i) {
+    var deviceInfo = deviceInfos[i];
+		if (deviceInfo.kind === 'videoinput') {
+			j=i;
+    }
+  }
+	maxcam=j;
+	//alert('cam:'+maxcam);
+}
+
 function setwebcam()
 {
+
 	document.getElementById("result").innerHTML="- Buscando -";
     if(stype==1)
     {
         setTimeout(captureToCanvas, 500);    
         return;
     }
+		//MediaStreamTrack.getSources(gotSources);
     var n=navigator;
     document.getElementById("outdiv").innerHTML = vidhtml;
     v=document.getElementById("v");
-
+		navigator.mediaDevices.enumerateDevices().then(gotDevices).catch(error);
     if(n.getUserMedia)
-        n.getUserMedia({video: true, audio: false}, success, error);
+        n.getUserMedia({video: {deviceId: maxcam ? {exact: maxcam} : undefined}, audio: false}, success, error);
     else
     if(n.mediaDevices.getUserMedia)
         n.mediaDevices.getUserMedia({video: { facingMode: "environment"} , audio: false})

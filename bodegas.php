@@ -1,24 +1,19 @@
 <?php
-require_once("models/config.php");
-require_once("models/header.php");
-
-
-
-
-if (!securePage($_SERVER['PHP_SELF'])){die();}
-$tipo = $_GET['tipo'];
-if($tipo == 'Bodega'){
-    $nombrePagina="Bodegas";
-}
 
 $nombrePagina="Cargadores";
 $acciones=[];
 $acciones[0][0]="Exportar";
 $acciones[0][1]="javascript:exporta();";
-if($loggedInUser->checkPermission(array(2)) && $tipo == 'Cargador'){
-   $acciones[1][0]="Alta";
-   $acciones[1][1]='/sistema.php?ruta=alta/cargadores'; 
+$acciones[1][0]="Importar";
+$acciones[1][1]='javascript:importa();';
+
+require_once("models/config.php");
+if (!securePage($_SERVER['PHP_SELF'])){die();}
+$tipo = $_GET['tipo'];
+if($tipo == 'Bodega'){
+    $nombrePagina="Bodegas";
 }
+require_once("models/header.php");
 $query="
 SELECT * FROM
 (
@@ -74,7 +69,8 @@ SELECT * FROM
         usos.bt=bat.idbaterias AND
         c.idsucursal IN (".$loggedInUser->sucursales.") AND 
         c.idcargadores=b.cg AND
-        cbg.cg=c.idcargadores
+        cbg.cg=c.idcargadores AND
+        c.cargadores_tipo='$tipo'
     
     UNION ALL
     
@@ -118,6 +114,7 @@ SELECT * FROM
         c.idsucursal IN (".$loggedInUser->sucursales.") AND
         c.idcargadores=b.cg AND
         cbg.cg=c.idcargadores AND
+        c.cargadores_tipo='$tipo' AND
         b.id not in (
             SELECT 
                bg   
@@ -162,13 +159,22 @@ SELECT * FROM
 			) AND
         c.idsucursal IN (".$loggedInUser->sucursales.") AND
         c.idcargadores=b.cg AND
-        cbg.cg=c.idcargadores
+        cbg.cg=c.idcargadores AND
+        c.cargadores_tipo='$tipo'
 ) as todo
 GROUP BY Cargador 
 ORDER BY Cargador, Espacio
 ";
 
-//$resultado = $mysqli->query($query);
+$resultado = $mysqli->query($query);
+$tiposcg=array();
+while($fila = $resultado->fetch_array()) {
+    $tipobn=str_replace(' ','_',$fila['Tipo']);
+    $tipobn=str_replace('(','',$tipobn);
+    $tipobn=str_replace(')','',$tipobn);
+    $tiposcg[$tipobn]=$fila['Tipo'];
+}
+
 
 $queryCargadoresDes="
     SELECT *, CONCAT(
@@ -199,7 +205,7 @@ function importa(){
 
 function exporta(){
 		   url=location.href.substring(0, location.href.lastIndexOf("/")+1)
-		   window.open(url+'exportaciones/ecargadores.php?tipo=<?php echo $tipo?>','_blank');
+		   window.open(url+'exportaciones/ebodegas.php','_blank');
 }
 	
 function importa2(){
@@ -275,55 +281,59 @@ function deshabilita(cual) {
 			<table id="tablacargadores" class="table table-striped table-bordered table-hover table-fixed" cellspacing="0" width="100%">
 				<thead>
 					<tr>
-                                                <th></th>
+                        <th></th>
 						<th>Nombre</th>
-                                                
-                                                <?php if($tipo == 'Cargador') :?>
-                                                <th>Tipo</th>
-                                                <?php else:?>
-                                                <th style="display: none">Tipo</th>
-                                                <?php endif;?>
-				
+                        
+                        <?php if($tipo == 'Cargador') :?>
+                        <th>Tipo</th>
+                        <?php else:?>
+                        <th style="display: none">Tipo</th>
+                        <?php endif;?>
+
 						<th>Num. Lugares</th>
 						<th>Lugares Disp.</th>
 						<th>Bat. En Espera</th>
-                                                <th>Bat. En Descanso</th>
-					
-
-                                                <?php if($tipo == 'Cargador') :?>
-                                                <th>Tiempo En Carga</th>
-                                                <?php else:?>
-                                                <th style="display: none">Tiempo En Carga</th>
-                                                <?php endif;?>
-                         
-                                                <th>Estatus</th>
+                        <th>Bat. En Descanso</th>
+                        <?php if($tipo == 'Cargador') :?>
+                            <th>Tiempo En Carga</th>
+                        <?php else:?>
+                            <th style="display: none">Tiempo En Carga</th>
+                        <?php endif;?>
+                        <th>Estatus</th>
 						<th>Opciones</th>
 					</tr>
 				</thead>
                                
-                                <tbody></tbody>
+                <tbody></tbody>
 			</table>
 			<div class="row">
 				<div class="col-md-12">
 					<div class="portlet light portlet-fit bordered">
 						<div class="portlet-title">
 							<div class="caption">
-                                                            <?php if($tipo == 'Cargador') :?>
+                                <?php if($tipo == 'Cargador') :?>
 								<span class="caption-subject font-green bold uppercase">Desempeño de Cargadores</span>
-                                                            <?php else:?>
-                                                                <span class="caption-subject font-green bold uppercase">Desempeño de Bodegas</span>
-                                                            <?php endif;?>
+                                <?php else:?>
+                                    <span class="caption-subject font-green bold uppercase">Desempeño de Bodegas</span>
+                                <?php endif;?>
 							</div>
 						</div>
+					<?php foreach ($tiposcg as $tipobn => $tipob){?>
 						<div class="portlet-body">
-							<div id="reporteCC" ></div>
+							<div id="reporteCE_<?php echo $tipobn;?>" ></div>
+						</div>
+                        <?php if($tipo == 'Cargador') {?>
+						<div class="portlet-body">
+							<div id="reporteCC_<?php echo $tipobn;?>" ></div>
+						</div>
+                        <?php } ?>
+						<div class="portlet-body">
+							<div id="reporteCD_<?php echo $tipobn;?>" ></div>
 						</div>
 						<div class="portlet-body">
-							<div id="reporteCD" ></div>
+							<div id="reporteCL_<?php echo $tipobn;?>" ></div>
 						</div>
-						<div class="portlet-body">
-							<div id="reporteCE" ></div>
-						</div>
+                    <?php }?>
 					</div>
 				</div>
 			</div>
@@ -341,29 +351,34 @@ function deshabilita(cual) {
         <!-- END PAGE LEVEL PLUGINS -->
 <?php
         
+    foreach ($tiposcg as $tipobn => $tipob){
         if($tipo == 'Cargador'){
-            $grafica=pinta_grafica('cg','reporteCC','carga','todo');
+            $grafica=pinta_grafica('cg','reporteCE_'.$tipobn,'espera','todo',$tipob);
             echo $grafica;
-            $grafica=pinta_grafica('cg','reporteCD','descanso','todo');
+            $grafica=pinta_grafica('cg','reporteCC_'.$tipobn,'carga','todo',$tipob);
             echo $grafica;
-            $grafica=pinta_grafica('cg','reporteCE','espera','todo');
+            $grafica=pinta_grafica('cg','reporteCD_'.$tipobn,'descanso','todo',$tipob);
+            echo $grafica;
+            $grafica=pinta_grafica('cg','reporteCL_'.$tipobn,'listo','todo',$tipob);
             echo $grafica;
         }else{
-            $grafica=pinta_grafica('li','reporteCE','espera','todo','Bodega');
+            $grafica=pinta_grafica('cg','reporteCE_'.$tipobn,'espera','todo','todos','Bodega');
+            echo $grafica;
+            $grafica=pinta_grafica('cg','reporteCD_'.$tipobn,'descanso','todo','todos','Bodega');
+            echo $grafica;
+            $grafica=pinta_grafica('cg','reporteCL_'.$tipobn,'listo','todo','todos','Bodega');
             echo $grafica;
         }
+    }
 	
 require_once("tema/comun/footer.php");
 ?>
 <script src="assets/global/scripts/app.min.js"></script>
 <script>
     $(document).ready( function () {
-        
         'use strict';
         var tipo = "<?php echo $tipo?>";
-        if(tipo == 'Bodega'){
-            $('.page-bar .dropdown').remove();
-        }
+
             var columns = [
                 {
                     "sClass":      'details-control',

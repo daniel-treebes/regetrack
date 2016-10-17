@@ -7,7 +7,7 @@ $habilitafecha;
     <div class="portlet box  blue-sharp">
         <div class="portlet-title">
             <div class="caption">
-                <i class="fa fa-car"></i>Habilitar <strong><?php  echo $_GET['id'] ?> </strong>
+                <i class="fa fa-exclamation-triangle"></i>Habilitar
             </div>
             <div class="tools">
                 <a href="" class="collapse" data-original-title="" title=""> </a>

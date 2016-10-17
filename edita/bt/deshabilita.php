@@ -5,7 +5,7 @@
     <div class="portlet box  blue-sharp">
         <div class="portlet-title">
             <div class="caption">
-                <i class="fa fa-car"></i>Desabilita Batería <strong><?php  echo $_GET['id'] ?> </strong>
+                <i class="fa fa-exclamation-triangle"></i>Desabilita Batería
             </div>
             <div class="tools">
                 <a href="" class="collapse" data-original-title="" title=""> </a>

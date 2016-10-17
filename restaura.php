@@ -34,7 +34,7 @@ FROM
 $losMC = $mysqli->query($queryMC);
 while($losMCa2 = $losMC->fetch_array())
 {
-$losMCa[] = $losMCa2;
+$losMCa[] = $losMCa2['Id'];
 }
 
 
@@ -48,7 +48,7 @@ FROM
 $lasBT = $mysqli->query($queryBT);
 while($lasBTa2 = $lasBT->fetch_array())
 {
-$lasBTa[] = $lasBTa2;
+$lasBTa[] = $lasBTa2['Id'];
 }
 
 
@@ -61,7 +61,7 @@ FROM
 $lasBG = $mysqli->query($queryBG);
 while($lasBGa2 = $lasBG->fetch_array())
 {
-$lasBGa[] = $lasBGa2;
+$lasBGa[] = $lasBGa2['Id'];
 }
  
 
@@ -98,32 +98,38 @@ function inicializa(){
 	global $ciclos;
 	global $lasBTa;
 	global $losMCa;
-	
+	global $lasBGa;
+
 	$bateriasAcomodadas=[];
-	$montaCargasAcomodadas=[];
+	$montacargasUsados=[];
+	$bodegasUsados=[];
 	
 	for($i=0;$i<count($lasBTa);$i++){
-		$random=randWithout(1,count($lasBTa),$bateriasAcomodadas);
-		$randomb=randWithout(1,count($lasBTa),$bateriasAcomodadas);
+		$random=randWithout(0,count($lasBTa),$bateriasAcomodadas);
+		$randomM=randWithout(0,count($losMCa),$montacargasUsados);
+		$randomB=randWithout(0,count($lasBGa),$bodegasUsados);
 		
 		$bateriasAcomodadas[$i]=$random;
-		if($i==0){
-		acomodaBaterias(1,$random,dameFechaCiclo($ciclos),dameFechaCero(),dameFechaCero(),dameFechaCero());
-		}else if($i==1){
-		acomodaBaterias(2,$random,dameFechaCiclo($ciclos),dameFechaCiclo($ciclos),dameFechaCero(),dameFechaCero());
-		}else if($i==2){
-		acomodaBaterias(3,$random,dameFechaCiclo($ciclos),dameFechaCiclo($ciclos),dameFechaCiclo($ciclos),dameFechaCero());
-		acomodaMC($losMCa[2]['Id'],$random,dameFechaCiclo($ciclos),dameFechaCiclo($ciclos));
-		}else if($i==3){
-		acomodaBaterias(4,$random,dameFechaCiclo($ciclos),dameFechaCiclo($ciclos),dameFechaCiclo($ciclos),dameFechaCiclo($ciclos));
-		acomodaMC($losMCa[1]['Id'],$random,dameFechaCiclo($ciclos),dameFechaCero());
-		}else if($i==4){
-		acomodaBaterias(5,$random,dameFechaCiclo($ciclos),dameFechaCiclo($ciclos),dameFechaCiclo($ciclos),dameFechaCiclo($ciclos));
-		acomodaMC($losMCa[0]['Id'],$random,dameFechaCiclo($ciclos),dameFechaCero());
-		}else if($i==5){
-		acomodaBaterias(6,$random,dameFechaCiclo($ciclos),dameFechaCiclo($ciclos),dameFechaCero(),dameFechaCero());
+		if($i % 2 == 0){
+			if ($randomB!='lleno'){
+				$bodegasUsados[]=$randomB;
+				acomodaBaterias($lasBGa[$randomB],$lasBTa[$random],dameFechaCiclo($ciclos),dameFechaCero(),dameFechaCero(),dameFechaCero());
+			}else{
+				$montacargasUsados[]=$randomM;
+				acomodaMC($losMCa[$randomM],$lasBTa[$random],dameFechaCiclo($ciclos),dameFechaCiclo($ciclos));
+			}
+		}else{
+			if ($randomM!='lleno'){
+				$montacargasUsados[]=$randomM;
+				acomodaMC($losMCa[$randomM],$lasBTa[$random],dameFechaCiclo($ciclos),dameFechaCiclo($ciclos));
+			}else{
+				$bodegasUsados[]=$randomB;
+				acomodaBaterias($lasBGa[$randomB],$lasBTa[$random],dameFechaCiclo($ciclos),dameFechaCero(),dameFechaCero(),dameFechaCero());
+			}
 		}
 	}
+//	echo '<pre>';print_r($bodegasUsados);echo'</pre>';
+//	echo '<pre>';print_r($montacargasUsados);echo'</pre>';
 }
 
 
@@ -498,33 +504,23 @@ function acomodaBaterias($bg,$bt,$fechaEntra,$fechaCarga,$fechaDescansa,$fechaSa
 	global $mysqli;
 	$query="INSERT INTO
 	uso_baterias_bodega(
-	id ,
 	bg ,
 	bt ,
 	fecha_entrada ,
 	fecha_carga ,
 	fecha_descanso ,
-	fecha_salida ,
-	usuario_entrada,
-	usuario_carga,
-	usuario_descanso,
-	usuario_salida
+	fecha_salida
 	)
 	VALUES (
-	NULL ,
 	'".$bg."',
 	'".$bt."',
 	'".$fechaEntra."',
 	'".$fechaCarga."',
 	'".$fechaDescansa."',
-	'".$fechaSale."',
-	'1',
-	'1',
-	'1',
-	'1'
-	);
+	'".$fechaSale."'
+	)
 	";
-	
+//echo $query.'<br><br>';
 	$mysqli->query($query);
 }
 
@@ -583,14 +579,11 @@ function reseteaTodo(){
 
 
 function randWithout($from, $to, array $exceptions) {
-    sort($exceptions); // lets us use break; in the foreach reliably
-    $number = rand($from, $to - count($exceptions)); // or mt_rand()
-    foreach ($exceptions as $exception) {
-        if ($number >= $exception) {
-            $number++; // make up for the gap
-        } else /*if ($number < $exception)*/ {
-            break;
-        }
+	if (count($exceptions)>=$to) return 'lleno';
+	$number = rand($from, $to);
+    while (in_array($number, $exceptions)) {
+		if ($number<$to) $number++;
+		else $number=$from;
     }
     return $number;
 }

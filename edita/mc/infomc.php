@@ -41,7 +41,7 @@ $habilitamotivo='';
 $habilitafecha='';
 while($fila = $resultado->fetch_array()) {
     $habilitaid= $fila['id'];
-    $habilitamc= $fila['mc'];
+    $habilitamc= $fila['idmontacargas'];
     $habilitamotivo= $fila['motivo'];
     $habilitafecha= $fila['fecha_entrada'];
 }

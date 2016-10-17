@@ -359,6 +359,9 @@ $bodegas_listo = 0;
             <div class="portlet-body">
                 <div id="reporteBD" ></div>
             </div>
+            <div class="portlet-body">
+                <div id="reporteBL" ></div>
+            </div>
         </div>
     </div>
 </div>
@@ -379,6 +382,9 @@ $bodegas_listo = 0;
             </div>
             <div class="portlet-body">
                 <div id="reporteCD" ></div>
+            </div>
+            <div class="portlet-body">
+                <div id="reporteCL" ></div>
             </div>
         </div>
     </div>
@@ -557,24 +563,27 @@ $bodegas_listo = 0;
 </script>
 <?php
 
-    $grafica=pinta_grafica('mc','reporteMC','uso','todo');
+    $grafica=pinta_grafica('mc','reporteMC','uso','todo','tipo');
     echo $grafica;
 
-
-    $grafica=pinta_grafica('cg','reporteCE','espera','todo');
+    $grafica=pinta_grafica('cg','reporteCE','espera','todo','tipo');
     echo $grafica;
-    $grafica=pinta_grafica('cg','reporteCC','carga','todo');
+    $grafica=pinta_grafica('cg','reporteCC','carga','todo','tipo');
     echo $grafica;
-    $grafica=pinta_grafica('cg','reporteCD','descanso','todo');
+    $grafica=pinta_grafica('cg','reporteCD','descanso','todo','tipo');
+    echo $grafica;
+    $grafica=pinta_grafica('cg','reporteCL','listo','todo','tipo');
     echo $grafica;
     
-    $grafica=pinta_grafica('bt','reporteBU','uso','todo');
+    $grafica=pinta_grafica('bt','reporteBU','uso','todo','tipo');
     echo $grafica;
-    $grafica=pinta_grafica('bt','reporteBE','espera','todo');
+    $grafica=pinta_grafica('bt','reporteBE','espera','todo','tipo');
     echo $grafica;
-    $grafica=pinta_grafica('bt','reporteBC','carga','todo');
+    $grafica=pinta_grafica('bt','reporteBC','carga','todo','tipo');
     echo $grafica;
-    $grafica=pinta_grafica('bt','reporteBD','descanso','todo');
+    $grafica=pinta_grafica('bt','reporteBD','descanso','todo','tipo');
+    echo $grafica;
+    $grafica=pinta_grafica('bt','reporteBL','listo','todo','tipo');
     echo $grafica;
     
     $efidato=eficiencia('bt','uso','eficienciaBTU');

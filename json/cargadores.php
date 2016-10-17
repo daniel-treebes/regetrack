@@ -4,7 +4,9 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 require_once("../models/config.php");
 $tipo = $_GET['tipo'];
-
+if($tipo == 'Bodega'){
+    $nombrePagina="Bodegas";
+}
 $query="
 SELECT * FROM
 (
@@ -60,9 +62,8 @@ SELECT * FROM
         usos.bt=bat.idbaterias AND
         c.idsucursal IN (".$loggedInUser->sucursales.") AND 
         c.idcargadores=b.cg AND
-        cbg.cg=c.idcargadores AND 
-        c.cargadores_tipo = '".$tipo."'
-        
+        cbg.cg=c.idcargadores AND
+        c.cargadores_tipo='$tipo'
     
     UNION ALL
     
@@ -106,6 +107,7 @@ SELECT * FROM
         c.idsucursal IN (".$loggedInUser->sucursales.") AND
         c.idcargadores=b.cg AND
         cbg.cg=c.idcargadores AND
+        c.cargadores_tipo='$tipo' AND
         b.id not in (
             SELECT 
                bg   
@@ -114,8 +116,8 @@ SELECT * FROM
             WHERE 
                fecha_salida='0000-00-00 00:00:00'
             GROUP BY bg
-        )AND
-	c.cargadores_tipo = '".$tipo."'	
+        )
+		
 	UNION ALL
     
     SELECT
@@ -151,7 +153,7 @@ SELECT * FROM
         c.idsucursal IN (".$loggedInUser->sucursales.") AND
         c.idcargadores=b.cg AND
         cbg.cg=c.idcargadores AND
-        c.cargadores_tipo = '".$tipo."'
+        c.cargadores_tipo='$tipo'
 ) as todo
 GROUP BY Cargador 
 ORDER BY Cargador, Espacio

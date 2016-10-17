@@ -1199,17 +1199,22 @@ function pinta_grafica($modulo,$divapintar,$estatus,$idapintar='todo',$tipo="tod
 	date_default_timezone_set('UTC');
 	date_default_timezone_set("America/Mexico_City");
 
+	$astipo=" as tipo, ";
+	$ordertipo=" tipo, ";
 	if($modulo=="bt"){
 		$id = 'idbaterias';
 		$nombre = 'baterias_nombre';
 		$qtipo="CONCAT(m.baterias_c,'-',m.baterias_k,'-',m.baterias_p,'-',m.baterias_t,'-',m.baterias_e,' (',m.baterias_volts,'V - ',m.baterias_amperaje,'Ah)')";
-	}else if($modulo=="cg"){
+	}elseif($modulo=="cg"){
 		$id = 'idcargadores';
-		$nombre = ',cargadores_nombre';
-		if ($cargador_tipo=='Cargador')
+		$nombre = 'cargadores_nombre';
+		if ($cargador_tipo=='Cargador'){
 			$qtipo="CONCAT(m.cargadores_volts,'V ',m.cargadores_amperaje,'Ah (',m.cargadores_e,')')";
-		else
+		}else{
 			$qtipo="";
+			$astipo="";
+			$ordertipo="";
+		}
 	}else{
 		$id = 'idmontacargas';
 		$nombre = 'montacargas_nombre';
@@ -1250,18 +1255,22 @@ function pinta_grafica($modulo,$divapintar,$estatus,$idapintar='todo',$tipo="tod
 
 	$qwhere='m.'.$id.'=u.'.$modulo;
 	if($modulo == 'cg'){
-		$qwhere='m.'.$id.'=b.cg AND b.id=u.bg AND cg.cargadores_tipo = "'.$cargador_tipo.'"';
+		$qwhere='m.'.$id.'=b.cg AND b.id=u.bg AND m.cargadores_tipo = "'.$cargador_tipo.'"';
 	}
 	$qwhere.=' AND m.idsucursal IN ('.$loggedInUser->sucursales.') ';
 	
-	if ($tipo!='todos'){
+	if ($tipo!='todos' && $tipo!='tipo' && $cargador_tipo=="Cargador"){
 		$qwhere.=" AND ".$qtipo."='".$tipo."'";
+	}
+	$agrupapor='nombre';
+	if ($tipo=='tipo'){
+		$agrupapor='tipo';
 	}
 	$query="
 		SELECT
 			m.".$id." as id,
 			m.$nombre as nombre,
-			$qtipo as tipo,
+			$qtipo $astipo
 			u.$fini as fecha_entrada,
 			u.$ffin as fecha_salida,
 			TIMESTAMPDIFF(hour, u.$fini, u.$ffin) as hrs,
@@ -1271,15 +1280,15 @@ function pinta_grafica($modulo,$divapintar,$estatus,$idapintar='todo',$tipo="tod
 			AND u.$ffin!='0000-00-00 00:00:00' 
 			$filtro
 		order by
-			nombre, u.$fini asc
+			$ordertipo nombre, u.$fini asc
 	";
-
+//echo $query.'<br>';
 	if ($estatus=='descanso'){
 		$query="
 			SELECT
 				m.".$id." as id,
 				m.$nombre as nombre,
-				$qtipo as tipo,
+				$qtipo $astipo
 				u.$fini as fecha_entrada,
 				IF(TIMESTAMPDIFF(hour, u.$fini, u.$ffin)<8,
 					u.$ffin,
@@ -1300,7 +1309,7 @@ function pinta_grafica($modulo,$divapintar,$estatus,$idapintar='todo',$tipo="tod
 				) 
 				$filtro
 			order by
-				nombre, u.$fini asc
+				$ordertipo nombre, u.$fini asc
 		";
 	}
 
@@ -1309,7 +1318,7 @@ function pinta_grafica($modulo,$divapintar,$estatus,$idapintar='todo',$tipo="tod
 			SELECT
 				m.".$id." as id,
 				m.$nombre as nombre,
-				$qtipo as tipo,
+				$qtipo $astipo
 				IF(TIMESTAMPDIFF(hour, u.$fini, u.$ffin)<8,
 					u.$ffin,
 					DATE_ADD(u.$fini, INTERVAL 8 HOUR)
@@ -1328,21 +1337,21 @@ function pinta_grafica($modulo,$divapintar,$estatus,$idapintar='todo',$tipo="tod
 				AND u.$ffin!='0000-00-00 00:00:00' 
 				$filtro
 			order by
-				nombre, u.$fini asc
+				$ordertipo nombre, u.$fini asc
 		";
 	}
-//echo $query.'<br>';
+//if ($modulo=='cg') echo $query.'<br>';
     $respuesta = $mysqli->query($query);
        
 	$data=array();
 	$nombreid='SIN USO';
 	if ($respuesta) {
 	   while($renglon = $respuesta->fetch_array()){
-		  $mc=$renglon['id'];
+		  $mc=$renglon[$agrupapor];
 		  if (!isset($data[$mc])){
 			 $data[$mc]['data']='[';
-			 $data[$mc]['nombre']=$renglon['nombre'];
-			 $nombreid=$renglon['nombre'];
+			 $data[$mc]['nombre']=$renglon[$agrupapor];
+			 $nombreid=$renglon[$agrupapor];
 		  }
 		  $fechaentrada=$renglon['fecha_entrada'];
 		  $fecha= strtotime($fechaentrada. " UTC");
@@ -1351,7 +1360,7 @@ function pinta_grafica($modulo,$divapintar,$estatus,$idapintar='todo',$tipo="tod
 	}
 
 	$tabladeh="deshabilita".$modulo." as d";
-	$titulo='HORAS DE '.strtoupper($estatus).' DE';
+	$titulo='HORAS EN "'.strtoupper($estatus).'" DE';
 	if ($modulo=='bt'){
 		$tabladeh.=' JOIN baterias as m ON d.bt = m.idbaterias';
 		if ($idapintar=='todo') $titulo.=' BATERIAS';
@@ -1373,42 +1382,47 @@ function pinta_grafica($modulo,$divapintar,$estatus,$idapintar='todo',$tipo="tod
 		else $titulo.='L MONTACARGAS '.$nombreid;
 	}
 	
-    if ($tipo!='todos') $titulo.=" - ".$tipo;
+    if ($tipo!='todos' && $tipo!='tipo' && $cargador_tipo=="Cargador"){
+		$titulo.=" - ".$tipo;
+		$filtro.=" AND ".$qtipo."='".$tipo."'";
+	}
+    if ($tipo=='tipo') $titulo.=" - POR TIPO";
+	if ($modulo=="cg") $filtro.=" AND m.cargadores_tipo='$cargador_tipo'";
 	
 	$query="
 		SELECT
 			d.*,
-			$qtipo as tipo,
+			$qtipo $astipo
 			m.$nombre as nombre
 		FROM  $tabladeh
 		WHERE m.idsucursal IN (".$loggedInUser->sucursales.")
-			AND ".$qtipo."='".$tipo."'
 			$filtro
-		ORDER BY nombre, d.fecha_entrada
+		ORDER BY $ordertipo nombre, d.fecha_entrada
 	";
       
 	$rep_alertas = $mysqli->query($query);
-	
+//echo $query.'<br>';
 	$alertas=array();
          
 	if ($rep_alertas){
 	   while($renglon = $rep_alertas->fetch_array()){
                 
 		  $mc= isset($renglon[$modulo]) ? $renglon[$modulo] : 'idmontacargas' ;
+		  $mc= $renglon[$agrupapor];
 		  if (!isset($alertas[$mc])){
 			 $alertas[$mc]['data']='';
-			 $alertas[$mc]['nombre']=$renglon['nombre'];
+			 $alertas[$mc]['nombre']=$renglon[$agrupapor];
 		  }
 		  $fechaentrada=$renglon['fecha_entrada'];
 		  $fecha= strtotime($fechaentrada. " UTC");
-		  $alertas[$mc]['data'].="{x: parseInt(".$fecha."000,10),title: 'AVISO', text: '".$renglon['motivo']."'},";
+		  $alertas[$mc]['data'].="{x: parseInt(".$fecha."000,10),title: 'AVISO', text: '".$renglon['nombre'].": ".$renglon['motivo']."'},";
 	   }
 	}
 	
 	
-	$aregresar='<script type="text/javascript">
-		$(function () {';
+	$aregresar='<script type="text/javascript">';
 		if (count($data)+count($alertas)>0){
+			$aregresar.='$(function () {';
 			$lineas='';
 			foreach ($data as $mc => $dmc){
 				$dmc['data']=substr($dmc['data'],0,-1).']';
@@ -1432,6 +1446,7 @@ function pinta_grafica($modulo,$divapintar,$estatus,$idapintar='todo',$tipo="tod
 					$alineas.="{".
 						"name : 'Alertas ".$amc['nombre']."', ".
 						"type: 'flags', ".
+						"visible: false, ".
 						"data : [".$amc['data']."], ".
 						"onSeries : 'dataseries".$mc."', ".
 						"shape : 'circlepin', ".
@@ -1445,9 +1460,6 @@ function pinta_grafica($modulo,$divapintar,$estatus,$idapintar='todo',$tipo="tod
 			$aregresar.="
 				$('#$divapintar').highcharts('StockChart', {
 	
-					rangeSelector : {
-						selected : 0
-					},
 					rangeSelector : {
 						buttons : [{
 							type : 'day',
@@ -1501,7 +1513,8 @@ function pinta_grafica($modulo,$divapintar,$estatus,$idapintar='todo',$tipo="tod
 			});
 			";   
 		}else{
-			$aregresar.= "$('#$divapintar').html('$titulo<br><br>NO HAY DATOS QUE MOSTRAR');   });";
+			//$aregresar.= "$('#$divapintar').html('$titulo<br><br>NO HAY DATOS QUE MOSTRAR');   });";
+			$aregresar.= "$('#$divapintar').parent().hide();";
 		}
 		$aregresar.= "</script>";
 		return $aregresar;

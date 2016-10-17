@@ -15,9 +15,9 @@ function pinta_alertas($mysqli, $modulo, $id){
         $otratabla="baterias";
     }
     $query="SELECT
-            SUM(alertas)/(TIMESTAMPDIFF(month,inicio,now())+1) as promedio,
+            SUM(alertas)/(IF(TIMESTAMPDIFF(month,inicio,now())>0,TIMESTAMPDIFF(month,inicio,now()),1)) as promedio,
             IF (CONCAT(YEAR(now()),'-',MONTH(now()))=mes,alertas,0) as actual,
-            IF (CONCAT(YEAR(now()-(60*60*24*31)),'-',MONTH(now()-(60*60*24*31)))=mes,alertas,0) as anterior
+            IF (CONCAT(YEAR(DATE_SUB(now(),INTERVAL 1 MONTH)),'-',MONTH(DATE_SUB(now(),INTERVAL 1 MONTH)))=mes,alertas,0) as anterior
         FROM 
         (
             SELECT
@@ -32,6 +32,7 @@ function pinta_alertas($mysqli, $modulo, $id){
         ) as tabla
         limit 1
     ";
+//    echo $query.'<br>';
     $res = $mysqli->query($query);
     while($fila = $res->fetch_array()) {
         $alertas=$fila;

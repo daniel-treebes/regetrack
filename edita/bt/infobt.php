@@ -155,29 +155,34 @@ if($loggedInUser->checkPermission(array(1,2))){
 			</div>
 			<div class="portlet-body form">	   
 						<div class="col-md-12">
+						   <div id="reporteBTU" ></div>
+						</div>
+						<div class="col-md-12">
+						   <div id="reporteBTE" ></div>
+						</div>
+						<div class="col-md-12">
 						   <div id="reporteBTC" ></div>
 						</div>
 						<div class="col-md-12">
 						   <div id="reporteBTD" ></div>
 						</div>
 						<div class="col-md-12">
-						   <div id="reporteBTU" ></div>
-						</div>
-						<div class="col-md-12">
-						   <div id="reporteBTE" ></div>
+						   <div id="reporteBTL" ></div>
 						</div>
 			</div>
 		</div>
 	</div>
 
 	<?php
-	$grafica=pinta_grafica('bt','reporteBTC','carga',$id,$sucursal_activa);
+	$grafica=pinta_grafica('bt','reporteBTU','uso',$id);
 	echo $grafica;
-	$grafica=pinta_grafica('bt','reporteBTD','descanso',$id,$sucursal_activa);
+	$grafica=pinta_grafica('bt','reporteBTE','espera',$id);
 	echo $grafica;
-	$grafica=pinta_grafica('bt','reporteBTU','uso',$id,$sucursal_activa);
+	$grafica=pinta_grafica('bt','reporteBTC','carga',$id);
 	echo $grafica;
-	$grafica=pinta_grafica('bt','reporteBTE','espera',$id,$sucursal_activa);
+	$grafica=pinta_grafica('bt','reporteBTD','descanso',$id);
+	echo $grafica;
+	$grafica=pinta_grafica('bt','reporteBTL','listo',$id);
 	echo $grafica;
 
 }

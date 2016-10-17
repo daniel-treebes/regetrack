@@ -89,7 +89,6 @@ if($habilitaid>0){
 }
 ?>
 <!--DATOS ESTADÍSTICOS Cargador-->
-<?php if ($datosCargador['ctipo']=='Cargador') {?>
 <div class="col-md-6" id="indicadores2">
     <div class="portlet box  blue-sharp">
         <div class="portlet-title">
@@ -150,7 +149,6 @@ if($habilitaid>0){
         </div>
     </div>
 </div>            
-<?php } ?>
 <!--DATOS ESTADÍSTICOS Baterias-->
 <div class="col-md-6" id="indicadores6">
     <div class="portlet box  blue-sharp">
@@ -203,24 +201,33 @@ if($loggedInUser->checkPermission(array(1,2))){
 			</div>
 			<div class="portlet-body form">
                 <div class="col-md-12">
+				   <div id="reporteCGE" ></div>
+				</div>
+				<?php if ($datosCargador['ctipo']!='Bodega'){?>
+                <div class="col-md-12">
 				   <div id="reporteCGC" ></div>
 				</div>
+				<?php } ?>
                 <div class="col-md-12">
 				   <div id="reporteCGD" ></div>
 				</div>
                 <div class="col-md-12">
-				   <div id="reporteCGE" ></div>
+				   <div id="reporteCGL" ></div>
 				</div>
 			</div>
 		</div>
 	</div>
 
 	<?php
-	$grafica=pinta_grafica('cg','reporteCGC','carga',$id, $datosCargador['ctipo']);
+	$grafica=pinta_grafica('cg','reporteCGE','espera',$id,'todos', $datosCargador['ctipo']);
 	echo $grafica;
-	$grafica=pinta_grafica('cg','reporteCGD','descanso',$id, $datosCargador['ctipo']);
+	if ($datosCargador['ctipo']!='Bodega'){
+		$grafica=pinta_grafica('cg','reporteCGC','carga',$id,'todos', $datosCargador['ctipo']);
+		echo $grafica;
+	}
+	$grafica=pinta_grafica('cg','reporteCGD','descanso',$id,'todos', $datosCargador['ctipo']);
 	echo $grafica;
-	$grafica=pinta_grafica('cg','reporteCGE','espera',$id, $datosCargador['ctipo']);
+	$grafica=pinta_grafica('cg','reporteCGL','listo',$id,'todos', $datosCargador['ctipo']);
 	echo $grafica;
 
 }
