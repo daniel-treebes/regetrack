@@ -5,6 +5,7 @@
 /* 
  *Inicializamos variables
  */
+   
 //MONTACARGAS
    $id=$_GET['id'];
    $nombre;
@@ -36,21 +37,22 @@
    <script src="https://code.highcharts.com/stock/highstock.js"></script>
 	<script src="https://code.highcharts.com/stock/modules/exporting.js"></script>
 
-   <script>
+        
+<!--   <script>
 	   $('.easy-pie-chart .number.btact').easyPieChart({
 		 animate: 1000,
 		 size:  75,
 		 lineWidth: 3,
-		 barColor: App.getBrandColor('<?php  echo $colorbtact; ?>')
+		 barColor: App.getBrandColor('<?php // echo $colorbtact; ?>')
 	  });
 	  
 	  $('.easy-pie-chart .number.btant').easyPieChart({
 		 animate: 1000,
 		 size: 75,
 		 lineWidth: 3,
-		 barColor: App.getBrandColor('<?php  echo $colorbtant; ?>')
+		 barColor: App.getBrandColor('<?php // echo $colorbtant; ?>')
 	  });
-   </script>
+   </script>-->
    
    <style>
 	  #result{

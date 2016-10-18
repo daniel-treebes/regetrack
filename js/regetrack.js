@@ -20,13 +20,14 @@ myApp.controller('MontacargasController', ['$scope', '$http',function($scope,$ht
      };
      
      
-     $scope.verificaNombre = function(){
+     $scope.verificaNombre = function(current_name){
          var nombre = $('input[name=montacargas_nombre]').val();
          var idsucursal = $('select[name=idsucursal]').val();
+         var current_name = (typeof current_name != 'undefined') ? current_name : false;
          if(nombre == ""){
             $('input[name=montacargas_nombre]').siblings('i').hide();
          }else{
-            $http.get("json/validarNombre.php",{params:{nombre:nombre,idsucursal:idsucursal,tipo: "montacargas"}})
+            $http.get("json/validarNombre.php",{params:{nombre:nombre,idsucursal:idsucursal,tipo: "montacargas",current_name:current_name}})
             .then(function(response) {
                 $('input[name=montacargas_nombre]').siblings('i').hide();
 
@@ -46,13 +47,14 @@ myApp.controller('MontacargasController', ['$scope', '$http',function($scope,$ht
 
 myApp.controller('BateriasController', ['$scope', '$http',function($scope,$http) {
 
-     $scope.verificaNombre = function(){
+     $scope.verificaNombre = function(current_name){
          var nombre = $('input[name=baterias_nombre]').val();
          var idsucursal = $('select[name=idsucursal]').val();
+          var current_name = (typeof current_name != 'undefined') ? current_name : false;
          if(nombre == ""){
             $('input[name=baterias_nombre]').siblings('i').hide();
          }else{
-            $http.get("json/validarNombre.php",{params:{nombre:nombre,idsucursal:idsucursal,tipo: "baterias"}})
+            $http.get("json/validarNombre.php",{params:{nombre:nombre,idsucursal:idsucursal,tipo: "baterias",current_name:current_name}})
             .then(function(response) {
                 $('input[name=baterias_nombre]').siblings('i').hide();
 
@@ -73,11 +75,11 @@ myApp.controller('BateriasController', ['$scope', '$http',function($scope,$http)
 myApp.controller('CargadoresController', ['$scope', '$http',function($scope,$http) {
      $scope.recomiendaBaterias = function() 
      { 
- 
+         
          $('input[type=checkbox]').attr('checked',false); 
         $http.get("json/recomiendaBateriasByCargadores.php",{params:{volts:$scope.cargadores_volts,amperaje:$scope.cargadores_amperaje,enchufe: $scope.cargadores_e,amperaje_range:10}})
             .then(function(response) {
-                console.log(response);
+               
                 angular.forEach(response.data, function(value, key) {
                    $('input[value="'+value+'"]').attr('checked',true);
                 });
@@ -85,13 +87,15 @@ myApp.controller('CargadoresController', ['$scope', '$http',function($scope,$htt
 
      };
      
-     $scope.verificaNombre = function(){
+     $scope.verificaNombre = function(current_name){
          var nombre = $('input[name=cargadores_nombre]').val();
          var idsucursal = $('select[name=idsucursal]').val();
+         var current_name = (typeof current_name != 'undefined') ? current_name : false;
+       
          if(nombre == ""){
             $('input[name=cargadores_nombre]').siblings('i').hide();
          }else{
-            $http.get("json/validarNombre.php",{params:{nombre:nombre,idsucursal:idsucursal,tipo: "cargadores"}})
+            $http.get("json/validarNombre.php",{params:{nombre:nombre,idsucursal:idsucursal,tipo: "cargadores",current_name:current_name}})
             .then(function(response) {
                 $('input[name=cargadores_nombre]').siblings('i').hide();
 
@@ -100,7 +104,7 @@ myApp.controller('CargadoresController', ['$scope', '$http',function($scope,$htt
                      $('input[name=cargadores_nombre]').siblings('i.fa-close').show();
                      $('button[type=submit]').attr('disabled',true);
                 }else{
-                    $('input[name=cargadores_nombre]').siblings('i.fa-close').hide();
+                     $('input[name=cargadores_nombre]').siblings('i.fa-close').hide();
                      $('input[name=cargadores_nombre]').siblings('i.fa-check').show();
                      $('button[type=submit]').attr('disabled',false);
                 }
@@ -114,6 +118,7 @@ myApp.directive('numberMask', function() {
     return {
         restrict: 'A',
         link: function(scope, element, attrs) {
+
             $(element).numeric();
         }
     }
@@ -123,6 +128,7 @@ myApp.directive('uppercase', function() {
     return {
         restrict: 'A',
         link: function(scope, element, attrs) {
+            
             $(element).numeric();
         }
     }

@@ -3,8 +3,12 @@ $query="
     SELECT
         c.idcargadores as Id,
         c.cargadores_nombre as Nombre,
+        c.idsucursal as IdSucursal,
         c.cargadores_modelo as Modelo,
         c.cargadores_marca as Marca,
+        c.cargadores_volts as Volts,
+        c.cargadores_amperaje as Ampere,
+        c.cargadores_e as Enchufe,
         c.cargadores_comprador as Comprador,
         c.cargadores_numserie as Serie,
         CONCAT(c.cargadores_volts,'V ',c.cargadores_amperaje,'Ah (',c.cargadores_e,')') as Tipo,

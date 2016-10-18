@@ -92,10 +92,23 @@ $resultado = $mysqli->query($bodegas_descanso);
 $bodegas_descanso = $resultado->num_rows;
 
 
-//PENDIENTE
-$bodegas_listo = 0;
+//LISTO
+$query="
+    select
+			
+			COUNT(u.id) as datos,
+			SUM(TIMESTAMPDIFF(hour, u.fecha_entrada, u.fecha_salida)) as horas,
+			AVG(TIMESTAMPDIFF(hour, u.fecha_entrada, u.fecha_salida)) as promedio
+		from uso_baterias_montacargas as u JOIN baterias as m ON u.bt = m.idbaterias
+		where m.idbaterias=u.bt AND m.idsucursal IN (".$loggedInUser->sucursales.") 
+			AND u.fecha_salida!='0000-00-00 00:00:00'
+			
+		order by u.fecha_entrada asc
+";
 
-
+$resultado = $mysqli->query($query);
+$resultado = $resultado->fetch_array();
+$bodegas_listo = $resultado['datos'];
 
 
 ?>

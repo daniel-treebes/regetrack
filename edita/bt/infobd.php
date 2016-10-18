@@ -6,8 +6,13 @@ $query="
         b.baterias_modelo as Modelo,
         b.baterias_marca as Marca,
         b.baterias_comprador as Comprador,
+        b.baterias_c as Celdas,
+        b.baterias_k as FactorK,
+        b.baterias_p as Placas,
+        b.baterias_t as Tipo,
+        b.baterias_e as Enchufe,
         b.baterias_numserie as Serie,
-        CONCAT(b.baterias_c,'-',b.baterias_k,'-',b.baterias_p,'-',b.baterias_t,'-',b.baterias_e,' (',b.baterias_volts,'V ',b.baterias_amperaje,'Ah)') as Tipo
+        b.idsucursal as Idsucursal
     FROM
         baterias as b
     WHERE

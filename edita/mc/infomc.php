@@ -1,6 +1,7 @@
 <?php
 
 $message_baterias = false;
+$message_montacargas = false;
 if($_POST){
     $post_data = $_POST;
    
@@ -32,7 +33,31 @@ if($_POST){
         
         
         
+    }elseif($post_data['action'] == 'editarMontacargaas'){
+     
+        $entity = MontacargasQuery::create()->findPk($post_data['idmontacargas']);
+        foreach ($post_data as $key => $value){
+            if(MontacargasPeer::getTableMap()->hasColumn($key)){
+               $entity->setByName($key, strtoupper($value), BasePeer::TYPE_FIELDNAME);
+            }
+        }
+        $volts = (int)$post_data['montacargas_c'] * 2;
+        $amperaje = (((int)$post_data['montacargas_p'] - 1)/2) * (int)$post_data['montacargas_k'];
+
+        $entity->setMontacargasVolts($volts)
+               ->setMontacargasAmperaje($amperaje);
+        
+
+        $entity->save();
+        
+        $message_montacargas = 'El Registro se ha guardado satisfactoriamente!';
     }
+    
+    
+    
+    
+    
+    
    
 }
 
@@ -45,8 +70,13 @@ $query="
         m.montacargas_modelo as Modelo,
         m.montacargas_marca as Marca,
         m.montacargas_comprador as Comprador,
+        m.montacargas_c as Celdas,
+        m.montacargas_k as FactorK,
+        m.montacargas_p as Placas,
+        m.montacargas_t as Tipo,
+        m.montacargas_e as Enchufe,
         m.montacargas_numserie as Serie,
-        CONCAT(m.montacargas_c,'-',m.montacargas_k,'-',m.montacargas_p,'-',m.montacargas_t,'-',m.montacargas_e,' (',m.montacargas_volts,'V - ',m.montacargas_amperaje,'Ah)') as Tipo
+        m.idsucursal as Idsucursal
     FROM montacargas as m
     WHERE m.idmontacargas= ".$_GET['id']."
         AND m.idsucursal IN (".$loggedInUser->sucursales.")
@@ -58,10 +88,17 @@ while($fila = $resultado->fetch_array()) {
     $id= $fila['Id'];
     $nombre= $fila['Nombre'];
     $modelo= $fila['Modelo'];
-    $tipo= $fila['Tipo'];
     $marca= $fila['Marca'];
     $comprador= $fila['Comprador'];
+    $celdas= $fila['Celdas'];
+    $factork= $fila['FactorK'];
+    $placas= $fila['Placas'];
+    $tipo= $fila['Tipo'];
+    $enchufe= $fila['Enchufe'];
     $serie= $fila['Serie'];
+    $idsucursal= $fila['Idsucursal'];
+    
+
 }
 
 $querydeshabilitado="
@@ -85,6 +122,7 @@ while($fila = $resultado->fetch_array()) {
 }
 //DATOS DEL MONTACARGAS
 ?>
+<script src="js/numeric.js"></script>
 <div class="col-md-6" id="indicadores1">
     <div class="portlet box  blue-sharp">
         <div class="portlet-title">
@@ -95,50 +133,103 @@ while($fila = $resultado->fetch_array()) {
                 <a href="" class="collapse" data-original-title="" title=""> </a>
             </div>
         </div>
-        <div class="portlet-body form" > 	   
-            <div class="form-actions right1 gray">
-                <div class="form-body">
+        <div class="portlet-body form" ng-controller="MontacargasController">
+            
+            <form role="form" name="CargadoresBateriasForm" method="post" action="<?php echo $_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING']?>">
+                <div class="form-actions right1 gray" style="padding: 0px">
+                <div class="form-body" style="padding: 0px">
+                    <?php if($message_montacargas) :?>
+                        <div class="row" style="margin-left: 0px; margin-right: 0px; padding-right: 10px; padding-left: 10px; padding-top: 10px;">
+
+                            <div class="alert alert-success">
+                            <strong>Exito!</strong>
+                            <?php echo $message_montacargas ?>
+                            </div>
+                        </div>
+                    <?php endif;?>
                     <div class="form-group">
                         <label class="col-md-3 control-label">Nombre</label>
                         <div class="col-md-9">
-                            <input readonly type="text" class="form-control datos-cosa" placeholder="Default Input" value="<?php  echo $nombre ?> "> 
+                            <div class="input-icon right">
+                                <select name="idsucursal" style="display: none"> 
+                                    <option value="<?php echo $idsucursal?>" selected>Sucursal</option>
+                                </select>
+                                <input type="hidden" name="idmontacargas" value="<?php echo $_GET['id']?>">
+                                <input type="hidden" name="action" value="editarMontacargaas">
+                                <i class="fa fa-check " style="top: 0px; margin-top: 10px; color: green"></i>
+                                <i class="fa fa-close " style="top: 0px; margin-top: 10px; color: red; display: none"></i>
+                                <input ng-blur="verificaNombre('<?php echo$nombre?>')"  class="form-control" type="text" value="<?php echo $nombre?>" name="montacargas_nombre">
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">Celdas</label>
+                        <div class="col-md-9">
+                            <input number-mask name="montacargas_c" type="text" class="form-control datos-cosa"  value="<?php  echo $celdas ?> "> 
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">Factor K</label>
+                        <div class="col-md-9">
+                            <input number-mask name="montacargas_k"  type="text" class="form-control datos-cosa"  value="<?php  echo $factork ?> "> 
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">Placas</label>
+                        <div class="col-md-9">
+                            <input number-mask name="montacargas_p" type="text" class="form-control datos-cosa"  value="<?php  echo $placas ?> "> 
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-md-3 control-label">Tipo</label>
                         <div class="col-md-9">
-                            <input readonly type="text" class="form-control datos-cosa" placeholder="Default Input" value="<?php  echo $tipo ?> "> 
+                            <input  name="montacargas_t" type="text" class="form-control datos-cosa"  value="<?php  echo $tipo ?> "> 
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">Enchufe</label>
+                        <div class="col-md-9">
+                            <input  name="montacargas_e" type="text" class="form-control datos-cosa"  value="<?php  echo $enchufe ?> "> 
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-md-3 control-label">Modelo</label>
                         <div class="col-md-9">
-                            <input readonly type="text" class="form-control datos-cosa" placeholder="Default Input" value="<?php  echo $modelo ?> "> 
+                            <input  name="montacargas_modelo" type="text" class="form-control datos-cosa"  value="<?php  echo $modelo ?> "> 
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-md-3 control-label">Marca</label>
                         <div class="col-md-9">
-                            <input readonly type="text" class="form-control datos-cosa" placeholder="Default Input" value="<?php  echo $marca ?> "> 
+                            <input   name="montacargas_marca" type="text" class="form-control datos-cosa"  value="<?php  echo $marca ?> "> 
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-md-3 control-label">Comprador</label>
                         <div class="col-md-9">
-                            <input readonly type="text" class="form-control datos-cosa" placeholder="Default Input" value="<?php  echo $comprador ?> "> 
+                            <input  name="montacargas_comprador" type="text" class="form-control datos-cosa"  value="<?php  echo $comprador ?> "> 
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-md-3 control-label">Serie</label>
                         <div class="col-md-9">
-                            <input readonly type="text" class="form-control datos-cosa" placeholder="Default Input" value="<?php  echo $serie ?> "> 
+                            <input  name="montacargas_numserie" type="text" class="form-control datos-cosa"  value="<?php  echo $serie ?> "> 
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-2 col-sm-offset-10" style="padding-bottom: 15px; padding-top: 15px;">
+                            <button type="submit" class="btn btn-success">Guardar</button>
                         </div>
                     </div>
                 </div>
             </div>
+            </form>
         </div>
+        
     </div>
 </div>
+
 <?php
 
 include("infobd.php");
@@ -159,6 +250,87 @@ if($habilitaid>0){
 }
 ?>
 <!--DATOS ESTADÍSTICOS-->
+        <?php if($loggedInUser->checkPermission(array(1,2))) :?>
+        <?php
+    
+        $sucursales = explode(',', $loggedInUser->sucursales);
+        $baterias_modelos = BateriasQuery::create()->withColumn('baterias_modelo')->withColumn("CONCAT(baterias_c,'-',baterias_k,'-',baterias_p,'-',baterias_t,'-',baterias_e,' (',baterias_volts,'V - ',baterias_amperaje,'Ah)')","tipo")->select(array('tipo'))->filterByIdsucursal($sucursales)->groupBy('tipo')->find();
+        $montacargas_baterias = MontacargasBateriasQuery::create()->joinBaterias()->withColumn("CONCAT(baterias_c,'-',baterias_k,'-',baterias_p,'-',baterias_t,'-',baterias_e,' (',baterias_volts,'V - ',baterias_amperaje,'Ah)')","tipo")->select(array('tipo','Baterias.BateriasModelo'))->groupBy('tipo')->filterByIdmontacargas($_GET['id'])->find()->toArray(null,false,  BasePeer::TYPE_FIELDNAME);
+        $montacargas_baterias_array = array();
+        foreach ($montacargas_baterias as $value){
+            if(!is_null($value['tipo'])){
+                $montacargas_baterias_array[] = $value['tipo'];
+            }else{
+                $montacargas_baterias_array[] = $value['Baterias.BateriasModelo'];
+            }
+        }
+        ?>
+        
+        <div class="col-sm-6">
+            <div class="portlet box  blue-sharp">
+                <div class="portlet-title">
+                    <div class="caption">
+                       <i class="icon-bateria" style="font-size: 25px;margin-top: 2px;"></i>
+                        <span class="caption-subject">Asociación de baterias</span>
+                    </div>
+                    <div class="tools">
+                            <a href="" class="collapse" data-original-title="" title=""> </a>
+                             
+                    </div>
+                </div>
+                <div class="portlet-body form" >
+                    <form role="form" name="MontacargasBateriasForm" method="post" action="<?php echo $_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING']?>">
+                        <?php if($message_baterias) :?>
+                            <div class="row" style="margin-left: 0px; margin-right: 0px; padding-right: 20px; padding-left: 20px; padding-top: 20px;">
+                        
+                                <div class="alert alert-success">
+                                <strong>Exito!</strong>
+                                <?php echo $message_baterias ?>
+                                </div>
+                            </div>
+                        <?php endif;?>
+                        <div class="row" style="padding: 20px">
+                            <input type="hidden" name="idmontacargas" value="<?php echo $_GET['id']?>">
+                            <input type="hidden" name="action" value="asignaBaterias">
+                            <?php foreach ($baterias_modelos as $modelo) :?>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <div class="mt-checkbox-list">
+                                            <?php if(!is_null($modelo['tipo'])) :?>
+                                            <label style="display: block" class="mt-checkbox mt-checkbox-outline"> <?php echo $modelo['tipo']?>
+                                                <?php if(in_array($modelo['tipo'], $montacargas_baterias_array)):?>
+                                                    <input  value="<?php echo $modelo['tipo']?>" name="baterias[]" type="checkbox" checked>
+                                                <?php else:?>
+                                                    <input  value="<?php echo $modelo['tipo']?>" name="baterias[]" type="checkbox">
+                                                <?php endif;?>
+                                                <span></span>
+                                            </label>
+                                            <?php else:?>
+                                                <label style="display: block" class="mt-checkbox mt-checkbox-outline"> <?php echo $modelo['baterias_modelo']?>
+                                                    <?php if(in_array($modelo['baterias_modelo'], $montacargas_baterias_array)):?>
+                                                    <input value="<?php echo $modelo['baterias_modelo']?>" name="baterias[]" type="checkbox" checked>
+                                                    <?php else:?>
+                                                          <input value="<?php echo $modelo['baterias_modelo']?>" name="baterias[]" type="checkbox">
+                                                    <?php endif;?>
+                                                  
+                                                    <span></span>
+                                                </label>
+                                            <?php endif;?>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php endforeach;?>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-2 col-sm-offset-10" style="padding-bottom: 15px;">
+                                <button type="submit" class="btn btn-success">Guardar</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <?php endif;?>
 <div class="col-md-6" id="indicadores2">
     <div class="portlet box  blue-sharp">
         <div class="portlet-title">
@@ -248,7 +420,8 @@ if($habilitaid>0){
             </div>
         </div>
     </div>
-</div>            
+</div>
+
 <?php
 //ALERTAS
 include("edita/alertas.php");
@@ -257,83 +430,7 @@ pinta_alertas($mysqli,'mc',$id);
 
 if($loggedInUser->checkPermission(array(1,2))){
 ?>      
-        <?php
-        $sucursales = explode(',', $loggedInUser->sucursales);
-        $baterias_modelos = BateriasQuery::create()->withColumn('baterias_modelo')->withColumn("CONCAT(baterias_c,'-',baterias_k,'-',baterias_p,'-',baterias_t,'-',baterias_e,' (',baterias_volts,'V - ',baterias_amperaje,'Ah)')","tipo")->select(array('tipo'))->filterByIdsucursal($sucursales)->groupBy('tipo')->find();
-        $montacargas_baterias = MontacargasBateriasQuery::create()->joinBaterias()->withColumn("CONCAT(baterias_c,'-',baterias_k,'-',baterias_p,'-',baterias_t,'-',baterias_e,' (',baterias_volts,'V - ',baterias_amperaje,'Ah)')","tipo")->select(array('tipo','Baterias.BateriasModelo'))->groupBy('tipo')->filterByIdmontacargas($_GET['id'])->find()->toArray(null,false,  BasePeer::TYPE_FIELDNAME);
-        $montacargas_baterias_array = array();
-        foreach ($montacargas_baterias as $value){
-            if(!is_null($value['tipo'])){
-                $montacargas_baterias_array[] = $value['tipo'];
-            }else{
-                $montacargas_baterias_array[] = $value['Baterias.BateriasModelo'];
-            }
-        }
-        ?>
-        <div class="col-sm-6">
-            <div class="portlet box  blue-sharp">
-                <div class="portlet-title">
-                    <div class="caption">
-                       <i class="icon-bateria" style="font-size: 25px;margin-top: 2px;"></i>
-                        <span class="caption-subject">Asociación de baterias</span>
-                    </div>
-                    <div class="tools">
-                            <a href="" class="collapse" data-original-title="" title=""> </a>
-                             
-                    </div>
-                </div>
-                <div class="portlet-body form" >
-                    <form role="form" name="MontacargasBateriasForm" method="post" action="<?php echo $_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING']?>">
-                        <?php if($message_baterias) :?>
-                            <div class="row" style="margin-left: 0px; margin-right: 0px; padding-right: 20px; padding-left: 20px; padding-top: 20px;">
-                        
-                                <div class="alert alert-success">
-                                <strong>Exito!</strong>
-                                <?php echo $message_baterias ?>
-                                </div>
-                            </div>
-                        <?php endif;?>
-                        <div class="row" style="padding: 20px">
-                            <input type="hidden" name="idmontacargas" value="<?php echo $_GET['id']?>">
-                            <input type="hidden" name="action" value="asignaBaterias">
-                            <?php foreach ($baterias_modelos as $modelo) :?>
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <div class="mt-checkbox-list">
-                                            <?php if(!is_null($modelo['tipo'])) :?>
-                                            <label style="display: block" class="mt-checkbox mt-checkbox-outline"> <?php echo $modelo['tipo']?>
-                                                <?php if(in_array($modelo['tipo'], $montacargas_baterias_array)):?>
-                                                    <input  value="<?php echo $modelo['tipo']?>" name="baterias[]" type="checkbox" checked>
-                                                <?php else:?>
-                                                    <input  value="<?php echo $modelo['tipo']?>" name="baterias[]" type="checkbox">
-                                                <?php endif;?>
-                                                <span></span>
-                                            </label>
-                                            <?php else:?>
-                                                <label style="display: block" class="mt-checkbox mt-checkbox-outline"> <?php echo $modelo['baterias_modelo']?>
-                                                    <?php if(in_array($modelo['baterias_modelo'], $montacargas_baterias_array)):?>
-                                                    <input value="<?php echo $modelo['baterias_modelo']?>" name="baterias[]" type="checkbox" checked>
-                                                    <?php else:?>
-                                                          <input value="<?php echo $modelo['baterias_modelo']?>" name="baterias[]" type="checkbox">
-                                                    <?php endif;?>
-                                                  
-                                                    <span></span>
-                                                </label>
-                                            <?php endif;?>
-                                        </div>
-                                    </div>
-                                </div>
-                            <?php endforeach;?>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-2 col-sm-offset-10" style="padding-bottom: 15px;">
-                                <button type="submit" class="btn btn-success">Guardar</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
+        
 	<div class="col-md-12" id="indicadores5">
 		<div class="portlet box  blue-sharp">
 			<div class="portlet-title">

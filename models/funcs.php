@@ -1633,6 +1633,7 @@ function eficiencia($modulo,$estatus,$divapintar,$idapintar='todo',$cargador_tip
 				$filtro
 			order by u.$fini asc
 		";
+             
 	}
 	
 	if ($estatus=='listo'){

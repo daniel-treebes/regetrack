@@ -55,8 +55,9 @@ echo "
 <script src="js/jquery.dataTables.yadcf.js" type="text/javascript"></script>
 <script src="node_modules/chosen-js/chosen.jquery.js" type="text/javascript"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+<script src="js/numeric.js"></script>
 <script src="js/regetrack.js"></script>
-<script src="https://raw.github.com/SamWM/jQuery-Plugins/master/numeric/jquery.numeric.js"></script>
+
 
 
 <style>

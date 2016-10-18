@@ -1,9 +1,35 @@
 <?php
 
 include("infobd.php");
+$message_baterias = false;
+if($_POST){
+    $post_data = $_POST;
+    
+    if($post_data['action'] == 'editarBaterias'){
+        
+        $entity = BateriasQuery::create()->findPk($post_data['idbaterias']);
+        foreach ($post_data as $key => $value){
+            if(BateriasPeer::getTableMap()->hasColumn($key)){
+               $entity->setByName($key, strtoupper($value), BasePeer::TYPE_FIELDNAME);
+            }
+        }
+        $volts = (int)$post_data['baterias_c'] * 2;
+        $amperaje = (((int)$post_data['baterias_p'] - 1)/2) * (int)$post_data['baterias_k'];
 
+        $entity->setBateriasVolts($volts)
+               ->setBateriasAmperaje($amperaje);
+        
+       
+        $entity->save();
+
+
+        $message_baterias = 'El Registro se ha guardado satisfactoriamente!';
+    }
+   
+}
 //DATOS DE BATERÍA
 ?>
+<script src="js/numeric.js"></script>
 <div class="col-md-6" id="indicadores1">
     <div class="portlet box  blue-sharp">
         <div class="portlet-title">
@@ -14,53 +40,102 @@ include("infobd.php");
                 <a href="" class="collapse" data-original-title="" title=""> </a>
             </div>
         </div>
-        <div class="portlet-body form">	   
-            <div class="form-actions right1 gray" >
-                <div class="form-body">
+        <div class="portlet-body form" ng-controller="BateriasController">	   
+            <form role="form" method="post" action="<?php echo $_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING']?>">
+                <div class="form-actions right1 gray" style="padding: 0px">
+                <div class="form-body" style="padding: 0px">
+                    <?php if($message_baterias) :?>
+                        <div class="row" style="margin-left: 0px; margin-right: 0px; padding-right: 10px; padding-left: 10px; padding-top: 10px;">
+
+                            <div class="alert alert-success">
+                            <strong>Exito!</strong>
+                            <?php echo $message_baterias ?>
+                            </div>
+                        </div>
+                    <?php endif;?>
                     <div class="form-group">
                         <label class="col-md-3 control-label">Nombre</label>
                         <div class="col-md-9">
-                            <input type="text" class="form-control datos-cosa" placeholder="Default Input" value="<?php  echo $datosBateria['Nombre'] ?> "> 
+                            <div class="input-icon right">
+                                <select name="idsucursal" style="display: none"> 
+                                    <option value="<?php echo $datosBateria['Idsucursal']?>" selected>Sucursal</option>
+                                </select>
+                                <input type="hidden" name="idbaterias" value="<?php echo $_GET['id']?>">
+                                <input type="hidden" name="action" value="editarBaterias">
+                                <i class="fa fa-check " style="top: 0px; margin-top: 10px; color: green"></i>
+                                <i class="fa fa-close " style="top: 0px; margin-top: 10px; color: red; display: none"></i>
+                                <input ng-blur="verificaNombre('<?php echo $datosBateria['Nombre']?>')"  class="form-control" type="text" value="<?php echo $datosBateria['Nombre']?>" name="baterias_nombre">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">Celdas</label>
+                        <div class="col-md-9">
+                            <input name="baterias_c" number-mask type="text" class="form-control datos-cosa"  value="<?php  echo $datosBateria['Celdas'] ?> "> 
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">Factor K</label>
+                        <div class="col-md-9">
+                            <input name="baterias_k" number-mask type="text" class="form-control datos-cosa"  value="<?php  echo $datosBateria['FactorK'] ?> "> 
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">Placas</label>
+                        <div class="col-md-9">
+                            <input name="baterias_p" number-mask type="text" class="form-control datos-cosa"  value="<?php  echo $datosBateria['Placas'] ?> "> 
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-md-3 control-label">Tipo</label>
                         <div class="col-md-9">
-                            <input type="text" class="form-control datos-cosa" placeholder="Default Input" value="<?php  echo $datosBateria['Tipo'] ?> "> 
+                            <input name="baterias_t" type="text" class="form-control datos-cosa"  value="<?php  echo $datosBateria['Tipo'] ?> "> 
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">Enchufe</label>
+                        <div class="col-md-9">
+                            <input name="baterias_e" type="text" class="form-control datos-cosa"  value="<?php  echo $datosBateria['Enchufe'] ?> "> 
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-md-3 control-label">Modelo</label>
                         <div class="col-md-9">
-                            <input type="text" class="form-control datos-cosa" placeholder="Default Input" value="<?php  echo $datosBateria['Modelo'] ?> "> 
+                            <input name="baterias_modelo" type="text" class="form-control datos-cosa"  value="<?php  echo $datosBateria['Modelo'] ?> "> 
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-md-3 control-label">Marca</label>
                         <div class="col-md-9">
-                            <input type="text" class="form-control datos-cosa" placeholder="Default Input" value="<?php  echo $datosBateria['Marca'] ?> "> 
+                            <input name="baterias_marca" type="text" class="form-control datos-cosa"  value="<?php  echo $datosBateria['Marca'] ?> "> 
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-md-3 control-label">Comprador</label>
                         <div class="col-md-9">
-                            <input type="text" class="form-control datos-cosa" placeholder="Default Input" value="<?php  echo $datosBateria['Comprador'] ?> "> 
+                            <input name="baterias_comprador" type="text" class="form-control datos-cosa"  value="<?php  echo $datosBateria['Comprador'] ?> "> 
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-md-3 control-label">Serie</label>
                         <div class="col-md-9">
-                            <input type="text" class="form-control datos-cosa" placeholder="Default Input" value="<?php  echo $datosBateria['Serie'] ?> "> 
+                            <input name="baterias_numserie" type="text" class="form-control datos-cosa"  value="<?php  echo $datosBateria['Serie'] ?> "> 
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-md-3 control-label">Ubicación</label>
                         <div class="col-md-9">
-                            <input type="text" class="form-control datos-cosa" placeholder="Default Input" value="<?php  echo $ubicacion ?> "> 
+                            <input readonly type="text" class="form-control datos-cosa"  value="<?php  echo $ubicacion ?> "> 
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-2 col-sm-offset-10" style="padding-bottom: 15px; padding-top: 15px;">
+                            <button type="submit" class="btn btn-success">Guardar</button>
                         </div>
                     </div>
                 </div>
             </div>
+            </form>
         </div>
     </div>
 </div>

@@ -1,9 +1,10 @@
 <?php
 
 $message_baterias = false;
+$message_cargadores = false;
 if($_POST){
     $post_data = $_POST;
-   
+    
     if($post_data['action'] == 'asignaBaterias'){
       
         $cargadores_baterias = CargadoresBateriasQuery::create()->filterByIdcargadores($post_data['idcargadores'])->delete();
@@ -31,9 +32,19 @@ if($_POST){
         }
 
         $message_baterias = 'El Registro se ha guardado satisfactoriamente!';
+
+    }elseif($post_data['action'] == 'editarCargador'){
         
+        $entity = CargadoresQuery::create()->findPk($post_data['idcargadores']);
+        foreach ($post_data as $key => $value){
+            if(CargadoresPeer::getTableMap()->hasColumn($key)){
+               $entity->setByName($key, strtoupper($value), BasePeer::TYPE_FIELDNAME);
+            }
+        }
+
+        $entity->save();
         
-        
+        $message_cargadores = 'El Registro se ha guardado satisfactoriamente!';
     }
    
 }
@@ -47,8 +58,9 @@ if ($datosCargador['ctipo']=='Cargador') {
 	$iconocb='fa-th';
 }
 ?>
+<script src="js/numeric.js"></script>
 <div class="col-md-6" id="indicadores1">
-    <div class="portlet box  blue-sharp">
+    <div class="portlet box  blue-sharp" ng-controller="CargadoresController">
         <div class="portlet-title">
             <div class="caption">
                 <i class="fa <?php echo $iconocb;?>"></i><?php echo $titulocg.' '.$datosCargador['Nombre']; ?>
@@ -58,58 +70,95 @@ if ($datosCargador['ctipo']=='Cargador') {
             </div>
         </div>
         <div class="portlet-body form">	   
-            <div class="form-actions right1 gray" >
-                <div class="form-body">
+            <div class="form-actions right1 gray" style="padding: 0px;">
+                <div class="form-body" style="padding: 0px;">
+                    <?php if($message_cargadores) :?>
+                            <div class="row" style="margin-left: 0px; margin-right: 0px; padding-right: 10px; padding-left: 10px; padding-top: 10px;">
+                        
+                                <div class="alert alert-success">
+                                <strong>Exito!</strong>
+                                <?php echo $message_cargadores ?>
+                                </div>
+                            </div>
+                    <?php endif;?>
+                    <form role="form" name="CargadoresBateriasForm" method="post" action="<?php echo $_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING']?>">
                     <div class="form-group">
                         <label class="col-md-3 control-label">Nombre</label>
                         <div class="col-md-9">
-                            <input type="text" class="form-control datos-cosa" placeholder="Default Input" value="<?php  echo $datosCargador['Nombre'] ?> "> 
+                            <div class="input-icon right">
+                                <i class="fa fa-check " style="top: 0px; margin-top: 10px; color: green"></i>
+                                <i class="fa fa-close " style="top: 0px; margin-top: 10px; color: red; display: none"></i>
+                                <input ng-blur="verificaNombre('<?php echo $datosCargador['Nombre']?>')"  class="form-control" type="text" value="<?php echo $datosCargador['Nombre']?>" name="cargadores_nombre">
+                            </div>
                         </div>
                     </div>
 					<?php if ($datosCargador['ctipo']=='Cargador') {?>
 						<div class="form-group">
-							<label class="col-md-3 control-label">Tipo</label>
+							<label class="col-md-3 control-label">Volts</label>
 							<div class="col-md-9">
-								<input type="text" class="form-control datos-cosa" placeholder="Default Input" value="<?php  echo $datosCargador['Tipo'] ?> "> 
+                                                            <select name="idsucursal" style="display: none"> 
+                                                                <option value="<?php echo $datosCargador['IdSucursal']?>" selected>Sucursal</option>
+                                                            </select>
+                                                            <input type="hidden" name="idcargadores" value="<?php echo $_GET['id']?>">
+                                                            <input type="hidden" name="action" value="editarCargador">
+                                                            <input name="cargadores_volts" number-mask type="text" class="form-control datos-cosa"  value="<?php  echo $datosCargador['Volts'] ?> " > 
+							</div>
+						</div>
+                                                <div class="form-group">
+							<label class="col-md-3 control-label">Ampere</label>
+							<div class="col-md-9">
+                                                            <input name="cargadores_amperaje"  number-mask type="text" class="form-control datos-cosa"  value="<?php  echo $datosCargador['Ampere'] ?> "> 
+							</div>
+						</div>
+                                                <div class="form-group">
+							<label class="col-md-3 control-label">Enchufe</label>
+							<div class="col-md-9">
+                                                            <input  name="cargadores_e" type="text" class="form-control datos-cosa"  value="<?php  echo $datosCargador['Enchufe'] ?> "> 
 							</div>
 						</div>
 						<div class="form-group">
 							<label class="col-md-3 control-label">Modelo</label>
 							<div class="col-md-9">
-								<input type="text" class="form-control datos-cosa" placeholder="Default Input" value="<?php  echo $datosCargador['Modelo'] ?> "> 
+								<input  name="cargadores_modelo"  type="text" class="form-control datos-cosa" value="<?php  echo $datosCargador['Modelo'] ?> "> 
 							</div>
 						</div>
 						<div class="form-group">
 							<label class="col-md-3 control-label">Marca</label>
 							<div class="col-md-9">
-								<input type="text" class="form-control datos-cosa" placeholder="Default Input" value="<?php  echo $datosCargador['Marca'] ?> "> 
+								<input  name="cargadores_marca" type="text" class="form-control datos-cosa" value="<?php  echo $datosCargador['Marca'] ?> "> 
 							</div>
 						</div>
 						<div class="form-group">
 							<label class="col-md-3 control-label">Comprador</label>
 							<div class="col-md-9">
-								<input type="text" class="form-control datos-cosa" placeholder="Default Input" value="<?php  echo $datosCargador['Comprador'] ?> "> 
+								<input  name="cargadores_comprador"  type="text" class="form-control datos-cosa"" value="<?php  echo $datosCargador['Comprador'] ?> "> 
 							</div>
 						</div>
 						<div class="form-group">
 							<label class="col-md-3 control-label">Serie</label>
 							<div class="col-md-9">
-								<input type="text" class="form-control datos-cosa" placeholder="Default Input" value="<?php  echo $datosCargador['Serie'] ?> "> 
+								<input  name="cargadores_numserie"  type="text" class="form-control datos-cosa" value="<?php  echo $datosCargador['Serie'] ?> "> 
 							</div>
 						</div>
 					<?php } ?>
                     <div class="form-group">
                         <label class="col-md-3 control-label">Espacios</label>
                         <div class="col-md-9">
-                            <input type="text" class="form-control datos-cosa" placeholder="Default Input" value="<?php  echo $cantlugares ?> "> 
+                            <input readonly type="text" class="form-control datos-cosa" placeholder="Default Input" value="<?php  echo $cantlugares ?> "> 
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-md-3 control-label">Total de Horas</label>
                         <div class="col-md-9">
-                            <input type="text" class="form-control datos-cosa" placeholder="Default Input" value="<?php  echo round($horas['espera']['h']['total'],0) ?> "> 
+                            <input readonly type="text" class="form-control datos-cosa" placeholder="Default Input" value="<?php  echo round($horas['espera']['h']['total'],0) ?> "> 
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-sm-2 col-sm-offset-10" style="padding-bottom: 15px; padding-top: 15px;">
+                            <button type="submit" class="btn btn-success">Guardar</button>
+                        </div>
+                    </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -140,7 +189,7 @@ if ($datosCargador['ctipo']=='Cargador') {
                     </div>
                 </div>
                 <div class="portlet-body form" >
-                    <form role="form" name="MontacargasBateriasForm" method="post" action="<?php echo $_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING']?>">
+                    <form role="form" name="CargadoresBateriasForm" method="post" action="<?php echo $_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING']?>">
                         <?php if($message_baterias) :?>
                             <div class="row" style="margin-left: 0px; margin-right: 0px; padding-right: 20px; padding-left: 20px; padding-top: 20px;">
                         
@@ -370,6 +419,5 @@ if($loggedInUser->checkPermission(array(1,2))){
 ?>
 
 
-        
 
 
