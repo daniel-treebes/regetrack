@@ -113,22 +113,38 @@ for($e=1;$e<=4;$e++){
 		$fini='fecha_entrada';
 		$finiw=$fini;
 		$ffin="IF(fecha_carga!='0000-00-00 00:00:00',fecha_carga,NOW())";
-		$ffinw="fecha_carga!='0000-00-00 00:00:00'";
+		$ffinw="fecha_carga";
 	}elseif ($e==2){
 		$est_estado="carga";
 		$fini="fecha_carga";
 		$finiw=$fini;
 		$ffin="IF(fecha_descanso!='0000-00-00 00:00:00',fecha_descanso,NOW())";
-		$ffinw="fecha_descanso!='0000-00-00 00:00:00'";
+		$ffinw="fecha_descanso";
 	}elseif($e==3){
 		$est_estado="descanso";
 		$fini="fecha_descanso";
 		$finiw=$fini;
-		$ffin="IF(DATE_ADD(fecha_descanso, INTERVAL 8 HOUR)>=(IF(fecha_salida!='0000-00-00 00:00:00',fecha_salida,NOW())),DATE_ADD(fecha_descanso, INTERVAL 8 HOUR),IF(fecha_salida!='0000-00-00 00:00:00',fecha_salida,NOW()))";
+		$ffin="IF (IF(fecha_original='0000-00-00 00:00:00',
+				IF(TIMESTAMPDIFF(hour, fecha_descanso, IF(fecha_salida!='0000-00-00 00:00:00',fecha_salida,NOW()))<8,true,false),
+				IF(TIMESTAMPDIFF(hour, fecha_original, IF(fecha_salida!='0000-00-00 00:00:00',fecha_salida,NOW()))<8,true,false)),
+			IF(fecha_salida!='0000-00-00 00:00:00',fecha_salida,NOW()),
+			IF (fecha_original='0000-00-00 00:00:00',
+				DATE_ADD(fecha_descanso, INTERVAL 8 HOUR),
+				DATE_ADD(fecha_original, INTERVAL 8 HOUR)
+			)
+		)";
 		$ffinw="fecha_salida";
 	}elseif($e==4){
 		$est_estado="listo";
-		$fini="IF(DATE_ADD(fecha_descanso, INTERVAL 8 HOUR)>=(IF(fecha_salida!='0000-00-00 00:00:00',fecha_salida,NOW())),DATE_ADD(fecha_descanso, INTERVAL 8 HOUR),IF(fecha_salida!='0000-00-00 00:00:00',fecha_salida,NOW()))";
+		$fini="IF (IF(fecha_original='0000-00-00 00:00:00',
+				IF(TIMESTAMPDIFF(hour, fecha_descanso, IF(fecha_salida!='0000-00-00 00:00:00',fecha_salida,NOW()))<8,true,false),
+				IF(TIMESTAMPDIFF(hour, fecha_original, IF(fecha_salida!='0000-00-00 00:00:00',fecha_salida,NOW()))<8,true,false)),
+			IF(fecha_salida!='0000-00-00 00:00:00',fecha_salida,NOW()),
+			IF (fecha_original='0000-00-00 00:00:00',
+				DATE_ADD(fecha_descanso, INTERVAL 8 HOUR),
+				DATE_ADD(fecha_original, INTERVAL 8 HOUR)
+			)
+		)";
 		$finiw="fecha_descanso";
 		$ffin="IF(fecha_salida!='0000-00-00 00:00:00',fecha_salida,NOW())";
 		$ffinw="fecha_salida";
