@@ -2,7 +2,7 @@
     <div class="portlet box  blue-sharp">
         <div class="portlet-title">
             <div class="caption">
-                <i class="fa fa-question-circle"></i>¿Que desea hacer? 
+                <i class="fa fa-question-circle"></i> <?php echo $datosBateria['Nombre']; ?> - ¿Que desea hacer? 
             </div>
             <div class="tools">
                 <a href="" class="collapse" data-original-title="" title=""> </a>

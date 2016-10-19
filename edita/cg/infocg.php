@@ -59,6 +59,18 @@ if ($datosCargador['ctipo']=='Cargador') {
 }
 ?>
 <script src="js/numeric.js"></script>
+<?php
+if($habilitaid>0){
+    //SI ESTÁ DESHABILITADO
+    include("habilita.php");
+}else{
+    //PINTA ACTIVIDADES QUE HACER?
+    include("cambia.php");
+    //PROCEDIMIENTO DE DESHABILITADO
+    include("deshabilita.php");
+}
+
+?>
 <div class="col-md-6" id="indicadores1">
     <div class="portlet box  blue-sharp" ng-controller="CargadoresController">
         <div class="portlet-title">
@@ -92,6 +104,8 @@ if ($datosCargador['ctipo']=='Cargador') {
                             </div>
                         </div>
                     </div>
+                     <input type="hidden" name="idcargadores" value="<?php echo $_GET['id']?>">
+                    <input type="hidden" name="action" value="editarCargador">
 					<?php if ($datosCargador['ctipo']=='Cargador') {?>
 						<div class="form-group">
 							<label class="col-md-3 control-label">Volts</label>
@@ -99,8 +113,7 @@ if ($datosCargador['ctipo']=='Cargador') {
                                                             <select name="idsucursal" style="display: none"> 
                                                                 <option value="<?php echo $datosCargador['IdSucursal']?>" selected>Sucursal</option>
                                                             </select>
-                                                            <input type="hidden" name="idcargadores" value="<?php echo $_GET['id']?>">
-                                                            <input type="hidden" name="action" value="editarCargador">
+                                                           
                                                             <input name="cargadores_volts" number-mask type="text" class="form-control datos-cosa"  value="<?php  echo $datosCargador['Volts'] ?> " > 
 							</div>
 						</div>
@@ -163,7 +176,9 @@ if ($datosCargador['ctipo']=='Cargador') {
             </div>
         </div>
     </div>
-	<?php
+
+    
+    <?php
 	if($loggedInUser->checkPermission(array(1,2)) && $datosCargador['ctipo']=='Cargador' ){
         $sucursales = explode(',', $loggedInUser->sucursales);
         $baterias_modelos = BateriasQuery::create()->withColumn('baterias_modelo')->withColumn("CONCAT(baterias_c,'-',baterias_k,'-',baterias_p,'-',baterias_t,'-',baterias_e,' (',baterias_volts,'V - ',baterias_amperaje,'Ah)')","tipo")->select(array('tipo'))->filterByIdsucursal($sucursales)->groupBy('tipo')->find();
@@ -184,11 +199,11 @@ if ($datosCargador['ctipo']=='Cargador') {
                         <span class="caption-subject">Asociación de baterias</span>
                     </div>
                     <div class="tools">
-                            <a href="" class="collapse" data-original-title="" title=""> </a>
+                            <a href="" class="expand" data-original-title="" title=""> </a>
                              
                     </div>
                 </div>
-                <div class="portlet-body form" >
+                <div class="portlet-body form" style="display:none">
                     <form role="form" name="CargadoresBateriasForm" method="post" action="<?php echo $_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING']?>">
                         <?php if($message_baterias) :?>
                             <div class="row" style="margin-left: 0px; margin-right: 0px; padding-right: 20px; padding-left: 20px; padding-top: 20px;">
@@ -240,19 +255,9 @@ if ($datosCargador['ctipo']=='Cargador') {
                 </div>
             </div>
 	<?php } ?>
-</div>
-<?php
-if($habilitaid>0){
-    //SI ESTÁ DESHABILITADO
-    include("habilita.php");
-}else{
-    //PINTA ACTIVIDADES QUE HACER?
-    include("cambia.php");
-    //PROCEDIMIENTO DE DESHABILITADO
-    include("deshabilita.php");
-}
 
-?>
+</div>
+
 <!--DATOS ESTADÍSTICOS Baterias-->
 <div class="col-md-6" id="indicadores6">
     <div class="portlet box  blue-sharp">

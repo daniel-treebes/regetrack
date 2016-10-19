@@ -85,6 +85,7 @@ $query="
 
 $resultado = $mysqli->query($query);
 while($fila = $resultado->fetch_array()) {
+    
     $id= $fila['Id'];
     $nombre= $fila['Nombre'];
     $modelo= $fila['Modelo'];
@@ -123,6 +124,22 @@ while($fila = $resultado->fetch_array()) {
 //DATOS DEL MONTACARGAS
 ?>
 <script src="js/numeric.js"></script>
+<?php
+
+include("infobd.php");
+
+if($habilitaid>0){
+    //SI ESTÁ DESHABILITADO
+    include("habilita.php");
+}else{
+    //PINTA ACTIVIDADES QUE HACER?
+    include("cambia.php");
+    
+    //PROCEDIMIENTO DE DESHABILITADO
+    include("deshabilita.php");
+   
+}
+?>
 <div class="col-md-6" id="indicadores1">
     <div class="portlet box  blue-sharp">
         <div class="portlet-title">
@@ -228,45 +245,21 @@ while($fila = $resultado->fetch_array()) {
         </div>
         
     </div>
-</div>
+            <?php if($loggedInUser->checkPermission(array(1,2))) :?>
+            <?php
 
-<?php
-
-include("infobd.php");
-
-if($habilitaid>0){
-    //SI ESTÁ DESHABILITADO
-    include("habilita.php");
-}else{
-    //PINTA ACTIVIDADES QUE HACER?
-    include("cambia.php");
-    
-    //PROCEDIMIENTO DE DESHABILITADO
-    include("deshabilita.php");
-    //PROCEDIMIENTO DE MONTADO O DESMONTADO DE BATERÍA
-    echo '<div class="row">';
-        include("scan.php");
-    echo '</div>';
-}
-?>
-<!--DATOS ESTADÍSTICOS-->
-        <?php if($loggedInUser->checkPermission(array(1,2))) :?>
-        <?php
-    
-        $sucursales = explode(',', $loggedInUser->sucursales);
-        $baterias_modelos = BateriasQuery::create()->withColumn('baterias_modelo')->withColumn("CONCAT(baterias_c,'-',baterias_k,'-',baterias_p,'-',baterias_t,'-',baterias_e,' (',baterias_volts,'V - ',baterias_amperaje,'Ah)')","tipo")->select(array('tipo'))->filterByIdsucursal($sucursales)->groupBy('tipo')->find();
-        $montacargas_baterias = MontacargasBateriasQuery::create()->joinBaterias()->withColumn("CONCAT(baterias_c,'-',baterias_k,'-',baterias_p,'-',baterias_t,'-',baterias_e,' (',baterias_volts,'V - ',baterias_amperaje,'Ah)')","tipo")->select(array('tipo','Baterias.BateriasModelo'))->groupBy('tipo')->filterByIdmontacargas($_GET['id'])->find()->toArray(null,false,  BasePeer::TYPE_FIELDNAME);
-        $montacargas_baterias_array = array();
-        foreach ($montacargas_baterias as $value){
-            if(!is_null($value['tipo'])){
-                $montacargas_baterias_array[] = $value['tipo'];
-            }else{
-                $montacargas_baterias_array[] = $value['Baterias.BateriasModelo'];
+            $sucursales = explode(',', $loggedInUser->sucursales);
+            $baterias_modelos = BateriasQuery::create()->withColumn('baterias_modelo')->withColumn("CONCAT(baterias_c,'-',baterias_k,'-',baterias_p,'-',baterias_t,'-',baterias_e,' (',baterias_volts,'V - ',baterias_amperaje,'Ah)')","tipo")->select(array('tipo'))->filterByIdsucursal($sucursales)->groupBy('tipo')->find();
+            $montacargas_baterias = MontacargasBateriasQuery::create()->joinBaterias()->withColumn("CONCAT(baterias_c,'-',baterias_k,'-',baterias_p,'-',baterias_t,'-',baterias_e,' (',baterias_volts,'V - ',baterias_amperaje,'Ah)')","tipo")->select(array('tipo','Baterias.BateriasModelo'))->groupBy('tipo')->filterByIdmontacargas($_GET['id'])->find()->toArray(null,false,  BasePeer::TYPE_FIELDNAME);
+            $montacargas_baterias_array = array();
+            foreach ($montacargas_baterias as $value){
+                if(!is_null($value['tipo'])){
+                    $montacargas_baterias_array[] = $value['tipo'];
+                }else{
+                    $montacargas_baterias_array[] = $value['Baterias.BateriasModelo'];
+                }
             }
-        }
-        ?>
-        
-        <div class="col-sm-6">
+            ?>
             <div class="portlet box  blue-sharp">
                 <div class="portlet-title">
                     <div class="caption">
@@ -274,11 +267,11 @@ if($habilitaid>0){
                         <span class="caption-subject">Asociación de baterias</span>
                     </div>
                     <div class="tools">
-                            <a href="" class="collapse" data-original-title="" title=""> </a>
+                            <a href="" class="expand" data-original-title="" title=""> </a>
                              
                     </div>
                 </div>
-                <div class="portlet-body form" >
+                <div class="portlet-body form" style="display: none">
                     <form role="form" name="MontacargasBateriasForm" method="post" action="<?php echo $_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING']?>">
                         <?php if($message_baterias) :?>
                             <div class="row" style="margin-left: 0px; margin-right: 0px; padding-right: 20px; padding-left: 20px; padding-top: 20px;">
@@ -329,8 +322,14 @@ if($habilitaid>0){
                     </form>
                 </div>
             </div>
-        </div>
-        <?php endif;?>
+            <?php endif;?>
+
+    
+</div>
+
+
+<!--DATOS ESTADÍSTICOS-->
+        
 <div class="col-md-6" id="indicadores2">
     <div class="portlet box  blue-sharp">
         <div class="portlet-title">
@@ -455,7 +454,16 @@ if($loggedInUser->checkPermission(array(1,2))){
 
 }
 ?>
+<?php 
 
+    if($habilitaid <= 0){
+        //PROCEDIMIENTO DE MONTADO O DESMONTADO DE BATERÍA
+        echo '<div class="row">';
+            include("scan.php");
+        echo '</div>';
+    }
+
+?>
 
         
 

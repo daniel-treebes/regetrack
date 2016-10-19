@@ -8,7 +8,7 @@ $acciones=[];
 $acciones[0][0]="Exportar";
 $acciones[0][1]="javascript:exporta();";
 if($loggedInUser->checkPermission(array(2))){
-   $acciones[1][0]="Alta";
+   $acciones[1][0]="Nuevo";
    $acciones[1][1]='/sistema.php?ruta=alta/baterias'; 
 }
 

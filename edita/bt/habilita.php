@@ -7,7 +7,7 @@ $habilitafecha;
     <div class="portlet box  blue-sharp">
         <div class="portlet-title">
             <div class="caption">
-                <i class="fa fa-exclamation-triangle"></i>Habilitar
+                <i class="fa fa-battery-full"></i>Batería <?php echo $datosBateria['Nombre']; ?>
             </div>
             <div class="tools">
                 <a href="" class="collapse" data-original-title="" title=""> </a>

@@ -30,6 +30,19 @@ if($_POST){
 //DATOS DE BATERÍA
 ?>
 <script src="js/numeric.js"></script>
+<?php
+if($habilitaid>0){
+    //SI ESTÁ DESHABILITADO
+    include("habilita.php");
+}else{
+    //PINTA ACTIVIDADES QUE HACER?
+    include("cambia.php");
+    
+    //PROCEDIMIENTO DE DESHABILITADO
+    include("deshabilita.php");
+   
+}
+?>
 <div class="col-md-6" id="indicadores1">
     <div class="portlet box  blue-sharp">
         <div class="portlet-title">
@@ -128,7 +141,7 @@ if($_POST){
                             <input readonly type="text" class="form-control datos-cosa"  value="<?php  echo $ubicacion ?> "> 
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row" style="padding-right: 15px;">
                         <div class="col-sm-2 col-sm-offset-10" style="padding-bottom: 15px; padding-top: 15px;">
                             <button type="submit" class="btn btn-success">Guardar</button>
                         </div>
@@ -139,23 +152,66 @@ if($_POST){
         </div>
     </div>
 </div>
-<?php
-if($habilitaid>0){
-    //SI ESTÁ DESHABILITADO
-    include("habilita.php");
-}else{
-    //PINTA ACTIVIDADES QUE HACER?
-    include("cambia.php");
-    
-    //PROCEDIMIENTO DE DESHABILITADO
-    include("deshabilita.php");
-    
-    //PROCEDIMIENTO DE MONTADO O DESMONTADO DE BATERÍA
-    echo '<div class="row">';
-        include("scan.php");
-    echo '</div>';
-}
+<?php 
+
+    $montacargas_baterias = MontacargasBateriasQuery::create()->filterByIdbaterias($_GET['id'])->find();
+
 ?>
+<div class="col-md-6">
+      <div class="portlet box  blue-sharp">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="icon-montacarga" style="font-size: 25px;margin-top: 2px;"></i>
+                <span class="caption-subject">Asociación con montacargas</span>
+            </div>
+            <div class="tools">
+                <a href="" class="expand" data-original-title="" title=""> </a>
+
+            </div>
+        </div>
+          <div class="portlet-body form" style="display: none; background-color: #F5F5F5">
+              <ul style="padding: 0px;list-style-type: square;margin: 0px">
+                <div class="row" style="padding: 20px">
+                    <?php foreach ($montacargas_baterias as $value) : ?>
+                   
+                    <li style="display: inline-block;"><i class="fa fa-circle"></i><a href="/sistema.php?ruta=edita/montacargas&id=<?php echo $value->getIdmontacargas()?>"><?php echo $value->getMontacargas()->getMontacargasNombre()?></a></li>
+                    
+                    <?php endforeach; ?>
+                </div>  
+                </ul>
+        </div>
+    </div>
+</div>
+<?php 
+
+    $cargadores_baterias = CargadoresBateriasQuery::create()->filterByIdbaterias($_GET['id'])->find();
+
+?>
+<div class="col-md-6">
+      <div class="portlet box  blue-sharp">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="icon-cargador" style="font-size: 25px;margin-top: 2px;"></i>
+                <span class="caption-subject">Asociación con cargadores</span>
+            </div>
+            <div class="tools">
+                <a href="" class="expand" data-original-title="" title=""> </a>
+
+            </div>
+        </div>
+          <div class="portlet-body form" style="display: none; background-color: #F5F5F5">
+              <ul style="padding: 0px;list-style-type: square;margin: 0px">
+                <div class="row" style="padding: 20px">
+                    <?php foreach ($cargadores_baterias as $value) : ?>
+                   
+                    <li style="display: inline-block;"><i class="fa fa-circle"></i><a href="/sistema.php?ruta=edita/cargadores&id=<?php echo $value->getIdcargadores()?>"><?php echo $value->getCargadores()->getCargadoresNombre()?></a></li>
+                    
+                    <?php endforeach; ?>
+                </div>  
+                </ul>
+        </div>
+    </div>
+</div>
 
 <!--DATOS ESTADÍSTICOS-->
 <div class="col-md-6" id="indicadores2">
@@ -262,8 +318,14 @@ if($loggedInUser->checkPermission(array(1,2))){
 
 }
 ?>
+<?php
 
+    if($habilitaid<=0)
+    //PROCEDIMIENTO DE MONTADO O DESMONTADO DE BATERÍA
+    echo '<div class="row">';
+        include("scan.php");
+    echo '</div>';
 
-        
+?>  
 
 

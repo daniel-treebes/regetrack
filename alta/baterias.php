@@ -4,7 +4,6 @@
 $message = false;
 if($_POST){
     $post_data = $_POST;
-   
     
     $entity = new Baterias();
     foreach ($post_data as $key => $value){
@@ -18,7 +17,34 @@ if($_POST){
     $entity->setBateriasVolts($volts)
            ->setBateriasAmperaje($amperaje);
     
+    
+    $tipo = $entity->getBateriasC()."-".$entity->getBateriasK()."-".$entity->getBateriasP()."-".$entity->getBateriasT()."-".$entity->getBateriasE()." (".$entity->getBateriasVolts()."V - ".$entity->getBateriasAmperaje()."Ah)";
+    
     $entity->save();
+    
+    
+    $sucursales = explode(',', $loggedInUser->sucursales);
+    
+    
+    $montacargas_baterias_array = MontacargasBateriasQuery::create()->withColumn("CONCAT(baterias_c,'-',baterias_k,'-',baterias_p,'-',baterias_t,'-',baterias_e,' (',baterias_volts,'V - ',baterias_amperaje,'Ah)')",'tipo')->useBateriasQuery()->filterByIdsucursal($sucursales)->endUse()->find()->toArray(null,false,BasePeer::TYPE_FIELDNAME);
+    foreach ($montacargas_baterias_array as $value){
+        if($tipo == $value['tipo']){
+            $montacargas_baterias = new MontacargasBaterias();
+            $montacargas_baterias->setIdbaterias($entity->getIdbaterias())
+                                 ->setIdmontacargas($value['idmontacargas'])
+                                 ->save();
+        }
+    }
+    
+    $cargadores_baterias_array = CargadoresBateriasQuery::create()->withColumn("CONCAT(baterias_c,'-',baterias_k,'-',baterias_p,'-',baterias_t,'-',baterias_e,' (',baterias_volts,'V - ',baterias_amperaje,'Ah)')",'tipo')->useBateriasQuery()->filterByIdsucursal($sucursales)->endUse()->find()->toArray(null,false,BasePeer::TYPE_FIELDNAME);
+    foreach ($cargadores_baterias_array as $value){
+        if($tipo == $value['tipo']){
+            $cargadores_baterias = new CargadoresBaterias();
+            $cargadores_baterias->setIdbaterias($entity->getIdbaterias())
+                                 ->setIdcargadores($value['idcargadores'])
+                                 ->save();
+        }
+    }
 
     
     $message = 'El Registro se ha guardado satisfactoriamente!';
@@ -98,31 +124,31 @@ $baterias_modelos = BateriasQuery::create()->select(array('baterias_modelo'))->f
                         </div>
                     
                     <div class="row">
-                        <div class="col-sm-2">
+                        <div class="col-lg-2 col-md-4">
                             <div class="form-group">
                                 <label>C</label>
                                 <input required class="form-control" type="text" ng-model="baterias_c" name="baterias_c" number-mask>
                             </div>
                         </div>
-                        <div class="col-sm-2">
+                        <div class="col-lg-2 col-md-4">
                             <div class="form-group">
                                 <label>K</label>
                                 <input required class="form-control" type="text" name="baterias_k"  ng-model="baterias_k" number-mask >
                             </div>
                          </div>
-                        <div class="col-sm-2">
+                        <div class="col-lg-2 col-md-4">
                             <div class="form-group">
                                 <label>P</label>
                                 <input required class="form-control" type="text" name="baterias_p" ng-model="baterias_p" number-mask>
                             </div>
                         </div>
-                        <div class="col-sm-2">
+                        <div class="col-lg-2 col-md-4">
                             <div class="form-group">
                                 <label>T</label>
                                 <input required class="form-control" type="text" name="baterias_t" ng-model="baterias_t">
                             </div>
                         </div>
-                        <div class="col-sm-2">
+                        <div class="col-lg-2 col-md-4">
                             <div class="form-group">
                                 <label>E</label>
                                 <input required class="form-control" type="text" name="baterias_e" ng-model="baterias_e">

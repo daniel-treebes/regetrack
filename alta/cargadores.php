@@ -113,26 +113,29 @@ $baterias_modelos = BateriasQuery::create()->withColumn('baterias_modelo')->with
                         </div>
                     
                     <div class="row">
-                        <div class="col-sm-2">
+                        <div class="col-lg-2 col-md-4">
                             <div class="form-group">
                                 <label>Volts</label>
                                 <input required class="form-control" type="text" ng-model="cargadores_volts" name="cargadores_volts" number-mask>
                             </div>
                         </div>
-                        <div class="col-sm-2">
+                        <div class="col-lg-2 col-md-4">
                             <div class="form-group">
                                 <label>Ampere</label>
                                 <input required class="form-control" type="text" name="cargadores_amperaje"  ng-model="cargadores_amperaje" number-mask >
                             </div>
                          </div>
-                        <div class="col-sm-2">
+                        <div class="col-lg-2 col-md-4">
                             <div class="form-group">
                                 <label>E</label>
                                 <input required class="form-control" type="text" name="cargadores_e" ng-model="cargadores_e">
                             </div>
                         </div>
-                        <div class="col-sm-2">
-                            <button ng-click="recomiendaBaterias()" class="btn btn-primary" type="button" style="margin-top: 20px;"><i class="icon-bateria" style="font-size: 24px"></i></button>
+                        <div class="col-lg-2 col-md-4" style="margin-top: -20px;">
+                            <button ng-click="recomiendaBaterias()" class="btn btn-primary" type="button" style="margin-top: 20px;">
+                                <i class="icon-bateria" style="font-size: 24px;display: block"></i>
+                                Sugerir
+                            </button>
                         </div>
                     </div>
 
@@ -155,13 +158,15 @@ $baterias_modelos = BateriasQuery::create()->withColumn('baterias_modelo')->with
                                     <div class="form-group">
                                         <div class="mt-checkbox-list">
                                             <?php if(!is_null($modelo['tipo'])) :?>
-                                            <label style="display: block" class="mt-checkbox mt-checkbox-outline"> <?php echo $modelo['tipo']?>
-                                                <input value="<?php echo $modelo['tipo']?>" name="baterias[]" type="checkbox">
+                                             <input style="display: inline-block" value="<?php echo $modelo['tipo']?>" name="baterias[]" type="checkbox">
+                                            <label style="display: inline-block" class="mt-checkbox mt-checkbox-outline"> <?php echo $modelo['tipo']?>
+                                               
                                                 <span></span>
                                             </label>
                                             <?php else:?>
-                                                <label style="display: block" class="mt-checkbox mt-checkbox-outline"> <?php echo $modelo['baterias_modelo']?>
-                                                    <input value="<?php echo $modelo['baterias_modelo']?>" name="baterias[]" type="checkbox">
+                                                 <input style="display: inline-block" value="<?php echo $modelo['baterias_modelo']?>" name="baterias[]" type="checkbox">
+                                                <label style="display: inline-block" class="mt-checkbox mt-checkbox-outline"> <?php echo $modelo['baterias_modelo']?>
+                                                   
                                                     <span></span>
                                                 </label>
                                             <?php endif;?>
