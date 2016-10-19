@@ -15,9 +15,11 @@
                 <div class="col-s-4 ">
                     <a href="/escanear.php" class="btn default btn-block" style="height: 110px;"><h2> <i class="fa fa-arrow-left"></i></h2><h5>Regresar</h5></a>
                 </div>
+                <?php if ($datosCargador['ctipo']=='Cargador'){ ?>
                 <div class="col-s-4 ">
                     <a href="javascript:deshabilita('cargadores','<?php  echo $_GET['id'] ?>')" class="btn red btn-block" style="height: 110px;"><h2> <i class="fa fa-warning"></i></h2><h5>Deshabilitar</h5></a>
                 </div>
+                <?php } ?>
             </div>
         </div>
     </div>

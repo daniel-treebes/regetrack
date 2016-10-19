@@ -276,7 +276,7 @@ $querybodegas="
 						   TIMESTAMPDIFF(day, fecha_descanso, now()),'D ',    
 						   TIMESTAMPDIFF(hour, fecha_descanso, now())-TIMESTAMPDIFF(day, fecha_descanso, now())*24,'H  ',
 						   TIMESTAMPDIFF(minute, fecha_descanso, now())-(TIMESTAMPDIFF(hour, fecha_descanso, now()))*60,'M'),
-						IF (fecha_descanso='0000-00-00 00:00:00',
+						IF (fecha_original='0000-00-00 00:00:00',
 							'0D 8H 0M',
 							IF(TIMESTAMPDIFF(hour, fecha_descanso, DATE_ADD(fecha_original, INTERVAL 8 HOUR))<8,
 								'0D 8H 0M',

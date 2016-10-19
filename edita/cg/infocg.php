@@ -5,7 +5,7 @@ $message_cargadores = false;
 if($_POST){
     $post_data = $_POST;
     
-    if($post_data['action'] == 'asignaBaterias'){
+    if(isset($post_data['action']) && $post_data['action'] == 'asignaBaterias'){
       
         $cargadores_baterias = CargadoresBateriasQuery::create()->filterByIdcargadores($post_data['idcargadores'])->delete();
         
@@ -33,7 +33,7 @@ if($_POST){
 
         $message_baterias = 'El Registro se ha guardado satisfactoriamente!';
 
-    }elseif($post_data['action'] == 'editarCargador'){
+    }elseif(isset($post_data['action']) && $post_data['action'] == 'editarCargador'){
         
         $entity = CargadoresQuery::create()->findPk($post_data['idcargadores']);
         foreach ($post_data as $key => $value){
@@ -96,24 +96,22 @@ if ($datosCargador['ctipo']=='Cargador') {
 						<div class="form-group">
 							<label class="col-md-3 control-label">Volts</label>
 							<div class="col-md-9">
-                                                            <select name="idsucursal" style="display: none"> 
-                                                                <option value="<?php echo $datosCargador['IdSucursal']?>" selected>Sucursal</option>
-                                                            </select>
-                                                            <input type="hidden" name="idcargadores" value="<?php echo $_GET['id']?>">
-                                                            <input type="hidden" name="action" value="editarCargador">
-                                                            <input name="cargadores_volts" number-mask type="text" class="form-control datos-cosa"  value="<?php  echo $datosCargador['Volts'] ?> " > 
+								<select name="idsucursal" style="display: none"> 
+									<option value="<?php echo $datosCargador['IdSucursal']?>" selected>Sucursal</option>
+								</select>
+								<input name="cargadores_volts" number-mask type="text" class="form-control datos-cosa"  value="<?php  echo $datosCargador['Volts'] ?> " > 
 							</div>
 						</div>
-                                                <div class="form-group">
-							<label class="col-md-3 control-label">Ampere</label>
+                        <div class="form-group">
+							<label class="col-md-3 control-label">Amperios</label>
 							<div class="col-md-9">
-                                                            <input name="cargadores_amperaje"  number-mask type="text" class="form-control datos-cosa"  value="<?php  echo $datosCargador['Ampere'] ?> "> 
+                                <input name="cargadores_amperaje"  number-mask type="text" class="form-control datos-cosa"  value="<?php  echo $datosCargador['Ampere'] ?> "> 
 							</div>
 						</div>
-                                                <div class="form-group">
+                        <div class="form-group">
 							<label class="col-md-3 control-label">Enchufe</label>
 							<div class="col-md-9">
-                                                            <input  name="cargadores_e" type="text" class="form-control datos-cosa"  value="<?php  echo $datosCargador['Enchufe'] ?> "> 
+                                <input  name="cargadores_e" type="text" class="form-control datos-cosa"  value="<?php  echo $datosCargador['Enchufe'] ?> "> 
 							</div>
 						</div>
 						<div class="form-group">
@@ -158,6 +156,8 @@ if ($datosCargador['ctipo']=='Cargador') {
                             <button type="submit" class="btn btn-success">Guardar</button>
                         </div>
                     </div>
+						<input type="hidden" name="idcargadores" value="<?php echo $_GET['id']?>">
+						<input type="hidden" name="action" value="editarCargador">
                     </form>
                 </div>
             </div>
@@ -248,8 +248,8 @@ if($habilitaid>0){
 }else{
     //PINTA ACTIVIDADES QUE HACER?
     include("cambia.php");
-    //PROCEDIMIENTO DE DESHABILITADO
-    include("deshabilita.php");
+    //PROCEDIMIENTO DE DESHABILITADO solo si no es Bodega
+	if ($datosCargador['ctipo']=='Cargador') include("deshabilita.php");
 }
 
 ?>
