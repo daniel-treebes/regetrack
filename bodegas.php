@@ -17,161 +17,218 @@ if($tipo == 'Bodega'){
 }
 
 $query="
-SELECT * FROM
-(
-    SELECT
-        b.id as Id,
-        c.cargadores_modelo as Modelo,
-        c.cargadores_nombre as Cargador,
-        c.idcargadores as cgid,
-        cbg.cantbg as cantbg,
-        b.nombre as Espacio,
-        CONCAT(c.cargadores_volts,'V ',c.cargadores_amperaje,'Ah (',c.cargadores_e,')') as Tipo,
-        bat.baterias_nombre as Bateria,
-        usos.entrada,
-        usos.carga,
-        usos.descanso,
-        NULL as disponible
-    FROM
-        bodegas as b,
-        cargadores as c,
-        baterias as bat,
-        (
-            SELECT 
-                bg,
-                bt,
-                CONCAT(
-                   TIMESTAMPDIFF(day, fecha_entrada, now()),'D ',    
-                   TIMESTAMPDIFF(hour, fecha_entrada, now())-TIMESTAMPDIFF(day, fecha_entrada, now())*24,'H  ',
-                   TIMESTAMPDIFF(minute, fecha_entrada, now())-(TIMESTAMPDIFF(hour, fecha_entrada, now()))*60,'M') 
-            
-                as 'entrada',
-                CONCAT(
-                   TIMESTAMPDIFF(day, fecha_carga, now()),'D ',    
-                   TIMESTAMPDIFF(hour, fecha_carga, now())-TIMESTAMPDIFF(day, fecha_carga, now())*24,'H  ',
-                   TIMESTAMPDIFF(minute, fecha_carga, now())-(TIMESTAMPDIFF(hour, fecha_carga, now()))*60,'M') 
-                as 'carga',
-                CONCAT(
-                   TIMESTAMPDIFF(day, fecha_descanso, now()),'D ',    
-                   TIMESTAMPDIFF(hour, fecha_descanso, now())-TIMESTAMPDIFF(day, fecha_descanso, now())*24,'H  ',
-                   TIMESTAMPDIFF(minute, fecha_descanso, now())-(TIMESTAMPDIFF(hour, fecha_descanso, now()))*60,'M')
-                as 'descanso'        
-            FROM 
-                uso_baterias_bodega
-            WHERE 
-                fecha_salida ='0000-00-00 00:00:00'
-        ) as usos,
-        (
-            SELECT cg,
-                COUNT(id) as cantbg
-            FROM bodegas
-            GROUP BY cg
-        ) as cbg
-    WHERE
-        usos.bg=b.id AND
-        usos.bt=bat.idbaterias AND
-        c.idsucursal IN (".$loggedInUser->sucursales.") AND 
-        c.idcargadores=b.cg AND
-        cbg.cg=c.idcargadores AND
-        c.cargadores_tipo='$tipo'
-    
-    UNION ALL
-    
-    SELECT
-        b.id as 'Id',
-        c.cargadores_modelo as Modelo,
-        c.cargadores_nombre as Cargador,
-        c.idcargadores as cgid,
-        cbg.cantbg as cantbg,
-        b.nombre as Espacio,
-        CONCAT(c.cargadores_volts,'V ',c.cargadores_amperaje,'Ah (',c.cargadores_e,')') as Tipo,
-        NULL as Bateria,
-        NULL as entrada,
-        NULL as carga,
-        NULL as descanso,
-        CONCAT(
-            TIMESTAMPDIFF(day, libres.fecha_salida, now()),'D ',    
-            TIMESTAMPDIFF(hour, libres.fecha_salida, now())-TIMESTAMPDIFF(day, libres.fecha_salida, now())*24,'H  ',
-            TIMESTAMPDIFF(minute, libres.fecha_salida, now())-(TIMESTAMPDIFF(hour, libres.fecha_salida, now()))*60,'M')
-        as disponible
-    FROM
-        bodegas as b,
-        cargadores as c,
-        (
-          SELECT  
-            bg,
-            MAX(fecha_salida) as fecha_salida
-          FROM 
-            uso_baterias_bodega
-          WHERE 
-            fecha_salida !='0000-00-00 00:00:00'
-          GROUP BY bg
-        ) as libres,
-        (
-            SELECT cg,
-                COUNT(id) as cantbg
-            FROM bodegas
-            GROUP BY cg
-        ) as cbg
-    WHERE
-        libres.bg=b.id AND
-        c.idsucursal IN (".$loggedInUser->sucursales.") AND
-        c.idcargadores=b.cg AND
-        cbg.cg=c.idcargadores AND
-        c.cargadores_tipo='$tipo' AND
-        b.id not in (
-            SELECT 
-               bg   
-            FROM 
-               uso_baterias_bodega
-            WHERE 
-               fecha_salida='0000-00-00 00:00:00'
-            GROUP BY bg
-        )
+	SELECT * FROM
+	(
+		SELECT
+			b.id as Id,
+			c.cargadores_nombre as Cargador,
+			c.idcargadores as cgid,
+			cbg.cantbg as cantbg,
+			b.nombre as Espacio,
+			CONCAT(c.cargadores_volts,'V ',c.cargadores_amperaje,'Ah (',c.cargadores_e,')') as Tipo,
+			bat.baterias_nombre as Bateria,
+			usos.entrada,
+			usos.carga,
+			usos.descanso,
+			usos.listo,
+			NULL as disponible
+		FROM
+			bodegas as b,
+			cargadores as c,
+			baterias as bat,
+			(
+				SELECT 
+					bg,
+					bt,
+					CONCAT(
+					   TIMESTAMPDIFF(day, fecha_entrada, now()),'D ',    
+					   TIMESTAMPDIFF(hour, fecha_entrada, now())-TIMESTAMPDIFF(day, fecha_entrada, now())*24,'H  ',
+					   TIMESTAMPDIFF(minute, fecha_entrada, now())-(TIMESTAMPDIFF(hour, fecha_entrada, now()))*60,'M') 
+					as 'entrada',
+					TIMESTAMPDIFF(hour, fecha_entrada, now()) as 'entradat',
+					CONCAT(
+					   TIMESTAMPDIFF(day, fecha_carga, now()),'D ',    
+					   TIMESTAMPDIFF(hour, fecha_carga, now())-TIMESTAMPDIFF(day, fecha_carga, now())*24,'H  ',
+					   TIMESTAMPDIFF(minute, fecha_carga, now())-(TIMESTAMPDIFF(hour, fecha_carga, now()))*60,'M') 
+					as 'carga',
+                    IF (fecha_descanso='0000-00-00 00:00:00',
+						NULL,
+                        IF (IF(fecha_original='0000-00-00 00:00:00',
+                                IF(TIMESTAMPDIFF(hour, fecha_descanso, now())<8,true,false),
+                                IF(TIMESTAMPDIFF(hour, fecha_original, now())<8,true,false)),
+                            CONCAT(
+                               TIMESTAMPDIFF(day, fecha_descanso, now()),'D ',    
+                               TIMESTAMPDIFF(hour, fecha_descanso, now())-TIMESTAMPDIFF(day, fecha_descanso, now())*24,'H  ',
+                               TIMESTAMPDIFF(minute, fecha_descanso, now())-(TIMESTAMPDIFF(hour, fecha_descanso, now()))*60,'M'),
+                            IF (fecha_original='0000-00-00 00:00:00',
+                                '0D 8H 0M',
+                                IF(TIMESTAMPDIFF(hour, fecha_descanso, DATE_ADD(fecha_original, INTERVAL 8 HOUR))<8,
+                                    '0D 8H 0M',
+                                    CONCAT(
+                                        TIMESTAMPDIFF(day, fecha_descanso, DATE_ADD(fecha_original, INTERVAL 8 HOUR)),'D ',    
+                                        TIMESTAMPDIFF(hour, fecha_descanso, DATE_ADD(fecha_original, INTERVAL 8 HOUR))-TIMESTAMPDIFF(day, fecha_descanso, DATE_ADD(fecha_original, INTERVAL 8 HOUR))*24,'H  ',
+                                        TIMESTAMPDIFF(minute, fecha_descanso, DATE_ADD(fecha_original, INTERVAL 8 HOUR))-(TIMESTAMPDIFF(hour, fecha_descanso, DATE_ADD(fecha_original, INTERVAL 8 HOUR)))*60,'M')
+                                )
+                            )
+                        )
+					) as 'descanso',
+					IF (IF(fecha_original='0000-00-00 00:00:00',
+							IF(TIMESTAMPDIFF(hour, fecha_descanso, now())<8,true,false),
+							IF(TIMESTAMPDIFF(hour, fecha_original, now())<8,true,false)),
+						NULL,
+						IF (fecha_original='0000-00-00 00:00:00',
+							CONCAT(
+							   TIMESTAMPDIFF(day, DATE_ADD(fecha_descanso, INTERVAL 8 HOUR), now()),'D ',    
+							   TIMESTAMPDIFF(hour, DATE_ADD(fecha_descanso, INTERVAL 8 HOUR), now())-TIMESTAMPDIFF(day, DATE_ADD(fecha_descanso, INTERVAL 8 HOUR), now())*24,'H  ',
+							   TIMESTAMPDIFF(minute, DATE_ADD(fecha_descanso, INTERVAL 8 HOUR), now())-(TIMESTAMPDIFF(hour, DATE_ADD(fecha_descanso, INTERVAL 8 HOUR), now()))*60,'M'),
+							CONCAT(
+							   TIMESTAMPDIFF(day, DATE_ADD(fecha_original, INTERVAL 8 HOUR), now()),'D ',    
+							   TIMESTAMPDIFF(hour, DATE_ADD(fecha_original, INTERVAL 8 HOUR), now())-TIMESTAMPDIFF(day, DATE_ADD(fecha_original, INTERVAL 8 HOUR), now())*24,'H  ',
+							   TIMESTAMPDIFF(minute, DATE_ADD(fecha_original, INTERVAL 8 HOUR), now())-(TIMESTAMPDIFF(hour, DATE_ADD(fecha_original, INTERVAL 8 HOUR), now()))*60,'M')
+						)
+					) as 'listo'
+                FROM 
+					uso_baterias_bodega,
+					(SELECT id as bdcid
+						FROM bodegas, cargadores
+						WHERE bodegas.cg=cargadores.idcargadores
+                            AND cargadores.idsucursal IN (".$loggedInUser->sucursales.")
+                            AND cargadores.cargadores_tipo='$tipo'
+					) as bdc
+				WHERE 
+					fecha_salida ='0000-00-00 00:00:00'
+                    AND bg=bdc.bdcid
+                GROUP BY bg
+			) as usos,
+			(
+				SELECT cg,
+					COUNT(id) as cantbg
+				FROM bodegas
+				GROUP BY cg
+			) as cbg
+		WHERE
+			usos.bg=b.id AND
+			usos.bt=bat.idbaterias AND
+            c.idsucursal IN (".$loggedInUser->sucursales.") AND 
+			c.idcargadores=b.cg AND
+			cbg.cg=c.idcargadores AND
+            c.cargadores_tipo='$tipo'
 		
-	UNION ALL
-    
-    SELECT
-        b.id as 'Id',
-        c.cargadores_nombre as Cargador,
-        c.idcargadores as cgid,
-         c.cargadores_modelo as Modelo,
-        cbg.cantbg as cantbg,
-        b.nombre as Espacio,
-        CONCAT(c.cargadores_volts,'V ',c.cargadores_amperaje,'Ah (',c.cargadores_e,')') as Tipo,
-        NULL as Bateria,
-        NULL as entrada,
-        NULL as carga,
-        NULL as descanso,
-        NULL as disponible
-    FROM
-        bodegas as b,
-        cargadores as c,
-        (
-            SELECT cg,
-                COUNT(id) as cantbg
-            FROM bodegas
-            GROUP BY cg
-        ) as cbg
-    WHERE
-        b.id NOT IN (
-				SELECT bg
-				FROM uso_baterias_bodega, bodegas as b, cargadores as c
-				WHERE b.id=bg
-					AND b.cg=c.idcargadores
-					AND c.idsucursal IN (".$loggedInUser->sucursales.")
+		UNION ALL
+		
+		SELECT
+			b.id as 'Id',
+			c.cargadores_nombre as Cargador,
+			c.idcargadores as cgid,
+			cbg.cantbg as cantbg,
+			b.nombre as Espacio,
+			CONCAT(c.cargadores_volts,'V ',c.cargadores_amperaje,'Ah (',c.cargadores_e,')') as Tipo,
+			NULL as Bateria,
+			NULL as entrada,
+			NULL as carga,
+			NULL as descanso,
+			NULL as listo,
+			CONCAT(
+				TIMESTAMPDIFF(day, libres.fecha_salida, now()),'D ',    
+				TIMESTAMPDIFF(hour, libres.fecha_salida, now())-TIMESTAMPDIFF(day, libres.fecha_salida, now())*24,'H  ',
+				TIMESTAMPDIFF(minute, libres.fecha_salida, now())-(TIMESTAMPDIFF(hour, libres.fecha_salida, now()))*60,'M')
+			as disponible
+		FROM
+			bodegas as b,
+			cargadores as c,
+			(
+				SELECT  
+					bg,
+					MAX(fecha_salida) as fecha_salida
+				FROM 
+					uso_baterias_bodega,
+					(SELECT id as bdcid
+						FROM bodegas, cargadores
+						WHERE bodegas.cg=cargadores.idcargadores
+                            AND cargadores.idsucursal IN (".$loggedInUser->sucursales.")
+                            AND cargadores.cargadores_tipo='$tipo'
+					) as bdc
+				WHERE 
+					fecha_salida !='0000-00-00 00:00:00'
+					AND bg=bdc.bdcid
+				GROUP BY bg
+			) as libres,
+			(
+				SELECT cg,
+					COUNT(id) as cantbg
+				FROM bodegas, cargadores
+                WHERE bodegas.cg=cargadores.idcargadores
+                    AND cargadores.idsucursal IN (".$loggedInUser->sucursales.")
+                    AND cargadores.cargadores_tipo='$tipo'
+				GROUP BY cg
+			) as cbg
+		WHERE
+			libres.bg=b.id AND
+			c.idcargadores=b.cg AND
+			cbg.cg=c.idcargadores AND
+			b.id not in (
+				SELECT 
+				   bg   
+				FROM 
+                    uso_baterias_bodega,
+					(SELECT id as bdcid
+						FROM bodegas, cargadores
+						WHERE bodegas.cg=cargadores.idcargadores
+                            AND cargadores.idsucursal IN (".$loggedInUser->sucursales.")
+                            AND cargadores.cargadores_tipo='$tipo'
+					) as bdc
+				WHERE 
+				   fecha_salida='0000-00-00 00:00:00'
+				   AND bg=bdc.bdcid
 				GROUP BY bg
 			) AND
-        c.idsucursal IN (".$loggedInUser->sucursales.") AND
-        c.idcargadores=b.cg AND
-        cbg.cg=c.idcargadores AND
-        c.cargadores_tipo='$tipo'
-) as todo
-GROUP BY Cargador 
-ORDER BY Cargador, Espacio
+            c.cargadores_tipo='$tipo'
+	
+		UNION ALL
+		
+		SELECT
+			b.id as 'Id',
+			c.cargadores_nombre as Cargador,
+			c.idcargadores as cgid,
+			cbg.cantbg as cantbg,
+			b.nombre as Espacio,
+			CONCAT(c.cargadores_volts,'V ',c.cargadores_amperaje,'Ah (',c.cargadores_e,')') as Tipo,
+			NULL as Bateria,
+			NULL as entrada,
+			NULL as carga,
+			NULL as descanso,
+			NULL as listo,
+			'SIN USAR' as disponible
+		FROM
+			bodegas as b,
+			cargadores as c,
+			(
+				SELECT cg,
+					COUNT(id) as cantbg
+				FROM bodegas, cargadores
+                WHERE bodegas.cg=cargadores.idcargadores
+                    AND cargadores.idsucursal IN (".$loggedInUser->sucursales.")
+                    AND cargadores.cargadores_tipo='$tipo'
+				GROUP BY cg
+			) as cbg
+		WHERE
+			b.id NOT IN (
+				SELECT bg
+				FROM uso_baterias_bodega, bodegas as b, cargadores
+				WHERE b.id=bg
+					AND b.cg=cargadores.idcargadores
+                    AND cargadores.idsucursal IN (".$loggedInUser->sucursales.")
+				GROUP BY bg
+			) AND
+			c.idcargadores=b.cg AND
+			cbg.cg=c.idcargadores AND
+            c.cargadores_tipo='$tipo'
+	) as todo
+	ORDER BY Cargador, Espacio
 ";
-
+//print_r($query);
 $resultado = $mysqli->query($query);
+
 $tiposcg=array();
 while($fila = $resultado->fetch_array()) {
     $tipobn=str_replace(' ','_',$fila['Tipo']);
@@ -179,6 +236,7 @@ while($fila = $resultado->fetch_array()) {
     $tipobn=str_replace(')','',$tipobn);
 
     $tiposcg[$tipobn]=$fila['Tipo'];
+    
 }
 
 
@@ -236,7 +294,7 @@ function importa2(){
 }
 
 function deshabilita(cual) {
-	alert()
+	alert();
 }
 		
 	</script>   
