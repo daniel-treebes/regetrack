@@ -225,7 +225,7 @@ if($habilitaid>0){
 <?php
 //ALERTAS
 include("edita/alertas.php");
-pinta_alertas($mysqli,'bt',$id);
+pinta_alertas($mysqli,'bt',$_GET['id']);
 
 if($loggedInUser->checkPermission(array(1,2))){
 ?>
@@ -261,15 +261,15 @@ if($loggedInUser->checkPermission(array(1,2))){
 	</div>
 
 	<?php
-	$grafica=pinta_grafica('bt','reporteBTU','uso',$id);
+	$grafica=pinta_grafica('bt','reporteBTU','uso',$_GET['id']);
 	echo $grafica;
-	$grafica=pinta_grafica('bt','reporteBTE','espera',$id);
+	$grafica=pinta_grafica('bt','reporteBTE','espera',$_GET['id']);
 	echo $grafica;
-	$grafica=pinta_grafica('bt','reporteBTC','carga',$id);
+	$grafica=pinta_grafica('bt','reporteBTC','carga',$_GET['id']);
 	echo $grafica;
-	$grafica=pinta_grafica('bt','reporteBTD','descanso',$id);
+	$grafica=pinta_grafica('bt','reporteBTD','descanso',$_GET['id']);
 	echo $grafica;
-	$grafica=pinta_grafica('bt','reporteBTL','listo',$id);
+	$grafica=pinta_grafica('bt','reporteBTL','listo',$_GET['id']);
 	echo $grafica;
 
 }

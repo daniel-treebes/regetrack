@@ -109,9 +109,9 @@ function importa2(){
     } );
 	</script>
         
-        <div class="row">
-            <div class="col-md-12">
-              <?php require_once("tema/comun/topcontenedor.php");?>
+<div class="row">
+	 <div class="col-md-12">
+		<?php require_once("tema/comun/topcontenedor.php");?>
          
         <div class="row">
             <div class="col-md-12">
@@ -171,6 +171,7 @@ function importa2(){
 			$tipobn=str_replace(' ','_',$fila['Tipo']);
 			$tipobn=str_replace('(','',$tipobn);
 			$tipobn=str_replace(')','',$tipobn);
+			$tipobn=str_replace('-','',$tipobn);
                         if(!is_null($fila['Tipo'])){
                             $tiposbateria[$tipobn]=$fila['Tipo'];
                         }
@@ -193,28 +194,15 @@ function importa2(){
 					 TIMESTAMPDIFF(hour, fecha_carga, now())-TIMESTAMPDIFF(day, fecha_carga, now())*24,'H  ',
 					 TIMESTAMPDIFF(minute, fecha_carga, now())-(TIMESTAMPDIFF(hour, fecha_carga, now()))*60,'M') 
 				  as 'carga',
+				  CONCAT(
+					 TIMESTAMPDIFF(day, fecha_descanso, now()),'D ',    
+					 TIMESTAMPDIFF(hour, fecha_descanso, now())-TIMESTAMPDIFF(day, fecha_descanso, now())*24,'H  ',
+					 TIMESTAMPDIFF(minute, fecha_descanso, now())-(TIMESTAMPDIFF(hour, fecha_descanso, now()))*60,'M')
+				  as 'descanso',
 				  IF (IF(fecha_original='0000-00-00 00:00:00',
 						  IF(TIMESTAMPDIFF(hour, fecha_descanso, now())<8,true,false),
 						  IF(TIMESTAMPDIFF(hour, fecha_original, now())<8,true,false)),
-					  CONCAT(
-						  TIMESTAMPDIFF(day, fecha_descanso, now()),'D ',    
-						  TIMESTAMPDIFF(hour, fecha_descanso, now())-TIMESTAMPDIFF(day, fecha_descanso, now())*24,'H  ',
-						  TIMESTAMPDIFF(minute, fecha_descanso, now())-(TIMESTAMPDIFF(hour, fecha_descanso, now()))*60,'M'),
-					  IF (fecha_original='0000-00-00 00:00:00',
-						  8,
-						  IF(TIMESTAMPDIFF(hour, fecha_descanso, DATE_ADD(fecha_original, INTERVAL 8 HOUR))<8,
-							  8,
-							  CONCAT(
-								  TIMESTAMPDIFF(day, fecha_descanso, DATE_ADD(fecha_original, INTERVAL 8 HOUR)),'D ',    
-								  TIMESTAMPDIFF(hour, fecha_descanso, DATE_ADD(fecha_original, INTERVAL 8 HOUR))-TIMESTAMPDIFF(day, fecha_descanso, DATE_ADD(fecha_original, INTERVAL 8 HOUR))*24,'H  ',
-								  TIMESTAMPDIFF(minute, fecha_descanso, DATE_ADD(fecha_original, INTERVAL 8 HOUR))-(TIMESTAMPDIFF(hour, fecha_descanso, DATE_ADD(fecha_original, INTERVAL 8 HOUR)))*60,'M')
-						  )
-					  )
-				  ) as 'descanso',
-				  IF (IF(fecha_original='0000-00-00 00:00:00',
-						  IF(TIMESTAMPDIFF(hour, fecha_descanso, now())<8,true,false),
-						  IF(TIMESTAMPDIFF(hour, fecha_original, now())<8,true,false)),
-					  0,
+					  NULL,
 					  IF (fecha_original='0000-00-00 00:00:00',
 						  CONCAT(
 							  TIMESTAMPDIFF(day, DATE_ADD(fecha_descanso, INTERVAL 8 HOUR), now()),'D ',    
@@ -239,7 +227,7 @@ function importa2(){
 			  ORDER BY id desc 
 			  LIMIT 1
 			";
-					  
+//echo $querydonde;		  
 			$resultadodonde = $mysqli->query($querydonde);
 			$filadonde = $resultadodonde->fetch_array();
 						 
@@ -324,7 +312,7 @@ function importa2(){
 										  $filaul = $resultadoul->fetch_array();
   
 										  $filamc['nombre']='<span style="color:red">ANT.: '.$filaul['lugar'].'</span>';
-										  $estadomc = '<span style="color:red">SIN ESTADO</span>';
+										  $estadomc = '<span style="color:purple">SIN ESTADO</span>';
 										  $filamc['entrada'] = '<span style="color:red">'.$filaul['fecha_salida'].'</span>';
 									  }else{
 										  $filamc['nombre']="<i class='fa icon-montacarga'></i> ".$filamc['nombre'];
@@ -349,10 +337,9 @@ function importa2(){
 									  echo "<td style='color:red'>ESPERA</td>";
 									  echo "<td>".$filadonde['entrada']."</td>";				  
 							  }else{
-									  //echo "<th></th>";
-									  echo "<td style='color:red'>Sin asignar</td>";
-									  echo "<td style='color:red'>N/A</td>";
-									  echo "<td style='color:red'>N/A</td>";
+									  echo "<td style='color:purple'>Sin asignar</td>";
+									  echo "<td style='color:purple'>N/A</td>";
+									  echo "<td style='color:purple'>N/A</td>";
 							  }
 						}else{ //SI NO EXISTE REGISTRO DE LA BATERIA EN LAS BODEGAS (BUSCAMOS EN MONTACARGAS)
 							 $querymc="SELECT m.idmontacargas as mc, m.montacargas_nombre as nombre,
@@ -370,7 +357,7 @@ function importa2(){
 									  $resultadomc = $mysqli->query($querymc);
 									  $filamc = $resultadomc->fetch_array();
 									  
-									  $estadomc = 'En uso';
+									  $estadomc = 'EN USO';
 									  if (!isset($filamc['nombre'])){
 										  $queryultimaubicacion="
 													SELECT lugar, fecha_salida
@@ -405,11 +392,11 @@ function importa2(){
 													LIMIT 1
 										  ";
 								  
-								$resultadoul = $mysqli->query($queryultimaubicacion);
+											$resultadoul = $mysqli->query($queryultimaubicacion);
 										  $filaul = $resultadoul->fetch_array();
   
 										  $filamc['nombre']='<span style="color:red">ANT.: '.$filaul['lugar'].'</span>';
-										  $estadomc = '<span style="color:red">SIN ESTADO</span>';
+										  $estadomc = '<span style="color:purple">SIN ESTADO</span>';
 										  $filamc['entrada'] = '<span style="color:red">'.$filaul['fecha_salida'].'</span>';
 									  }else{
 										  $filamc['nombre']="<i class='fa icon-montacarga'></i> ".$filamc['nombre'];
@@ -449,7 +436,7 @@ function importa2(){
 				  
 				  echo "</tr>";
 		}
-			  
+			ksort($tiposbateria); 
 ?>
         </tbody>
     </table>
@@ -463,28 +450,27 @@ function importa2(){
 					</div>
                                    
 					<?php foreach ($tiposbateria as $tipobn => $tipob){?>
-                                      
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <div class="portlet box  blue-sharp">
-                                                         <div class="portlet-title">
-                                                            <div class="caption">
-                                                                <i style="font-size: 20px"class="fa icon-bateria"></i><?php echo $tipob ?>
-                                                             </div>
-                                                            <div class="tools">
-                                                                <a href="javascript:;" class="collapse" data-original-title="" title=""> </a>
-                                                            </div>
-                                                        </div>
-                                                        <div class="portlet-body "> 
-                                                            <div id="reporteBTU_<?php echo $tipobn;?>" ></div>
-                                                            <div id="reporteBTE_<?php echo $tipobn;?>" ></div>
-                                                            <div id="reporteBTC_<?php echo $tipobn;?>" ></div>
-                                                            <div id="reporteBTD_<?php echo $tipobn;?>" ></div>
-                                                            <div id="reporteBTL_<?php echo $tipobn;?>" ></div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
+						<div class="row">
+							<div class="col-md-12">
+								<div class="portlet box  blue-sharp">
+									<div class="portlet-title">
+										<div class="caption">
+											<i style="font-size: 15px"class="fa icon-bateria"></i><?php echo $tipob ?>
+										</div>
+										<div class="tools">
+											<a href="javascript:;" class="collapse" data-original-title="" title=""> </a>
+										</div>
+									</div>
+									<div class="portlet-body "> 
+										<div id="reporteBTU_<?php echo $tipobn;?>" ></div>
+										<div id="reporteBTE_<?php echo $tipobn;?>" ></div>
+										<div id="reporteBTC_<?php echo $tipobn;?>" ></div>
+										<div id="reporteBTD_<?php echo $tipobn;?>" ></div>
+										<div id="reporteBTL_<?php echo $tipobn;?>" ></div>
+									</div>
+								</div>
+							</div>
+						</div>
 					<?php }?>
 				</div>
 			</div>

@@ -178,9 +178,17 @@ function deshabilita(cual) {
        
         <tbody >
 			 <?php 
-			 while($fila = $resultado->fetch_array()) {
-				echo "<tr>";
-			    echo "<th>".$fila['Nombre']."</th>";
+		$tiposmc=array();
+			while($fila = $resultado->fetch_array()) {
+					$tipobn=str_replace(' ','_',$fila['Tipo']);
+					$tipobn=str_replace('(','',$tipobn);
+					$tipobn=str_replace(')','',$tipobn);
+					$tipobn=str_replace('-','',$tipobn);
+						if(!is_null($fila['Tipo'])){
+							 $tiposmc[$tipobn]=$fila['Tipo'];
+						}
+			   echo "<tr>";
+			   echo "<th>".$fila['Nombre']."</th>";
 				echo "<th>".$fila['Modelo']."</th>";
                                   echo "<th>".$fila['Marca']."</th>";
                                    echo "<th>".$fila['Empresa']."</th>";
@@ -318,9 +326,25 @@ function deshabilita(cual) {
 						   <span class="caption-subject font-green bold uppercase">Desempeño de montacargas</span>
 					   </div>
 				   </div>
-				   <div class="portlet-body">
-					   <div id="reporteMC" ></div>
-				   </div>
+					<?php foreach ($tiposmc as $tipobn => $tipob){?>
+						<div class="row">
+							<div class="col-md-12">
+								<div class="portlet box  blue-sharp">
+									<div class="portlet-title">
+										<div class="caption">
+											<i style="font-size: 15px"class="fa icon-montacarga"></i><?php echo $tipob ?>
+										</div>
+										<div class="tools">
+											<a href="javascript:;" class="collapse" data-original-title="" title=""> </a>
+										</div>
+									</div>
+									<div class="portlet-body "> 
+										<div id="reporteMC_<?php echo $tipobn;?>" ></div>
+									</div>
+								</div>
+							</div>
+						</div>
+					<?php }?>
 			   </div>
 		   </div>
 		</div>
@@ -339,8 +363,10 @@ function deshabilita(cual) {
 <script src="assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js" type="text/javascript"></script>
 
 <?php
-$grafica=pinta_grafica('mc','reporteMC','uso','todo');
-echo $grafica;
+	foreach ($tiposmc as $tipobn => $tipob){
+		$grafica=pinta_grafica('mc','reporteMC_'.$tipobn,'uso','todo',$tipob);
+		echo $grafica;
+	}
 
 require_once("tema/comun/footer.php");
 ?>

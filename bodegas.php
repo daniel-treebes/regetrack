@@ -238,7 +238,7 @@ while($fila = $resultado->fetch_array()) {
     $tiposcg[$tipobn]=$fila['Tipo'];
     
 }
-
+ksort($tiposcg);
 
 $queryCargadoresDes="
     SELECT *, CONCAT(
@@ -268,7 +268,7 @@ function importa(){
 }
 
 function exporta(){
-		   url=location.href.substring(0, location.href.lastIndexOf("/")+1)
+		   url=location.href.substring(0, location.href.lastIndexOf("/")+1);
 		   window.open(url+'exportaciones/ebodegas.php','_blank');
 }
 	
@@ -395,7 +395,7 @@ function deshabilita(cual) {
                                                                     <div class="portlet box  blue-sharp">
                                                                          <div class="portlet-title">
                                                                             <div class="caption">
-                                                                                <i style="font-size: 20px"class="fa icon-bateria"></i><?php echo $tipob ?>
+                                                                                <i style="font-size: 15px"class="fa icon-cargador"></i><?php echo $tipob ?>
                                                                              </div>
                                                                             <div class="tools">
                                                                                 <a href="javascript:;" class="collapse" data-original-title="" title=""> </a>
@@ -510,7 +510,7 @@ require_once("tema/comun/footer.php");
                         "sUrl": "//cdn.datatables.net/plug-ins/1.10.12/i18n/Spanish.json",
                     },
                     rowCallback: function(row, data, index) {
-                        if(data.details.length == 0){
+                        if(data.details.length === 0){
                             $(row).find('td').eq(0).removeClass('details-control');
                         }
 

@@ -1421,105 +1421,107 @@ function pinta_grafica($modulo,$divapintar,$estatus,$idapintar='todo',$tipo="tod
 	   }
 	}
 	
-	
-	$aregresar='<script type="text/javascript">';
-		if (count($data)+count($alertas)>0){
-			$aregresar.='$(function () {';
-			$lineas='';
-			foreach ($data as $mc => $dmc){
-				$dmc['data']=substr($dmc['data'],0,-1).']';
-				$lineas.="{".
-					"name : '".$dmc['nombre']."', ".
-					"type: 'spline', ".
-					"marker : { ".
-						"enabled : true, ".
-						"radius : 4 ".
-					"}, ".
-					"data : ".$dmc['data'].", ".
-					"id : 'dataseries".$mc."' ".
-				"}, ";
-			}
-			$alineas='';
-			if (count($alertas)<=0){
-			   $lineas=substr($lineas,0,-1);
-			}else{
-				foreach ($alertas as $mc => $amc){
-					$amc['data']=substr($amc['data'],0,-1);
-					$alineas.="{".
-						"name : 'Alertas ".$amc['nombre']."', ".
-						"type: 'flags', ".
-						"visible: false, ".
-						"data : [".$amc['data']."], ".
-						"onSeries : 'dataseries".$mc."', ".
-						"shape : 'circlepin', ".
-						"width : 16 ".
+	if (count($alertas)>0 || count($data)>0){
+		$aregresar='<script type="text/javascript">';
+			if (count($data)+count($alertas)>0){
+				$aregresar.='$(function () {';
+				$lineas='';
+				foreach ($data as $mc => $dmc){
+					$dmc['data']=substr($dmc['data'],0,-1).']';
+					$lineas.="{".
+						"name : '".$dmc['nombre']."', ".
+						"type: 'spline', ".
+						"marker : { ".
+							"enabled : true, ".
+							"radius : 4 ".
+						"}, ".
+						"data : ".$dmc['data'].", ".
+						"id : 'dataseries".$mc."' ".
 					"}, ";
 				}
-				$alineas=substr($alineas,0,-1);
-			}
-			
-                        
-			$aregresar.="
-				$('#$divapintar').highcharts('StockChart', {
-	
-					rangeSelector : {
-						buttons : [{
-							type : 'day',
-							count : 1,
-							text : '1D'
-						}, {
-							type : 'week',
-							count : 1,
-							text : '1S'
-						}, {
-							type : 'month',
-							count : 1,
-							text : '1M'
-						}, {
-							type : 'all',
-							count : 1,
-							text : 'Todo'
-						}],
-						selected : 1,
-						inputEnabled : true
-					},
-
-					legend : {
-						enabled : true
-					},
+				$alineas='';
+				if (count($alertas)<=0){
+				   $lineas=substr($lineas,0,-1);
+				}else{
+					foreach ($alertas as $mc => $amc){
+						$amc['data']=substr($amc['data'],0,-1);
+						$alineas.="{".
+							"name : 'Alertas ".$amc['nombre']."', ".
+							"type: 'flags', ".
+							"visible: false, ".
+							"data : [".$amc['data']."], ".
+							"onSeries : 'dataseries".$mc."', ".
+							"shape : 'circlepin', ".
+							"width : 16 ".
+						"}, ";
+					}
+					$alineas=substr($alineas,0,-1);
+				}
+				
+							
+				$aregresar.="
+					$('#$divapintar').highcharts('StockChart', {
 		
-					title : {
-						text : '$titulo'
-					},
-		
-					tooltip: {
-						style: {
-							width: '200px'
+						rangeSelector : {
+							buttons : [{
+								type : 'day',
+								count : 1,
+								text : '1D'
+							}, {
+								type : 'week',
+								count : 1,
+								text : '1S'
+							}, {
+								type : 'month',
+								count : 1,
+								text : '1M'
+							}, {
+								type : 'all',
+								count : 1,
+								text : 'Todo'
+							}],
+							selected : 1,
+							inputEnabled : true
 						},
-						valueDecimals: 4,
-						shared : true
-					},
-		
-					yAxis : {
+	
+						legend : {
+							enabled : true
+						},
+			
 						title : {
-							text : 'HORAS'
-						}
-					},
-					xAxis : {
-					   max: parseInt(".time()."000)
-					},
-		
-					series : [".$lineas.$alineas."
-					]
+							text : '$titulo'
+						},
+			
+						tooltip: {
+							style: {
+								width: '200px'
+							},
+							valueDecimals: 4,
+							shared : true
+						},
+			
+						yAxis : {
+							title : {
+								text : 'HORAS'
+							}
+						},
+						xAxis : {
+						   max: parseInt(".time()."000)
+						},
+			
+						series : [".$lineas.$alineas."
+						]
+					});
 				});
-			});
-			";   
-		}else{
-			//$aregresar.= "$('#$divapintar').html('$titulo<br><br>NO HAY DATOS QUE MOSTRAR');   });";
-			$aregresar.= "$('#$divapintar').parent().hide();";
-		}
-		$aregresar.= "</script>";
-		return $aregresar;
+				";   
+			}else{
+				//$aregresar.= "$('#$divapintar').html('$titulo<br><br>NO HAY DATOS QUE MOSTRAR');   });";
+				$aregresar.= "$('#$divapintar').parent().hide();";
+			}
+			$aregresar.= "</script>";
+			return $aregresar;
+	}
+	return;
 }
 
 function eficiencia($modulo,$estatus,$divapintar,$idapintar='todo',$cargador_tipo= 'Cargador'){
