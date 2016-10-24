@@ -9,7 +9,7 @@ $nombrePagina="Montacargas";
 $acciones=[];
 $acciones[0][0]="Exportar";
 $acciones[0][1]="javascript:exporta();";
-if($loggedInUser->checkPermission(array(2))){
+if($loggedInUser->checkPermission(array(1))){
    $acciones[1][0]="Nuevo";
    $acciones[1][1]='/sistema.php?ruta=alta/montacargas'; 
 }

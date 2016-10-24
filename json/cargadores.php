@@ -234,22 +234,195 @@ $cgDes=array();
 while($fila = $resCgDes->fetch_array()) {
     $cgDes[$fila['cg']]=$fila;
 }
-$num_lugares = 0;
-$lugares_ocupados = 0;
-$baterias_espera = 0;
-$baterias_descanso = 0;
-$baterias_carga = 0;
-$baterias_listo = 0;
 
 $json_array = array();
 
-  while($fila = $resultado->fetch_array()) {
+
+while($fila = $resultado->fetch_array()) {
    
-    echo '<pre>';var_dump($fila);echo  '</pre>';exit();  
-      
-      
-    $tmp = array();
-    $tmp['details'] = array();
+    
+    if(!array_key_exists($fila['Cargador'], $json_array)){
+       
+        $tmp = array();
+        $tmp['details'] = array();
+        
+        $tmp['Lugares']  = 0;
+        $tmp['Disponibles']  = 0;
+        $tmp['Espera']  = 0;
+        $tmp['Descanso']  = 0;
+        $tmp['Tiempo']  = 0;
+        $tmp['Listo']  = 0;
+        
+         $tmp['Lugares']++;
+        if($fila['disponible'] == 'SIN USAR'){
+            $tmp['Disponibles']++;
+        }elseif(!is_null($fila['listo'])){
+            $tmp['Listo'] ++;
+        }elseif(!is_null($fila['descanso'])){
+            $tmp['Descanso'] ++;
+        }elseif(!is_null($fila['carga'])){
+            $tmp['Tiempo'] ++;
+        }elseif(!is_null($fila['entrada'])){
+            $tmp['Espera'] ++;
+        }
+        
+        if ($tmp['Tiempo'] == 0) {
+            $tmp['Tiempo'] = 'Disponible';
+        } else {
+            $tmp['Tiempo'] = $fila['carga'];
+        }
+        $herramientas = "<button type='button' class='btn green' onclick='window.location.href=\"sistema.php?ruta=edita/cargadores&id=" . $fila['cgid'] . "\"'><i class='fa fa-cogs'></i> </button>";
+        $herramientas.="<button type='button' class='btn gray'  onclick='window.open(\"libs/imprimeQR.php?tipo=cargadores&id=" . $fila['cgid'] . "\")'><i class='fa fa-qrcode'></i> </button>";
+        $lugares_ocupados = $tmp['Lugares'] - $tmp['Disponibles'];
+        if ($lugares_ocupados > 0) {
+            $details_control_flag = true;
+            $details_control = "<td class='details-control'></td>";
+        } else {
+            $details_control_flag = false;
+            $details_control = "<td></td>";
+        }
+        $tmp['Cargador'] = $fila['Cargador'];
+        $tmp['Tipo'] = $fila['Tipo'];
+        if (isset($cgDes[$fila['cgid']])) {
+            $tmp['Estado'] = 'Deshabilitado';
+            $tmp['Tiempo'] = 'N/D';
+        } else {
+            $tmp['Estado'] = 'Habilitado';
+        }
+        $tmp['Herramientas'] ="<td>".$herramientas."</td>";
+        
+        if($details_control_flag){
+             $bodegas = BodegasQuery::create()->select('Id')->filterByCg($fila['cgid'])->find()->toArray();
+             $query = "SELECT  id FROM uso_baterias_bodega WHERE uso_baterias_bodega.bg IN (".  implode(',', $bodegas).") AND uso_baterias_bodega.fecha_salida = '0000-00-00 00:00:00'";
+             $uso_baterias_array = array();
+             $uso_baterias = $mysqli->query($query);
+            
+             while($fila = $uso_baterias->fetch_array()) {
+		$uso_baterias_array[]=$fila['id'];
+            }
+            
+            $uso_baterias = UsoBateriasBodegaQuery::create()->filterById($uso_baterias_array)->find();
+            
+             $count = 0;
+             $uso_baterias_count = $uso_baterias->count();
+             foreach($uso_baterias as $ubb){
+
+                 $nombre = $ubb->getBaterias()->getBateriasNombre();
+                 $today = new DateTime();
+                 if(!is_null($ubb->getFechaEntrada()) && is_null($ubb->getFechaCarga()) && is_null($ubb->getFechaDescanso()) && is_null($ubb->getFechaSalida())){
+                     $estado = 'Espera';
+                     $time = new DateTime($ubb->getFechaEntrada());
+                 }elseif (!is_null($ubb->getFechaEntrada()) && !is_null($ubb->getFechaCarga()) && is_null($ubb->getFechaDescanso()) && is_null($ubb->getFechaSalida())) {
+                     $estado = 'Carga';
+                     $time = new DateTime($ubb->getFechaCarga());
+                 }
+                 elseif (!is_null($ubb->getFechaEntrada()) && !is_null($ubb->getFechaCarga()) && !is_null($ubb->getFechaDescanso()) && is_null($ubb->getFechaSalida())) {
+                     $estado = 'Descanso';
+                     $time = new DateTime($ubb->getFechaDescanso());
+                 }
+
+                 $tiempo = $time->diff($today);
+                 
+                 $tmp['details'][$count]['Bateria'] = $nombre;
+                 $tmp['details'][$count]['Estado'] = $estado;
+                 $tmp['details'][$count]['Tiempo'] = $tiempo->d.'D '.$tiempo->h.'H '.$tiempo->i.'M';
+                 
+                 $count ++;
+
+
+             }
+
+         }
+         
+         $key = $tmp['Cargador'];
+         $json_array[$key] = $tmp;
+
+    }else {
+        $key = $tmp['Cargador'];
+        
+        $tmp['Lugares']  = 0;
+        $tmp['Disponibles']  = 0;
+        
+        $json_array[$key]['Lugares']++;
+        $tmp['Lugares'] ++;
+        if($fila['disponible'] == 'SIN USAR'){
+            $json_array[$key]['Disponibles']++;
+            $tmp['Disponibles']++;
+        }elseif(!is_null($fila['listo'])){
+            $json_array[$key]['Listo'] ++;
+        }elseif(!is_null($fila['descanso'])){
+            $json_array[$key]['Descanso'] ++;
+        }elseif(!is_null($fila['carga'])){
+            $json_array[$key]['Tiempo'] ++;
+        }elseif(!is_null($fila['entrada'])){
+            $json_array[$key]['Espera'] ++;
+        }
+        
+        if ($json_array[$key]['Tiempo'] == 0) {
+            $json_array[$key]['Tiempo'] = 'Disponible';
+        } else {
+            $json_array[$key]['Tiempo'] = $fila['carga'];
+        }
+       
+        $lugares_ocupados = $tmp['Lugares'] - $tmp['Disponibles'];
+        if ($lugares_ocupados > 0) {
+            $details_control_flag = true;
+            $details_control = "<td class='details-control'></td>";
+        } else {
+            $details_control_flag = false;
+            $details_control = "<td></td>";
+        }
+
+        if($details_control_flag){
+             $bodegas = BodegasQuery::create()->select('Id')->filterByCg($fila['cgid'])->find()->toArray();
+             $query = "SELECT  id FROM uso_baterias_bodega WHERE uso_baterias_bodega.bg IN (".  implode(',', $bodegas).") AND uso_baterias_bodega.fecha_salida = '0000-00-00 00:00:00'";
+             $uso_baterias_array = array();
+             $uso_baterias = $mysqli->query($query);
+            
+             while($fila = $uso_baterias->fetch_array()) {
+		$uso_baterias_array[]=$fila['id'];
+            }
+            
+            $uso_baterias = UsoBateriasBodegaQuery::create()->filterById($uso_baterias_array)->find();
+            
+             $count = count($json_array[$key]['details']);
+             $uso_baterias_count = $uso_baterias->count();
+             foreach($uso_baterias as $ubb){
+
+                 $nombre = $ubb->getBaterias()->getBateriasNombre();
+                 $today = new DateTime();
+                 if(!is_null($ubb->getFechaEntrada()) && is_null($ubb->getFechaCarga()) && is_null($ubb->getFechaDescanso()) && is_null($ubb->getFechaSalida())){
+                     $estado = 'Espera';
+                     $time = new DateTime($ubb->getFechaEntrada());
+                 }elseif (!is_null($ubb->getFechaEntrada()) && !is_null($ubb->getFechaCarga()) && is_null($ubb->getFechaDescanso()) && is_null($ubb->getFechaSalida())) {
+                     $estado = 'Carga';
+                     $time = new DateTime($ubb->getFechaCarga());
+                 }
+                 elseif (!is_null($ubb->getFechaEntrada()) && !is_null($ubb->getFechaCarga()) && !is_null($ubb->getFechaDescanso()) && is_null($ubb->getFechaSalida())) {
+                     $estado = 'Descanso';
+                     $time = new DateTime($ubb->getFechaDescanso());
+                 }
+
+                 $tiempo = $time->diff($today);
+                 
+                 $json_array[$key]['details'][$count]['Bateria'] = $nombre;
+                 $json_array[$key]['details'][$count]['Estado'] = $estado;
+                 $json_array[$key]['details'][$count]['Tiempo'] = $tiempo->d.'D '.$tiempo->h.'H '.$tiempo->i.'M';
+                 
+                 $count ++;
+
+
+             }
+
+         }
+        
+    
+    }
+    
+    
+    /*
+    
+    
     $num_lugares = BodegasQuery::create()->filterByCg($fila['cgid'])->count();
     $bodegas = BodegasQuery::create()->select('Id')->filterByCg($fila['cgid'])->find()->toArray();
     
@@ -268,7 +441,9 @@ $json_array = array();
     $query = "SELECT  * FROM uso_baterias_bodega WHERE uso_baterias_bodega.bg IN (".  implode(',', $bodegas).") AND uso_baterias_bodega.fecha_entrada <>  '0000-00-00 00:00:00' AND uso_baterias_bodega.fecha_salida = '0000-00-00 00:00:00'  AND uso_baterias_bodega.fecha_carga <> '0000-00-00 00:00:00'  AND uso_baterias_bodega.fecha_descanso = '0000-00-00 00:00:00'";
     $baterias_carga = $mysqli->query($query);
     $baterias_carga = $baterias_carga->num_rows; 
-
+    
+    if(!is_null($bodegas))
+    
     if($baterias_carga == 0){
          $tmp['Tiempo'] = 'Disponible';
     }else{
@@ -352,8 +527,18 @@ $json_array = array();
          }
          $id = $fila['cgid'];
          $json_array[] = $tmp;
+     
+     */
          
  }
- $json = json_encode($json_array);
+
+ //POR ALGUNA RAZON EXTRAÑA EL JSON QUE REGRESO NO FUNCIONA SI NO HAGO ESTO
+ $json_array2 = array();
+ foreach ($json_array as $value){
+     $json_array2[] = $value;
+ }
+ 
+
+ $json = json_encode($json_array2);
 header('Content-Type: application/json');
 echo $json;

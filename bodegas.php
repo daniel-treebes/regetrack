@@ -5,7 +5,7 @@ $nombrePagina="Cargadores";
 $acciones=[];
 $acciones[0][0]="Exportar";
 $acciones[0][1]="javascript:exporta();";
-if($loggedInUser->checkPermission(array(2))){
+if($loggedInUser->checkPermission(array(1))){
    $acciones[1][0]="Nuevo";
    $acciones[1][1]='/sistema.php?ruta=alta/cargadores'; 
 }
@@ -361,11 +361,13 @@ function deshabilita(cual) {
 						<th>Lugares Disp.</th>
 						<th>Bat. En Espera</th>
                         <th>Bat. En Descanso</th>
+                        <th>Bat. En Listo</th>
                         <?php if($tipo == 'Cargador') :?>
                             <th>Tiempo En Carga</th>
                         <?php else:?>
                             <th style="display: none">Tiempo En Carga</th>
                         <?php endif;?>
+                        
                         <th>Estatus</th>
 						<th>Opciones</th>
 					</tr>
@@ -482,13 +484,12 @@ require_once("tema/comun/footer.php");
                 { "mData": "Disponibles" },
                 { "mData": "Espera" },
                 { "mData": "Descanso" },
+                { "mData": "Listo" },
                 { "mData": "Tiempo" },
                 { "mData": "Estado" },
                 { "mData": "Herramientas" },
             ];
-       
-        console.log()
-  
+
         $.ajax({
             "dataType": 'json',
             "contentType": "application/json; charset=utf-8",
@@ -502,7 +503,7 @@ require_once("tema/comun/footer.php");
 //                    "sScrollY": "510px",
                     "iDisplayLength": 10,
                     "bPaginate": true,
-                    "aaData": data, 
+                    "data": data, 
                     "aaSorting": [[1, 'asc']],
                     "aoColumns": columns,
                     "oLanguage": {
@@ -514,15 +515,15 @@ require_once("tema/comun/footer.php");
                         }
 
                        // if(tipo == 'Cargador'){
-                            if($(row).find('td').eq(8).text() == "Habilitado"){
+                            if($(row).find('td').eq(9).text() == "Habilitado"){
+                                $(row).find('td').eq(9).css('color','green').css('font-weight','bold'); 
+                             }else{
+                                 $(row).find('td').eq(9).css('color','red').css('font-weight','bold'); 
+                             }
+                             if($(row).find('td').eq(8).text() == "Disponible"){
                                 $(row).find('td').eq(8).css('color','green').css('font-weight','bold'); 
                              }else{
-                                 $(row).find('td').eq(8).css('color','red').css('font-weight','bold'); 
-                             }
-                             if($(row).find('td').eq(7).text() == "Disponible"){
-                                $(row).find('td').eq(7).css('color','green').css('font-weight','bold'); 
-                             }else{
-                                  $(row).find('td').eq(7).css('color','red').css('font-weight','bold'); 
+                                $(row).find('td').eq(8).css('color','red').css('font-weight','bold'); 
                             }
                        // }else{
                            
@@ -534,7 +535,7 @@ require_once("tema/comun/footer.php");
                             $('#tablacargadores tbody tr').filter(function(){
                                 
                                 $(this).find('td').eq(2).hide();
-                                 $(this).find('td').eq(7).hide();
+                                 $(this).find('td').eq(8).hide();
                             });
                         }
                       }
@@ -598,13 +599,13 @@ require_once("tema/comun/footer.php");
                     oTable.yadcf([
                         {column_number : 1,filter_type: "multi_select",select_type: 'chosen',filter_container_id: 'filter_0'},
                         {column_number : 2,filter_type: "multi_select",select_type: 'chosen',filter_container_id: 'filter_1'},
-                        {column_number : 8,filter_type: "multi_select",select_type: 'chosen',filter_container_id: 'filter_8'},
+                        {column_number : 9,filter_type: "multi_select",select_type: 'chosen',filter_container_id: 'filter_8'},
 
                     ]);
                 }else{
                      oTable.yadcf([
                         {column_number : 1,filter_type: "multi_select",select_type: 'chosen',filter_container_id: 'filter_0'},
-                        {column_number : 7,filter_type: "multi_select",select_type: 'chosen',filter_container_id: 'filter_8'},
+                        {column_number : 8,filter_type: "multi_select",select_type: 'chosen',filter_container_id: 'filter_8'},
 
                     ]);
                 }

@@ -43,6 +43,13 @@ if($habilitaid>0){
    
 }
 ?>
+<?php 
+    $infobt_readonly = "readonly";
+    if($loggedInUser->checkPermission(array(1))){
+        $infobt_readonly = "";
+    }
+?>
+
 <div class="col-md-6" id="indicadores1">
     <div class="portlet box  blue-sharp">
         <div class="portlet-title">
@@ -77,62 +84,62 @@ if($habilitaid>0){
                                 <input type="hidden" name="action" value="editarBaterias">
                                 <i class="fa fa-check " style="top: 0px; margin-top: 10px; color: green"></i>
                                 <i class="fa fa-close " style="top: 0px; margin-top: 10px; color: red; display: none"></i>
-                                <input ng-blur="verificaNombre('<?php echo $datosBateria['Nombre']?>')"  class="form-control" type="text" value="<?php echo $datosBateria['Nombre']?>" name="baterias_nombre">
+                                <input <?php echo $infobt_readonly ?> ng-blur="verificaNombre('<?php echo $datosBateria['Nombre']?>')"  class="form-control" type="text" value="<?php echo $datosBateria['Nombre']?>" name="baterias_nombre">
                             </div>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-md-3 control-label">Celdas</label>
                         <div class="col-md-9">
-                            <input name="baterias_c" number-mask type="text" class="form-control datos-cosa"  value="<?php  echo $datosBateria['Celdas'] ?> "> 
+                            <input <?php echo $infobt_readonly ?> name="baterias_c" number-mask type="text" class="form-control datos-cosa"  value="<?php  echo $datosBateria['Celdas'] ?> "> 
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-md-3 control-label">Factor K</label>
                         <div class="col-md-9">
-                            <input name="baterias_k" number-mask type="text" class="form-control datos-cosa"  value="<?php  echo $datosBateria['FactorK'] ?> "> 
+                            <input <?php echo $infobt_readonly ?> name="baterias_k" number-mask type="text" class="form-control datos-cosa"  value="<?php  echo $datosBateria['FactorK'] ?> "> 
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-md-3 control-label">Placas</label>
                         <div class="col-md-9">
-                            <input name="baterias_p" number-mask type="text" class="form-control datos-cosa"  value="<?php  echo $datosBateria['Placas'] ?> "> 
+                            <input <?php echo $infobt_readonly ?> name="baterias_p" number-mask type="text" class="form-control datos-cosa"  value="<?php  echo $datosBateria['Placas'] ?> "> 
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-md-3 control-label">Tipo</label>
                         <div class="col-md-9">
-                            <input name="baterias_t" type="text" class="form-control datos-cosa"  value="<?php  echo $datosBateria['Tipo'] ?> "> 
+                            <input <?php echo $infobt_readonly ?> name="baterias_t" type="text" class="form-control datos-cosa"  value="<?php  echo $datosBateria['Tipo'] ?> "> 
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-md-3 control-label">Enchufe</label>
                         <div class="col-md-9">
-                            <input name="baterias_e" type="text" class="form-control datos-cosa"  value="<?php  echo $datosBateria['Enchufe'] ?> "> 
+                            <input <?php echo $infobt_readonly ?> name="baterias_e" type="text" class="form-control datos-cosa"  value="<?php  echo $datosBateria['Enchufe'] ?> "> 
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-md-3 control-label">Modelo</label>
                         <div class="col-md-9">
-                            <input name="baterias_modelo" type="text" class="form-control datos-cosa"  value="<?php  echo $datosBateria['Modelo'] ?> "> 
+                            <input <?php echo $infobt_readonly ?> name="baterias_modelo" type="text" class="form-control datos-cosa"  value="<?php  echo $datosBateria['Modelo'] ?> "> 
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-md-3 control-label">Marca</label>
                         <div class="col-md-9">
-                            <input name="baterias_marca" type="text" class="form-control datos-cosa"  value="<?php  echo $datosBateria['Marca'] ?> "> 
+                            <input <?php echo $infobt_readonly ?> name="baterias_marca" type="text" class="form-control datos-cosa"  value="<?php  echo $datosBateria['Marca'] ?> "> 
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-md-3 control-label">Comprador</label>
                         <div class="col-md-9">
-                            <input name="baterias_comprador" type="text" class="form-control datos-cosa"  value="<?php  echo $datosBateria['Comprador'] ?> "> 
+                            <input <?php echo $infobt_readonly ?> name="baterias_comprador" type="text" class="form-control datos-cosa"  value="<?php  echo $datosBateria['Comprador'] ?> "> 
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-md-3 control-label">Serie</label>
                         <div class="col-md-9">
-                            <input name="baterias_numserie" type="text" class="form-control datos-cosa"  value="<?php  echo $datosBateria['Serie'] ?> "> 
+                            <input <?php echo $infobt_readonly ?>  name="baterias_numserie" type="text" class="form-control datos-cosa"  value="<?php  echo $datosBateria['Serie'] ?> "> 
                         </div>
                     </div>
                     <div class="form-group">
@@ -143,7 +150,9 @@ if($habilitaid>0){
                     </div>
                     <div class="row" style="padding-right: 15px;">
                         <div class="col-sm-2 col-sm-offset-10" style="padding-bottom: 15px; padding-top: 15px;">
-                            <button type="submit" class="btn btn-success">Guardar</button>
+                            <?php if($loggedInUser->checkPermission(array(1))) :?>
+                                <button type="submit" class="btn btn-success">Guardar</button>
+                            <?php endif;?>
                         </div>
                     </div>
                 </div>
@@ -151,13 +160,12 @@ if($habilitaid>0){
             </form>
         </div>
     </div>
-</div>
-<?php 
+    <?php 
 
     $montacargas_baterias = MontacargasBateriasQuery::create()->filterByIdbaterias($_GET['id'])->find();
 
 ?>
-<div class="col-md-6">
+
       <div class="portlet box  blue-sharp">
         <div class="portlet-title">
             <div class="caption">
@@ -174,20 +182,20 @@ if($habilitaid>0){
                 <div class="row" style="padding: 20px">
                     <?php foreach ($montacargas_baterias as $value) : ?>
                    
-                    <li style="display: inline-block;"><i class="fa fa-circle"></i><a href="/sistema.php?ruta=edita/montacargas&id=<?php echo $value->getIdmontacargas()?>"><?php echo $value->getMontacargas()->getMontacargasNombre()?></a></li>
+                    <li style="display: inline-block;" ><i class="fa fa-circle" style="font-size: 10px"></i><a href="/sistema.php?ruta=edita/montacargas&id=<?php echo $value->getIdmontacargas()?>"><?php echo $value->getMontacargas()->getMontacargasNombre()?></a></li>
                     
                     <?php endforeach; ?>
                 </div>  
                 </ul>
         </div>
     </div>
-</div>
+
 <?php 
 
     $cargadores_baterias = CargadoresBateriasQuery::create()->filterByIdbaterias($_GET['id'])->find();
 
 ?>
-<div class="col-md-6">
+
       <div class="portlet box  blue-sharp">
         <div class="portlet-title">
             <div class="caption">
@@ -204,68 +212,16 @@ if($habilitaid>0){
                 <div class="row" style="padding: 20px">
                     <?php foreach ($cargadores_baterias as $value) : ?>
                    
-                    <li style="display: inline-block;"><i class="fa fa-circle"></i><a href="/sistema.php?ruta=edita/cargadores&id=<?php echo $value->getIdcargadores()?>"><?php echo $value->getCargadores()->getCargadoresNombre()?></a></li>
+                    <li style="display: inline-block;" ><i class="fa fa-circle" style="font-size: 10px"></i><a href="/sistema.php?ruta=edita/cargadores&id=<?php echo $value->getIdcargadores()?>"><?php echo $value->getCargadores()->getCargadoresNombre()?></a></li>
                     
                     <?php endforeach; ?>
                 </div>  
                 </ul>
         </div>
     </div>
+    
 </div>
-
-<!--DATOS ESTADÍSTICOS-->
-<div class="col-md-6" id="indicadores2">
-    <div class="portlet box  blue-sharp">
-        <div class="portlet-title">
-            <div class="caption">
-                <i class="fa fa-bar-chart "></i>Estadísticas
-            </div>
-            <div class="tools">
-                <a href="" class="collapse" data-original-title="" title=""> </a>
-            </div>
-        </div>
-        <div class="portlet-body form">	   
-            <div class="form-actions right1 gray" >
-                <div class="form-body">
-                    <div class="col-md-4">
-                        <div class="easy-pie-chart">
-                           <center>Estado Actual<br><strong><?php echo $estadoAct;?></strong></center>
-                           <div class="number btestado" data-percent="<?php  echo $porcentaje; ?>">
-                              <span><?php echo $porcentaje; ?></span>% 
-                              <canvas height="75" width="75"></canvas>
-                           </div>
-                           <?php  echo $tiempoDeUso; ?> hrs / 8hrs
-                        </div>
-                    <br>
-                    </div>
-                    <div class="margin-bottom-10 visible-sm"></div>
-                    <div class="col-md-4">
-                        <div class="easy-pie-chart">
-                           <center>Promedio de uso<br>mes pasado</center>
-                           <div class="number btant" data-percent="<?php echo $ppromedioAnt;?>">
-                              <span><?php echo $ppromedioAnt;?>%</span> 
-                              <canvas height="75" width="75"></canvas>
-                           </div>
-                           <?php echo $tpromedioAnt;?> hrs / 8hrs
-                        </div>
-                    <br>
-                    </div>
-                    <div class="margin-bottom-10 visible-sm"> </div>
-                    <div class="col-md-4">
-                        <div class="easy-pie-chart">
-                           <center>Promedio de uso<br>mes actual</center>
-                           <div class="number btact" data-percent="<?php  echo $ppromedioAct; ?>">
-                              <span><?php  echo $ppromedioAct; ?></span>% 
-                              <canvas height="75" width="75"></canvas>
-                           </div>
-                           <?php echo $tpromedioAct;?> hrs / 8hrs
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>            
+          
 <?php
 //ALERTAS
 include("edita/alertas.php");

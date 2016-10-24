@@ -140,6 +140,12 @@ if($habilitaid>0){
    
 }
 ?>
+<?php 
+    $infomc_readonly = "readonly";
+    if($loggedInUser->checkPermission(array(1))){
+        $infomc_readonly = "";
+    }
+?>
 <div class="col-md-6" id="indicadores1">
     <div class="portlet box  blue-sharp">
         <div class="portlet-title">
@@ -157,7 +163,6 @@ if($habilitaid>0){
                 <div class="form-body" style="padding: 0px">
                     <?php if($message_montacargas) :?>
                         <div class="row" style="margin-left: 0px; margin-right: 0px; padding-right: 10px; padding-left: 10px; padding-top: 10px;">
-
                             <div class="alert alert-success">
                             <strong>Exito!</strong>
                             <?php echo $message_montacargas ?>
@@ -175,7 +180,7 @@ if($habilitaid>0){
                                 <input type="hidden" name="action" value="editarMontacargaas">
                                 <i class="fa fa-check " style="top: 0px; margin-top: 10px; color: green"></i>
                                 <i class="fa fa-close " style="top: 0px; margin-top: 10px; color: red; display: none"></i>
-                                <input ng-blur="verificaNombre('<?php echo$nombre?>')"  class="form-control" type="text" value="<?php echo $nombre?>" name="montacargas_nombre">
+                                <input <?php echo $infomc_readonly?> ng-blur="verificaNombre('<?php echo$nombre?>')"  class="form-control" type="text" value="<?php echo $nombre?>" name="montacargas_nombre">
                             </div>
                         </div>
                         
@@ -183,70 +188,74 @@ if($habilitaid>0){
                     <div class="form-group">
                         <label class="col-md-3 control-label">Celdas</label>
                         <div class="col-md-9">
-                            <input number-mask name="montacargas_c" type="text" class="form-control datos-cosa"  value="<?php  echo $celdas ?> "> 
+                            <input <?php echo $infomc_readonly?> number-mask name="montacargas_c" type="text" class="form-control datos-cosa"  value="<?php  echo $celdas ?> "> 
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-md-3 control-label">Factor K</label>
                         <div class="col-md-9">
-                            <input number-mask name="montacargas_k"  type="text" class="form-control datos-cosa"  value="<?php  echo $factork ?> "> 
+                            <input <?php echo $infomc_readonly?> number-mask name="montacargas_k"  type="text" class="form-control datos-cosa"  value="<?php  echo $factork ?> "> 
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-md-3 control-label">Placas</label>
                         <div class="col-md-9">
-                            <input number-mask name="montacargas_p" type="text" class="form-control datos-cosa"  value="<?php  echo $placas ?> "> 
+                            <input <?php echo $infomc_readonly?>  number-mask name="montacargas_p" type="text" class="form-control datos-cosa"  value="<?php  echo $placas ?> "> 
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-md-3 control-label">Tipo</label>
                         <div class="col-md-9">
-                            <input  name="montacargas_t" type="text" class="form-control datos-cosa"  value="<?php  echo $tipo ?> "> 
+                            <input <?php echo $infomc_readonly?>  name="montacargas_t" type="text" class="form-control datos-cosa"  value="<?php  echo $tipo ?> "> 
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-md-3 control-label">Enchufe</label>
                         <div class="col-md-9">
-                            <input  name="montacargas_e" type="text" class="form-control datos-cosa"  value="<?php  echo $enchufe ?> "> 
+                            <input <?php echo $infomc_readonly?> name="montacargas_e" type="text" class="form-control datos-cosa"  value="<?php  echo $enchufe ?> "> 
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-md-3 control-label">Modelo</label>
                         <div class="col-md-9">
-                            <input  name="montacargas_modelo" type="text" class="form-control datos-cosa"  value="<?php  echo $modelo ?> "> 
+                            <input <?php echo $infomc_readonly?> name="montacargas_modelo" type="text" class="form-control datos-cosa"  value="<?php  echo $modelo ?> "> 
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-md-3 control-label">Marca</label>
                         <div class="col-md-9">
-                            <input   name="montacargas_marca" type="text" class="form-control datos-cosa"  value="<?php  echo $marca ?> "> 
+                            <input <?php echo $infomc_readonly?>  name="montacargas_marca" type="text" class="form-control datos-cosa"  value="<?php  echo $marca ?> "> 
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-md-3 control-label">Comprador</label>
                         <div class="col-md-9">
-                            <input  name="montacargas_comprador" type="text" class="form-control datos-cosa"  value="<?php  echo $comprador ?> "> 
+                            <input <?php echo $infomc_readonly?> name="montacargas_comprador" type="text" class="form-control datos-cosa"  value="<?php  echo $comprador ?> "> 
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-md-3 control-label">Serie</label>
                         <div class="col-md-9">
-                            <input  name="montacargas_numserie" type="text" class="form-control datos-cosa"  value="<?php  echo $serie ?> "> 
+                            <input <?php echo $infomc_readonly?> name="montacargas_numserie" type="text" class="form-control datos-cosa"  value="<?php  echo $serie ?> "> 
                         </div>
                     </div>
+                   
                     <div class="row">
                         <div class="col-sm-2 col-sm-offset-10" style="padding-bottom: 15px; padding-top: 15px;">
-                            <button type="submit" class="btn btn-success">Guardar</button>
+                             <?php if($loggedInUser->checkPermission(array(1))) :?>
+                                <button type="submit" class="btn btn-success">Guardar</button>
+                             <?php endif;?>
                         </div>
                     </div>
+                   
                 </div>
             </div>
             </form>
         </div>
         
     </div>
-<<<<<<< HEAD
-            <?php if($loggedInUser->checkPermission(array(1,2))) :?>
+
+
             <?php
 
             $sucursales = explode(',', $loggedInUser->sucursales);
@@ -286,155 +295,69 @@ if($habilitaid>0){
                         <div class="row" style="padding: 20px">
                             <input type="hidden" name="idmontacargas" value="<?php echo $_GET['id']?>">
                             <input type="hidden" name="action" value="asignaBaterias">
-                            <?php foreach ($baterias_modelos as $modelo) :?>
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <div class="mt-checkbox-list">
-                                            <?php if(!is_null($modelo['tipo'])) :?>
-                                            <label style="display: block" class="mt-checkbox mt-checkbox-outline"> <?php echo $modelo['tipo']?>
+                            <?php  if($loggedInUser->checkPermission(array(1))) :?>
+                                <?php foreach ($baterias_modelos as $modelo) :?>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <div class="mt-checkbox-list">
+                                                <?php if(!is_null($modelo['tipo'])) :?>
                                                 <?php if(in_array($modelo['tipo'], $montacargas_baterias_array)):?>
-                                                    <input  value="<?php echo $modelo['tipo']?>" name="baterias[]" type="checkbox" checked>
+                                                    <input  style="display: inline-block" value="<?php echo $modelo['tipo']?>" name="baterias[]" type="checkbox" checked>
                                                 <?php else:?>
-                                                    <input  value="<?php echo $modelo['tipo']?>" name="baterias[]" type="checkbox">
+                                                    <input style="display: inline-block" value="<?php echo $modelo['tipo']?>" name="baterias[]" type="checkbox">
                                                 <?php endif;?>
                                                 <span></span>
-                                            </label>
-                                            <?php else:?>
-                                                <label style="display: block" class="mt-checkbox mt-checkbox-outline"> <?php echo $modelo['baterias_modelo']?>
-                                                    <?php if(in_array($modelo['baterias_modelo'], $montacargas_baterias_array)):?>
-                                                    <input value="<?php echo $modelo['baterias_modelo']?>" name="baterias[]" type="checkbox" checked>
-                                                    <?php else:?>
-                                                          <input value="<?php echo $modelo['baterias_modelo']?>" name="baterias[]" type="checkbox">
-                                                    <?php endif;?>
-                                                  
-                                                    <span></span>
+                                                <label style="display: inline-block" class="mt-checkbox mt-checkbox-outline"> <?php echo $modelo['tipo']?>
+
                                                 </label>
-                                            <?php endif;?>
+                                                <?php else:?>
+                                                     <?php if(in_array($modelo['baterias_modelo'], $montacargas_baterias_array)):?>
+                                                        <input style="display: inline-block" value="<?php echo $modelo['baterias_modelo']?>" name="baterias[]" type="checkbox" checked>
+                                                        <?php else:?>
+                                                              <input value="<?php echo $modelo['baterias_modelo']?>" name="baterias[]" type="checkbox">
+                                                        <?php endif;?>
+                                                    <label style="display: inline-block" class="mt-checkbox mt-checkbox-outline"> <?php echo $modelo['baterias_modelo']?>
+
+
+                                                        <span></span>
+                                                    </label>
+                                                <?php endif;?>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            <?php endforeach;?>
+                                <?php endforeach;?>
+                            <?php else :?>
+                                <?php foreach ($montacargas_baterias_array as $value) :?>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <div class="mt-checkbox-list">
+                                                <label style="display: inline-block" class="mt-checkbox mt-checkbox-outline"> <?php echo $value?>
+                                                     <span></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <?php endforeach;?>
+                            <?php endif;?>
                         </div>
+                        <?php  if($loggedInUser->checkPermission(array(1))) :?>
                         <div class="row">
                             <div class="col-sm-2 col-sm-offset-10" style="padding-bottom: 15px;">
                                 <button type="submit" class="btn btn-success">Guardar</button>
                             </div>
                         </div>
+                        <?php endif;?>
                     </form>
                 </div>
             </div>
-            <?php endif;?>
+
 
     
 </div>
 
 
 <!--DATOS ESTADÍSTICOS-->
-        
-=======
-    <?php if($loggedInUser->checkPermission(array(1,2))) :?>
-    <?php
-
-    $sucursales = explode(',', $loggedInUser->sucursales);
-    $baterias_modelos = BateriasQuery::create()->withColumn('baterias_modelo')->withColumn("CONCAT(baterias_c,'-',baterias_k,'-',baterias_p,'-',baterias_t,'-',baterias_e,' (',baterias_volts,'V - ',baterias_amperaje,'Ah)')","tipo")->select(array('tipo'))->filterByIdsucursal($sucursales)->groupBy('tipo')->find();
-    $montacargas_baterias = MontacargasBateriasQuery::create()->joinBaterias()->withColumn("CONCAT(baterias_c,'-',baterias_k,'-',baterias_p,'-',baterias_t,'-',baterias_e,' (',baterias_volts,'V - ',baterias_amperaje,'Ah)')","tipo")->select(array('tipo','Baterias.BateriasModelo'))->groupBy('tipo')->filterByIdmontacargas($_GET['id'])->find()->toArray(null,false,  BasePeer::TYPE_FIELDNAME);
-    $montacargas_baterias_array = array();
-    foreach ($montacargas_baterias as $value){
-        if(!is_null($value['tipo'])){
-            $montacargas_baterias_array[] = $value['tipo'];
-        }else{
-            $montacargas_baterias_array[] = $value['Baterias.BateriasModelo'];
-        }
-    }
-    ?>
-    
-    <div class="portlet box  blue-sharp">
-        <div class="portlet-title">
-            <div class="caption">
-               <i class="icon-bateria" style="font-size: 25px;margin-top: 2px;"></i>
-                <span class="caption-subject">Asociación de baterias</span>
-            </div>
-            <div class="tools">
-                    <a href="" class="collapse" data-original-title="" title=""> </a>
-                     
-            </div>
-        </div>
-        <div class="portlet-body form" >
-            <form role="form" name="MontacargasBateriasForm" method="post" action="<?php echo $_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING']?>">
-                <?php if($message_baterias) :?>
-                    <div class="row" style="margin-left: 0px; margin-right: 0px; padding-right: 20px; padding-left: 20px; padding-top: 20px;">
-                
-                        <div class="alert alert-success">
-                        <strong>Exito!</strong>
-                        <?php echo $message_baterias ?>
-                        </div>
-                    </div>
-                <?php endif;?>
-                <div class="row" style="padding: 20px">
-                    <input type="hidden" name="idmontacargas" value="<?php echo $_GET['id']?>">
-                    <input type="hidden" name="action" value="asignaBaterias">
-                    <?php foreach ($baterias_modelos as $modelo) :?>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <div class="mt-checkbox-list">
-                                    <?php if(!is_null($modelo['tipo'])) :?>
-                                    <label style="display: block" class="mt-checkbox mt-checkbox-outline"> <?php echo $modelo['tipo']?>
-                                        <?php if(in_array($modelo['tipo'], $montacargas_baterias_array)):?>
-                                            <input  value="<?php echo $modelo['tipo']?>" name="baterias[]" type="checkbox" checked>
-                                        <?php else:?>
-                                            <input  value="<?php echo $modelo['tipo']?>" name="baterias[]" type="checkbox">
-                                        <?php endif;?>
-                                        <span></span>
-                                    </label>
-                                    <?php else:?>
-                                        <label style="display: block" class="mt-checkbox mt-checkbox-outline"> <?php echo $modelo['baterias_modelo']?>
-                                            <?php if(in_array($modelo['baterias_modelo'], $montacargas_baterias_array)):?>
-                                            <input value="<?php echo $modelo['baterias_modelo']?>" name="baterias[]" type="checkbox" checked>
-                                            <?php else:?>
-                                                  <input value="<?php echo $modelo['baterias_modelo']?>" name="baterias[]" type="checkbox">
-                                            <?php endif;?>
-                                          
-                                            <span></span>
-                                        </label>
-                                    <?php endif;?>
-                                </div>
-                            </div>
-                        </div>
-                    <?php endforeach;?>
-                </div>
-                <div class="row">
-                    <div class="col-sm-2 col-sm-offset-10" style="padding-bottom: 15px;">
-                        <button type="submit" class="btn btn-success">Guardar</button>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-    <?php endif;?>
-    
-</div>
-
-<?php
-
-include("infobd.php");
-
-if($habilitaid>0){
-    //SI ESTÁ DESHABILITADO
-    include("habilita.php");
-}else{
-    //PINTA ACTIVIDADES QUE HACER?
-    include("cambia.php");
-    
-    //PROCEDIMIENTO DE DESHABILITADO
-    include("deshabilita.php");
-    //PROCEDIMIENTO DE MONTADO O DESMONTADO DE BATERÍA
-    echo '<div class="row">';
-        include("scan.php");
-    echo '</div>';
-}
-?>
-<!--DATOS ESTADÍSTICOS-->
->>>>>>> 3d1de66536b54b357f77db6903c3f0addb714743
+       
 <div class="col-md-6" id="indicadores2">
     <div class="portlet box  blue-sharp">
         <div class="portlet-title">

@@ -1,7 +1,7 @@
 function cancelacambios() {
    ocultaPasos();
    $('#indicadores1').show(1000);
-   $('#indicadores2').show(1000);
+   $('.indicadores2').show(1000);
    $('#indicadores3').show(1000);
    $('#indicadores4').show(1000);
    $('#indicadores5').show(1000);
@@ -17,7 +17,7 @@ function imprimeQr(tipo,id) {
 
 function deshabilita(idmc) {
    $('#indicadores1').hide(1000);
-   $('#indicadores2').hide(1000);
+   $('.indicadores2').hide(1000);
    $('#indicadores3').hide(1000);
    $('#indicadores4').hide(1000);
    $('#indicadores5').hide(1000);

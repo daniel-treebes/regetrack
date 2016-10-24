@@ -37,7 +37,8 @@ if(!empty($_POST))
 
 	if(count($errors) == 0)
 	{       
-               
+            
+       
 		//A security note here, never tell the user which credential was incorrect
 		if(!usernameExists($username))
 		{
@@ -45,8 +46,9 @@ if(!empty($_POST))
 		}
 		else
 		{
+                        
 			$userdetails = fetchUserDetails($username);
-                       
+                        
 			//See if the user's account is activated
 			if($userdetails["active"]==0)
 			{
@@ -77,13 +79,14 @@ if(!empty($_POST))
 					$loggedInUser->title = $userdetails["title"];
 					$loggedInUser->displayname = $userdetails["display_name"];
 					$loggedInUser->username = $userdetails["user_name"];
-					$loggedInUser->idempresa = $userdetails["idempresa"];
 					$loggedInUser->idsucursal = $userdetails["idsucursal"];
-				
+                                        
 					//SI ES ADMINISTRADOR Y NO TIENE UNA SUCURSAL ASIGNADA LE ASIGNAMOS LA PRIMERA ACTIVA
 					if(is_null($loggedInUser->idsucursal)){
 						$hoy = time();
-						$sucursal_activa = SucursalQuery::create()->filterByIdempresa($loggedInUser->idempresa)->findOne();
+                                                $empresa = EmpresaQuery::create()->filterByIdusuario($loggedInUser->user_id)->findOne();
+						$sucursal_activa = SucursalQuery::create()->filterByIdempresa($empresa->getIdempresa())->findOne();
+                                                $loggedInUser->idempresa = $empresa->getIdempresa();
 						$loggedInUser->sucursal_activa = $sucursal_activa->getIdsucursal();
 						
 						$query=" SELECT idsucursal

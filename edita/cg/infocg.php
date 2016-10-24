@@ -71,6 +71,12 @@ if($habilitaid>0){
 }
 
 ?>
+<?php 
+    $infocg_readonly = "readonly";
+    if($loggedInUser->checkPermission(array(1))){
+        $infocg_readonly = "";
+    }
+?>
 <div class="col-md-6" id="indicadores1">
     <div class="portlet box  blue-sharp" ng-controller="CargadoresController">
         <div class="portlet-title">
@@ -85,78 +91,74 @@ if($habilitaid>0){
             <div class="form-actions right1 gray" style="padding: 0px;">
                 <div class="form-body" style="padding: 0px;">
                     <?php if($message_cargadores) :?>
-                            <div class="row" style="margin-left: 0px; margin-right: 0px; padding-right: 10px; padding-left: 10px; padding-top: 10px;">
-                        
-                                <div class="alert alert-success">
-                                <strong>Exito!</strong>
-                                <?php echo $message_cargadores ?>
-                                </div>
+                        <div class="row" style="margin-left: 0px; margin-right: 0px; padding-right: 10px; padding-left: 10px; padding-top: 10px;">
+
+                            <div class="alert alert-success">
+                            <strong>Exito!</strong>
+                            <?php echo $message_cargadores ?>
                             </div>
+                        </div>
                     <?php endif;?>
                     <form role="form" name="CargadoresBateriasForm" method="post" action="<?php echo $_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING']?>">
                     <div class="form-group">
                         <label class="col-md-3 control-label">Nombre</label>
                         <div class="col-md-9">
                             <div class="input-icon right">
+                                <select name="idsucursal" style="display: none"> 
+                                    <option value="<?php echo $datosCargador['IdSucursal']?>" selected>Sucursal</option>
+                                </select>
+                                <input type="hidden" name="idcargadores" value="<?php echo $_GET['id']?>">
+                                <input type="hidden" name="action" value="editarCargador">
                                 <i class="fa fa-check " style="top: 0px; margin-top: 10px; color: green"></i>
                                 <i class="fa fa-close " style="top: 0px; margin-top: 10px; color: red; display: none"></i>
-                                <input ng-blur="verificaNombre('<?php echo $datosCargador['Nombre']?>')"  class="form-control" type="text" value="<?php echo $datosCargador['Nombre']?>" name="cargadores_nombre">
+                                <input <?php echo $infocg_readonly ?> ng-blur="verificaNombre('<?php echo $datosCargador['Nombre']?>')"  class="form-control" type="text" value="<?php echo $datosCargador['Nombre']?>" name="cargadores_nombre">
                             </div>
                         </div>
                     </div>
-                     <input type="hidden" name="idcargadores" value="<?php echo $_GET['id']?>">
-                    <input type="hidden" name="action" value="editarCargador">
-					<?php if ($datosCargador['ctipo']=='Cargador') {?>
-						<div class="form-group">
-							<label class="col-md-3 control-label">Volts</label>
-							<div class="col-md-9">
-
-                                                            
-                                                            <select name="idsucursal" style="display: none"> 
-                                                                <option value="<?php echo $datosCargador['IdSucursal']?>" selected>Sucursal</option>
-                                                            </select>
-                                                           
-
-
-							</div>
-						</div>
+                    <?php if ($datosCargador['ctipo']=='Cargador') {?>
                         <div class="form-group">
-							<label class="col-md-3 control-label">Amperios</label>
-							<div class="col-md-9">
-                                <input name="cargadores_amperaje"  number-mask type="text" class="form-control datos-cosa"  value="<?php  echo $datosCargador['Ampere'] ?> "> 
-							</div>
-						</div>
+                            <label class="col-md-3 control-label">Volts</label>
+                            <div class="col-md-9">
+                                <input <?php echo $infocg_readonly ?> name="cargadores_volts"  number-mask type="text" class="form-control datos-cosa"  value="<?php  echo $datosCargador['Volts'] ?> "> 
+                            </div>
+                        </div>
                         <div class="form-group">
-							<label class="col-md-3 control-label">Enchufe</label>
-							<div class="col-md-9">
-                                <input  name="cargadores_e" type="text" class="form-control datos-cosa"  value="<?php  echo $datosCargador['Enchufe'] ?> "> 
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-md-3 control-label">Modelo</label>
-							<div class="col-md-9">
-								<input  name="cargadores_modelo"  type="text" class="form-control datos-cosa" value="<?php  echo $datosCargador['Modelo'] ?> "> 
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-md-3 control-label">Marca</label>
-							<div class="col-md-9">
-								<input  name="cargadores_marca" type="text" class="form-control datos-cosa" value="<?php  echo $datosCargador['Marca'] ?> "> 
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-md-3 control-label">Comprador</label>
-							<div class="col-md-9">
-								<input  name="cargadores_comprador"  type="text" class="form-control datos-cosa"" value="<?php  echo $datosCargador['Comprador'] ?> "> 
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-md-3 control-label">Serie</label>
-							<div class="col-md-9">
-								<input  name="cargadores_numserie"  type="text" class="form-control datos-cosa" value="<?php  echo $datosCargador['Serie'] ?> "> 
-							</div>
-						</div>
-					<?php } ?>
+                            <label class="col-md-3 control-label">Amperios</label>
+                            <div class="col-md-9">
+                                <input <?php echo $infocg_readonly ?> name="cargadores_amperaje"  number-mask type="text" class="form-control datos-cosa"  value="<?php echo $datosCargador['Ampere'] ?> "> 
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-3 control-label">Enchufe</label>
+                            <div class="col-md-9">
+                                <input  <?php echo $infocg_readonly ?> name="cargadores_e" type="text" class="form-control datos-cosa"  value="<?php echo $datosCargador['Enchufe'] ?> "> 
+                            </div>
+                        </div>
+                        <div class="form-group">
+                                <label class="col-md-3 control-label">Modelo</label>
+                                <div class="col-md-9">
+                                    <input  <?php echo $infocg_readonly ?> name="cargadores_modelo"  type="text" class="form-control datos-cosa" value="<?php  echo $datosCargador['Modelo'] ?> "> 
+                                </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-3 control-label">Marca</label>
+                            <div class="col-md-9">
+                                <input  <?php echo $infocg_readonly ?> name="cargadores_marca" type="text" class="form-control datos-cosa" value="<?php  echo $datosCargador['Marca'] ?> "> 
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-3 control-label">Comprador</label>
+                            <div class="col-md-9">
+                                    <input  <?php echo $infocg_readonly ?> name="cargadores_comprador"  type="text" class="form-control datos-cosa"" value="<?php  echo $datosCargador['Comprador'] ?> "> 
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-3 control-label">Serie</label>
+                            <div class="col-md-9">
+                                <input <?php echo $infocg_readonly ?>  name="cargadores_numserie"  type="text" class="form-control datos-cosa" value="<?php  echo $datosCargador['Serie'] ?> "> 
+                            </div>
+                        </div>
+                    <?php } ?>
                     <div class="form-group">
                         <label class="col-md-3 control-label">Espacios</label>
                         <div class="col-md-9">
@@ -171,20 +173,23 @@ if($habilitaid>0){
                     </div>
                     <div class="row">
                         <div class="col-sm-2 col-sm-offset-10" style="padding-bottom: 15px; padding-top: 15px;">
-                            <button type="submit" class="btn btn-success">Guardar</button>
+                             <?php if($loggedInUser->checkPermission(array(1))) :?>
+                                <button type="submit" class="btn btn-success">Guardar</button>
+                             <?php endif;?>
                         </div>
                     </div>
-						<input type="hidden" name="idcargadores" value="<?php echo $_GET['id']?>">
-						<input type="hidden" name="action" value="editarCargador">
+                        <input type="hidden" name="idcargadores" value="<?php echo $_GET['id']?>">
+                        <input type="hidden" name="action" value="editarCargador">
                     </form>
                 </div>
             </div>
         </div>
     </div>
 
-    
-    <?php
-	if($loggedInUser->checkPermission(array(1,2)) && $datosCargador['ctipo']=='Cargador' ){
+        
+        <?php if ($datosCargador['ctipo']=='Cargador') :?>
+        <?php
+        
         $sucursales = explode(',', $loggedInUser->sucursales);
         $baterias_modelos = BateriasQuery::create()->withColumn('baterias_modelo')->withColumn("CONCAT(baterias_c,'-',baterias_k,'-',baterias_p,'-',baterias_t,'-',baterias_e,' (',baterias_volts,'V - ',baterias_amperaje,'Ah)')","tipo")->select(array('tipo'))->filterByIdsucursal($sucursales)->groupBy('tipo')->find();
         $cargadores_baterias = CargadoresBateriasQuery::create()->joinBaterias()->withColumn("CONCAT(baterias_c,'-',baterias_k,'-',baterias_p,'-',baterias_t,'-',baterias_e,' (',baterias_volts,'V - ',baterias_amperaje,'Ah)')","tipo")->select(array('tipo','Baterias.BateriasModelo'))->groupBy('tipo')->filterByIdcargadores($_GET['id'])->find()->toArray(null,false,  BasePeer::TYPE_FIELDNAME);
@@ -197,7 +202,7 @@ if($habilitaid>0){
             }
         }
         ?>
-            <div class="portlet box  blue-sharp">
+        <div class="portlet box  blue-sharp">
                 <div class="portlet-title">
                     <div class="caption">
                        <i class="icon-bateria" style="font-size: 25px;margin-top: 2px;"></i>
@@ -222,26 +227,28 @@ if($habilitaid>0){
                         <div class="row" style="padding: 20px">
                             <input type="hidden" name="idcargadores" value="<?php echo $_GET['id']?>">
                             <input type="hidden" name="action" value="asignaBaterias">
-                            <?php foreach ($baterias_modelos as $modelo) :?>
+                            <?php if($loggedInUser->checkPermission(array(1))) :?>
+                                <?php foreach ($baterias_modelos as $modelo) :?>
                                 <div class="col-sm-6">
                                     <div class="form-group">
                                         <div class="mt-checkbox-list">
                                             <?php if(!is_null($modelo['tipo'])) :?>
-                                            <label style="display: block" class="mt-checkbox mt-checkbox-outline"> <?php echo $modelo['tipo']?>
-                                                <?php if(in_array($modelo['tipo'], $cargadores_baterias_array)):?>
-                                                    <input  value="<?php echo $modelo['tipo']?>" name="baterias[]" type="checkbox" checked>
+                                            <?php if(in_array($modelo['tipo'], $cargadores_baterias_array)):?>
+                                                    <input style="display: inline-block" value="<?php echo $modelo['tipo']?>" name="baterias[]" type="checkbox" checked>
                                                 <?php else:?>
-                                                    <input  value="<?php echo $modelo['tipo']?>" name="baterias[]" type="checkbox">
-                                                <?php endif;?>
+                                                    <input style="display: inline-block" value="<?php echo $modelo['tipo']?>" name="baterias[]" type="checkbox">
+                                            <?php endif;?>
+                                            <label style="display: inline-block" class="mt-checkbox mt-checkbox-outline"> <?php echo $modelo['tipo']?>                           
                                                 <span></span>
                                             </label>
                                             <?php else:?>
-                                                <label style="display: block" class="mt-checkbox mt-checkbox-outline"> <?php echo $modelo['baterias_modelo']?>
-                                                    <?php if(in_array($modelo['baterias_modelo'], $cargadores_baterias_array)):?>
-                                                    <input value="<?php echo $modelo['baterias_modelo']?>" name="baterias[]" type="checkbox" checked>
+                                                <?php if(in_array($modelo['baterias_modelo'], $cargadores_baterias_array)):?>
+                                                    <input style="display: inline-block" value="<?php echo $modelo['baterias_modelo']?>" name="baterias[]" type="checkbox" checked>
                                                     <?php else:?>
-                                                          <input value="<?php echo $modelo['baterias_modelo']?>" name="baterias[]" type="checkbox">
-                                                    <?php endif;?>
+                                                          <input style="display: inline-block" value="<?php echo $modelo['baterias_modelo']?>" name="baterias[]" type="checkbox">
+                                                <?php endif;?>
+                                                <label style="display: inline-block" class="mt-checkbox mt-checkbox-outline"> <?php echo $modelo['baterias_modelo']?>
+                                                    
                                                   
                                                     <span></span>
                                                 </label>
@@ -250,16 +257,32 @@ if($habilitaid>0){
                                     </div>
                                 </div>
                             <?php endforeach;?>
+                            <?php else :?>
+                                <?php foreach ($cargadores_baterias_array as $value) :?>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <div class="mt-checkbox-list">
+                                                <label style="display: inline-block" class="mt-checkbox mt-checkbox-outline"> <?php echo $value?>
+                                                     <span></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <?php endforeach;?>
+                            <?php endif;?>
                         </div>
                         <div class="row">
                             <div class="col-sm-2 col-sm-offset-10" style="padding-bottom: 15px;">
-                                <button type="submit" class="btn btn-success">Guardar</button>
+                                <?php if($loggedInUser->checkPermission(array(1))) :?>
+                                    <button type="submit" class="btn btn-success">Guardar</button>
+                                <?php endif;?>
                             </div>
                         </div>
                     </form>
                 </div>
             </div>
-	<?php } ?>
+        <?php endif;?>
+
 
 </div>
 
@@ -320,7 +343,7 @@ for($e=1;$e<=4;$e++){
 	}
 ?>
 <!--DATOS ESTADÍSTICOS Cargador-->
-<div class="col-md-6" id="indicadores2">
+<div class="col-md-6 indicadores2">
     <div class="portlet box  blue-sharp">
         <div class="portlet-title">
             <div class="caption">

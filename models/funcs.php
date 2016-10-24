@@ -306,7 +306,8 @@ function fetchAllUsers()
 
 //Retrieve complete user information by username, token or ID
 function fetchUserDetails($username=NULL,$token=NULL, $id=NULL)
-{
+{   
+
 	if($username!=NULL) {
 		$column = "user_name";
 		$data = $username;
@@ -333,21 +334,22 @@ function fetchUserDetails($username=NULL,$token=NULL, $id=NULL)
 		title,
 		sign_up_stamp,
 		last_sign_in_stamp,
-                idsucursal,
-                idempresa
-		FROM ".$db_table_prefix."users
-                JOIN empresa ON empresa.idusuario = id
+                idsucursal
+		FROM ".$db_table_prefix."users          
 		WHERE
 		$column = ?
 		LIMIT 1");
 		$stmt->bind_param("s", $data);
 	
 	$stmt->execute();
-        
-	$stmt->bind_result($id, $user, $display, $password, $email, $token, $activationRequest, $passwordRequest, $active, $title, $signUp, $signIn,$idsucursal,$idempresa);
-	while ($stmt->fetch()){
-		$row = array('id' => $id, 'user_name' => $user, 'display_name' => $display, 'password' => $password, 'email' => $email, 'activation_token' => $token, 'last_activation_request' => $activationRequest, 'lost_password_request' => $passwordRequest, 'active' => $active, 'title' => $title, 'sign_up_stamp' => $signUp, 'last_sign_in_stamp' => $signIn,'idsucursal' => $idsucursal,'idempresa' => $idempresa);
-	}
+       
+	$stmt->bind_result($id, $user, $display, $password, $email, $token, $activationRequest, $passwordRequest, $active, $title, $signUp, $signIn,$idsucursal);
+	
+        while ($stmt->fetch()){
+		$row = array('id' => $id, 'user_name' => $user, 'display_name' => $display, 'password' => $password, 'email' => $email, 'activation_token' => $token, 'last_activation_request' => $activationRequest, 'lost_password_request' => $passwordRequest, 'active' => $active, 'title' => $title, 'sign_up_stamp' => $signUp, 'last_sign_in_stamp' => $signIn,'idsucursal' => $idsucursal);
+              
+                
+        }
 	$stmt->close();
         
 	return ($row);
