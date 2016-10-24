@@ -11,7 +11,7 @@ $montacargas=  MontacargasQuery::create()->filterByIdsucursal($loggedInUser->suc
 $montacargas_total = $montacargas->count();
 
 $montacargas_desh_query = "
-    SELECT id 
+    SELECT deshabilitamc.idmontacargas 
     FROM regetrac_sistemav2.deshabilitamc 
     JOIN montacargas ON deshabilitamc.idmontacargas = montacargas.idmontacargas 
     WHERE fecha_salida = '0000-00-00 00:00:00'  AND montacargas.idsucursal IN (".$loggedInUser->sucursales.") ;
@@ -21,7 +21,8 @@ $resultado = $mysqli->query($montacargas_desh_query);
 
 $montacargas_desh_arr = array();
 while( $fila = $resultado->fetch_array()){
-    $montacargas_desh_arr[] = $fila['id']; // Inside while loop
+  
+    $montacargas_desh_arr[] = $fila['idmontacargas']; // Inside while loop
 }
  
 $montacargas_desh = DeshabilitamcQuery::create()->filterByIdmontacargas($montacargas_desh_arr)->find();
