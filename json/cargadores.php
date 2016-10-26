@@ -254,7 +254,7 @@ while($fila = $resultado->fetch_array()) {
         $tmp['Listo']  = 0;
         
          $tmp['Lugares']++;
-        if($fila['disponible'] == 'SIN USAR'){
+         if(!is_null($fila['disponible'])){
             $tmp['Disponibles']++;
         }elseif(!is_null($fila['listo'])){
             $tmp['Listo'] ++;
@@ -345,7 +345,7 @@ while($fila = $resultado->fetch_array()) {
         
         $json_array[$key]['Lugares']++;
         $tmp['Lugares'] ++;
-        if($fila['disponible'] == 'SIN USAR'){
+        if(!is_null($fila['disponible'])){
             $json_array[$key]['Disponibles']++;
             $tmp['Disponibles']++;
         }elseif(!is_null($fila['listo'])){

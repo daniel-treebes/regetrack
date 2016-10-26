@@ -73,9 +73,12 @@ function importa2(){
 }		
 	</script>   
         <style>
-	 #tablabaterias{
-		min-width: 750px;
-	 }
+            #tablabaterias{
+                   min-width: 750px;
+            }
+            .pagination{
+                float: right;
+            }
         </style>
         <script src="assets/global/scripts/app.min.js"></script>
 	<script type="text/javascript">

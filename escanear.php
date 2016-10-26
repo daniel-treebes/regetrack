@@ -23,7 +23,7 @@
 				AND bg.cg=cg.idcargadores
 				AND tubb.fecha_carga!='0000-00-00 00:00:00'
 				AND tubb.fecha_descanso='0000-00-00 00:00:00'
-                                AND cg.idsucursal = ".$loggedInUser->sucursal_activa."
+                                AND cg.idsucursal IN (".$loggedInUser->sucursales.")
 			GROUP BY id
 		) as tu ON tu.id=cg.idcargadores 
 	  WHERE bt.idbaterias=tubb.bt
@@ -31,7 +31,7 @@
 		 AND bg.cg=cg.idcargadores
 		 AND tubb.fecha_carga='0000-00-00 00:00:00'
         ";
-      
+       
 	$resultado = $mysqli->query($queryBateriasEsperando);
 	$btEsperando=array();
 	while($fila = $resultado->fetch_array()) {
@@ -39,7 +39,7 @@
 		$btEsperando[$fila['nombrebt']]['t']=$fila['t_pcargar'];
 	}
 	
-   $queryBateriasSinLugar="SELECT baterias_numserie as nombrebt
+   $queryBateriasSinLugar="SELECT baterias_nombre as nombrebt
 	  FROM baterias
 	  
 	  WHERE baterias.idbaterias NOT IN (
@@ -54,51 +54,56 @@
 			WHERE fecha_salida='0000-00-00 00:00:00'
 			GROUP BY bt
 		 )
-		 AND baterias.idsucursal = ".$loggedInUser->sucursal_activa;
-                 
-   $resultado = $mysqli->query($queryBateriasSinLugar);
+		 AND baterias.idsucursal IN (".$loggedInUser->sucursales.")";
+            
+ 
 	$btSinlugar=array();
+        //$resultado = $mysqli->query($queryBateriasSinLugar);
 	while($fila = $resultado->fetch_array()) {
+             
 		$btSinlugar[]=$fila['nombrebt'];
 	}
-
+       
    $queryUltimoLugar="SELECT a.nombrebt,
 		 a.nombrel as lugar,
 		 MAX(a.ufecha) as desde
 	  FROM
-		 (  SELECT bt.baterias_numserie as nombrebt,
+		 (  SELECT bt.baterias_nombre as nombrebt,
 			   'C' as tipol,
 			   cg.cargadores_nombre as nombrel,
 			   MAX(u.fecha_salida) as ufecha
 			FROM  baterias as bt, cargadores as cg, bodegas as bg, uso_baterias_bodega as u
 			WHERE bt.idbaterias=u.bt
-			  
+			   AND cg.idsucursal IN (".$loggedInUser->sucursales.")
 			   AND bg.id=u.bg
 			   AND bg.cg=cg.idcargadores
+                           AND cg.cargadores_tipo = 'Cargador'
 			  
 			GROUP BY nombrebt
 			
 			UNION ALL
 			
-			SELECT bt.baterias_numserie as nombrebt,
+			SELECT bt.baterias_nombre as nombrebt,
 			   'M' as tipol,
 			   m.montacargas_nombre as nombrel,
 			   MAX(u.fecha_salida) as ufecha
 			FROM baterias as bt, montacargas as m, uso_baterias_montacargas as u
 			WHERE bt.idbaterias=u.bt
 			   AND m.idmontacargas=u.mc
+                           AND m.idsucursal IN (".$loggedInUser->sucursales.")
 			GROUP BY nombrebt
 			
 			UNION ALL
 			
-			SELECT bt.baterias_numserie as nombrebt,
+			SELECT bt.baterias_nombre as nombrebt,
 			   'S' as tipol,
 			   'SIN REGISTROS' as nombrel,
 			   '0000-00-00 00:00:00' as ufecha
 			FROM baterias as bt
+                        WHERE bt.idsucursal IN (".$loggedInUser->sucursales.")
 			GROUP BY nombrebt
 		 ) as a,
-		(  SELECT baterias_numserie as nombrebt
+		(  SELECT baterias_nombre as nombrebt
 			FROM baterias
 		
 			WHERE baterias.idbaterias NOT IN (
@@ -113,22 +118,73 @@
 				  WHERE fecha_salida='0000-00-00 00:00:00'
 				  GROUP BY bt
 			   )
+                           AND idsucursal IN (".$loggedInUser->sucursales.")
 			
 		) as b
 	  WHERE a.nombrebt=b.nombrebt
 	  GROUP BY a.nombrebt
 	  ORDER BY a.nombrebt		
    ";
-
+   
    $resultado = $mysqli->query($queryUltimoLugar);
 	$btSinlugar=array();
 	while($fila = $resultado->fetch_array()) {
 		$btSinlugar[$fila['nombrebt']]['lugar']=$fila['lugar'];
 		$btSinlugar[$fila['nombrebt']]['desde']=$fila['desde'];
 	}
-
-
-
+        
+     
+      $sucursales = explode(',', $loggedInUser->sucursales);  
+     //BATERIAS EN MONTAARGAS QUE DEBEN IR A BODEGA 
+      
+    $sucursales = explode(',', $loggedInUser->sucursales);    
+    $baterias_descanso_array = array();
+    $baterias_descanso = UsoBateriasBodegaQuery::create()->select(array('Bt','Bg',))->filterByFechaDescanso('0000-00-00 00:00:00', Criteria::NOT_EQUAL)->filterByFechaSalida('0000-00-00 00:00:00', Criteria::EQUAL)->useBodegasQuery()->useCargadoresQuery()->filterByCargadoresTipo('Cargador')->filterByIdsucursal($sucursales)->endUse()->endUse()->find()->toArray();
+    foreach ($baterias_descanso as $value){
+        $bateria = BateriasQuery::create()->findPk($value['Bt']);
+        
+        //¿HAY CARGADOR DISPONIBLE?
+        $amperaje = $bateria->getBateriasAmperaje();
+        $masmenos = ($amperaje * 10) / 100;
+        $amperaje_min = $amperaje - $masmenos;
+        $amperaje_max = $amperaje + $masmenos;
+        
+        $bodegas_count = BodegasQuery::create()->select(array('Id'))->useCargadoresQuery()->filterByIdsucursal($sucursales)->filterByCargadoresAmperaje(array('min' => $amperaje_min, 'max' => $amperaje_max))->endUse()->find()->count();
+        $disponibles = UsoBateriasBodegaQuery::create()->filterByBg($bodegas)->filterByFechasalida('0000-00-00 00:00:00', Criteria::NOT_EQUAL)->count();
+        if($disponibles==$bodegas_count){
+            $bodega = BodegasQuery::create()->findPk($value['Bg']);
+            $tmp['bateria'] = $bateria->getBateriasNombre();
+            $tmp['bodega'] = $bodega->getCargadores()->getCargadoresNombre();
+            $tmp['lugar'] = $bodega->getNombre();
+            $baterias_descanso_array[] = $tmp;
+        }
+    }
+        
+        
+     //BATERIAS EN ESPERA EN BODEGA Y DEBEN DE SER MOVIDAS A CARGADOR
+    
+    $baterias_espera_array = array();
+    $baterias_espera = UsoBateriasBodegaQuery::create()->select(array('Bt','Bg',))->filterByFechaEntrada('0000-00-00 00:00:00', Criteria::NOT_EQUAL)->filterByFechaSalida('0000-00-00 00:00:00', Criteria::EQUAL)->useBodegasQuery()->useCargadoresQuery()->filterByCargadoresTipo('Bodega')->filterByIdsucursal($sucursales)->endUse()->endUse()->find()->toArray();
+    foreach ($baterias_espera as $value){
+        $bateria = BateriasQuery::create()->findPk($value['Bt']);
+        
+        //¿HAY CARGADOR DISPONIBLE?
+        $amperaje = $bateria->getBateriasAmperaje();
+        $masmenos = ($amperaje * 10) / 100;
+        $amperaje_min = $amperaje - $masmenos;
+        $amperaje_max = $amperaje + $masmenos;
+        
+        $bodegas = BodegasQuery::create()->select(array('Id'))->useCargadoresQuery()->filterByIdsucursal($sucursales)->filterByCargadoresAmperaje(array('min' => $amperaje_min, 'max' => $amperaje_max))->endUse()->find()->toArray();
+        $disponibles = UsoBateriasBodegaQuery::create()->filterByBg($bodegas)->filterByFechasalida('0000-00-00 00:00:00')->count();
+        if($disponibles==0){
+            $bodega = BodegasQuery::create()->findPk($value['Bg']);
+            $tmp['bateria'] = $bateria->getBateriasNombre();
+            $tmp['bodega'] = $bodega->getCargadores()->getCargadoresNombre();
+            $tmp['lugar'] = $bodega->getNombre();
+            $baterias_espera_array[] = $tmp;
+        }
+    }
+          
    ?>
 <div class="row">
 	<div class="col-md-12">
@@ -198,6 +254,22 @@
 									 if ($datosbt['t']=='0H 0M') $tiempo='<blink style="color:red;text-decoration: blink;">'.$tiempo.'</blink>';
 									 echo '<h4>La batería <strong>'.$bt.'</strong> en cargador <strong>'.$datosbt['cg'].'</strong> le falta <strong>'.
 										 $tiempo.'</strong> para poder cargarla.</h4>';
+								 }
+								 echo '</div>';
+							 }
+                                                         if (count($baterias_espera_array)>0){
+								 echo '<div class="col-md-12"><h3 style="color:red;">BATERIAS EN BODEGA A SER REUBICADAS</h3>';
+								 foreach ($baterias_espera_array as $bt => $datosbt){	
+									 echo '<h4>La batería <strong>'.$datosbt['bateria'].'</strong> ubicada en <strong>'. $datosbt['bodega'].'</strong> lista para ser reubicada.</h4>';
+										
+								 }
+								 echo '</div>';
+							 }
+                                                         if (count($baterias_descanso_array)>0){
+								 echo '<div class="col-md-12"><h3 style="color:red;">BATERIAS PARA REUBICAR EN BODEGA</h3>';
+								 foreach ($baterias_espera_array as $bt => $datosbt){	
+									 echo '<h4>La batería <strong>'.$datosbt['bateria'].'</strong> ubicada en <strong>'. $datosbt['bodega'].'</strong> lista para ser reubicada en bodega.</h4>';
+										
 								 }
 								 echo '</div>';
 							 }
