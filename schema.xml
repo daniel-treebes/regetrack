@@ -18,6 +18,7 @@
     <column name="baterias_numserie" phpName="BateriasNumserie" type="VARCHAR" size="255" required="false"/>
     <column name="baterias_ciclosmant" phpName="BateriasCiclosmant" type="INTEGER" required="false"/>
     <column name="baterias_ciclosiniciales" phpName="BateriasCiclosiniciales" type="INTEGER" required="false"/>
+    <column name="baterias_baja" phpName="BateriasBaja" type="TINYINT" required="false" defaultValue="0"/>
     <foreign-key foreignTable="sucursal" name="baterias_idsucursal" onDelete="CASCADE" onUpdate="CASCADE">
       <reference local="idsucursal" foreign="idsucursal"/>
     </foreign-key>
@@ -54,6 +55,7 @@
     <column name="cargadores_nombre" phpName="CargadoresNombre" type="VARCHAR" size="255" required="false"/>
     <column name="cargadores_numserie" phpName="CargadoresNumserie" type="VARCHAR" size="45" required="false"/>
     <column name="cargadores_tipo" phpName="CargadoresTipo" type="CHAR" sqlType="enum('Cargador','Bodega')" required="true" defaultValue="Cargador"/>
+    <column name="cargadores_baja" phpName="CargadoresBaja" type="TINYINT" required="false" defaultValue="0"/>
     <foreign-key foreignTable="sucursal" name="cargadores_idsucursal" onDelete="CASCADE" onUpdate="CASCADE">
       <reference local="idsucursal" foreign="idsucursal"/>
     </foreign-key>
@@ -184,6 +186,7 @@
     <column name="montacargas_comprador" phpName="MontacargasComprador" type="VARCHAR" size="45" required="false"/>
     <column name="montacargas_ciclosmant" phpName="MontacargasCiclosmant" type="INTEGER" required="false"/>
     <column name="montacargas_ciclosiniciales" phpName="MontacargasCiclosiniciales" type="INTEGER" required="false"/>
+    <column name="montacargas_baja" phpName="MontacargasBaja" type="TINYINT" required="false" defaultValue="0"/>
     <foreign-key foreignTable="sucursal" name="montacargas_idsucursal" onDelete="CASCADE" onUpdate="CASCADE">
       <reference local="idsucursal" foreign="idsucursal"/>
     </foreign-key>

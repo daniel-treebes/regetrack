@@ -38,6 +38,7 @@ $habilitabt=$_GET['id'];
 $habilitamotivo='';
 $habilitafecha='';
 while($fila = $resultado->fetch_array()) {
+    
     $habilitaid= $fila['id'];
     $habilitabt= $fila['bt'];
     $habilitamotivo= $fila['motivo'];

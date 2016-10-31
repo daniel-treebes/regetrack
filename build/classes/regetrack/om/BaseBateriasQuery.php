@@ -22,6 +22,7 @@
  * @method BateriasQuery orderByBateriasNumserie($order = Criteria::ASC) Order by the baterias_numserie column
  * @method BateriasQuery orderByBateriasCiclosmant($order = Criteria::ASC) Order by the baterias_ciclosmant column
  * @method BateriasQuery orderByBateriasCiclosiniciales($order = Criteria::ASC) Order by the baterias_ciclosiniciales column
+ * @method BateriasQuery orderByBateriasBaja($order = Criteria::ASC) Order by the baterias_baja column
  *
  * @method BateriasQuery groupByIdbaterias() Group by the idbaterias column
  * @method BateriasQuery groupByIdsucursal() Group by the idsucursal column
@@ -39,6 +40,7 @@
  * @method BateriasQuery groupByBateriasNumserie() Group by the baterias_numserie column
  * @method BateriasQuery groupByBateriasCiclosmant() Group by the baterias_ciclosmant column
  * @method BateriasQuery groupByBateriasCiclosiniciales() Group by the baterias_ciclosiniciales column
+ * @method BateriasQuery groupByBateriasBaja() Group by the baterias_baja column
  *
  * @method BateriasQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method BateriasQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -86,6 +88,7 @@
  * @method Baterias findOneByBateriasNumserie(string $baterias_numserie) Return the first Baterias filtered by the baterias_numserie column
  * @method Baterias findOneByBateriasCiclosmant(int $baterias_ciclosmant) Return the first Baterias filtered by the baterias_ciclosmant column
  * @method Baterias findOneByBateriasCiclosiniciales(int $baterias_ciclosiniciales) Return the first Baterias filtered by the baterias_ciclosiniciales column
+ * @method Baterias findOneByBateriasBaja(int $baterias_baja) Return the first Baterias filtered by the baterias_baja column
  *
  * @method array findByIdbaterias(int $idbaterias) Return Baterias objects filtered by the idbaterias column
  * @method array findByIdsucursal(int $idsucursal) Return Baterias objects filtered by the idsucursal column
@@ -103,6 +106,7 @@
  * @method array findByBateriasNumserie(string $baterias_numserie) Return Baterias objects filtered by the baterias_numserie column
  * @method array findByBateriasCiclosmant(int $baterias_ciclosmant) Return Baterias objects filtered by the baterias_ciclosmant column
  * @method array findByBateriasCiclosiniciales(int $baterias_ciclosiniciales) Return Baterias objects filtered by the baterias_ciclosiniciales column
+ * @method array findByBateriasBaja(int $baterias_baja) Return Baterias objects filtered by the baterias_baja column
  *
  * @package    propel.generator.regetrack.om
  */
@@ -210,7 +214,7 @@ abstract class BaseBateriasQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `idbaterias`, `idsucursal`, `baterias_modelo`, `baterias_marca`, `baterias_c`, `baterias_k`, `baterias_p`, `baterias_t`, `baterias_e`, `baterias_volts`, `baterias_amperaje`, `baterias_comprador`, `baterias_nombre`, `baterias_numserie`, `baterias_ciclosmant`, `baterias_ciclosiniciales` FROM `baterias` WHERE `idbaterias` = :p0';
+        $sql = 'SELECT `idbaterias`, `idsucursal`, `baterias_modelo`, `baterias_marca`, `baterias_c`, `baterias_k`, `baterias_p`, `baterias_t`, `baterias_e`, `baterias_volts`, `baterias_amperaje`, `baterias_comprador`, `baterias_nombre`, `baterias_numserie`, `baterias_ciclosmant`, `baterias_ciclosiniciales`, `baterias_baja` FROM `baterias` WHERE `idbaterias` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -841,6 +845,48 @@ abstract class BaseBateriasQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(BateriasPeer::BATERIAS_CICLOSINICIALES, $bateriasCiclosiniciales, $comparison);
+    }
+
+    /**
+     * Filter the query on the baterias_baja column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByBateriasBaja(1234); // WHERE baterias_baja = 1234
+     * $query->filterByBateriasBaja(array(12, 34)); // WHERE baterias_baja IN (12, 34)
+     * $query->filterByBateriasBaja(array('min' => 12)); // WHERE baterias_baja >= 12
+     * $query->filterByBateriasBaja(array('max' => 12)); // WHERE baterias_baja <= 12
+     * </code>
+     *
+     * @param     mixed $bateriasBaja The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return BateriasQuery The current query, for fluid interface
+     */
+    public function filterByBateriasBaja($bateriasBaja = null, $comparison = null)
+    {
+        if (is_array($bateriasBaja)) {
+            $useMinMax = false;
+            if (isset($bateriasBaja['min'])) {
+                $this->addUsingAlias(BateriasPeer::BATERIAS_BAJA, $bateriasBaja['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($bateriasBaja['max'])) {
+                $this->addUsingAlias(BateriasPeer::BATERIAS_BAJA, $bateriasBaja['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(BateriasPeer::BATERIAS_BAJA, $bateriasBaja, $comparison);
     }
 
     /**

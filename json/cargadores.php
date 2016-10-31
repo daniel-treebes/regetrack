@@ -213,7 +213,8 @@ $query="
 			) AND
 			c.idcargadores=b.cg AND
 			cbg.cg=c.idcargadores AND
-            c.cargadores_tipo='$tipo'
+            c.cargadores_tipo='$tipo' AND
+            c.cargadores_baja = 0
 	) as todo
 	ORDER BY Cargador, Espacio
 ";

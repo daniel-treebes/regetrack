@@ -126,6 +126,13 @@ abstract class BaseMontacargas extends BaseObject implements Persistent
     protected $montacargas_ciclosiniciales;
 
     /**
+     * The value for the montacargas_baja field.
+     * Note: this column has a database default value of: 0
+     * @var        int
+     */
+    protected $montacargas_baja;
+
+    /**
      * @var        Sucursal
      */
     protected $aSucursal;
@@ -185,6 +192,27 @@ abstract class BaseMontacargas extends BaseObject implements Persistent
      * @var		PropelObjectCollection
      */
     protected $usoBateriasMontacargassScheduledForDeletion = null;
+
+    /**
+     * Applies default values to this object.
+     * This method should be called from the object's constructor (or
+     * equivalent initialization method).
+     * @see        __construct()
+     */
+    public function applyDefaultValues()
+    {
+        $this->montacargas_baja = 0;
+    }
+
+    /**
+     * Initializes internal state of BaseMontacargas object.
+     * @see        applyDefaults()
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        $this->applyDefaultValues();
+    }
 
     /**
      * Get the [idmontacargas] column value.
@@ -360,6 +388,17 @@ abstract class BaseMontacargas extends BaseObject implements Persistent
     {
 
         return $this->montacargas_ciclosiniciales;
+    }
+
+    /**
+     * Get the [montacargas_baja] column value.
+     *
+     * @return int
+     */
+    public function getMontacargasBaja()
+    {
+
+        return $this->montacargas_baja;
     }
 
     /**
@@ -703,6 +742,27 @@ abstract class BaseMontacargas extends BaseObject implements Persistent
     } // setMontacargasCiclosiniciales()
 
     /**
+     * Set the value of [montacargas_baja] column.
+     *
+     * @param  int $v new value
+     * @return Montacargas The current object (for fluent API support)
+     */
+    public function setMontacargasBaja($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (int) $v;
+        }
+
+        if ($this->montacargas_baja !== $v) {
+            $this->montacargas_baja = $v;
+            $this->modifiedColumns[] = MontacargasPeer::MONTACARGAS_BAJA;
+        }
+
+
+        return $this;
+    } // setMontacargasBaja()
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -712,6 +772,10 @@ abstract class BaseMontacargas extends BaseObject implements Persistent
      */
     public function hasOnlyDefaultValues()
     {
+            if ($this->montacargas_baja !== 0) {
+                return false;
+            }
+
         // otherwise, everything was equal, so return true
         return true;
     } // hasOnlyDefaultValues()
@@ -750,6 +814,7 @@ abstract class BaseMontacargas extends BaseObject implements Persistent
             $this->montacargas_comprador = ($row[$startcol + 13] !== null) ? (string) $row[$startcol + 13] : null;
             $this->montacargas_ciclosmant = ($row[$startcol + 14] !== null) ? (int) $row[$startcol + 14] : null;
             $this->montacargas_ciclosiniciales = ($row[$startcol + 15] !== null) ? (int) $row[$startcol + 15] : null;
+            $this->montacargas_baja = ($row[$startcol + 16] !== null) ? (int) $row[$startcol + 16] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -759,7 +824,7 @@ abstract class BaseMontacargas extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 16; // 16 = MontacargasPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 17; // 17 = MontacargasPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Montacargas object", $e);
@@ -1092,6 +1157,9 @@ abstract class BaseMontacargas extends BaseObject implements Persistent
         if ($this->isColumnModified(MontacargasPeer::MONTACARGAS_CICLOSINICIALES)) {
             $modifiedColumns[':p' . $index++]  = '`montacargas_ciclosiniciales`';
         }
+        if ($this->isColumnModified(MontacargasPeer::MONTACARGAS_BAJA)) {
+            $modifiedColumns[':p' . $index++]  = '`montacargas_baja`';
+        }
 
         $sql = sprintf(
             'INSERT INTO `montacargas` (%s) VALUES (%s)',
@@ -1150,6 +1218,9 @@ abstract class BaseMontacargas extends BaseObject implements Persistent
                         break;
                     case '`montacargas_ciclosiniciales`':
                         $stmt->bindValue($identifier, $this->montacargas_ciclosiniciales, PDO::PARAM_INT);
+                        break;
+                    case '`montacargas_baja`':
+                        $stmt->bindValue($identifier, $this->montacargas_baja, PDO::PARAM_INT);
                         break;
                 }
             }
@@ -1369,6 +1440,9 @@ abstract class BaseMontacargas extends BaseObject implements Persistent
             case 15:
                 return $this->getMontacargasCiclosiniciales();
                 break;
+            case 16:
+                return $this->getMontacargasBaja();
+                break;
             default:
                 return null;
                 break;
@@ -1414,6 +1488,7 @@ abstract class BaseMontacargas extends BaseObject implements Persistent
             $keys[13] => $this->getMontacargasComprador(),
             $keys[14] => $this->getMontacargasCiclosmant(),
             $keys[15] => $this->getMontacargasCiclosiniciales(),
+            $keys[16] => $this->getMontacargasBaja(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1515,6 +1590,9 @@ abstract class BaseMontacargas extends BaseObject implements Persistent
             case 15:
                 $this->setMontacargasCiclosiniciales($value);
                 break;
+            case 16:
+                $this->setMontacargasBaja($value);
+                break;
         } // switch()
     }
 
@@ -1555,6 +1633,7 @@ abstract class BaseMontacargas extends BaseObject implements Persistent
         if (array_key_exists($keys[13], $arr)) $this->setMontacargasComprador($arr[$keys[13]]);
         if (array_key_exists($keys[14], $arr)) $this->setMontacargasCiclosmant($arr[$keys[14]]);
         if (array_key_exists($keys[15], $arr)) $this->setMontacargasCiclosiniciales($arr[$keys[15]]);
+        if (array_key_exists($keys[16], $arr)) $this->setMontacargasBaja($arr[$keys[16]]);
     }
 
     /**
@@ -1582,6 +1661,7 @@ abstract class BaseMontacargas extends BaseObject implements Persistent
         if ($this->isColumnModified(MontacargasPeer::MONTACARGAS_COMPRADOR)) $criteria->add(MontacargasPeer::MONTACARGAS_COMPRADOR, $this->montacargas_comprador);
         if ($this->isColumnModified(MontacargasPeer::MONTACARGAS_CICLOSMANT)) $criteria->add(MontacargasPeer::MONTACARGAS_CICLOSMANT, $this->montacargas_ciclosmant);
         if ($this->isColumnModified(MontacargasPeer::MONTACARGAS_CICLOSINICIALES)) $criteria->add(MontacargasPeer::MONTACARGAS_CICLOSINICIALES, $this->montacargas_ciclosiniciales);
+        if ($this->isColumnModified(MontacargasPeer::MONTACARGAS_BAJA)) $criteria->add(MontacargasPeer::MONTACARGAS_BAJA, $this->montacargas_baja);
 
         return $criteria;
     }
@@ -1660,6 +1740,7 @@ abstract class BaseMontacargas extends BaseObject implements Persistent
         $copyObj->setMontacargasComprador($this->getMontacargasComprador());
         $copyObj->setMontacargasCiclosmant($this->getMontacargasCiclosmant());
         $copyObj->setMontacargasCiclosiniciales($this->getMontacargasCiclosiniciales());
+        $copyObj->setMontacargasBaja($this->getMontacargasBaja());
 
         if ($deepCopy && !$this->startCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -2656,10 +2737,12 @@ abstract class BaseMontacargas extends BaseObject implements Persistent
         $this->montacargas_comprador = null;
         $this->montacargas_ciclosmant = null;
         $this->montacargas_ciclosiniciales = null;
+        $this->montacargas_baja = null;
         $this->alreadyInSave = false;
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;
         $this->clearAllReferences();
+        $this->applyDefaultValues();
         $this->resetModified();
         $this->setNew(true);
         $this->setDeleted(false);

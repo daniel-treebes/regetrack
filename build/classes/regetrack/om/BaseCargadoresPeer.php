@@ -24,13 +24,13 @@ abstract class BaseCargadoresPeer
     const TM_CLASS = 'CargadoresTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 11;
+    const NUM_COLUMNS = 12;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 11;
+    const NUM_HYDRATE_COLUMNS = 12;
 
     /** the column name for the idcargadores field */
     const IDCARGADORES = 'cargadores.idcargadores';
@@ -65,6 +65,9 @@ abstract class BaseCargadoresPeer
     /** the column name for the cargadores_tipo field */
     const CARGADORES_TIPO = 'cargadores.cargadores_tipo';
 
+    /** the column name for the cargadores_baja field */
+    const CARGADORES_BAJA = 'cargadores.cargadores_baja';
+
     /** The enumerated values for the cargadores_tipo field */
     const CARGADORES_TIPO_CARGADOR = 'Cargador';
     const CARGADORES_TIPO_BODEGA = 'Bodega';
@@ -88,12 +91,12 @@ abstract class BaseCargadoresPeer
      * e.g. CargadoresPeer::$fieldNames[CargadoresPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Idcargadores', 'Idsucursal', 'CargadoresModelo', 'CargadoresMarca', 'CargadoresE', 'CargadoresVolts', 'CargadoresAmperaje', 'CargadoresComprador', 'CargadoresNombre', 'CargadoresNumserie', 'CargadoresTipo', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idcargadores', 'idsucursal', 'cargadoresModelo', 'cargadoresMarca', 'cargadoresE', 'cargadoresVolts', 'cargadoresAmperaje', 'cargadoresComprador', 'cargadoresNombre', 'cargadoresNumserie', 'cargadoresTipo', ),
-        BasePeer::TYPE_COLNAME => array (CargadoresPeer::IDCARGADORES, CargadoresPeer::IDSUCURSAL, CargadoresPeer::CARGADORES_MODELO, CargadoresPeer::CARGADORES_MARCA, CargadoresPeer::CARGADORES_E, CargadoresPeer::CARGADORES_VOLTS, CargadoresPeer::CARGADORES_AMPERAJE, CargadoresPeer::CARGADORES_COMPRADOR, CargadoresPeer::CARGADORES_NOMBRE, CargadoresPeer::CARGADORES_NUMSERIE, CargadoresPeer::CARGADORES_TIPO, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDCARGADORES', 'IDSUCURSAL', 'CARGADORES_MODELO', 'CARGADORES_MARCA', 'CARGADORES_E', 'CARGADORES_VOLTS', 'CARGADORES_AMPERAJE', 'CARGADORES_COMPRADOR', 'CARGADORES_NOMBRE', 'CARGADORES_NUMSERIE', 'CARGADORES_TIPO', ),
-        BasePeer::TYPE_FIELDNAME => array ('idcargadores', 'idsucursal', 'cargadores_modelo', 'cargadores_marca', 'cargadores_e', 'cargadores_volts', 'cargadores_amperaje', 'cargadores_comprador', 'cargadores_nombre', 'cargadores_numserie', 'cargadores_tipo', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, )
+        BasePeer::TYPE_PHPNAME => array ('Idcargadores', 'Idsucursal', 'CargadoresModelo', 'CargadoresMarca', 'CargadoresE', 'CargadoresVolts', 'CargadoresAmperaje', 'CargadoresComprador', 'CargadoresNombre', 'CargadoresNumserie', 'CargadoresTipo', 'CargadoresBaja', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idcargadores', 'idsucursal', 'cargadoresModelo', 'cargadoresMarca', 'cargadoresE', 'cargadoresVolts', 'cargadoresAmperaje', 'cargadoresComprador', 'cargadoresNombre', 'cargadoresNumserie', 'cargadoresTipo', 'cargadoresBaja', ),
+        BasePeer::TYPE_COLNAME => array (CargadoresPeer::IDCARGADORES, CargadoresPeer::IDSUCURSAL, CargadoresPeer::CARGADORES_MODELO, CargadoresPeer::CARGADORES_MARCA, CargadoresPeer::CARGADORES_E, CargadoresPeer::CARGADORES_VOLTS, CargadoresPeer::CARGADORES_AMPERAJE, CargadoresPeer::CARGADORES_COMPRADOR, CargadoresPeer::CARGADORES_NOMBRE, CargadoresPeer::CARGADORES_NUMSERIE, CargadoresPeer::CARGADORES_TIPO, CargadoresPeer::CARGADORES_BAJA, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDCARGADORES', 'IDSUCURSAL', 'CARGADORES_MODELO', 'CARGADORES_MARCA', 'CARGADORES_E', 'CARGADORES_VOLTS', 'CARGADORES_AMPERAJE', 'CARGADORES_COMPRADOR', 'CARGADORES_NOMBRE', 'CARGADORES_NUMSERIE', 'CARGADORES_TIPO', 'CARGADORES_BAJA', ),
+        BasePeer::TYPE_FIELDNAME => array ('idcargadores', 'idsucursal', 'cargadores_modelo', 'cargadores_marca', 'cargadores_e', 'cargadores_volts', 'cargadores_amperaje', 'cargadores_comprador', 'cargadores_nombre', 'cargadores_numserie', 'cargadores_tipo', 'cargadores_baja', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, )
     );
 
     /**
@@ -103,12 +106,12 @@ abstract class BaseCargadoresPeer
      * e.g. CargadoresPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Idcargadores' => 0, 'Idsucursal' => 1, 'CargadoresModelo' => 2, 'CargadoresMarca' => 3, 'CargadoresE' => 4, 'CargadoresVolts' => 5, 'CargadoresAmperaje' => 6, 'CargadoresComprador' => 7, 'CargadoresNombre' => 8, 'CargadoresNumserie' => 9, 'CargadoresTipo' => 10, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idcargadores' => 0, 'idsucursal' => 1, 'cargadoresModelo' => 2, 'cargadoresMarca' => 3, 'cargadoresE' => 4, 'cargadoresVolts' => 5, 'cargadoresAmperaje' => 6, 'cargadoresComprador' => 7, 'cargadoresNombre' => 8, 'cargadoresNumserie' => 9, 'cargadoresTipo' => 10, ),
-        BasePeer::TYPE_COLNAME => array (CargadoresPeer::IDCARGADORES => 0, CargadoresPeer::IDSUCURSAL => 1, CargadoresPeer::CARGADORES_MODELO => 2, CargadoresPeer::CARGADORES_MARCA => 3, CargadoresPeer::CARGADORES_E => 4, CargadoresPeer::CARGADORES_VOLTS => 5, CargadoresPeer::CARGADORES_AMPERAJE => 6, CargadoresPeer::CARGADORES_COMPRADOR => 7, CargadoresPeer::CARGADORES_NOMBRE => 8, CargadoresPeer::CARGADORES_NUMSERIE => 9, CargadoresPeer::CARGADORES_TIPO => 10, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDCARGADORES' => 0, 'IDSUCURSAL' => 1, 'CARGADORES_MODELO' => 2, 'CARGADORES_MARCA' => 3, 'CARGADORES_E' => 4, 'CARGADORES_VOLTS' => 5, 'CARGADORES_AMPERAJE' => 6, 'CARGADORES_COMPRADOR' => 7, 'CARGADORES_NOMBRE' => 8, 'CARGADORES_NUMSERIE' => 9, 'CARGADORES_TIPO' => 10, ),
-        BasePeer::TYPE_FIELDNAME => array ('idcargadores' => 0, 'idsucursal' => 1, 'cargadores_modelo' => 2, 'cargadores_marca' => 3, 'cargadores_e' => 4, 'cargadores_volts' => 5, 'cargadores_amperaje' => 6, 'cargadores_comprador' => 7, 'cargadores_nombre' => 8, 'cargadores_numserie' => 9, 'cargadores_tipo' => 10, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, )
+        BasePeer::TYPE_PHPNAME => array ('Idcargadores' => 0, 'Idsucursal' => 1, 'CargadoresModelo' => 2, 'CargadoresMarca' => 3, 'CargadoresE' => 4, 'CargadoresVolts' => 5, 'CargadoresAmperaje' => 6, 'CargadoresComprador' => 7, 'CargadoresNombre' => 8, 'CargadoresNumserie' => 9, 'CargadoresTipo' => 10, 'CargadoresBaja' => 11, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idcargadores' => 0, 'idsucursal' => 1, 'cargadoresModelo' => 2, 'cargadoresMarca' => 3, 'cargadoresE' => 4, 'cargadoresVolts' => 5, 'cargadoresAmperaje' => 6, 'cargadoresComprador' => 7, 'cargadoresNombre' => 8, 'cargadoresNumserie' => 9, 'cargadoresTipo' => 10, 'cargadoresBaja' => 11, ),
+        BasePeer::TYPE_COLNAME => array (CargadoresPeer::IDCARGADORES => 0, CargadoresPeer::IDSUCURSAL => 1, CargadoresPeer::CARGADORES_MODELO => 2, CargadoresPeer::CARGADORES_MARCA => 3, CargadoresPeer::CARGADORES_E => 4, CargadoresPeer::CARGADORES_VOLTS => 5, CargadoresPeer::CARGADORES_AMPERAJE => 6, CargadoresPeer::CARGADORES_COMPRADOR => 7, CargadoresPeer::CARGADORES_NOMBRE => 8, CargadoresPeer::CARGADORES_NUMSERIE => 9, CargadoresPeer::CARGADORES_TIPO => 10, CargadoresPeer::CARGADORES_BAJA => 11, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDCARGADORES' => 0, 'IDSUCURSAL' => 1, 'CARGADORES_MODELO' => 2, 'CARGADORES_MARCA' => 3, 'CARGADORES_E' => 4, 'CARGADORES_VOLTS' => 5, 'CARGADORES_AMPERAJE' => 6, 'CARGADORES_COMPRADOR' => 7, 'CARGADORES_NOMBRE' => 8, 'CARGADORES_NUMSERIE' => 9, 'CARGADORES_TIPO' => 10, 'CARGADORES_BAJA' => 11, ),
+        BasePeer::TYPE_FIELDNAME => array ('idcargadores' => 0, 'idsucursal' => 1, 'cargadores_modelo' => 2, 'cargadores_marca' => 3, 'cargadores_e' => 4, 'cargadores_volts' => 5, 'cargadores_amperaje' => 6, 'cargadores_comprador' => 7, 'cargadores_nombre' => 8, 'cargadores_numserie' => 9, 'cargadores_tipo' => 10, 'cargadores_baja' => 11, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, )
     );
 
     /** The enumerated values for this table */
@@ -246,6 +249,7 @@ abstract class BaseCargadoresPeer
             $criteria->addSelectColumn(CargadoresPeer::CARGADORES_NOMBRE);
             $criteria->addSelectColumn(CargadoresPeer::CARGADORES_NUMSERIE);
             $criteria->addSelectColumn(CargadoresPeer::CARGADORES_TIPO);
+            $criteria->addSelectColumn(CargadoresPeer::CARGADORES_BAJA);
         } else {
             $criteria->addSelectColumn($alias . '.idcargadores');
             $criteria->addSelectColumn($alias . '.idsucursal');
@@ -258,6 +262,7 @@ abstract class BaseCargadoresPeer
             $criteria->addSelectColumn($alias . '.cargadores_nombre');
             $criteria->addSelectColumn($alias . '.cargadores_numserie');
             $criteria->addSelectColumn($alias . '.cargadores_tipo');
+            $criteria->addSelectColumn($alias . '.cargadores_baja');
         }
     }
 

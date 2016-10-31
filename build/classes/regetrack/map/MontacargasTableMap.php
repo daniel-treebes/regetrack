@@ -54,6 +54,7 @@ class MontacargasTableMap extends TableMap
         $this->addColumn('montacargas_comprador', 'MontacargasComprador', 'VARCHAR', false, 45, null);
         $this->addColumn('montacargas_ciclosmant', 'MontacargasCiclosmant', 'INTEGER', false, null, null);
         $this->addColumn('montacargas_ciclosiniciales', 'MontacargasCiclosiniciales', 'INTEGER', false, null, null);
+        $this->addColumn('montacargas_baja', 'MontacargasBaja', 'TINYINT', false, null, 0);
         // validators
     } // initialize()
 

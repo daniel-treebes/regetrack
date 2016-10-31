@@ -24,7 +24,7 @@ $query="
         CONCAT(m.montacargas_c,'-',m.montacargas_k,'-',m.montacargas_p,'-',m.montacargas_t,'-',m.montacargas_e,' (',m.montacargas_volts,'V - ',m.montacargas_amperaje,'Ah)') as Tipo
     FROM
         montacargas as m
-        WHERE m.idsucursal = ".$loggedInUser->sucursal_activa."
+        WHERE m.idsucursal IN (".$loggedInUser->sucursales.") AND m.montacargas_baja = 0
 	ORDER BY Nombre
 ";
 
@@ -32,6 +32,7 @@ $query="
 $resultado = $mysqli->query($query);	
 
 ?>
+<script src="assets/global/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
 <input id="sortpicture" type="file" name="sortpic" style="display: none"; />
     <script>
 $( "#sortpicture" ).change(function() {
@@ -302,7 +303,7 @@ function deshabilita(cual) {
 				  $filastatus = $resultadostatus->fetch_array();
 						 
 				  if (isset($filastatus['motivo']) ){
-					   echo '<th style="color:red">'.$filastatus['motivo'].': '.$filastatus['tiempo'].'</th>';
+					    echo '<th style="color:red">Deshabilitado</th>';
 				  }else{
 					   echo '<th style="color:green">Habilitado</th>';
 				  }

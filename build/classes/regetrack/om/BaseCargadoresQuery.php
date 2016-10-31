@@ -17,6 +17,7 @@
  * @method CargadoresQuery orderByCargadoresNombre($order = Criteria::ASC) Order by the cargadores_nombre column
  * @method CargadoresQuery orderByCargadoresNumserie($order = Criteria::ASC) Order by the cargadores_numserie column
  * @method CargadoresQuery orderByCargadoresTipo($order = Criteria::ASC) Order by the cargadores_tipo column
+ * @method CargadoresQuery orderByCargadoresBaja($order = Criteria::ASC) Order by the cargadores_baja column
  *
  * @method CargadoresQuery groupByIdcargadores() Group by the idcargadores column
  * @method CargadoresQuery groupByIdsucursal() Group by the idsucursal column
@@ -29,6 +30,7 @@
  * @method CargadoresQuery groupByCargadoresNombre() Group by the cargadores_nombre column
  * @method CargadoresQuery groupByCargadoresNumserie() Group by the cargadores_numserie column
  * @method CargadoresQuery groupByCargadoresTipo() Group by the cargadores_tipo column
+ * @method CargadoresQuery groupByCargadoresBaja() Group by the cargadores_baja column
  *
  * @method CargadoresQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method CargadoresQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -63,6 +65,7 @@
  * @method Cargadores findOneByCargadoresNombre(string $cargadores_nombre) Return the first Cargadores filtered by the cargadores_nombre column
  * @method Cargadores findOneByCargadoresNumserie(string $cargadores_numserie) Return the first Cargadores filtered by the cargadores_numserie column
  * @method Cargadores findOneByCargadoresTipo(string $cargadores_tipo) Return the first Cargadores filtered by the cargadores_tipo column
+ * @method Cargadores findOneByCargadoresBaja(int $cargadores_baja) Return the first Cargadores filtered by the cargadores_baja column
  *
  * @method array findByIdcargadores(int $idcargadores) Return Cargadores objects filtered by the idcargadores column
  * @method array findByIdsucursal(int $idsucursal) Return Cargadores objects filtered by the idsucursal column
@@ -75,6 +78,7 @@
  * @method array findByCargadoresNombre(string $cargadores_nombre) Return Cargadores objects filtered by the cargadores_nombre column
  * @method array findByCargadoresNumserie(string $cargadores_numserie) Return Cargadores objects filtered by the cargadores_numserie column
  * @method array findByCargadoresTipo(string $cargadores_tipo) Return Cargadores objects filtered by the cargadores_tipo column
+ * @method array findByCargadoresBaja(int $cargadores_baja) Return Cargadores objects filtered by the cargadores_baja column
  *
  * @package    propel.generator.regetrack.om
  */
@@ -182,7 +186,7 @@ abstract class BaseCargadoresQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `idcargadores`, `idsucursal`, `cargadores_modelo`, `cargadores_marca`, `cargadores_e`, `cargadores_volts`, `cargadores_amperaje`, `cargadores_comprador`, `cargadores_nombre`, `cargadores_numserie`, `cargadores_tipo` FROM `cargadores` WHERE `idcargadores` = :p0';
+        $sql = 'SELECT `idcargadores`, `idsucursal`, `cargadores_modelo`, `cargadores_marca`, `cargadores_e`, `cargadores_volts`, `cargadores_amperaje`, `cargadores_comprador`, `cargadores_nombre`, `cargadores_numserie`, `cargadores_tipo`, `cargadores_baja` FROM `cargadores` WHERE `idcargadores` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -642,6 +646,48 @@ abstract class BaseCargadoresQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(CargadoresPeer::CARGADORES_TIPO, $cargadoresTipo, $comparison);
+    }
+
+    /**
+     * Filter the query on the cargadores_baja column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByCargadoresBaja(1234); // WHERE cargadores_baja = 1234
+     * $query->filterByCargadoresBaja(array(12, 34)); // WHERE cargadores_baja IN (12, 34)
+     * $query->filterByCargadoresBaja(array('min' => 12)); // WHERE cargadores_baja >= 12
+     * $query->filterByCargadoresBaja(array('max' => 12)); // WHERE cargadores_baja <= 12
+     * </code>
+     *
+     * @param     mixed $cargadoresBaja The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return CargadoresQuery The current query, for fluid interface
+     */
+    public function filterByCargadoresBaja($cargadoresBaja = null, $comparison = null)
+    {
+        if (is_array($cargadoresBaja)) {
+            $useMinMax = false;
+            if (isset($cargadoresBaja['min'])) {
+                $this->addUsingAlias(CargadoresPeer::CARGADORES_BAJA, $cargadoresBaja['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($cargadoresBaja['max'])) {
+                $this->addUsingAlias(CargadoresPeer::CARGADORES_BAJA, $cargadoresBaja['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(CargadoresPeer::CARGADORES_BAJA, $cargadoresBaja, $comparison);
     }
 
     /**

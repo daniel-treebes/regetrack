@@ -54,6 +54,7 @@ class BateriasTableMap extends TableMap
         $this->addColumn('baterias_numserie', 'BateriasNumserie', 'VARCHAR', false, 255, null);
         $this->addColumn('baterias_ciclosmant', 'BateriasCiclosmant', 'INTEGER', false, null, null);
         $this->addColumn('baterias_ciclosiniciales', 'BateriasCiclosiniciales', 'INTEGER', false, null, null);
+        $this->addColumn('baterias_baja', 'BateriasBaja', 'TINYINT', false, null, 0);
         // validators
     } // initialize()
 

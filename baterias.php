@@ -27,7 +27,8 @@ SELECT
    b.baterias_ciclosmant
 FROM
    baterias as b
-WHERE b.idsucursal = ".$loggedInUser->sucursal_activa."
+WHERE b.idsucursal IN (".$loggedInUser->sucursales.")
+AND b.baterias_baja = 0
 ORDER BY Nombre
 ";
 
@@ -35,6 +36,7 @@ $resultado = $mysqli->query($query);
 
 ?>
 <input id="sortpicture" type="file" name="sortpic" style="display: none"; />
+<script src="assets/global/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
     <script>
 $( "#sortpicture" ).change(function() {
    importa2();

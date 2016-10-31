@@ -51,6 +51,21 @@ if($_POST){
         $entity->save();
         
         $message_montacargas = 'El Registro se ha guardado satisfactoriamente!';
+    }elseif($post_data['action'] == 'bajaMontacargas'){
+       
+        $entity = MontacargasQuery::create()->findPk($post_data['idmontacargas']);
+        $entity->setMontacargasBaja(1);
+        $entity->save();
+        
+         $desh= DeshabilitamcQuery::create()->filterByIdmontacargas($entity->getIdmontacargas())->filterByFechaSalida()->findOne();
+         $desh->setFechaSalida(new DateTime())->save();
+         $desh = new Deshabilitamc();
+         $desh->setFechaEntrada(new DateTime())
+              ->setIdmontacargas($entity->getIdmontacargas())
+              ->setMotivo('Baja')
+              ->save();
+
+        $message_baterias = 'El montacargas fue dado de baja satisfactoriamente!';
     }
     
     
@@ -141,8 +156,16 @@ if($habilitaid>0){
 }
 ?>
 <?php 
+    //baja
+    $mc = MontacargasQuery::create()->findPk($_GET['id']);
+    $desh= DeshabilitamcQuery::create()->filterByIdmontacargas($mc->getIdmontacargas())->filterByFechaSalida()->exists();
+    $baja = false;
+    if($desh && $mc->getMontacargasBaja() == 0){
+        $baja = true;
+    }
+    
     $infomc_readonly = "readonly";
-    if($loggedInUser->checkPermission(array(1))){
+    if($loggedInUser->checkPermission(array(1)) && $mc->getMontacargasBaja() == 0){
         $infomc_readonly = "";
     }
 ?>
@@ -240,11 +263,37 @@ if($habilitaid>0){
                         </div>
                     </div>
                    
-                    <div class="row">
-                        <div class="col-sm-2 col-sm-offset-10" style="padding-bottom: 15px; padding-top: 15px;">
-                             <?php if($loggedInUser->checkPermission(array(1))) :?>
-                                <button type="submit" class="btn btn-success">Guardar</button>
-                             <?php endif;?>
+                    <div class="row" style="padding-right: 15px;">
+                        <div class="col-sm-2 col-sm-offset-8" style="padding-bottom: 15px; padding-top: 15px;">
+                            <?php if($baja && $loggedInUser->checkPermission(array(1))) :?>
+                                <a class="btn btn-danger" style="width: 100%" data-toggle="modal" href="#basic">Baja</a>
+                            <?php endif;?>
+                        </div>
+                        <div class="col-sm-2" style="padding-bottom: 15px; padding-top: 15px;">
+                            <?php if($loggedInUser->checkPermission(array(1)) && $mc->getMontacargasBaja() == 0) :?>
+                            <button type="submit" class="btn btn-success" style="width: 100%">Guardar</button>
+                            <?php endif;?>
+                        </div>
+                        <div class="modal fade" id="basic" tabindex="-1" role="basic" aria-hidden="true">
+                             <form role="form" method="post" action="<?php echo $_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING']?>">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                                            <h4 class="modal-title">Baja Montacargas <?php echo $mc->getMontacargasNombre()?></h4>
+                                        </div>
+                                        <input type="hidden" name="idmontacargas" value="<?php echo $_GET['id']?>">
+                                        <input type="hidden" name="action" value="bajaMontacargas">
+                                        <div class="modal-body"> ¿Esta seguro que desea dar de baja el montacargas ?<p style="color:red">NOTA: UNA VEZ CONFIRMADO ESTE CAMBIO ES IRREVERSIBLE</p></div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn dark btn-outline" data-dismiss="modal">Cancelar</button>
+                                            <button type="submit" class="btn btn-danger">Confirmar</button>
+                                        </div>
+                                    </div>
+                                    <!-- /.modal-content -->
+                                </div>
+                            </form>
+                            <!-- /.modal-dialog -->
                         </div>
                     </div>
                    
@@ -295,7 +344,7 @@ if($habilitaid>0){
                         <div class="row" style="padding: 20px">
                             <input type="hidden" name="idmontacargas" value="<?php echo $_GET['id']?>">
                             <input type="hidden" name="action" value="asignaBaterias">
-                            <?php  if($loggedInUser->checkPermission(array(1))) :?>
+                            <?php  if($loggedInUser->checkPermission(array(1)) && $mc->getMontacargasBaja() == 0) :?>
                                 <?php foreach ($baterias_modelos as $modelo) :?>
                                     <div class="col-sm-6">
                                         <div class="form-group">

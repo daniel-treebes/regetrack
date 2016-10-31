@@ -53,6 +53,7 @@ class CargadoresTableMap extends TableMap
   0 => 'Cargador',
   1 => 'Bodega',
 ));
+        $this->addColumn('cargadores_baja', 'CargadoresBaja', 'TINYINT', false, null, 0);
         // validators
     } // initialize()
 

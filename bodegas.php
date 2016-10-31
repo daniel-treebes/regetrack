@@ -257,6 +257,7 @@ $queryCargadoresDes="
 ?>
 
 <input id="sortpicture" type="file" name="sortpic" style="display: none"; />
+<script src="assets/global/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
     <script>
 $( "#sortpicture" ).change(function() {
    importa2();

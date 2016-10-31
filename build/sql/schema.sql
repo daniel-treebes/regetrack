@@ -27,6 +27,7 @@ CREATE TABLE `baterias`
     `baterias_numserie` VARCHAR(255),
     `baterias_ciclosmant` INTEGER,
     `baterias_ciclosiniciales` INTEGER,
+    `baterias_baja` TINYINT DEFAULT 0,
     PRIMARY KEY (`idbaterias`),
     INDEX `idsucursal` (`idsucursal`),
     CONSTRAINT `baterias_idsucursal`
@@ -75,6 +76,7 @@ CREATE TABLE `cargadores`
     `cargadores_nombre` VARCHAR(255),
     `cargadores_numserie` VARCHAR(45),
     `cargadores_tipo` enum('Cargador','Bodega') DEFAULT 'Cargador' NOT NULL,
+    `cargadores_baja` TINYINT DEFAULT 0,
     PRIMARY KEY (`idcargadores`),
     INDEX `idsucursal` (`idsucursal`),
     CONSTRAINT `cargadores_idsucursal`
@@ -233,6 +235,7 @@ CREATE TABLE `montacargas`
     `montacargas_comprador` VARCHAR(45),
     `montacargas_ciclosmant` INTEGER,
     `montacargas_ciclosiniciales` INTEGER,
+    `montacargas_baja` TINYINT DEFAULT 0,
     PRIMARY KEY (`idmontacargas`),
     INDEX `idsucursal` (`idsucursal`),
     CONSTRAINT `montacargas_idsucursal`

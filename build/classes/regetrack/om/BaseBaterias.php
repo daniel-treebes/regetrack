@@ -126,6 +126,13 @@ abstract class BaseBaterias extends BaseObject implements Persistent
     protected $baterias_ciclosiniciales;
 
     /**
+     * The value for the baterias_baja field.
+     * Note: this column has a database default value of: 0
+     * @var        int
+     */
+    protected $baterias_baja;
+
+    /**
      * @var        Sucursal
      */
     protected $aSucursal;
@@ -209,6 +216,27 @@ abstract class BaseBaterias extends BaseObject implements Persistent
      * @var		PropelObjectCollection
      */
     protected $usoBateriasMontacargassScheduledForDeletion = null;
+
+    /**
+     * Applies default values to this object.
+     * This method should be called from the object's constructor (or
+     * equivalent initialization method).
+     * @see        __construct()
+     */
+    public function applyDefaultValues()
+    {
+        $this->baterias_baja = 0;
+    }
+
+    /**
+     * Initializes internal state of BaseBaterias object.
+     * @see        applyDefaults()
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        $this->applyDefaultValues();
+    }
 
     /**
      * Get the [idbaterias] column value.
@@ -384,6 +412,17 @@ abstract class BaseBaterias extends BaseObject implements Persistent
     {
 
         return $this->baterias_ciclosiniciales;
+    }
+
+    /**
+     * Get the [baterias_baja] column value.
+     *
+     * @return int
+     */
+    public function getBateriasBaja()
+    {
+
+        return $this->baterias_baja;
     }
 
     /**
@@ -727,6 +766,27 @@ abstract class BaseBaterias extends BaseObject implements Persistent
     } // setBateriasCiclosiniciales()
 
     /**
+     * Set the value of [baterias_baja] column.
+     *
+     * @param  int $v new value
+     * @return Baterias The current object (for fluent API support)
+     */
+    public function setBateriasBaja($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (int) $v;
+        }
+
+        if ($this->baterias_baja !== $v) {
+            $this->baterias_baja = $v;
+            $this->modifiedColumns[] = BateriasPeer::BATERIAS_BAJA;
+        }
+
+
+        return $this;
+    } // setBateriasBaja()
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -736,6 +796,10 @@ abstract class BaseBaterias extends BaseObject implements Persistent
      */
     public function hasOnlyDefaultValues()
     {
+            if ($this->baterias_baja !== 0) {
+                return false;
+            }
+
         // otherwise, everything was equal, so return true
         return true;
     } // hasOnlyDefaultValues()
@@ -774,6 +838,7 @@ abstract class BaseBaterias extends BaseObject implements Persistent
             $this->baterias_numserie = ($row[$startcol + 13] !== null) ? (string) $row[$startcol + 13] : null;
             $this->baterias_ciclosmant = ($row[$startcol + 14] !== null) ? (int) $row[$startcol + 14] : null;
             $this->baterias_ciclosiniciales = ($row[$startcol + 15] !== null) ? (int) $row[$startcol + 15] : null;
+            $this->baterias_baja = ($row[$startcol + 16] !== null) ? (int) $row[$startcol + 16] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -783,7 +848,7 @@ abstract class BaseBaterias extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 16; // 16 = BateriasPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 17; // 17 = BateriasPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Baterias object", $e);
@@ -1154,6 +1219,9 @@ abstract class BaseBaterias extends BaseObject implements Persistent
         if ($this->isColumnModified(BateriasPeer::BATERIAS_CICLOSINICIALES)) {
             $modifiedColumns[':p' . $index++]  = '`baterias_ciclosiniciales`';
         }
+        if ($this->isColumnModified(BateriasPeer::BATERIAS_BAJA)) {
+            $modifiedColumns[':p' . $index++]  = '`baterias_baja`';
+        }
 
         $sql = sprintf(
             'INSERT INTO `baterias` (%s) VALUES (%s)',
@@ -1212,6 +1280,9 @@ abstract class BaseBaterias extends BaseObject implements Persistent
                         break;
                     case '`baterias_ciclosiniciales`':
                         $stmt->bindValue($identifier, $this->baterias_ciclosiniciales, PDO::PARAM_INT);
+                        break;
+                    case '`baterias_baja`':
+                        $stmt->bindValue($identifier, $this->baterias_baja, PDO::PARAM_INT);
                         break;
                 }
             }
@@ -1447,6 +1518,9 @@ abstract class BaseBaterias extends BaseObject implements Persistent
             case 15:
                 return $this->getBateriasCiclosiniciales();
                 break;
+            case 16:
+                return $this->getBateriasBaja();
+                break;
             default:
                 return null;
                 break;
@@ -1492,6 +1566,7 @@ abstract class BaseBaterias extends BaseObject implements Persistent
             $keys[13] => $this->getBateriasNumserie(),
             $keys[14] => $this->getBateriasCiclosmant(),
             $keys[15] => $this->getBateriasCiclosiniciales(),
+            $keys[16] => $this->getBateriasBaja(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1599,6 +1674,9 @@ abstract class BaseBaterias extends BaseObject implements Persistent
             case 15:
                 $this->setBateriasCiclosiniciales($value);
                 break;
+            case 16:
+                $this->setBateriasBaja($value);
+                break;
         } // switch()
     }
 
@@ -1639,6 +1717,7 @@ abstract class BaseBaterias extends BaseObject implements Persistent
         if (array_key_exists($keys[13], $arr)) $this->setBateriasNumserie($arr[$keys[13]]);
         if (array_key_exists($keys[14], $arr)) $this->setBateriasCiclosmant($arr[$keys[14]]);
         if (array_key_exists($keys[15], $arr)) $this->setBateriasCiclosiniciales($arr[$keys[15]]);
+        if (array_key_exists($keys[16], $arr)) $this->setBateriasBaja($arr[$keys[16]]);
     }
 
     /**
@@ -1666,6 +1745,7 @@ abstract class BaseBaterias extends BaseObject implements Persistent
         if ($this->isColumnModified(BateriasPeer::BATERIAS_NUMSERIE)) $criteria->add(BateriasPeer::BATERIAS_NUMSERIE, $this->baterias_numserie);
         if ($this->isColumnModified(BateriasPeer::BATERIAS_CICLOSMANT)) $criteria->add(BateriasPeer::BATERIAS_CICLOSMANT, $this->baterias_ciclosmant);
         if ($this->isColumnModified(BateriasPeer::BATERIAS_CICLOSINICIALES)) $criteria->add(BateriasPeer::BATERIAS_CICLOSINICIALES, $this->baterias_ciclosiniciales);
+        if ($this->isColumnModified(BateriasPeer::BATERIAS_BAJA)) $criteria->add(BateriasPeer::BATERIAS_BAJA, $this->baterias_baja);
 
         return $criteria;
     }
@@ -1744,6 +1824,7 @@ abstract class BaseBaterias extends BaseObject implements Persistent
         $copyObj->setBateriasNumserie($this->getBateriasNumserie());
         $copyObj->setBateriasCiclosmant($this->getBateriasCiclosmant());
         $copyObj->setBateriasCiclosiniciales($this->getBateriasCiclosiniciales());
+        $copyObj->setBateriasBaja($this->getBateriasBaja());
 
         if ($deepCopy && !$this->startCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -3208,10 +3289,12 @@ abstract class BaseBaterias extends BaseObject implements Persistent
         $this->baterias_numserie = null;
         $this->baterias_ciclosmant = null;
         $this->baterias_ciclosiniciales = null;
+        $this->baterias_baja = null;
         $this->alreadyInSave = false;
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;
         $this->clearAllReferences();
+        $this->applyDefaultValues();
         $this->resetModified();
         $this->setNew(true);
         $this->setDeleted(false);

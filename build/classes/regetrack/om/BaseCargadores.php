@@ -97,6 +97,13 @@ abstract class BaseCargadores extends BaseObject implements Persistent
     protected $cargadores_tipo;
 
     /**
+     * The value for the cargadores_baja field.
+     * Note: this column has a database default value of: 0
+     * @var        int
+     */
+    protected $cargadores_baja;
+
+    /**
      * @var        Sucursal
      */
     protected $aSucursal;
@@ -166,6 +173,7 @@ abstract class BaseCargadores extends BaseObject implements Persistent
     public function applyDefaultValues()
     {
         $this->cargadores_tipo = 'Cargador';
+        $this->cargadores_baja = 0;
     }
 
     /**
@@ -297,6 +305,17 @@ abstract class BaseCargadores extends BaseObject implements Persistent
     {
 
         return $this->cargadores_tipo;
+    }
+
+    /**
+     * Get the [cargadores_baja] column value.
+     *
+     * @return int
+     */
+    public function getCargadoresBaja()
+    {
+
+        return $this->cargadores_baja;
     }
 
     /**
@@ -535,6 +554,27 @@ abstract class BaseCargadores extends BaseObject implements Persistent
     } // setCargadoresTipo()
 
     /**
+     * Set the value of [cargadores_baja] column.
+     *
+     * @param  int $v new value
+     * @return Cargadores The current object (for fluent API support)
+     */
+    public function setCargadoresBaja($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (int) $v;
+        }
+
+        if ($this->cargadores_baja !== $v) {
+            $this->cargadores_baja = $v;
+            $this->modifiedColumns[] = CargadoresPeer::CARGADORES_BAJA;
+        }
+
+
+        return $this;
+    } // setCargadoresBaja()
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -545,6 +585,10 @@ abstract class BaseCargadores extends BaseObject implements Persistent
     public function hasOnlyDefaultValues()
     {
             if ($this->cargadores_tipo !== 'Cargador') {
+                return false;
+            }
+
+            if ($this->cargadores_baja !== 0) {
                 return false;
             }
 
@@ -581,6 +625,7 @@ abstract class BaseCargadores extends BaseObject implements Persistent
             $this->cargadores_nombre = ($row[$startcol + 8] !== null) ? (string) $row[$startcol + 8] : null;
             $this->cargadores_numserie = ($row[$startcol + 9] !== null) ? (string) $row[$startcol + 9] : null;
             $this->cargadores_tipo = ($row[$startcol + 10] !== null) ? (string) $row[$startcol + 10] : null;
+            $this->cargadores_baja = ($row[$startcol + 11] !== null) ? (int) $row[$startcol + 11] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -590,7 +635,7 @@ abstract class BaseCargadores extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 11; // 11 = CargadoresPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 12; // 12 = CargadoresPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Cargadores object", $e);
@@ -908,6 +953,9 @@ abstract class BaseCargadores extends BaseObject implements Persistent
         if ($this->isColumnModified(CargadoresPeer::CARGADORES_TIPO)) {
             $modifiedColumns[':p' . $index++]  = '`cargadores_tipo`';
         }
+        if ($this->isColumnModified(CargadoresPeer::CARGADORES_BAJA)) {
+            $modifiedColumns[':p' . $index++]  = '`cargadores_baja`';
+        }
 
         $sql = sprintf(
             'INSERT INTO `cargadores` (%s) VALUES (%s)',
@@ -951,6 +999,9 @@ abstract class BaseCargadores extends BaseObject implements Persistent
                         break;
                     case '`cargadores_tipo`':
                         $stmt->bindValue($identifier, $this->cargadores_tipo, PDO::PARAM_STR);
+                        break;
+                    case '`cargadores_baja`':
+                        $stmt->bindValue($identifier, $this->cargadores_baja, PDO::PARAM_INT);
                         break;
                 }
             }
@@ -1155,6 +1206,9 @@ abstract class BaseCargadores extends BaseObject implements Persistent
             case 10:
                 return $this->getCargadoresTipo();
                 break;
+            case 11:
+                return $this->getCargadoresBaja();
+                break;
             default:
                 return null;
                 break;
@@ -1195,6 +1249,7 @@ abstract class BaseCargadores extends BaseObject implements Persistent
             $keys[8] => $this->getCargadoresNombre(),
             $keys[9] => $this->getCargadoresNumserie(),
             $keys[10] => $this->getCargadoresTipo(),
+            $keys[11] => $this->getCargadoresBaja(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1281,6 +1336,9 @@ abstract class BaseCargadores extends BaseObject implements Persistent
             case 10:
                 $this->setCargadoresTipo($value);
                 break;
+            case 11:
+                $this->setCargadoresBaja($value);
+                break;
         } // switch()
     }
 
@@ -1316,6 +1374,7 @@ abstract class BaseCargadores extends BaseObject implements Persistent
         if (array_key_exists($keys[8], $arr)) $this->setCargadoresNombre($arr[$keys[8]]);
         if (array_key_exists($keys[9], $arr)) $this->setCargadoresNumserie($arr[$keys[9]]);
         if (array_key_exists($keys[10], $arr)) $this->setCargadoresTipo($arr[$keys[10]]);
+        if (array_key_exists($keys[11], $arr)) $this->setCargadoresBaja($arr[$keys[11]]);
     }
 
     /**
@@ -1338,6 +1397,7 @@ abstract class BaseCargadores extends BaseObject implements Persistent
         if ($this->isColumnModified(CargadoresPeer::CARGADORES_NOMBRE)) $criteria->add(CargadoresPeer::CARGADORES_NOMBRE, $this->cargadores_nombre);
         if ($this->isColumnModified(CargadoresPeer::CARGADORES_NUMSERIE)) $criteria->add(CargadoresPeer::CARGADORES_NUMSERIE, $this->cargadores_numserie);
         if ($this->isColumnModified(CargadoresPeer::CARGADORES_TIPO)) $criteria->add(CargadoresPeer::CARGADORES_TIPO, $this->cargadores_tipo);
+        if ($this->isColumnModified(CargadoresPeer::CARGADORES_BAJA)) $criteria->add(CargadoresPeer::CARGADORES_BAJA, $this->cargadores_baja);
 
         return $criteria;
     }
@@ -1411,6 +1471,7 @@ abstract class BaseCargadores extends BaseObject implements Persistent
         $copyObj->setCargadoresNombre($this->getCargadoresNombre());
         $copyObj->setCargadoresNumserie($this->getCargadoresNumserie());
         $copyObj->setCargadoresTipo($this->getCargadoresTipo());
+        $copyObj->setCargadoresBaja($this->getCargadoresBaja());
 
         if ($deepCopy && !$this->startCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -2277,6 +2338,7 @@ abstract class BaseCargadores extends BaseObject implements Persistent
         $this->cargadores_nombre = null;
         $this->cargadores_numserie = null;
         $this->cargadores_tipo = null;
+        $this->cargadores_baja = null;
         $this->alreadyInSave = false;
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;
