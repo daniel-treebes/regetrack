@@ -174,12 +174,12 @@ if($habilitaid>0){
                         </div>
                     </div>
                     <div class="row" style="padding-right: 15px;">
-                        <div class="col-sm-2 col-sm-offset-8" style="padding-bottom: 15px; padding-top: 15px;">
+                        <div class="col-sm-4 col-sm-offset-4" style="padding-bottom: 15px; padding-top: 15px;">
                             <?php if($baja && $loggedInUser->checkPermission(array(1))) :?>
                                 <a class="btn btn-danger" style="width: 100%" data-toggle="modal" href="#basic">Baja</a>
                             <?php endif;?>
                         </div>
-                        <div class="col-sm-2" style="padding-bottom: 15px; padding-top: 15px;">
+                        <div class="col-sm-4" style="padding-bottom: 15px; padding-top: 15px;">
                             <?php if($loggedInUser->checkPermission(array(1)) && $bateria->getBateriasBaja() == 0) :?>
                             <button type="submit" class="btn btn-success" style="width: 100%">Guardar</button>
                             <?php endif;?>
